@@ -1,0 +1,120 @@
+{
+	// Place your snippets for c here. Each snippet is defined under a snippet name and has a prefix, body and 
+	// description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. Placeholders with the 
+	// same ids are connected.
+	// Example:
+	"Class_c": {
+		"prefix": "cclass",
+		"body": [
+			"#include \"$1.h\"",
+			"#include \"VM_memory.h\"",
+			"",
+			"static void deinit($1_t *self)",
+			"{",
+			"    DynMemPut(self->mem);",
+			"}",
+			"",
+			"static void init($1_t *self, int argc, char **argv)",
+			"{",
+			"    /* attrivute */",
+			"    self->context = self;",
+			"",
+			"    /* operation */",
+			"    self->dinit = deinit;",
+			"",
+			"    /* object */",
+			"",
+			"    /* override */",
+			"}",
+			"",
+			"$1_t *New_$1(int argc, char **argv)",
+			"{",
+			"    DMEM *mem = DynMemGet(sizeof($1_t));",
+			"    $1_t *self = mem->addr;",
+			"    self->mem = mem;",
+			"    self->init = init;",
+			"    self->init(self, argc, argv);",
+			"    return self;",
+			"}"
+		],
+		"description": "Create class for .c file"
+	},
+	"class_h": {
+		"prefix": "hclass",
+		"body": [
+			"#ifndef _$1__H",
+			"#define _$1__H",
+			"#include \"VM_memory.h\"",
+			"typedef struct Class_$1 $1_t;",
+			"struct Class_$1",
+			"{",
+			"    /* attribute */",
+			"    DMEM *mem;",
+			"    void *context;",
+			"",
+			"    /* operation */",
+			"    void (*dinit)($1_t *self);",
+			"    void (*init)($1_t *$self, int argc, char **argv);",
+			"",
+			"    /* virtual operation */",
+			"",
+			"    /* object */",
+			"};",
+			"",
+			"$1_t *New_$1(int argc, char **argv);",
+			"#endif"
+		],
+		"description": "Create class for .h file"
+	},
+	"derive_c": {
+		"prefix": "cderive",
+		"body": [
+			"#include \"$1.h\"",
+			"#include \"VM_memory.h\"",
+			"",
+			"static void init_$2($1_t *self, int argc, char **argv)",
+			"{",
+			"    /* attrivute */",
+			"",
+			"    /* operation */",
+			"",
+			"    /* object */",
+			"",
+			"    /* override */",
+			"}",
+			"",
+			"$1_t *New_$1_$2(int argc, char **argv)",
+			"{",
+			"    $1_t *self = New_$1(argc, argv);",
+			"    self->init = init_$2;",
+			"    self->init(self, argc, argv);",
+			"    return self;",
+			"}"
+		],
+		"description": "Create class for .c file"
+	},
+	"derive_h": {
+		"prefix": "hderive",
+		"body": [
+			"#ifndef _$1_$2__H",
+			"#define _$1_$2__H",
+			"#include \"VM_memory.h\"",
+			"#include \"$1.h\"",
+			"",
+			"$1_t *New_$1_$2(int argc, char **argv);",
+			"#endif"
+		],
+		"description": "Create class for .h file"
+	},
+	"fun": {
+		"prefix": "fun",
+		"body": [
+			"",
+			"$1 (*$2)($3_t *self$4);",
+			"self->$2 = $2;",
+			"static $1 $2($3_t *self$4)",
+			""
+		]
+	}
+}
