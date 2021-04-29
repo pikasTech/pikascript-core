@@ -1,19 +1,27 @@
 # 简介
 mimiLib是一个跨平台的面向对象c语言库
 # 包含:
-1.字符串处理（mimistr) 
+## 1.字符串处理（mimistr) 
 
-2.内存管理(mimimemory) 
+## 2.内存管理 (mimimemory) 
 
-3.虚拟硬件(mimivm)支持串口和 gui 
+## 3.虚拟硬件 (mimivm)
 
-4.命令行交互层(mimishell) 
+支持串口和 gui 
 
-5.数据结构(mimidata) 
+## 4.命令行交互层 (mimishell) 
 
-6.异步回调机制(mimiapp) 
+## 5.数据结构 (mimidata) 
 
-7.单元测试(mimitest) 
+## 6.异步回调机制 (mimiapp) 
 
-8.系统兼容层(mimiport)支持在stm32和linux上运行
+## 7.单元测试 (mimitest) 
+
+## 8.系统兼容层 (mimiport)
+
+支持在stm32和linux上运行
+
+## 9.代码片段 (mimiconfig/vscode)
+
+加速构建统一的面向对象代码
 
