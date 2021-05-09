@@ -22,8 +22,8 @@ rm include -rf
 rm lib -rf
 rm bin -rf
 
-# build project and remove build folder
-cd build && cmake .. && make && cd .. && rm build -rf 
+# build project
+cd build && cmake .. && make && cd .. 
 
 # remove CMakeLists.txt from sub sorce folder
 for dir in $(ls src)
