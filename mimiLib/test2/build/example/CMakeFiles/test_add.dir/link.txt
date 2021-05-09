@@ -1,1 +1,0 @@
-/usr/bin/cc    CMakeFiles/test_add.dir/test_add.c.o  -o ../bin/test_add   -L/root/dev/mimiLib/test2/lib  -Wl,-rpath,/root/dev/mimiLib/test2/lib -ladd 
