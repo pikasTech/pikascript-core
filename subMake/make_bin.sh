@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SRC_FOLDER=src
-SUB_CMAKE_DIR=setup/subCmake/CMakeLists.txt
+SUB_CMAKE_DIR=setup/subCmake_bin/CMakeLists.txt
 
 # copy sub CMakeLists.txt to sub sorce folder
 for dir in $(ls $SRC_FOLDER)
@@ -17,14 +17,9 @@ else
    echo dir build exist
 fi
 
-# clear the include and lib folder
-rm include -rf
-rm lib -rf
+# clear the bin folder
 rm bin -rf
 
 # build project
 cd build && cmake .. && make && cd .. 
 
-cp subMake/make_bin.sh .
-sh make_bin.sh
-rm make_bin.sh
