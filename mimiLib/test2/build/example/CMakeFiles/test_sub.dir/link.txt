@@ -1,0 +1,1 @@
+/usr/bin/cc    CMakeFiles/test_sub.dir/test_sub.c.o  -o ../bin/test_sub   -L/root/dev/mimiLib/test2/lib  -Wl,-rpath,/root/dev/mimiLib/test2/lib -lsub 

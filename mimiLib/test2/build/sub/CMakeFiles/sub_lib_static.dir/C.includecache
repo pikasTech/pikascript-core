@@ -1,0 +1,14 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/root/dev/mimiLib/test2/sub/sub.c
+sub.h
+/root/dev/mimiLib/test2/sub/sub.h
+
+/root/dev/mimiLib/test2/sub/sub.h
+

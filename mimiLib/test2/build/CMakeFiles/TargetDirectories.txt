@@ -1,0 +1,12 @@
+/root/dev/mimiLib/test2/build/CMakeFiles/rebuild_cache.dir
+/root/dev/mimiLib/test2/build/CMakeFiles/edit_cache.dir
+/root/dev/mimiLib/test2/build/add/CMakeFiles/rebuild_cache.dir
+/root/dev/mimiLib/test2/build/add/CMakeFiles/edit_cache.dir
+/root/dev/mimiLib/test2/build/add/CMakeFiles/add_lib_static.dir
+/root/dev/mimiLib/test2/build/sub/CMakeFiles/rebuild_cache.dir
+/root/dev/mimiLib/test2/build/sub/CMakeFiles/edit_cache.dir
+/root/dev/mimiLib/test2/build/sub/CMakeFiles/sub_lib_static.dir
+/root/dev/mimiLib/test2/build/example/CMakeFiles/rebuild_cache.dir
+/root/dev/mimiLib/test2/build/example/CMakeFiles/edit_cache.dir
+/root/dev/mimiLib/test2/build/example/CMakeFiles/test_sub.dir
+/root/dev/mimiLib/test2/build/example/CMakeFiles/test_add.dir
