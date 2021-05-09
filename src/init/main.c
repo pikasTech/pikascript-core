@@ -1,4 +1,3 @@
-#include "main.h"
 #include "SH_sgui.h"
 #include "VM_gui.h"
 #include "VM_terminal.h"

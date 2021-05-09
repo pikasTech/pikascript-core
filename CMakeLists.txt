@@ -1,4 +1,4 @@
-set(SRC_DIR src)
+set(SRC_DIR src/kernal)
 
 # 获得当前目录名
 string(REGEX REPLACE "/$" "" CURRENT_FOLDER_ABSOLUTE ${CMAKE_CURRENT_SOURCE_DIR})

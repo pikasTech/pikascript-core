@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SRC_FOLDER=src
+SRC_FOLDER=src/kernal
 SUB_CMAKE_DIR=setup/subCmake/CMakeLists.txt
 
 # copy sub CMakeLists.txt to sub sorce folder
@@ -25,6 +25,3 @@ rm bin -rf
 # build project
 cd build && cmake .. && make && cd .. 
 
-cp subMake/make_bin.sh .
-sh make_bin.sh
-rm make_bin.sh
