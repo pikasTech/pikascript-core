@@ -12,17 +12,17 @@ project(${CURRENT_FOLDER})
 add_definitions(-D LINUX)
 
 #设置库文件输出目录
-set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/build/lib)
+set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 #设置执行文件输出目录
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/build/bin)
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
 # 添加子目录
-add_subdirectory(mimiapp)
-add_subdirectory(mimidata)
-add_subdirectory(mimimemory)
-add_subdirectory(mimiport)
-add_subdirectory(mimishell)
-add_subdirectory(mimistr)
-add_subdirectory(mimitest)
-add_subdirectory(mimivm)
+add_subdirectory(src/mimiapp)
+add_subdirectory(src/mimidata)
+add_subdirectory(src/mimimemory)
+add_subdirectory(src/mimiport)
+add_subdirectory(src/mimishell)
+add_subdirectory(src/mimistr)
+add_subdirectory(src/mimitest)
+add_subdirectory(src/mimivm)
