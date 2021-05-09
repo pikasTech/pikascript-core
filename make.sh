@@ -25,4 +25,3 @@ rm bin -rf
 # build project
 cd build && cmake .. && make && cd .. 
 
-
