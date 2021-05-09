@@ -1,7 +1,7 @@
 #include "shDriver_VM_iot.h"
 #include "VM_iot.h"
 #include "mimiSH_core.h"
-#include "mimiStr.h"
+#include "dataString.h"
 #include <stdlib.h>
 
 struct VM_iot *iot;
@@ -71,7 +71,6 @@ void *sDriver_VM_iot_main(int argc, char **argv)
         data_int = atoi(argv[2]);
 
         data[0] = (unsigned char)(data_int >> 8);
-
         data[1] = (unsigned char)data_int;
 
         upload(iot, address, data);

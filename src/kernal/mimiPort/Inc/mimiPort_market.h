@@ -13,9 +13,9 @@ vkey_t *VM_key_init_PORT(int KEY_id);
 
 VM_socket_t *VM_socket_init_PORT(int socket_ID);
 struct VM_delay *VM_delay_init_PORT(void);
-void PORT_VM_gui_clear(void);
-void PORT_VM_gui_showString(int x, int y, char *string);
-gui_t *VM_gui_init_PORT(void);
+void _PORT_clear(void);
+void _PORT_showString(int x, int y, char *string);
+VMgui_t *VM_gui_init_PORT(void);
 void	PORT_reboot(void);
 void PORT_VM_terminal_exit_linux(void);
 char PORT_VM_terminal_getChar_linux(void);

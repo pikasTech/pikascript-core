@@ -1,6 +1,6 @@
 #ifndef __VM_COM_H
 #define __VM_COM_H
-#include "VM_memory.h"
+#include "dataMemory.h"
 typedef struct VM_com
 {
     DMEM *mem;

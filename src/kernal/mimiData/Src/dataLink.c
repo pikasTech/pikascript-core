@@ -1,147 +1,115 @@
 #include "dataLink.h"
-#include "VM_memory.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include "dataMemory.h"
+#include "dataArgsConst.h"
 
-static void deinit_data_default(void *data);
-void deinit_node(dataLink_t *Node);
-
-int linkNode_size(dataLink_t *Head)
+static void deinit(link_t *self)
 {
-    dataLink_t *NodeNow;
+    DynMemPut(self->mem);
+    linkNode_t *nowNode = self->firstNode;
+    while (NULL != nowNode)
+    {
+        nowNode->dinit(nowNode);
+        nowNode = nowNode->nextNode;
+    }
+}
+
+static void add(link_t *self, void *contant, void (*_contantDinit)(void *contant))
+{
+    linkNode_t *NewNode = New_linkNode(NULL);
+    NewNode->contant = contant;
+    NewNode->_contantDinit = _contantDinit;
+    NewNode->id = self->TopId;
+    self->TopId++;
+
+    // old first node become new second node
+    linkNode_t *secondNode = self->firstNode;
+
+    // change the first node to new node
+    self->firstNode = NewNode;
+
+    // link the new first node and second node
+    if (NULL != secondNode)
+    {
+        secondNode->priorNode = self->firstNode;
+    }
+    self->firstNode->nextNode = secondNode;
+}
+
+static int size(link_t *self)
+{
+    linkNode_t *NowNode;
     int size = 0;
-    NodeNow = Head;
-    while (NULL != NodeNow->next)
+    NowNode = self->firstNode;
+    while (NULL != NowNode)
     {
         size++;
-        // point to the next Node
-        NodeNow = NodeNow->next;
+        NowNode = NowNode->nextNode;
     }
     return size;
 }
 
-void linkNode_add(dataLink_t *Head, void *dataNew)
+static void *getNodeWhenIdMate(linkNode_t *node, argsConst_t *args)
 {
-    dataLink_t *NodeNew;
-    dataLink_t *NodeFirst;
-    DMEM *NodeNewMem;
-
-    NodeNewMem = DynMemGet(sizeof(dataLink_t));
-    NodeNew = (dataLink_t *)(NodeNewMem->addr);
-    NodeNew->mem = NodeNewMem;
-
-    NodeFirst = Head->next;
-
-    // add the new data to the new node
-    NodeNew->data = dataNew;
-    // operate the pointer add the new node between the head and first node
-    // head do not have prior, so only need to operate the next pointer
-    Head->next = NodeNew;
-
-    // operate he pointer of new node
-    NodeNew->prior = Head;
-
-    NodeNew->next = NodeFirst;
-}
-
-
-
-void *linkNode_traverse(dataLink_t *Head, void *(*operate)(void *))
-{
-    dataLink_t *NodeNow;
-    data_t *dataNow;
-    NodeNow = Head->next;
-    void *out = NULL;
-
-    while (NULL != NodeNow)
+    long long id = args->getInt64ByName(args, "id");
+    if (node->isId(node, id))
     {
-        dataNow = (data_t *)NodeNow->data;
-        {
-            out = operate(dataNow);
-            // return when get output
-            if (NULL != out)
-            {
-                return out;
-            }
-        }
-        NodeNow = NodeNow->next;
+        return node;
     }
     return NULL;
 }
 
-
-
-static void deinit(dataLink_t *Head)
+static linkNode_t *findNodeById(link_t *self, long long id)
 {
-    // destroy the link (deinit the node one by one)
-    Head->destroy(Head);
-    // deinit the Head
-    DynMemPut(Head->mem);
+    linkNode_t *nodeOut = NULL;
+    argsConst_t *args = New_argsConst(NULL);
+    args->pushInt64WithName(args, "id", id);
+    nodeOut = self->tranverse(self, getNodeWhenIdMate, args);
+    args->dinit(args);
+    return nodeOut;
 }
 
-void linkNode_destroy(dataLink_t *Head)
+static void *tranverse(link_t *self,
+                       void *(*nodeOperation)(linkNode_t *node, argsConst_t *args),
+                       argsConst_t *args)
 {
-    dataLink_t *NodeNow, *NodeNext;
-    NodeNow = Head->next;
-
-    // if the link is empty, return directly
-    if (NULL == NodeNow)
+    linkNode_t *node = self->firstNode;
+    void *operationOut;
+    while (NULL != node)
     {
-        return;
+        operationOut = nodeOperation(node, args);
+        if (NULL != operationOut)
+        {
+            return operationOut;
+        }
+        node = node->nextNode;
     }
-
-    while (NULL != NodeNow->next)
-    {
-        // get hte node next
-        NodeNext = NodeNow->next;
-        // deinit the data of nodeNow, use the function of Head
-        Head->port_deinit_data(NodeNow->data);
-        // deinit the nodNow, use the function of Head
-        Head->deinit_node(NodeNow);
-        // point to the next Node
-        NodeNow = NodeNext;
-    }
-    // deinit the data of Last Node
-    Head->port_deinit_data(NodeNow->data);
-    // deinit the Last Node
-    Head->deinit_node(NodeNow);
+    return NULL;
 }
 
-void deinit_node(dataLink_t *Node)
+static void init(link_t *self, argsConst_t *args)
 {
-    DynMemPut(Node->mem);
+    /* attrivute */
+    self->firstNode = NULL;
+    self->TopId = 0;
+
+    /* operation */
+    self->dinit = deinit;
+    self->add = add;
+    self->size = size;
+    self->findNodeById = findNodeById;
+    self->tranverse = tranverse;
+
+    /* object */
+
+    /* override */
 }
 
-// if use other data sturct, the port_deinit_data function need to be rewrite
-static void deinit_data_default(void *data_noType)
+link_t *New_Link(argsConst_t *args)
 {
-    data_t *data = data_noType;
-    DynMemPut(data->mem);
-    data->mem = NULL;
-}
-
-dataLink_t *dataLink_init(void)
-{
-    //note: only the Head of link have the operations, other node donot have operations, so wehen operate other node, use the operations of Head.
-
-    // make a new node, and point the List to the node
-    DMEM *mem = DynMemGet(sizeof(dataLink_t));
-    dataLink_t *Head = (dataLink_t *)(mem->addr);
-    Head->mem = mem;
-
-    // load the functions
-    Head->add = linkNode_add;
-    Head->destroy = linkNode_destroy;
-    Head->size = linkNode_size;
-    Head->traverse = linkNode_traverse;
-    Head->deinit = deinit;
-    // should be redefine in user code, set how to deinit the data, becasue the data used in user code is not known by the dataLink, it is define by user.
-    Head->port_deinit_data = deinit_data_default;
-    Head->deinit_node = deinit_node;
-
-    // init the data
-    // the circulate double link
-    Head->next = NULL;
-    Head->prior = NULL;
-    return Head;
+    DMEM *mem = DynMemGet(sizeof(link_t));
+    link_t *self = mem->addr;
+    self->mem = mem;
+    self->init = init;
+    self->init(self, args);
+    return self;
 }

@@ -1,8 +1,8 @@
 #include "VM_iot.h"
 #include "VM_delay.h"
-#include "VM_memory.h"
+#include "dataMemory.h"
 #include "mimiSH_core.h"
-#include "mimiStr.h"
+#include "dataString.h"
 #include "mimiVM_core.h"
 #include <stdio.h>
 #include <stdlib.h>

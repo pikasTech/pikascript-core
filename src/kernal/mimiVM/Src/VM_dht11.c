@@ -1,5 +1,5 @@
 #include "VM_dht11.h"
-#include "VM_memory.h"
+#include "dataMemory.h"
 #ifndef LINUX
 #include "tim.h"
 /**

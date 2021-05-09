@@ -1,6 +1,6 @@
 #ifndef ___VM_LCD_H
 #define ___VM_LCD_H
-#include "VM_memory.h"
+#include "dataMemory.h"
 #ifndef LINUX
 #include "main.h"
 #endif

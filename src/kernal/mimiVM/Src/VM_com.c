@@ -1,6 +1,6 @@
 #include "VM_com.h"
-#include "VM_memory.h"
-#include "mimiStr.h"
+#include "dataMemory.h"
+#include "dataString.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

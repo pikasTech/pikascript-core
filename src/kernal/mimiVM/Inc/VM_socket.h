@@ -1,6 +1,6 @@
 #ifndef __VM_SOCKET_H
 #define __VM_SOCKET_H
-#include "VM_memory.h"
+#include "dataMemory.h"
 typedef struct VM_socket
 {
 	void(*DeInit)(struct VM_socket *socket);

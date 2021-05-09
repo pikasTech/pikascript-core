@@ -1,5 +1,5 @@
 #include "VM_key.h"
-#include "VM_memory.h"
+#include "dataMemory.h"
 
 static void update_port(vkey_t *key, int systime_ms)
 {

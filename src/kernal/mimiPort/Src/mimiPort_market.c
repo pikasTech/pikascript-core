@@ -78,7 +78,7 @@ void PORT_reboot(void)
 #endif
 }
 
-static void showLine_PORT(gui_t *gui, int line, int cols, char *str)
+static void _PORT_showLine_PORT(VMgui_t *gui, int line, int cols, char *str)
 {
 	// the map of line to x,y is for linux, rewrite it in other platform, shuch as lcd.
 #ifndef LINUX
@@ -93,16 +93,16 @@ static void showLine_PORT(gui_t *gui, int line, int cols, char *str)
 #endif
 }
 
-gui_t *VM_gui_init_PORT(void)
+VMgui_t *VM_gui_init_PORT(void)
 {
-	gui_t *gui = VM_gui_init();
-	gui->PORT_VM_gui_clear = PORT_VM_gui_clear;
-	gui->PORT_VM_gui_showString = PORT_VM_gui_showString;
-	gui->showLine = showLine_PORT;
+	VMgui_t *gui = VM_gui_init();
+	gui->_PORT_clear = _PORT_clear;
+	gui->_PORT_showString = _PORT_showString;
+	gui->_PORT_showLine = _PORT_showLine_PORT;
 	return gui;
 }
 
-void PORT_VM_gui_clear(void)
+void _PORT_clear(void)
 {
 #ifndef LINUX
 	LCD_Fill(0, 0, LCD_W, LCD_H, WHITE);
@@ -254,7 +254,7 @@ VM_socket_t *VM_socket_init_PORT(int socket_ID)
 	return socket;
 }
 
-void PORT_VM_gui_showString(int x, int y, char *string)
+void _PORT_showString(int x, int y, char *string)
 {
 #ifndef LINUX
 	LCD_ShowString(x, y, (unsigned char *)string, RED, WHITE, 12, 0);

@@ -1,18 +1,18 @@
 #include "panel_default.h"
 #include "VM_gui.h"
-#include "VM_memory.h"
+#include "dataMemory.h"
 
 #include "VM_delay.h"
 #include "mimiPort_market.h"
 #include "mimiSH_config.h"
 #include "mimiSH_core.h"
-#include "mimiStr.h"
+#include "dataString.h"
 #ifndef LINUX
 #include "main.h"
 #endif
 panel_t *Pub_panel;
 
-static void change_gui(gui_t *gui, gui_t *gui_new)
+static void change_gui(VMgui_t *gui, VMgui_t *gui_new)
 {
 	Pub_panel->gui_main = gui_new;
 	Pub_panel->gui_main->refresh(Pub_panel->gui_main);
@@ -22,7 +22,7 @@ static void change_gui(gui_t *gui, gui_t *gui_new)
 
 static void back_callBack(void *context)
 {
-	gui_t *gui = (gui_t *)context;
+	VMgui_t *gui = (VMgui_t *)context;
 	Pub_panel->gui_main = gui->last_gui;
 	Pub_panel->gui_main->refresh(Pub_panel->gui_main);
 }
@@ -37,25 +37,25 @@ static void reboot_callBack(void *context)
 
 static void observer_callBack(void *context)
 {
-	gui_t *gui = (gui_t *)context;
+	VMgui_t *gui = (VMgui_t *)context;
 	gui->change_gui(gui, Pub_panel->gui_observer);
 }
 
 static void temperature_callBack(void *context)
 {
-	gui_t *gui = (gui_t *)context;
+	VMgui_t *gui = (VMgui_t *)context;
 	gui->change_gui(gui, Pub_panel->gui_temperature);
 }
 
 static void tumidity_callBack(void *context)
 {
-	gui_t *gui = (gui_t *)context;
+	VMgui_t *gui = (VMgui_t *)context;
 	gui->change_gui(gui, Pub_panel->gui_tumidity);
 }
 
 static void reconnect_callBack(void *context)
 {
-	gui_t *gui = (gui_t *)context;
+	VMgui_t *gui = (VMgui_t *)context;
 	gui->change_gui(gui, Pub_panel->gui_reconnect);
 	gui->showString(gui, 1, 1, "Connecting to ");
 	gui->showString(gui, 1, 2, "iot server......");
@@ -66,22 +66,22 @@ static void reconnect_callBack(void *context)
 
 static void smoke_callBack(void *context)
 {
-	gui_t *gui = (gui_t *)context;
+	VMgui_t *gui = (VMgui_t *)context;
 	gui->change_gui(gui, Pub_panel->gui_smoke);
 }
 
 static void gui_carbon_monoxide_callBack(void *context)
 {
-	gui_t *gui = (gui_t *)context;
+	VMgui_t *gui = (VMgui_t *)context;
 	gui->change_gui(gui, Pub_panel->gui_carbon_monoxide);
 }
 
-static void option_pointer_refrash_void(gui_t *gui)
+static void option_pointer_refrash_void(VMgui_t *gui)
 {
 	//do not refrash the option_pointer
 }
 
-static void refresh_periodic_Observer_value(gui_t *gui)
+static void refresh_periodic_Observer_value(VMgui_t *gui)
 {
 	//get data from general data
 	struct Data_observer *data = (struct Data_observer *)gui->generalData;
@@ -93,21 +93,21 @@ static void refresh_periodic_Observer_value(gui_t *gui)
 	gui->showString(gui, 4, 5, str);
 }
 
-gui_t *VM_gui_init_PORT_panel(void)
+VMgui_t *VM_gui_init_PORT_panel(void)
 {
-	gui_t *gui = VM_gui_init_PORT();
+	VMgui_t *gui = VM_gui_init_PORT();
 	gui->back_callBack = back_callBack;
 	gui->change_gui = change_gui;
 	return gui;
 }
 
-static gui_t *gui_Observer_value_init(char *title, void *general_data)
+static VMgui_t *gui_Observer_value_init(char *title, void *general_data)
 {
-	gui_t *gui;
+	VMgui_t *gui;
 	gui = VM_gui_init_PORT_panel();
-	gui->option_pointer_refrash = option_pointer_refrash_void;
+	gui->refrash_optionPointer = option_pointer_refrash_void;
 	gui->option_pointer_max = 0;
-	gui->refresh_periodic = refresh_periodic_Observer_value;
+	gui->_refresh_periodic = refresh_periodic_Observer_value;
 	gui->generalData = general_data;
 	strPrint(gui->title, title);
 	return gui;
@@ -116,19 +116,19 @@ static gui_t *gui_Observer_value_init(char *title, void *general_data)
 static void gui_Observer_init(void)
 {
 	Pub_panel->gui_observer = VM_gui_init_PORT_panel();
-	gui_t *gui = Pub_panel->gui_observer;
+	VMgui_t *gui = Pub_panel->gui_observer;
 	gui->option_pointer_max = 3;
 	strPrint(gui->option_str[0], "Temperature");
-	gui->option_callBack[0] = temperature_callBack;
+	gui->_option_callBack[0] = temperature_callBack;
 
 	strPrint(gui->option_str[1], "Tumidity");
-	gui->option_callBack[1] = tumidity_callBack;
+	gui->_option_callBack[1] = tumidity_callBack;
 
 	strPrint(gui->option_str[2], "Smoke");
-	gui->option_callBack[2] = smoke_callBack;
+	gui->_option_callBack[2] = smoke_callBack;
 
 	strPrint(gui->option_str[3], "Carbon monoxide");
-	gui->option_callBack[3] = gui_carbon_monoxide_callBack;
+	gui->_option_callBack[3] = gui_carbon_monoxide_callBack;
 
 	strPrint(gui->title, "Observer");
 }
@@ -136,18 +136,18 @@ static void gui_Observer_init(void)
 static void gui_home_init(panel_t *panel)
 {
 	panel->gui_home = VM_gui_init_PORT_panel();
-	gui_t *gui = panel->gui_home;
+	VMgui_t *gui = panel->gui_home;
 	gui->option_pointer_max = 2;
 	strPrint(gui->option_str[0], "Observer");
-	gui->option_callBack[0] = observer_callBack;
+	gui->_option_callBack[0] = observer_callBack;
 	strPrint(gui->option_str[1], "Reconnect");
-	gui->option_callBack[1] = reconnect_callBack;
+	gui->_option_callBack[1] = reconnect_callBack;
 	strPrint(gui->option_str[2], "Reboot");
-	gui->option_callBack[2] = reboot_callBack;
+	gui->_option_callBack[2] = reboot_callBack;
 	strPrint(gui->title, "Home");
 }
 
-static void refresh_periodic_deault(gui_t *gui)
+static void _refresh_periodic_deault(VMgui_t *gui)
 {
 	// rewrite here if need periodic refresh.
 }
@@ -160,7 +160,7 @@ static void panel_init_PORT(panel_t *panel)
 	panel->gui_tumidity = gui_Observer_value_init("Tumidity", (void *)&panel->data_tumidity);
 
 	panel->gui_reconnect = gui_Observer_value_init("Reconnect", NULL);
-	panel->gui_reconnect->refresh_periodic = refresh_periodic_deault;
+	panel->gui_reconnect->_refresh_periodic = _refresh_periodic_deault;
 
 	panel->gui_smoke = gui_Observer_value_init("Smoke", (void *)&panel->data_smoke);
 	panel->gui_carbon_monoxide = gui_Observer_value_init("Carbon monoxide", (void *)&panel->data_carbon_monoxide);
@@ -175,7 +175,7 @@ static void deinit(panel_t *panel)
 
 static void update(panel_t *panel)
 {
-	panel->gui_main->refresh_periodic(panel->gui_main);
+	panel->gui_main->_refresh_periodic(panel->gui_main);
 }
 
 void panel_default_init(void)

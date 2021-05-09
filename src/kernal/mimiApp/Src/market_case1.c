@@ -1,17 +1,17 @@
 #include "market_case1.h"
 #include "VM_delay.h"
 #include "VM_key.h"
-#include "VM_memory.h"
+#include "dataMemory.h"
 #include "VM_socket.h"
 #include "mimiPort_market.h"
 #include "mimiSH_config.h"
 #include "mimiSH_core.h"
-#include "mimiStr.h"
+#include "dataString.h"
 #include "panel_market.h"
 #include <stdlib.h>
 #include <string.h>
 
-static void gui_goosNum_refuresh(gui_t *gui);
+static void gui_goosNum_refuresh(VMgui_t *gui);
 
 extern sh_t *Pub_Sh;
 
@@ -21,9 +21,9 @@ static void deinit(market_case1_t *market_case1)
     market_case1->panel->dinit(market_case1->panel);
 }
 
-static void gui_clear_line(gui_t *gui, int line)
+static void gui_clear_line(VMgui_t *gui, int line)
 {
-    gui->showLine(gui, line, 0, "                     ");
+    gui->_PORT_showLine(gui, line, 0, "                     ");
 }
 
 goods_t *Class_goods_init_market(void *field_market, char *goods_name, int price)
@@ -40,7 +40,7 @@ static void choseGoodsAndChange_callBack(void *context)
     // the the context
     panel_market_t *panel = (panel_market_t *)context;
     market_case1_t *market = (market_case1_t *)panel->context;
-    gui_t *gui = panel->gui_main;
+    VMgui_t *gui = panel->gui_main;
     int goods_ID = gui->option_pointer;
     goods_t *goods_main;
     switch (goods_ID)
@@ -76,36 +76,36 @@ static void choseGoodsAndChange_callBack(void *context)
     guiChange_callBack(context);
 }
 
-static void gui_BuyGoods_refresh(gui_t *gui)
+static void gui_BuyGoods_refresh(VMgui_t *gui)
 {
     gui->clear(gui);
-    gui->showLine(gui, 6, 0, "----------------------");
-    gui->showLine(gui, 7, 0, "|ADD");
-    gui->showLine(gui, 7, 0 + 5, "|   DEC ");
-    gui->showLine(gui, 7, 0 + 5 + 5 + 5, "| OK |");
+    gui->_PORT_showLine(gui, 6, 0, "----------------------");
+    gui->_PORT_showLine(gui, 7, 0, "|ADD");
+    gui->_PORT_showLine(gui, 7, 0 + 5, "|   DEC ");
+    gui->_PORT_showLine(gui, 7, 0 + 5 + 5 + 5, "| OK |");
 
-    gui->title_refresh(gui);
+    gui->refresh_title(gui);
     gui_goosNum_refuresh(gui);
 }
 
-static void gui_setGoodsPrice_refresh(gui_t *gui)
+static void gui_setGoodsPrice_refresh(VMgui_t *gui)
 {
     panel_market_t *panel = (panel_market_t *)gui->context;
     market_case1_t *market = (market_case1_t *)panel->context;
     gui->clear(gui);
-    gui->showLine(gui, 6, 0, "----------------------");
-    gui->showLine(gui, 7, 0, "|ADD");
-    gui->showLine(gui, 7, 0 + 5, "|   DEC ");
-    gui->showLine(gui, 7, 0 + 5 + 5 + 5, "| OK |");
+    gui->_PORT_showLine(gui, 6, 0, "----------------------");
+    gui->_PORT_showLine(gui, 7, 0, "|ADD");
+    gui->_PORT_showLine(gui, 7, 0 + 5, "|   DEC ");
+    gui->_PORT_showLine(gui, 7, 0 + 5 + 5 + 5, "| OK |");
 
     char buff[32] = {0};
     sprintf(buff, "Prece: %d CNY", market->goods_main->price);
     gui_clear_line(gui, 2);
-    gui->showLine(gui, 2, 2, buff);
+    gui->_PORT_showLine(gui, 2, 2, buff);
 
-    gui->option_pointer_refrash(gui);
-    gui->option_str_refrash(gui);
-    gui->title_refresh(gui);
+    gui->refrash_optionPointer(gui);
+    gui->refrash_optionStr(gui);
+    gui->refresh_title(gui);
 }
 static int get_totle(market_case1_t *market)
 {
@@ -144,29 +144,29 @@ static int get_totle(market_case1_t *market)
     }
     return totle;
 }
-static void gui_pay_refresh(gui_t *gui)
+static void gui_pay_refresh(VMgui_t *gui)
 {
     panel_market_t *panel = (panel_market_t *)gui->context;
     market_case1_t *market = (market_case1_t *)panel->context;
     gui->clear(gui);
-    gui->showLine(gui, 6, 0, "----------------------");
-    gui->showLine(gui, 7, 0, "|Back");
-    gui->showLine(gui, 7, 0 + 5, "|     ");
-    gui->showLine(gui, 7, 0 + 5 + 5 + 5, "| OK |");
+    gui->_PORT_showLine(gui, 6, 0, "----------------------");
+    gui->_PORT_showLine(gui, 7, 0, "|Back");
+    gui->_PORT_showLine(gui, 7, 0 + 5, "|     ");
+    gui->_PORT_showLine(gui, 7, 0 + 5 + 5 + 5, "| OK |");
 
     market->totle = get_totle(market);
 
     char buff[32] = {0};
     sprintf(buff, "Need pay: %d CNY", market->totle);
     gui_clear_line(gui, 2);
-    gui->showLine(gui, 2, 2, buff);
+    gui->_PORT_showLine(gui, 2, 2, buff);
 
-    gui->option_pointer_refrash(gui);
-    gui->option_str_refrash(gui);
-    gui->title_refresh(gui);
+    gui->refrash_optionPointer(gui);
+    gui->refrash_optionStr(gui);
+    gui->refresh_title(gui);
 }
 
-static void gui_add_goodsPriceset(gui_t *gui)
+static void gui_add_goodsPriceset(VMgui_t *gui)
 {
     panel_market_t *panel = (panel_market_t *)gui->context;
     market_case1_t *market = (market_case1_t *)panel->context;
@@ -174,10 +174,10 @@ static void gui_add_goodsPriceset(gui_t *gui)
     char buff[32] = {0};
     sprintf(buff, "Prece: %d CNY", market->goods_main->price);
     gui_clear_line(gui, 2);
-    gui->showLine(gui, 2, 2, buff);
+    gui->_PORT_showLine(gui, 2, 2, buff);
 }
 
-static void gui_dec_goodsPriceSet(gui_t *gui)
+static void gui_dec_goodsPriceSet(VMgui_t *gui)
 {
     panel_market_t *panel = (panel_market_t *)gui->context;
     market_case1_t *market = (market_case1_t *)panel->context;
@@ -188,35 +188,35 @@ static void gui_dec_goodsPriceSet(gui_t *gui)
     char buff[32] = {0};
     sprintf(buff, "Prece: %d CNY", market->goods_main->price);
     gui_clear_line(gui, 2);
-    gui->showLine(gui, 2, 2, buff);
+    gui->_PORT_showLine(gui, 2, 2, buff);
 }
 
-static void gui_ok_goodsPriceSet(gui_t *gui)
+static void gui_ok_goodsPriceSet(VMgui_t *gui)
 {
     gui->back_callBack(gui->context);
 }
 
-static void gui_goosNum_refuresh(gui_t *gui)
+static void gui_goosNum_refuresh(VMgui_t *gui)
 {
     panel_market_t *panel = (panel_market_t *)gui->context;
     market_case1_t *market = (market_case1_t *)panel->context;
     char buff_p[32] = {0};
     sprintf(buff_p, "Prece: %d CNY", market->goods_main->price);
     gui_clear_line(gui, 2);
-    gui->showLine(gui, 2, 2, buff_p);
+    gui->_PORT_showLine(gui, 2, 2, buff_p);
 
     char buff[32] = {0};
     sprintf(buff, "Buy number: %d", market->goods_main->buy_number);
     gui_clear_line(gui, 3);
-    gui->showLine(gui, 3, 2, buff);
+    gui->_PORT_showLine(gui, 3, 2, buff);
 
     char buff_ap[32] = {0};
     sprintf(buff_ap, "Subtotal: %d CNY", market->goods_main->buy_number * market->goods_main->price);
     gui_clear_line(gui, 4);
-    gui->showLine(gui, 4, 2, buff_ap);
+    gui->_PORT_showLine(gui, 4, 2, buff_ap);
 }
 
-static void gui_add_goodsNum(gui_t *gui)
+static void gui_add_goodsNum(VMgui_t *gui)
 {
     panel_market_t *panel = (panel_market_t *)gui->context;
     market_case1_t *market = (market_case1_t *)panel->context;
@@ -224,7 +224,7 @@ static void gui_add_goodsNum(gui_t *gui)
     gui_goosNum_refuresh(gui);
 }
 
-static void gui_dec_goodsNum(gui_t *gui)
+static void gui_dec_goodsNum(VMgui_t *gui)
 {
     panel_market_t *panel = (panel_market_t *)gui->context;
     market_case1_t *market = (market_case1_t *)panel->context;
@@ -235,7 +235,7 @@ static void gui_dec_goodsNum(gui_t *gui)
     gui_goosNum_refuresh(gui);
 }
 
-static void gui_ok_goodsNum(gui_t *gui)
+static void gui_ok_goodsNum(VMgui_t *gui)
 {
     gui->back_callBack(gui->context);
 }
@@ -250,7 +250,7 @@ static void clear_buy_num(market_case1_t *market)
     market->totle = get_totle(market);
 }
 
-static void gui_ok_pay(gui_t *gui)
+static void gui_ok_pay(VMgui_t *gui)
 {
     panel_market_t *panel = gui->context;
     market_case1_t *market = panel->context;
@@ -279,7 +279,7 @@ static void gui_ok_pay(gui_t *gui)
     market->sales += market->totle;
     // upload sales
     iot->data_upload_int(iot, 0, market->sales);
-
+		
     iot->delay(iot, 500);
     // upload odders;
     iot->data_upload_int(iot, 1, market->odders);
@@ -291,7 +291,7 @@ static void gui_ok_pay(gui_t *gui)
 static void callback_key_0(vkey_t *key, void *arg)
 {
     market_case1_t *market = (market_case1_t *)key->context;
-    gui_t *gui = market->panel->gui_main;
+    VMgui_t *gui = market->panel->gui_main;
     gui->back(gui);
 }
 
@@ -299,20 +299,23 @@ static void callback_key_0(vkey_t *key, void *arg)
 static void callback_key_1(vkey_t *key, void *arg)
 {
     market_case1_t *market = (market_case1_t *)key->context;
-    gui_t *gui = market->panel->gui_main;
+    VMgui_t *gui = market->panel->gui_main;
     gui->down(gui);
 }
 
 static void reconnect_callback(void *context)
 {
     panel_market_t *panel = context;
-    gui_t *gui = panel->gui_main;
+    VMgui_t *gui_reconnect = panel->gui_Reconnect;
+    VMgui_t *gui = panel->gui_main;
     market_case1_t *market = panel->context;
+
+    gui->next_gui[0] = panel->gui_Reconnect;
 
     guiChange_callBack(panel);
 
-    gui->showLine(gui, 2, 1, "Connecting to ");
-    gui->showLine(gui, 3, 1, "iot server......");
+    gui->_PORT_showLine(gui, 2, 1, "Connecting to ");
+    gui->_PORT_showLine(gui, 3, 1, "iot server......");
 
     DynMemPut((DMEM *)(PubSh->cmd(PubSh, "iot connect")));
     iot_t *iot = market->iot;
@@ -323,15 +326,15 @@ static void reconnect_callback(void *context)
 
     iot->data_upload_int(iot, 1, 0);
 
-    gui->showLine(gui, 2, 1, "Reconnect finished!");
-    gui->showLine(gui, 3, 1, "Please press [Back].");
+    gui->_PORT_showLine(gui, 2, 1, "Reconnect finished!");
+    gui->_PORT_showLine(gui, 3, 1, "Please press [Back].");
 }
 
 // callback need to be write in user code.
 static void callback_key_2(vkey_t *key, void *arg)
 {
     market_case1_t *market = (market_case1_t *)key->context;
-    gui_t *gui = market->panel->gui_main;
+    VMgui_t *gui = market->panel->gui_main;
     gui->enter(gui);
 }
 
@@ -358,7 +361,7 @@ static void update(market_case1_t *market, int systime_ms)
 {
     if (0 == systime_ms % 3000)
     {
-        market->panel->gui_main->refresh_periodic(market->panel->gui_main);
+        market->panel->gui_main->_refresh_periodic(market->panel->gui_main);
     }
     if (0 == systime_ms % 50)
     {
@@ -372,24 +375,6 @@ static void update(market_case1_t *market, int systime_ms)
         market->key_1->update_callBack(market->key_1, systime_ms);
         market->key_2->update_callBack(market->key_2, systime_ms);
     }
-
-    // if (0 == systime_ms % 5000)
-    // {
-    // 			int latitude = atoi(market->latitude);
-    // 			int longitude = atoi(market->longitude);
-    // 			iot_t *iot= market->iot;
-
-    // 			if(Save_Data.isUsefull)
-    // 			{
-    // 				memcpy(market->latitude,Save_Data.latitude,latitude_Length);
-    // 				memcpy(market->longitude,Save_Data.longitude,longitude_Length);
-    // 			}
-
-    // 			iot->data_upload_int(iot,2,latitude);
-    // 			market->delay->delay(market->delay,300);
-    // 			iot->data_upload_int(iot,3,longitude);
-    // 			market->delay->delay(market->delay,300);
-    // }
 }
 
 iot_t *VM_iot_Init_market(void *context)
@@ -406,8 +391,8 @@ panel_market_t *Class_panel_market_init_market(void *context)
 
     for (int i = 0; i < 5; i++)
     {
-        panel->gui_Set->option_callBack[i] = choseGoodsAndChange_callBack;
-        panel->gui_shopping->option_callBack[i] = choseGoodsAndChange_callBack;
+        panel->gui_Set->_option_callBack[i] = choseGoodsAndChange_callBack;
+        panel->gui_shopping->_option_callBack[i] = choseGoodsAndChange_callBack;
     }
 
     panel->gui_goods_set->back = gui_add_goodsPriceset;
@@ -420,9 +405,7 @@ panel_market_t *Class_panel_market_init_market(void *context)
     panel->gui_goods_shopping->enter = gui_ok_goodsNum;
     panel->gui_goods_shopping->refresh = gui_BuyGoods_refresh;
 
-    panel->gui_home->option_callBack[3] = reconnect_callback;
-
-    panel->gui_Reconnect->next_gui[0] = panel->gui_Reconnect;
+    panel->gui_home->_option_callBack[3] = reconnect_callback;
 
     panel->gui_Pay->refresh = gui_pay_refresh;
     panel->gui_Pay->enter = gui_ok_pay;
@@ -479,9 +462,6 @@ Class_market_case1_init(void)
     market->update = update;
     market->sales = 0;
     market->odders = 0;
-
-    // memcpy(market->latitude,"4352.83797",sizeof("4352.83797"));
-    // memcpy(market->longitude,"12518.07578",sizeof("12518.07578"));
 
     return market;
 }

@@ -1,4 +1,4 @@
-#include "VM_memory.h"
+#include "dataMemory.h"
 #include "VM_smoke.h"
 
 smoke_t *Pub_VM_smoke;

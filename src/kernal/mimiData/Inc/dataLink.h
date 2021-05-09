@@ -1,29 +1,33 @@
-#ifndef __DATA_LINK_H
-#define __DATA_LINK_H
+#ifndef _link2__H
+#define _link2__H
+#include "dataArgsConst.h"
+#include "dataLinkNode.h"
+#include "dataMemory.h"
 
-#include "VM_memory.h"
-typedef struct dataTest
+typedef struct Class_link link_t;
+struct Class_link
 {
+    /* attribute */
     DMEM *mem;
-    int a;
-    int b;
-} data_t;
+    linkNode_t *firstNode;
+    long long TopId;
 
-typedef struct dataLink
-{
-    void *data;
-    DMEM *mem;
-    struct dataLink *prior;
-    struct dataLink *next;
-    void (*add)(struct dataLink *, void *);
-    void (*destroy)(struct dataLink *);
-    int (*size)(struct dataLink *);
-    void *(*traverse)(struct dataLink *, void *(*)(void *));
-    void (*deinit)(struct dataLink *);
-    void (*port_deinit_data)(void *);
-    void (*deinit_node)(struct dataLink *);
-} dataLink_t;
+    /* operation */
+    void (*dinit)(link_t *self);
+    void (*init)(link_t *self, argsConst_t *args);
+    void (*add)(link_t *self, void *contant, void (*_contantDinit)(void *contant));
+    void *(*tranverse)(
+        link_t *self,
+        void *(*fun)(linkNode_t *node, argsConst_t *args),
+        argsConst_t *args);
 
-dataLink_t *dataLink_init(void);
+    linkNode_t *(*findNodeById)(link_t *self, long long id);
 
+    int (*size)(link_t *self);
+    /* virtual operation */
+
+    /* object */
+};
+
+link_t *New_Link(argsConst_t *args);
 #endif

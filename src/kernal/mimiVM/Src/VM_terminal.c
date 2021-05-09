@@ -1,5 +1,5 @@
 #include "VM_terminal.h"
-#include "VM_memory.h"
+#include "dataMemory.h"
 static void deinit(terminal_t *terminal)
 {
     DynMemPut(terminal->mem);

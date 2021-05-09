@@ -7,11 +7,11 @@ VM_core is a virtusl machine runing in stm32, the shell_driver is based on VM di
 #include "usart.h"
 #endif
 #include "VM_iot.h"
-#include "VM_memory.h"
+#include "dataMemory.h"
 #include "dataLog.h"
 #include "mimiSH_config.h"
 #include "mimiSH_core.h"
-#include "mimiStr.h"
+#include "dataString.h"
 // #include "VM_gps.h"
 #include "mimiVM_core.h"
 #include <stdio.h>
@@ -173,6 +173,13 @@ void com3_SingleLine_callBack_process(struct com_t *pcom)
 	VM_UART_Transmit(&VM.com1, "repost from uart3 >");
 	VM_UART_Transmit(&VM.com1, pcom->RX_SingleLine);
 	VM_UART_Transmit(&VM.com1, "\r\n");
+
+	char *strOut;
+	DMEM *memOut;
+	memOut = (DMEM *)(PubSh->cmd(PubSh, VIM_com_RX_SingleLine_pget(pcom)));
+	strOut = (char *)(memOut->addr);
+	VM_UART_Transmit(&VM.com1, strOut);
+	DynMemPut(memOut);
 }
 
 void VM_com_TX_buff_free(struct com_t *pcom)
@@ -215,14 +222,11 @@ void VM_com_RX_SingleLine_process(struct com_t *pcom)
 {
 	int RX_buff_i = *(VM_com_RX_buff_i_pget(pcom));
 
-	// GPS_IT(VM_com_RX_Char_get(pcom));
-
 	// return if there is too much rx
 	if (!(RX_buff_i < 256))
 	{
 		return;
 	}
-
 	if ((VM_com_RX_Char_get(pcom) != '\r') && (VM_com_RX_Char_get(pcom) != '\n'))
 	{
 		VM_com_RX_buff_pget(pcom)[VM_com_RX_buff_i_get(pcom)] = VM_com_RX_Char_get(pcom);

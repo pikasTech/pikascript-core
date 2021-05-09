@@ -1,7 +1,7 @@
 #ifndef __VM_DELAY_H
 #define __VM_DELAY_H
 
-#include "VM_memory.h"
+#include "dataMemory.h"
 struct VM_delay
 {
     void (*delay)(struct VM_delay *, int);

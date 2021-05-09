@@ -1,6 +1,6 @@
 #include "dataLog.h"
-#include "VM_memory.h"
-#include "mimiStr.h"
+#include "dataMemory.h"
+#include "dataString.h"
 static void print(loger_t *loger, char *str)
 {
     //get size of log
@@ -34,6 +34,7 @@ loger_t *dataLog_init(void)
     loger_t *loger = (loger_t *)mem->addr;
     loger->mem = mem;
     loger->log_mem = NULL;
+    loger->log = NULL;
     loger->log_size = 0;
     loger->print = print;
     loger->deinit = deinit;

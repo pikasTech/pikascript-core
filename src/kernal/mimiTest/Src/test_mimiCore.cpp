@@ -4,8 +4,8 @@
 extern "C"
 {
 // tools
-#include "dataLink.h"
-#include "mimiStr.h"
+#include "dataLinkWithNode.h"
+#include "dataString.h"
 #include "mimiTest.h"
 #include <string.h>
 // cores
@@ -26,13 +26,19 @@ extern "C"
 // SubTest
 #include "VM_com_test.h"
 #include "VM_dht11_test.h"
-#include "VM_memory.h"
 #include "VM_socket_test.h"
+#include "dataMemory.h"
+#include "test_PORT_strprint_linux.h"
+#include "test_VM_args.h"
+#include "test_VM_device.h"
 #include "test_VM_key.h"
+#include "test_args2.h"
 #include "test_dataLink.h"
 #include "test_dataLog.h"
 #include "test_dataQueue.h"
-#include "test_PORT_strprint_linux.h"
+#include "test_link2.h"
+#include "test_timer.h"
+#include "test_server.h"
 }
 extern DMEM_STATE DMEMS;
 extern int error_num;
@@ -333,6 +339,12 @@ void test_mimiCore(int isShow)
     // ASSERT_RETURN(TEST_dataQueue, 1);
     ASSERT_RETURN(TEST_VM_key, isShow);
     ASSERT_RETURN(TEST_PORT_strprint_linux, isShow);
+    ASSERT_RETURN(TEST_timer, isShow);
+    ASSERT_RETURN(TEST_VM_args, isShow);
+    ASSERT_RETURN(TEST_VM_device, isShow);
+    ASSERT_RETURN(TEST_link2, isShow);
+    ASSERT_RETURN(TEST_args2, isShow);
+    ASSERT_RETURN(TEST_server, 1);
     std::cout << "Test of mimiCore Finished! " << std::endl
               << std::endl
               << "Memory still used: " << DMEMS.blk_num << std::endl

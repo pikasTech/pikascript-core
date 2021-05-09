@@ -1,6 +1,6 @@
 #ifndef __SH_sgui__H
 #define __SH_sgui__H
-#include "VM_memory.h"
+#include "dataMemory.h"
 typedef struct SH_sgui sgui_t;
 struct SH_sgui
 {

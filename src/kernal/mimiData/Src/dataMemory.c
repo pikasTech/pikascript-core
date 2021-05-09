@@ -1,4 +1,4 @@
-#include "VM_memory.h"
+#include "dataMemory.h"
 
 static uint8_t DMEMORY[DMEM_TOTAL_SIZE];
 DMEM_STATE DMEMS = {0};

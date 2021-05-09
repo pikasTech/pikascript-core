@@ -1,6 +1,6 @@
 #include "shApp_cmdNoFound.h"
-#include "VM_memory.h"
-#include "mimiStr.h"
+#include "dataMemory.h"
+#include "dataString.h"
 #include <stdlib.h>
 void *app_cmdNofound(int argc, char **argv)
 {

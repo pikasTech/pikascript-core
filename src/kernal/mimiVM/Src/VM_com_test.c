@@ -1,6 +1,6 @@
 #include "VM_com_test.h"
 #include "VM_com.h"
-#include "mimiStr.h"
+#include "dataString.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

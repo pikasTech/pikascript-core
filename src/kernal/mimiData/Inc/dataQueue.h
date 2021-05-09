@@ -1,11 +1,11 @@
 #ifndef __DATA_QUEUE_H
 #define __DATA_QUEUE_H
-#include "VM_memory.h"
-#include "dataLink.h"
+#include "dataMemory.h"
+#include "dataLinkWithNode.h"
 typedef struct dataQueue
 {
     DMEM *mem;
-    dataLink_t *head;
+    linkWithNode_t *head;
 
     void (*push)(struct dataQueue *, void *);
     void *(*pop)(struct dataQueue *);

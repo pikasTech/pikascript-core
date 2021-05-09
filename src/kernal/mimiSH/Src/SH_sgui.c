@@ -1,6 +1,6 @@
 #include "SH_sgui.h"
-#include "VM_memory.h"
-#include "mimiStr.h"
+#include "dataMemory.h"
+#include "dataString.h"
 
 static void deinit(sgui_t *sgui)
 {

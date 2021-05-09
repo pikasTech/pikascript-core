@@ -1,5 +1,5 @@
 #include "test_dataLink.h"
-#include "dataLink.h"
+#include "dataLinkWithNode.h"
 
 void *find_a_equal_3(void *data)
 {
@@ -12,7 +12,7 @@ void *find_a_equal_3(void *data)
     return NULL;
 }
 
-int linkNode_test(dataLink_t *Head, int isShow)
+int linkNode_test(linkWithNode_t *Head, int isShow)
 {
     DMEM *mem1, *mem2;
     mem1 = DynMemGet(sizeof(data_t));
@@ -60,7 +60,7 @@ int linkNode_test(dataLink_t *Head, int isShow)
 
 int TEST_dataLink(int isShow)
 {
-    dataLink_t *Head = dataLink_init();
+    linkWithNode_t *Head = New_linkWithNode(NULL);
     int testOut = 0;
     testOut = linkNode_test(Head, isShow);
     Head->deinit(Head);

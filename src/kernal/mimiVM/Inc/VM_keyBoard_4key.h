@@ -1,6 +1,6 @@
 #ifndef __VM__KEYBOARD_4KEY__H
 #define __VM__KEYBOARD_4KEY__H
-#include "VM_memory.h"
+#include "dataMemory.h"
 #include "VM_key.h"
 typedef struct VM_keyBoard_4key keyBoard4_t;
 struct VM_keyBoard_4key

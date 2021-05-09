@@ -1,7 +1,7 @@
 #ifndef __SHELL_CORE_H
 #define __SHELL_CORE_H
-#include "VM_memory.h"
-#include "dataLink.h"
+#include "dataMemory.h"
+#include "dataLinkWithNode.h"
 char *ShellCMDPush(char *CMD);
 int strGetArgs(char *CMD, char **argv);
 
@@ -16,7 +16,7 @@ typedef struct ShellCore
 {
     DMEM *mem;
     void *(*cmd)(struct ShellCore *, char *);
-    dataLink_t *cmdMapHead;
+    linkWithNode_t *cmdMapHead;
     void (*addMap)(struct ShellCore *, char *, void *(*)(int argc, char **argv));
     int (*listMap)(struct ShellCore *, int);
     int (*test)(struct ShellCore *, int);

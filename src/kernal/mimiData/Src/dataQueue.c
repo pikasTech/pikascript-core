@@ -1,6 +1,6 @@
 #include "dataQueue.h"
-#include "dataLink.h"
-#include "VM_memory.h"
+#include "dataLinkWithNode.h"
+#include "dataMemory.h"
 
 void push(struct dataQueue *queue, void *data)
 {
@@ -32,7 +32,7 @@ queue_t *dataQueue_init()
     queue->mem = mem;
     queue->pop = pop;
     queue->push = push;
-    queue->head = dataLink_init();
+    queue->head = New_linkWithNode(NULL);
     queue->head->port_deinit_data = port_deinit_data_default;
     return queue;
 }

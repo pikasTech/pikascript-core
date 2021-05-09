@@ -1,6 +1,6 @@
 #include "VM_keyBoard_4key.h"
 #include "VM_key.h"
-#include "VM_memory.h"
+#include "dataMemory.h"
 
 static void deinit(keyBoard4_t *kb)
 {

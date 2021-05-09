@@ -3,7 +3,7 @@
 #include "VM_delay.h"
 #include "VM_iot.h"
 #include "VM_key.h"
-#include "VM_memory.h"
+#include "dataMemory.h"
 #include "VM_socket.h"
 #include "goods.h"
 #include "panel_market.h"
@@ -40,9 +40,6 @@ struct Class_market_case1
   int odders;
 
   void (*update)(market_case1_t *market_case1, int systime_ms);
-
-  // char latitude[latitude_Length];		//γ��
-  // char longitude[longitude_Length];		//����
 };
 market_case1_t *Class_market_case1_init(void);
 #endif

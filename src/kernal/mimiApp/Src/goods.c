@@ -1,6 +1,6 @@
 #include "goods.h"
-#include "VM_memory.h"
-#include "mimiStr.h"
+#include "dataMemory.h"
+#include "dataString.h"
 static void deinit(goods_t *goods)
 {
     DynMemPut(goods->mem);

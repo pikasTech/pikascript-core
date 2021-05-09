@@ -2,7 +2,7 @@
 #define __VM_IOT_H
 
 typedef struct VM_iot iot_t;
-#include "VM_memory.h"
+#include "dataMemory.h"
 
 struct VM_iot
 {

@@ -1,7 +1,7 @@
 #include "VM_socket.h"
 #include "VM_iot.h"
-#include "VM_memory.h"
-#include "mimiStr.h"
+#include "dataMemory.h"
+#include "dataString.h"
 #include "mimiVM_core.h"
 //#include "mimiSH_core.h"
 

@@ -1,6 +1,6 @@
 #ifndef __VM_terminal__H
 #define __VM_terminal__H
-#include "VM_memory.h"
+#include "dataMemory.h"
 typedef struct VM_terminal terminal_t;
 struct VM_terminal
 {

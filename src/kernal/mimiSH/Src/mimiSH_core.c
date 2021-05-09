@@ -1,8 +1,8 @@
 // don't modify the mimiSH_core !!
 #include "mimiSH_core.h"
-#include "VM_memory.h"
-#include "dataLink.h"
-#include "mimiStr.h"
+#include "dataMemory.h"
+#include "dataLinkWithNode.h"
+#include "dataString.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -105,7 +105,7 @@ void *Shell_cmd(sh_t *sh, char *cmd)
 {
 	char *name;
 	cmdMap_t *cmdMap;
-	dataLink_t *nodeNow = sh->cmdMapHead->next;
+	linkWithNode_t *nodeNow = sh->cmdMapHead->next;
 	while (NULL != nodeNow)
 	{
 		cmdMap = (cmdMap_t *)nodeNow->data;
@@ -187,7 +187,7 @@ sh_t *ShellCore_init(void)
 	sh_t *sh = (sh_t *)(mem->addr);
 	sh->mem = mem;
 	sh->cmd = Shell_cmd;
-	sh->cmdMapHead = dataLink_init();
+	sh->cmdMapHead = New_linkWithNode(NULL);
 	// set how to deinit the data of cmdMap Link
 	sh->cmdMapHead->port_deinit_data = deinit_cmdMap_data;
 	sh->addMap = Shell_addMap;

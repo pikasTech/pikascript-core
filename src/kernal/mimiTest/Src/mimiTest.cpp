@@ -2,7 +2,7 @@
 #include <iostream>
 extern "C"
 {
-#include "VM_memory.h"
+#include "dataMemory.h"
 }
 
 extern DMEM_STATE DMEMS;

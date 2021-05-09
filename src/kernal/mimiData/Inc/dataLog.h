@@ -1,6 +1,6 @@
 #ifndef __DATA_LOG__H
 #define __DATA_LOG__H
-#include "VM_memory.h"
+#include "dataMemory.h"
 
 
 typedef struct dataLog

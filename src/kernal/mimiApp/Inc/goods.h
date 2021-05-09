@@ -1,6 +1,6 @@
 #ifndef _goods__H
 #define _goods__H
-#include "VM_memory.h"
+#include "dataMemory.h"
 typedef struct Class_goods goods_t;
 struct Class_goods
 {

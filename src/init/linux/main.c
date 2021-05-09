@@ -1,23 +1,25 @@
 #include "SH_sgui.h"
 #include "VM_gui.h"
 #include "VM_terminal.h"
-#include "market_case1.h"
+#include "dataString.h"
+#include "gui2.h"
 #include "mimiPort_market.h"
 #include "mimiSH_config.h"
 #include "mimiSH_core.h"
-#include "mimiStr.h"
 #include "mimiVM_core.h"
-#include "panel_default.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/select.h>
 #include <sys/time.h>
 #include <unistd.h>
 
+#include "temp_master.h"
+#include "temp_panel.h"
+
 extern sh_t *PubSh;
 terminal_t *terminal;
 sgui_t *sgui;
-market_case1_t *market;
+extern server_t *tempM;
 
 static void callBack_char_linux_cli(terminal_t *terminal, char ch);
 
@@ -40,26 +42,29 @@ static void *detector_sh_linux(void *(*fun_d)(char *, char *, void *(fun)(int, c
 
 static void callBack_char_linux_gui(terminal_t *terminal, char ch)
 {
-    gui_t *gui_main = market->panel->gui_main;
     if (3 == ch)
     {
         terminal->callBack_char = callBack_char_linux_cli;
+        server_t *panel = tempM->subObjectList[3];
+        panel->disable(panel);
         PubSh->cmd(PubSh, "to com1 gui exited.");
-    }
-    if ('j' == ch)
-    {
-        gui_main->up(gui_main);
-    }
-    if ('k' == ch)
-    {
-        gui_main->down(gui_main);
     }
     if ('h' == ch)
     {
+        server_t *panel = tempM->subObjectList[3];
+        gui2_t *gui_main = panel->subObjectList[0];
         gui_main->back(gui_main);
+    }
+    if ('k' == ch)
+    {
+        server_t *panel = tempM->subObjectList[3];
+        gui2_t *gui_main = panel->subObjectList[0];
+        gui_main->down(gui_main);
     }
     if ('l' == ch)
     {
+        server_t *panel = tempM->subObjectList[3];
+        gui2_t *gui_main = panel->subObjectList[0];
         gui_main->enter(gui_main);
     }
 }
@@ -69,8 +74,12 @@ static void *sh_sgui_main_linux(int argc, char **argv)
     DMEM *strout_mem = DynMemGet(sizeof(char) * 256);
     char *strOut = strout_mem->addr;
     strOut[0] = 0;
+
     terminal->callBack_char = callBack_char_linux_gui;
-    market->panel->gui_main->refresh(market->panel->gui_main);
+
+    server_t *panel = tempM->subObjectList[3];
+    panel->enable(panel);
+
     return (void *)strout_mem;
 }
 
@@ -140,8 +149,14 @@ int main(int argc, char **argv)
 
     PubSh = Shell_Core_init_linux();
     terminal = VM_terminal_init_linux();
-    market = Class_market_case1_init();
     sgui = SH_sgui_init_linux();
+
+    {
+        list_t *args = New_list(NULL);
+        args->int64(args, "isEnable", 0);
+        tempM = New_server_tempM(args);
+        args->dinit(args);
+    }
 
     PubSh->addMap(PubSh, "gui", sgui->sh_main);
 
@@ -155,11 +170,7 @@ int main(int argc, char **argv)
         usleep(5000);
         i_ms += 5;
 
-        if (0 == i_ms % 50)
-        {
-            // refresh gui pernal
-            market->update(market, i_ms);
-        }
+        tempM->update(tempM, i_ms);
 
         if (0 == i_ms % 50)
         {

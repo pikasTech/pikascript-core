@@ -1,7 +1,7 @@
 #ifndef __VM_SMOKE_H
 #define __VM_SMOKE_H
 
-#include "VM_memory.h"
+#include "dataMemory.h"
 typedef struct VM_smoke
 {
 	DMEM *mem;

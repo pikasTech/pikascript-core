@@ -1,7 +1,7 @@
 #ifndef __panel_default_linux__H
 #define __panel_default_linux__H
 #include "VM_gui.h"
-#include "VM_memory.h"
+#include "dataMemory.h"
 
 struct Data_observer
 {
@@ -14,15 +14,15 @@ struct gui_default_linux
 {
     DMEM *mem;
     void (*dinit)(panel_t *gui_default_linux);
-    gui_t *gui_home;
-    gui_t *gui_observer;
-    gui_t *gui_temperature;
-    gui_t *gui_tumidity;
-    gui_t *gui_smoke;
-    gui_t *gui_carbon_monoxide;
-    gui_t *gui_reconnect;
+    VMgui_t *gui_home;
+    VMgui_t *gui_observer;
+    VMgui_t *gui_temperature;
+    VMgui_t *gui_tumidity;
+    VMgui_t *gui_smoke;
+    VMgui_t *gui_carbon_monoxide;
+    VMgui_t *gui_reconnect;
 
-    gui_t *gui_main;
+    VMgui_t *gui_main;
 
     void (*update)(panel_t *panel);
     struct Data_observer data_temperate;

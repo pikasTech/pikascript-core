@@ -1,8 +1,8 @@
 #ifndef __VM_GUI__H
 #define __VM_GUI__H
-#include "VM_memory.h"
+#include "dataMemory.h"
 
-typedef struct VM_gui gui_t;
+typedef struct VM_gui VMgui_t;
 
 struct VM_gui
 {
@@ -13,44 +13,43 @@ struct VM_gui
 
 	char option_str[5][32];
 
-	gui_t *last_gui;
-	gui_t *next_gui[5];
+	VMgui_t *last_gui;
+	VMgui_t *next_gui[5];
 
-	void (*showString)(gui_t *gui, int x, int y, char *string);
-	void (*option_pointer_refrash)(gui_t *gui);
-	void (*option_str_refrash)(gui_t *gui);
-	void (*option_callBack[5])(void *context);
+	void (*showString)(VMgui_t *gui, int x, int y, char *string);
+	void (*refrash_optionPointer)(VMgui_t *gui);
+	void (*refrash_optionStr)(VMgui_t *gui);
+	void (*_option_callBack[5])(VMgui_t *gui);
 
-	void (*change_gui)(gui_t *gui, gui_t *gui_new);
+	void (*change_gui)(VMgui_t *gui, VMgui_t *gui_new);
 
-	void (*back_callBack)(void *context);
+	void (*back_callBack)(VMgui_t *gui);
 
 	char title[32];
-	void (*title_refresh)(gui_t *gui);
-	void (*refresh_periodic)(gui_t *gui);
+	void (*refresh_title)(VMgui_t *gui);
+	void (*_refresh_periodic)(VMgui_t *gui);
 
-	void (*deinit)(gui_t *gui);
-	void (*refresh)(gui_t *gui);
-	void (*up)(gui_t *gui);
-	void (*down)(gui_t *gui);
-	void (*enter)(gui_t *gui);
-	void (*back)(gui_t *gui);
+	void (*deinit)(VMgui_t *gui);
+	void (*refresh)(VMgui_t *gui);
+	void (*up)(VMgui_t *gui);
+	void (*down)(VMgui_t *gui);
+	void (*enter)(VMgui_t *gui);
+	void (*back)(VMgui_t *gui);
 
-	void (*showLine)(gui_t *gui, int line, int cols, char *str);
-	void (*PORT_VM_gui_showString)(int x, int y, char *string);
-	void (*PORT_VM_gui_clear)(void);
+	void (*_PORT_showLine)(VMgui_t *gui, int line, int cols, char *str);
+	void (*_PORT_showString)(int x, int y, char *string);
+	void (*_PORT_clear)(void);
 
-	void (*clear)(gui_t *gui);
+	void (*clear)(VMgui_t *gui);
 	// used to transfor diferent types of data to gui.
 	void *generalData;
 
-	// this parameter limited the context of Callback 
+	// this parameter limited the context of Callback
 	void *context;
 
-void (*setTitle)(gui_t *gui, char *title);
-
+	void (*setTitle)(VMgui_t *gui, char *title);
 };
 
-gui_t *VM_gui_init(void);
+VMgui_t *VM_gui_init(void);
 
 #endif

@@ -2,7 +2,7 @@
 #define __VM_KEY__H
 
 #include "VM_key.h"
-#include "VM_memory.h"
+#include "dataMemory.h"
 
 typedef struct VM_key vkey_t;
 

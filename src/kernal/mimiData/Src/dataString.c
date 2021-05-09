@@ -1,4 +1,4 @@
-#include "mimiStr.h"
+#include "dataString.h"
 
 char *strPrintWithSize_unlimited(char *strOut, char *pData, unsigned short int Size, unsigned short int isClearBuff)
 {
