@@ -1,1 +1,0 @@
-/usr/bin/cc    -Xlinker CMakeFiles/linux.bin.dir/main.c.o  -o ../../../../bin/linux.bin   -L/root/dev/mimilib/lib  -Wl,-rpath,/root/dev/mimilib/lib ../../../../lib/libmimi.a 
