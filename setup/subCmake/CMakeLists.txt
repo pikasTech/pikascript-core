@@ -4,6 +4,7 @@ string(REGEX REPLACE ".*/(.*)" "\\1" CURRENT_FOLDER ${CURRENT_FOLDER_ABSOLUTE})
 
 # 递归获取目录下所有的C文件
 file(GLOB_RECURSE c_files ./*.c)
+file(GLOB_RECURSE cpp_files ./*.cpp)
 
 # 递归获取目录下所有的h文件
 file(GLOB_RECURSE h_files ./*.h)
@@ -19,7 +20,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 link_directories(${PROJECT_SOURCE_DIR}/lib)
 
 #生成静态库
-add_library(${CURRENT_FOLDER} STATIC ${c_files})
+add_library(${CURRENT_FOLDER} STATIC ${c_files} ${cpp_files})
 
 #静态库的名字设置为当前目录名
 set_target_properties(${CURRENT_FOLDER} PROPERTIES OUTPUT_NAME ${CURRENT_FOLDER})

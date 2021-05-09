@@ -3,7 +3,7 @@ string(REGEX REPLACE "/$" "" CURRENT_FOLDER_ABSOLUTE ${CMAKE_CURRENT_SOURCE_DIR}
 string(REGEX REPLACE ".*/(.*)" "\\1" CURRENT_FOLDER ${CURRENT_FOLDER_ABSOLUTE})
 
 # 获取 main.c 文件
-file(GLOB_RECURSE main_file ./*main.c)
+file(GLOB_RECURSE main_file ./*main.c*)
 
 # 获取.a文件
 file(GLOB_RECURSE lib_file ${PROJECT_SOURCE_DIR}/lib/*.a) 
@@ -19,9 +19,9 @@ message ("link options: " ${CMAKE_EXE_LINKER_FLAGS})
 link_directories(${PROJECT_SOURCE_DIR}/lib)
 
 #生成可执行文件
-ADD_EXECUTABLE(${CURRENT_FOLDER}_exe ${main_file})
+ADD_EXECUTABLE(${CURRENT_FOLDER}.bin ${main_file})
 
-TARGET_LINK_LIBRARIES(${CURRENT_FOLDER}_exe ${lib_file})
+TARGET_LINK_LIBRARIES(${CURRENT_FOLDER}.bin ${lib_file})
 
 # 添加链接库
 #execute_process(
