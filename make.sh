@@ -25,9 +25,4 @@ rm bin -rf
 # build project
 cd build && cmake .. && make && cd .. 
 
-# remove CMakeLists.txt from sub sorce folder
-for dir in $(ls src)
-do
-   echo 'delete CMakeLists.txt from '$SRC_FOLDER'/'$dir
-   rm  $SRC_FOLDER/$dir/CMakeLists.txt
-done
+

@@ -17,10 +17,6 @@ else
    echo dir build exist
 fi
 
-# clear the include and lib folder
-rm include -rf
-rm lib -rf
-rm bin -rf
 
 # build project and remove build folder
 cd build && cmake .. && make && cd .. && rm build -rf 
