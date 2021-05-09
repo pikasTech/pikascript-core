@@ -33,15 +33,15 @@ foreach(item ${subDirsList_kernal})
 endforeach()
 
 
-# 添加子目录---init
-execute_process(
-	COMMAND ls ${PROJECT_SOURCE_DIR}/${SRC_DIR}/init
-	OUTPUT_VARIABLE subDirs_init
-	)
-string(REPLACE "\n" ";" subDirsList_init ${subDirs_init})
+# # 添加子目录---init
+# execute_process(
+# 	COMMAND ls ${PROJECT_SOURCE_DIR}/${SRC_DIR}/init
+# 	OUTPUT_VARIABLE subDirs_init
+# 	)
+# string(REPLACE "\n" ";" subDirsList_init ${subDirs_init})
 
-#编译下一级所有子模块----init
-foreach(item ${subDirsList_init})
-	message("add sub directory: ${SRC_DIR}/${item}")
-	add_subdirectory(${SRC_DIR}/init/${item})
-endforeach()
+# #编译下一级所有子模块----init
+# foreach(item ${subDirsList_init})
+# 	message("add sub directory: ${SRC_DIR}/${item}")
+# 	add_subdirectory(${SRC_DIR}/init/${item})
+# endforeach()
