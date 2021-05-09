@@ -1,3 +1,6 @@
+SRC_FOLDER=src
+SUB_CMAKE_DIR=config/subCmake/CMakeLists.txt
+
 git pull
 
 rm build -rf
@@ -6,7 +9,7 @@ rm build -rf
 for dir in $(ls src)
 do
    echo 'delete CMakeLists.txt from '$SRC_FOLDER'/'$dir
-   git rm  $SRC_FOLDER/$dir/CMakeLists.txt
+   git rm $SRC_FOLDER/$dir/CMakeLists.txt
 done
 
 # clear the include and lib folder
