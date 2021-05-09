@@ -1,6 +1,5 @@
 #!/bin/bash
 SRC_FOLDER=src
-SUB_CMAKE_DIR=setup/subCmake/CMakeLists.txt
 
 # clear CMakeLists.txt from sub sorce folder
 for dir in $(ls src)
