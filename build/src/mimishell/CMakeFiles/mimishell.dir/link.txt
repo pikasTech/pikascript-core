@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../../lib/libmimishell.a  CMakeFiles/mimishell.dir/src/SH_sgui.c.o CMakeFiles/mimishell.dir/src/mimiSH_config.c.o CMakeFiles/mimishell.dir/src/mimiSH_core.c.o CMakeFiles/mimishell.dir/src/shApp_argv.c.o CMakeFiles/mimishell.dir/src/shApp_cmdNoFound.c.o CMakeFiles/mimishell.dir/src/shApp_test.c.o CMakeFiles/mimishell.dir/src/shDriver_VM_iot.c.o CMakeFiles/mimishell.dir/src/shDriver_sendTo.c.o CMakeFiles/mimishell.dir/src/shDriver_uart.c.o
+/usr/bin/ranlib ../../../lib/libmimishell.a

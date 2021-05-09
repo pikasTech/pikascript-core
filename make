@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SRC_FOLDER=src
-SUB_CMAKE_DIR=config/subCmake/CMakeLists.txt
+SUB_CMAKE_DIR=setup/subCmake/CMakeLists.txt
 
 # copy sub CMakeLists.txt to sub sorce folder
 for dir in $(ls $SRC_FOLDER)

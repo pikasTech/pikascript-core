@@ -1,0 +1,40 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/VM_memory.h
+stdint.h
+../include/stdint.h
+stdio.h
+../include/stdio.h
+string.h
+../include/string.h
+
+../include/callback.h
+VM_memory.h
+../include/VM_memory.h
+
+../include/timer.h
+VM_memory.h
+../include/VM_memory.h
+callback.h
+../include/callback.h
+
+/root/dev/mimilib/src/mimiapp/src/callback.c
+callback.h
+/root/dev/mimilib/src/mimiapp/src/callback.h
+VM_memory.h
+/root/dev/mimilib/src/mimiapp/src/VM_memory.h
+
+/root/dev/mimilib/src/mimiapp/src/timer.c
+VM_memory.h
+/root/dev/mimilib/src/mimiapp/src/VM_memory.h
+timer.h
+/root/dev/mimilib/src/mimiapp/src/timer.h
+callback.h
+/root/dev/mimilib/src/mimiapp/src/callback.h
+

@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../../lib/libmimidata.a  CMakeFiles/mimidata.dir/src/dataLink.c.o CMakeFiles/mimidata.dir/src/dataLog.c.o CMakeFiles/mimidata.dir/src/dataQueue.c.o CMakeFiles/mimidata.dir/src/test_dataLink.c.o CMakeFiles/mimidata.dir/src/test_dataLog.c.o CMakeFiles/mimidata.dir/src/test_dataQueue.c.o
+/usr/bin/ranlib ../../../lib/libmimidata.a

@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../../lib/libmimistr.a  CMakeFiles/mimistr.dir/src/mimiStr.c.o
+/usr/bin/ranlib ../../../lib/libmimistr.a

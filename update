@@ -1,5 +1,5 @@
 #!/bin/bash
-sh clear.sh
+sh clear
 git pull
 git add *
 git commit

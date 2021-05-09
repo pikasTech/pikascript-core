@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../../lib/libmimiapp.a  CMakeFiles/mimiapp.dir/src/callback.c.o CMakeFiles/mimiapp.dir/src/timer.c.o
+/usr/bin/ranlib ../../../lib/libmimiapp.a
