@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "add.h": "c",
-        "sub.h": "c",
-        "shapp_argv.h": "c",
-        "shapp_test.h": "c",
-        "mimish_config.h": "c"
-    }
-}
