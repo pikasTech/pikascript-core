@@ -1,3 +1,5 @@
+set(SRC_DIR src)
+
 # 获得当前目录名
 string(REGEX REPLACE "/$" "" CURRENT_FOLDER_ABSOLUTE ${CMAKE_CURRENT_SOURCE_DIR})
 string(REGEX REPLACE ".*/(.*)" "\\1" CURRENT_FOLDER ${CURRENT_FOLDER_ABSOLUTE})
@@ -18,11 +20,16 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
 # 添加子目录
-add_subdirectory(src/mimiapp)
-add_subdirectory(src/mimidata)
-add_subdirectory(src/mimimemory)
-add_subdirectory(src/mimiport)
-add_subdirectory(src/mimishell)
-add_subdirectory(src/mimistr)
-add_subdirectory(src/mimitest)
-add_subdirectory(src/mimivm)
+execute_process(
+	COMMAND ls ${PROJECT_SOURCE_DIR}/${SRC_DIR}
+	OUTPUT_VARIABLE subDirs
+	)
+
+string(REPLACE "\n" ";" subDirsList ${subDirs})
+
+#编译下一级所有子模块
+foreach(item ${subDirsList})
+	message("add sub directory: ${SRC_DIR}/${item}")
+	add_subdirectory(${SRC_DIR}/${item})
+endforeach()
+
