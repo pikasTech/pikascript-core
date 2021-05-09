@@ -1,6 +1,9 @@
 # 简介
 mimiLib是一个跨平台的面向对象c语言库
 # 包含:
+
+## 源码目录:src
+
 ## 1.字符串处理（mimistr) 
 
 ## 2.内存管理 (mimimemory) 
