@@ -1,2 +1,0 @@
-/usr/bin/ar qc ../../../lib/libmimiport.a  CMakeFiles/mimiport.dir/src/PORT_bh1750.c.o CMakeFiles/mimiport.dir/src/PORT_com.c.o CMakeFiles/mimiport.dir/src/mimiPort_market.c.o
-/usr/bin/ranlib ../../../lib/libmimiport.a

@@ -1,2 +1,0 @@
-/usr/bin/ar qc ../../../lib/libmimitest.a  CMakeFiles/mimitest.dir/src/test_PORT_strprint_linux.c.o CMakeFiles/mimitest.dir/src/test_VM_args.c.o CMakeFiles/mimitest.dir/src/test_VM_device.c.o CMakeFiles/mimitest.dir/src/test_timer.c.o
-/usr/bin/ranlib ../../../lib/libmimitest.a

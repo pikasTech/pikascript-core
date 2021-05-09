@@ -1,2 +1,0 @@
-/usr/bin/ar qc ../../../lib/libmimimemory.a  CMakeFiles/mimimemory.dir/src/VM_memory.c.o
-/usr/bin/ranlib ../../../lib/libmimimemory.a
