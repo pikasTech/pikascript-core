@@ -1,0 +1,1 @@
+/usr/bin/c++     -Xlinker CMakeFiles/test.bin.dir/main.cpp.o  -o ../../../../bin/test.bin   -L/root/dev/mimilib/lib  -Wl,-rpath,/root/dev/mimilib/lib ../../../../lib/libmimi.a 

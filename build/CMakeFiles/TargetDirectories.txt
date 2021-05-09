@@ -1,0 +1,11 @@
+/root/dev/mimilib/build/CMakeFiles/rebuild_cache.dir
+/root/dev/mimilib/build/CMakeFiles/edit_cache.dir
+/root/dev/mimilib/build/src/kernal/mimi/CMakeFiles/rebuild_cache.dir
+/root/dev/mimilib/build/src/kernal/mimi/CMakeFiles/edit_cache.dir
+/root/dev/mimilib/build/src/kernal/mimi/CMakeFiles/mimi.dir
+/root/dev/mimilib/build/src/init/linux/CMakeFiles/rebuild_cache.dir
+/root/dev/mimilib/build/src/init/linux/CMakeFiles/edit_cache.dir
+/root/dev/mimilib/build/src/init/linux/CMakeFiles/linux.bin.dir
+/root/dev/mimilib/build/src/init/test/CMakeFiles/rebuild_cache.dir
+/root/dev/mimilib/build/src/init/test/CMakeFiles/edit_cache.dir
+/root/dev/mimilib/build/src/init/test/CMakeFiles/test.bin.dir

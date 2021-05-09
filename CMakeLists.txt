@@ -19,8 +19,19 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 #设置执行文件输出目录
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
+# 添加子目录---kernal
+execute_process(
+	COMMAND ls ${PROJECT_SOURCE_DIR}/${SRC_DIR}/kernal
+	OUTPUT_VARIABLE subDirs_kernal
+	)
+string(REPLACE "\n" ";" subDirsList_kernal ${subDirs_kernal})
+
 #编译下一级所有子模块----kernal
-	add_subdirectory(${SRC_DIR}/kernal)
+foreach(item ${subDirsList_kernal})
+	message("add sub directory: ${SRC_DIR}/${item}")
+	add_subdirectory(${SRC_DIR}/kernal/${item})
+endforeach()
+
 
 # 添加子目录---init
 execute_process(
