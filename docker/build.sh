@@ -1,4 +1,4 @@
-DOCKER_NAME=mimiLib
+DOCKER_NAME=mimilib
 
 docker rmi -f $DOCKER_NAME 
 docker rm -f $DOCKER_NAME
