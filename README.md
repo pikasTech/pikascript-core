@@ -27,7 +27,7 @@ mimiLib是一个跨平台的面向对象c语言库
 
 ## 使用方法：
 
-``` 
+``` shell
     # build the container
     cd docker
     sh build.sh
