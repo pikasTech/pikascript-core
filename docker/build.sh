@@ -1,3 +1,7 @@
+# get project name
+project_path=$(cd ..;pwd)
+project_name="${project_path##*/}"
+
 DOCKER_NAME=mimilib
 
 docker rmi -f $DOCKER_NAME 
