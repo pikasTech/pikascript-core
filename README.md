@@ -25,3 +25,21 @@ mimiLib是一个跨平台的面向对象c语言库
 
 加速构建统一的面向对象代码
 
+## 使用方法：
+
+``` 
+    # build the container
+    cd docker
+    sh build.sh
+
+    # attach to the container
+    docker attach mimilib
+
+    # make the project
+    cd mimilib
+    sh make.sh
+
+    # update and contribute to the project
+    sh update.sh
+```
+
