@@ -11,10 +11,6 @@ file(GLOB_RECURSE lib_file ${PROJECT_SOURCE_DIR}/lib/*.a)
 # 添加头文件路径
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
-# set link options
-SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Xlinker")
-message ("link options: " ${CMAKE_EXE_LINKER_FLAGS})
-
 # 添加第三方库(add)头文件路径
 link_directories(${PROJECT_SOURCE_DIR}/lib)
 
