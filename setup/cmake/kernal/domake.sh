@@ -27,10 +27,12 @@ else
    echo dir build exist
 fi
 
+
 # clear the include and lib folder
+echo remove $PWD/include
 rm include -rf
-# rm lib -rf
-rm bin -rf
+echo remove $PWD/lib
+rm lib -rf
 
 # build project
 cd build/$BUILD_DIR && cmake ../../ && make && cd .. 

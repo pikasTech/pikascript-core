@@ -1,4 +1,4 @@
-set(SRC_DIR src/kernal)
+set(SRC_DIR src/init)
 
 # 获得当前目录名
 string(REGEX REPLACE "/$" "" CURRENT_FOLDER_ABSOLUTE ${CMAKE_CURRENT_SOURCE_DIR})
@@ -24,7 +24,7 @@ execute_process(
 	COMMAND ls ${PROJECT_SOURCE_DIR}/${SRC_DIR}
 	OUTPUT_VARIABLE subDirs	)
 
-string(REPLACE "\n" ";" subDirsList ${subDirs_kernal})
+string(REPLACE "\n" ";" subDirsList ${subDirs})
 
 #编译下一级所有子模块
 foreach(item ${subDirsList})
