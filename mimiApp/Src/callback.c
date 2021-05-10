@@ -1,7 +1,6 @@
 #include "callback.h"
 #include "dataMemory.h"
 
-
 #define ERROR_HANDLE_DO_NOT_BE_OVERRIDE 1
 
 static void deinit(callback_t *callback)
