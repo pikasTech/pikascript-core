@@ -1,14 +1,17 @@
 #!/bin/bash
-BUILD_DIR=lib
+BUILD_DIR=kernal
 
 # copy sub CMakeLists.txt to sub sorce folder
 SRC_FOLDER=src/kernal
-SUB_CMAKE_DIR=setup/subCmake/CMakeLists.txt
+SUB_CMAKE_DIR=setup/cmake/$BUILD_DIR/sub/CMakeLists.txt
+TOP_CMAKE_DIR=setup/cmake/$BUILD_DIR/top/CMakeLists.txt
 for dir in $(ls $SRC_FOLDER)
 do
         echo 'copy '$SUB_CMAKE_DIR' to '$SRC_FOLDER'/'$dir
         cp $SUB_CMAKE_DIR $SRC_FOLDER/$dir/CMakeLists.txt
 done
+# copy top CMakeLists.txt to top sorce folder
+cp $TOP_CMAKE_DIR .
 
 # make dir build to build project
 if [ ! -d build ];then

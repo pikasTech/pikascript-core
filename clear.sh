@@ -3,6 +3,7 @@ SRC_FOLDER=src
 
 # clear CMakeLists.txt from sub sorce folder
 find src -name "*CMakeLists.txt" | xargs rm
+rm CMakeLists.txt
 
 # clear the include and lib folder
 echo remove build/
