@@ -17,7 +17,11 @@ link_directories(${PROJECT_SOURCE_DIR}/lib)
 #生成可执行文件
 ADD_EXECUTABLE(${CURRENT_FOLDER}.bin ${main_file})
 
-TARGET_LINK_LIBRARIES(${CURRENT_FOLDER}.bin ${lib_file})
+TARGET_LINK_LIBRARIES(${CURRENT_FOLDER}.bin 
+	-Wl,--start-group
+	${lib_file}
+	-Wl,--end-group	
+	)
 
 # 添加链接库
 #execute_process(
