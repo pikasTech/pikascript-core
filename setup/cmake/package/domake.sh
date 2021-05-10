@@ -1,8 +1,8 @@
 #!/bin/bash
-BUILD_DIR=kernal
+BUILD_DIR=package
 
 # copy sub CMakeLists.txt to sub sorce folder
-SRC_FOLDER=src/kernal
+SRC_FOLDER=src/$BUILD_DIR
 SUB_CMAKE_DIR=setup/cmake/$BUILD_DIR/sub/CMakeLists.txt
 TOP_CMAKE_DIR=setup/cmake/$BUILD_DIR/top/CMakeLists.txt
 for dir in $(ls $SRC_FOLDER)

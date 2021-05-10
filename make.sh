@@ -1,4 +1,4 @@
-cp setup/cmake/kernal/domake.sh .
+cp setup/cmake/package/domake.sh .
 sh domake.sh
 rm domake.sh
 
