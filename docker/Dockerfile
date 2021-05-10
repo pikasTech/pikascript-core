@@ -16,6 +16,7 @@ RUN sudo apt install -y openssh-server
 RUN sudo apt install -y net-tools
 RUN sudo apt install -y build-essential gdb
 RUN sudo apt install -y cmake
+RUN sudo apt install -y ranger
 RUN cp /etc/skel/.bashrc ~/ # enable the colors for root
 #----------------------->END system tools
 
