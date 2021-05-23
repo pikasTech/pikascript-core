@@ -39,6 +39,7 @@ extern "C"
 #include "test_link2.h"
 #include "test_timer.h"
 #include "test_server.h"
+#include "test_server2.h"
 }
 extern DMEM_STATE DMEMS;
 extern int error_num;
@@ -344,7 +345,8 @@ void test_mimiCore(int isShow)
     ASSERT_RETURN(TEST_VM_device, isShow);
     ASSERT_RETURN(TEST_link2, isShow);
     ASSERT_RETURN(TEST_args2, isShow);
-    ASSERT_RETURN(TEST_server, 1);
+    ASSERT_RETURN(TEST_server, isShow);
+    ASSERT_RETURN(TEST_server2, 1);
     std::cout << "Test of mimiCore Finished! " << std::endl
               << std::endl
               << "Memory still used: " << DMEMS.blk_num << std::endl
