@@ -12,7 +12,7 @@
 #endif
 
 #define DMEM_BLOCK_SIZE 128                                //内存块大小为128字节
-#define DMEM_BLOCK_NUM 1024                                //内存块个数为1024个
+#define DMEM_BLOCK_NUM 512                                //内存块个数为1024个
 #define DMEM_TOTAL_SIZE (DMEM_BLOCK_SIZE * DMEM_BLOCK_NUM) //内存总大小
 
 typedef enum
