@@ -56,6 +56,28 @@ static void setStr(server2_t *self, char *name, char *str)
                                          str);
 }
 
+static long long getInt64(server2_t *self, char *name)
+{
+    return self->attributeList->getInt64ByName(
+        self->attributeList,
+        name);
+}
+static void *getPointer(server2_t *self, char *name)
+{
+    return self->attributeList->getPointerByName(
+        self->attributeList,
+        name);
+}
+static float getFloat(server2_t *self, char *name)
+{
+}
+void getStr(server2_t *self, char *name, char **strOut)
+{
+    self->attributeList->getStrByName(
+        self->attributeList,
+        name,
+        strOut);
+}
 static void init(server2_t *self, list_t *args)
 {
     /* List */
@@ -76,6 +98,11 @@ static void init(server2_t *self, list_t *args)
     self->setPointer = setPointer;
     self->setFloat = setFloat;
     self->setStr = setStr;
+
+    self->getInt64 = getInt64;
+    self->getPointer = getPointer;
+    self->getFloat = getFloat;
+    self->getStr = getStr;
     /* object */
 
     /* override */

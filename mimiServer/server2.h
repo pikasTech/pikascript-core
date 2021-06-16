@@ -22,10 +22,16 @@ struct Class_server2
     void (*disable)(server2_t *self);
 
     void (*setInt64)(server2_t *self, char *name, long long val);
+    long long (*getInt64)(server2_t *self, char *name);
+
     void (*setPointer)(server2_t *self, char *name, void *pointer);
+    void *(*getPointer)(server2_t *self, char *name);
+
     void (*setFloat)(server2_t *self, char *name, float value);
+    float (*getFloat)(server2_t *self, char *name);
+
     void (*setStr)(server2_t *self, char *name, char *str);
-    
+    void (*getStr)(server2_t *self, char *name, char **strOut);
 
     /* virtual operation */
 
