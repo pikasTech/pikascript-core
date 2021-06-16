@@ -32,7 +32,9 @@ struct Class_Arglist
     int (*getStrByIndex)(list_t *self, int index, char **strOut);
 
     int (*pushFloatWithDefaultName)(list_t *self, float argFloat);
+
     int (*pushFloatWithName)(list_t *self, char *name, float argFloat);
+
     float (*getFloatByIndex)(list_t *self, int index);
 
     int (*pushPointerWithName)(list_t *self, char *name, void *argPointer);
