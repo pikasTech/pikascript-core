@@ -93,12 +93,6 @@ static void init(server2_t *self, list_t *args)
     self->subServerList = New_link(NULL);
     self->attributeList = New_list(NULL);
 
-    /* attrivute */
-    self->setInt64(self,
-                   "isEnable", 1);
-    self->setPointer(self,
-                     "context", self);
-
     /* operation */
     self->dinit = deinit;
     self->update = update;
@@ -116,6 +110,13 @@ static void init(server2_t *self, list_t *args)
     self->getStr = getStr;
 
     self->loadAttributeFromArgs = loadAttributeFromArgs;
+
+    /* attrivute */
+    self->setInt64(self,
+                   "isEnable", 1);
+    self->setPointer(self,
+                     "context", self);
+
     /* object */
 
     /* override */
