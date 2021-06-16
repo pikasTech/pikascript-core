@@ -6,7 +6,7 @@
 int TEST_link2(int isShow)
 {
     int err = 0;
-    link_t *link = New_Link(NULL);
+    link_t *link = New_link(NULL);
     dataTest_t *data1 = New_dataTest(NULL);
     dataTest_t *data2 = New_dataTest(NULL);
 

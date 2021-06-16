@@ -9,10 +9,10 @@ struct Class_server2
 {
     /* attribute */
     DMEM *mem;
-    
+
     /* list */
     link_t *subServerList;
-    list_t*attributeList;
+    list_t *attributeList;
 
     /* operation */
     void (*dinit)(server2_t *self);
@@ -20,6 +20,12 @@ struct Class_server2
     void (*update)(server2_t *self, int sysytime);
     void (*enable)(server2_t *self);
     void (*disable)(server2_t *self);
+
+    void (*setInt64)(server2_t *self, char *name, long long val);
+    void (*setPointer)(server2_t *self, char *name, void *pointer);
+    void (*setFloat)(server2_t *self, char *name, float value);
+    void (*setStr)(server2_t *self, char *name, char *str);
+    
 
     /* virtual operation */
 

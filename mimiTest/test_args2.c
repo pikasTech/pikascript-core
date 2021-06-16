@@ -8,13 +8,13 @@ int TEST_args2(int isShow)
     char *strOut = NULL;
     list_t *args = New_list(NULL);
     args->pushFloatWithDefaultName(args, 24.5);
-    args->int64(args,
+    args->pushInt64WithName(args,
                             "int64Test",
                             (long long)22221);
-    args->pointer(args,
+    args->pushPointerWithName(args,
                               "pointerTest",
                               (void *)2222322);
-    args->str(args, "strTest", "teeeds");
+    args->pushStrWithName(args, "strTest", "teeeds");
 
     floatOut = args->getFloatByIndex(args, 0);
     int64Out = args->getInt64ByName(args, "int64Test");

@@ -75,14 +75,14 @@ static void init_tempM(server_t *self, list_t *args)
 	
 	{
 		list_t *args = New_list(NULL);
-		args->pointer(args, "context", tempInfo);
+		args->pushPointerWithName(args, "context", tempInfo);
 		allert = New_server_allert(args);
 		args->dinit(args);
 	}
 	{
 		list_t *args = New_list(NULL);
-		args->int64(args, "isEnable", 0);
-		args->pointer(args, "context", self);
+		args->pushInt64WithName(args, "isEnable", 0);
+		args->pushPointerWithName(args, "context", self);
 		panel = New_server_panelTemp(args);
 		args->dinit(args);
 	}

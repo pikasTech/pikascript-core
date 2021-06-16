@@ -91,6 +91,14 @@ static int pushFloatWithDefaultName(list_t *self, float argFloat)
     return 0;
 }
 
+static int pushFloatWithName(list_t *self, char *name, float argFloat)
+{
+    sprintf((char *)self->contantBuff, "%f", argFloat);
+    loadName(self, name);
+    self->pushContant(self, "float");
+    return 0;
+}
+
 static float getFloatByIndex(list_t *self, int index)
 {
     float val = 0;
@@ -258,7 +266,7 @@ static void init(list_t *self, list_t *args)
 {
     /* attrivute */
     self->context = self;
-    self->argLinkList = New_Link(NULL);
+    self->argLinkList = New_link(NULL);
     for (int i = 0; i < ARG_CONTANT_LENGTH; i++)
     {
         self->contantBuff[i] = 0;
@@ -277,19 +285,20 @@ static void init(list_t *self, list_t *args)
     self->getArgByIndex = getArgByIndex;
     self->getTypeByName = getTypeByName;
 
-    self->str = pushStrWithName;
+    self->pushStrWithName = pushStrWithName;
     self->pushStrWithDefaultName = pushStrWithDefaultName;
     self->getStrByIndex = getStrByIndex;
     self->getStrByName = getStrByName;
 
+    self->pushFloatWithName = pushFloatWithName;
     self->pushFloatWithDefaultName = pushFloatWithDefaultName;
     self->getFloatByIndex = getFloatByIndex;
 
-    self->pointer = pushPointerWithName;
+    self->pushPointerWithName = pushPointerWithName;
     self->getPointerByIndex = getPointerByIndex;
     self->getPointerByName = getPointerByName;
 
-    self->int64 = pushInt64WithName;
+    self->pushInt64WithName = pushInt64WithName;
     self->getInt64ByName = getInt64ByName;
     self->getInt64ByIndex = getInt64ByIndex;
 

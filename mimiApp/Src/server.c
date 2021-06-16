@@ -60,8 +60,8 @@ static void init(server_t *self, list_t *args)
 {
     /* attrivute */
     self->context = self;
-    self->subOjbectLinkList = New_Link(NULL);
-    self->subAttributeLinkList = New_Link(NULL);
+    self->subOjbectLinkList = New_link(NULL);
+    self->subAttributeLinkList = New_link(NULL);
 
     for (int i = 0; i < SERVER_SUB_ATTRIBUTE_LIST_LENGTH; i++)
     {

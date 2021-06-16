@@ -104,7 +104,7 @@ static void init(link_t *self, argsConst_t *args)
     /* override */
 }
 
-link_t *New_Link(argsConst_t *args)
+link_t *New_link(argsConst_t *args)
 {
     DMEM *mem = DynMemGet(sizeof(link_t));
     link_t *self = mem->addr;

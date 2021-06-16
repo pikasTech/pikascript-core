@@ -29,5 +29,5 @@ struct Class_link
     /* object */
 };
 
-link_t *New_Link(argsConst_t *args);
+link_t *New_link(argsConst_t *args);
 #endif

@@ -25,20 +25,21 @@ struct Class_Arglist
 
     char *(*getTypeByName)(list_t *self, char *name);
 
-    int (*str)(list_t *self, char *name, char *strIn);
+    int (*pushStrWithName)(list_t *self, char *name, char *strIn);
     int (*getStrByName)(list_t *self, char *name, char **strOut);
 
     int (*pushStrWithDefaultName)(list_t *self, char *strIn);
     int (*getStrByIndex)(list_t *self, int index, char **strOut);
 
     int (*pushFloatWithDefaultName)(list_t *self, float argFloat);
+    int (*pushFloatWithName)(list_t *self, char *name, float argFloat);
     float (*getFloatByIndex)(list_t *self, int index);
 
-    int (*pointer)(list_t *self, char *name, void *argPointer);
+    int (*pushPointerWithName)(list_t *self, char *name, void *argPointer);
     void *(*getPointerByName)(list_t *self, char *name);
     void *(*getPointerByIndex)(list_t *self, int index);
 
-    int (*int64)(list_t *self, char *name, long long int64In);
+    int (*pushInt64WithName)(list_t *self, char *name, long long int64In);
     long long (*getInt64ByName)(list_t *self, char *name);
     long long (*getInt64ByIndex)(list_t *self, int index);
 
