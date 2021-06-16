@@ -33,6 +33,8 @@ struct Class_server2
     void (*setStr)(server2_t *self, char *name, char *str);
     void (*getStr)(server2_t *self, char *name, char **strOut);
 
+    void (*loadAttributeFromArgs)(server2_t *self, list_t *args, char *name);
+
     /* virtual operation */
 
     /* object */

@@ -20,6 +20,8 @@ struct Class_Arglist
     int (*size)(list_t *self);
     int (*pushContant)(list_t *self, char *type);
     int (*getIndexByName)(list_t *self, char *name);
+    
+    int (*copyArg)(list_t *self, char *name, list_t *directList);
 
     arg_t *(*getArgByIndex)(list_t *self, int index);
 
@@ -36,7 +38,9 @@ struct Class_Arglist
     int (*pushFloatWithName)(list_t *self, char *name, float argFloat);
 
     float (*getFloatByIndex)(list_t *self, int index);
-
+    
+    float (*getFloatByName)(list_t *self, char *name);
+    
     int (*pushPointerWithName)(list_t *self, char *name, void *argPointer);
     void *(*getPointerByName)(list_t *self, char *name);
     void *(*getPointerByIndex)(list_t *self, int index);

@@ -58,26 +58,35 @@ static void setStr(server2_t *self, char *name, char *str)
 
 static long long getInt64(server2_t *self, char *name)
 {
-    return self->attributeList->getInt64ByName(
-        self->attributeList,
-        name);
+    return self->attributeList->getInt64ByName(self->attributeList,
+                                               name);
 }
+
 static void *getPointer(server2_t *self, char *name)
 {
-    return self->attributeList->getPointerByName(
-        self->attributeList,
-        name);
+    return self->attributeList->getPointerByName(self->attributeList,
+                                                 name);
 }
+
 static float getFloat(server2_t *self, char *name)
 {
+    return self->attributeList->getFloatByName(self->attributeList,
+                                               name);
 }
+
 void getStr(server2_t *self, char *name, char **strOut)
 {
-    self->attributeList->getStrByName(
-        self->attributeList,
-        name,
-        strOut);
+    self->attributeList->getStrByName(self->attributeList,
+                                      name,
+                                      strOut);
 }
+
+static void loadAttributeFromArgs(server2_t *self, list_t *args, char *name)
+{
+    self->setPointer(self,
+                     name, args->getPointerByName(args, name));
+}
+
 static void init(server2_t *self, list_t *args)
 {
     /* List */
@@ -85,8 +94,10 @@ static void init(server2_t *self, list_t *args)
     self->attributeList = New_list(NULL);
 
     /* attrivute */
-    self->attributeList->pushInt64WithName(self->attributeList, "isEnable", 1);
-    self->attributeList->pushPointerWithName(self->attributeList, "isEnable", self);
+    self->setInt64(self,
+                   "isEnable", 1);
+    self->setPointer(self,
+                     "context", self);
 
     /* operation */
     self->dinit = deinit;
@@ -103,6 +114,8 @@ static void init(server2_t *self, list_t *args)
     self->getPointer = getPointer;
     self->getFloat = getFloat;
     self->getStr = getStr;
+
+    self->loadAttributeFromArgs = loadAttributeFromArgs;
     /* object */
 
     /* override */
@@ -112,8 +125,9 @@ static void init(server2_t *self, list_t *args)
     {
         return;
     }
-    self->attributeList->pushPointerWithName(self->attributeList, "context", args->getPointerByName(args, "context"));
-    self->attributeList->pushInt64WithName(self->attributeList, "isEnable", args->getInt64ByName(args, "isEnable"));
+    self->setPointer(self,
+                     "context", args->getPointerByName(args, "context"));
+    self->setInt64(self, "isEnable", args->getInt64ByName(args, "isEnable"));
 }
 
 server2_t *New_server2(list_t *args)

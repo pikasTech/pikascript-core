@@ -262,6 +262,31 @@ static arg_t *getArgByIndex(list_t *self, int index)
     return arg;
 }
 
+static float getFloatByName(list_t *self, char *name)
+{
+    int index = 0;
+    index = self->getIndexByName(self, name);
+    if (-1 == index)
+    {
+        return -1;
+    }
+    return getFloatByIndex(self, index);
+}
+
+static int copyArg(list_t *self, char *name, list_t *directList)
+{
+    int index = 0;
+    index = self->getIndexByName(self, name);
+    if (-1 == index)
+    {
+        return -1;
+    }
+    arg_t *argToBeCopy = self->getArgByIndex(self, index);
+    directList->argLinkList->add(directList->argLinkList,
+                                 argToBeCopy,
+                                 (void *)argToBeCopy->dinit);
+}
+
 static void init(list_t *self, list_t *args)
 {
     /* attrivute */
@@ -284,6 +309,7 @@ static void init(list_t *self, list_t *args)
     self->getIndexByName = getIndexByName;
     self->getArgByIndex = getArgByIndex;
     self->getTypeByName = getTypeByName;
+    self->copyArg = copyArg;
 
     self->pushStrWithName = pushStrWithName;
     self->pushStrWithDefaultName = pushStrWithDefaultName;
@@ -293,6 +319,7 @@ static void init(list_t *self, list_t *args)
     self->pushFloatWithName = pushFloatWithName;
     self->pushFloatWithDefaultName = pushFloatWithDefaultName;
     self->getFloatByIndex = getFloatByIndex;
+    self->getFloatByName = getFloatByName;
 
     self->pushPointerWithName = pushPointerWithName;
     self->getPointerByIndex = getPointerByIndex;
