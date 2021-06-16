@@ -9,10 +9,10 @@ struct Class_server2
 {
     /* attribute */
     DMEM *mem;
-    void *context;
-    int isEnable;
+    
+    /* list */
     link_t *subServerList;
-    link_t *dataList;
+    list_t*attributeList;
 
     /* operation */
     void (*dinit)(server2_t *self);
@@ -20,12 +20,6 @@ struct Class_server2
     void (*update)(server2_t *self, int sysytime);
     void (*enable)(server2_t *self);
     void (*disable)(server2_t *self);
-    void (*argHandle)(server2_t *self,
-                      list_t *args,
-                      char *argName,
-                      void (*handle)(server2_t *self,
-                                     list_t *args,
-                                     char *argName));
 
     /* virtual operation */
 

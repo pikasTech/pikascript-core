@@ -6,13 +6,13 @@ static void deinit(server2_t *self)
 {
     DynMemPut(self->mem);
     self->subServerList->dinit(self->subServerList);
-    self->dataList->dinit(self->dataList);
+    self->attributeList->dinit(self->attributeList);
 }
 
 static void update(server2_t *self, int systime)
 {
     // return if lamp is not enable
-    if (0 == self->isEnable)
+    if (0 == self->attributeList->getInt64ByName(self->attributeList,"isEnable"))
     {
         return;
     }
@@ -20,56 +20,30 @@ static void update(server2_t *self, int systime)
 
 static void enable(server2_t *self)
 {
-    self->isEnable = 1;
+    self->attributeList->int64(self->attributeList,"isEnable", 1);
 }
 
 static void disable(server2_t *self)
 {
-    self->isEnable = 0;
-}
-
-static void argHandle_context(server2_t *self,
-                              list_t *args,
-                              char *argName)
-{
-    self->context = args->getPointerByName(args, argName);
-}
-
-static void argHandle_isEnalbe(server2_t *self,
-                               list_t *args,
-                               char *argName)
-{
-    self->isEnable = args->getInt64ByName(args, argName);
-}
-
-static void argHandle(server2_t *self,
-                      list_t *args,
-                      char *argName,
-                      void (*handle)(server2_t *self,
-                                     list_t *args,
-                                     char *argName))
-{
-    if (-1 == args->getIndexByName(args, argName))
-    {
-        return;
-    }
-    handle(self, args, argName);
+    self->attributeList->int64(self->attributeList,"isEnable", 0);
 }
 
 static void init(server2_t *self, list_t *args)
 {
-    /* attrivute */
-    self->context = self;
+    /* List */
     self->subServerList = New_Link(NULL);
-    self->dataList = New_Link(NULL);
-    self->isEnable = 1;
+    self->attributeList = New_list(NULL);
+
+    /* attrivute */
+    self->attributeList->int64(self->attributeList,"isEnable", 1);
+    self->attributeList->pointer(self->attributeList,"isEnable", self);
+
 
     /* operation */
     self->dinit = deinit;
     self->update = update;
     self->enable = enable;
     self->disable = disable;
-    self->argHandle = argHandle;
 
     /* object */
 
@@ -80,14 +54,8 @@ static void init(server2_t *self, list_t *args)
     {
         return;
     }
-    self->argHandle(self,
-                    args,
-                    "isEnable",
-                    argHandle_isEnalbe);
-    self->argHandle(self,
-                    args,
-                    "context",
-                    argHandle_context);
+    self->attributeList->pointer(self->attributeList,"context",args->getPointerByName(args, "context"));
+    self->attributeList->int64(self->attributeList,"isEnable",args->getInt64ByName(args, "isEnable"));
 }
 
 server2_t *New_server2(list_t *args)

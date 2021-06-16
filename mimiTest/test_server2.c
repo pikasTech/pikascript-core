@@ -7,6 +7,11 @@ int TEST_server2(int isShow)
     args->int64(args, "isEnable", 0);
     server2_t *server = New_server2(args);
 
+    if (isShow)
+    {
+        printf("the isEnable = %d\r\n", (int)server->attributeList->getInt64ByName(server->attributeList, "isEnable"));
+    }
+
     goto exit;
 exit:
     args->dinit(args);
