@@ -37,46 +37,61 @@ int TEST_args2(int isShow)
         if ((float)24.5 != floatOut)
         {
             err = 1;
-            goto exit_1;
         }
         if (22221 != (int)int64Out)
         {
             err = 2;
-            goto exit_1;
         }
         if (2222322 != (int)(long long)pointer)
         {
             err = 3;
-            goto exit_1;
         }
         if (0 != strcmp("teeeds", strOut))
         {
             err = 4;
-            goto exit_1;
         }
         if (0 != strcmp("float", args->getTypeByName(args, "arg0")))
         {
             err = 5;
-            goto exit_1;
         }
         if (0 != strcmp("int64", args->getTypeByName(args, "int64Test")))
         {
             err = 6;
-            goto exit_1;
         }
         if (0 != strcmp("pointer", args->getTypeByName(args, "pointerTest")))
         {
             err = 7;
-            goto exit_1;
         }
         if (0 != strcmp("string", args->getTypeByName(args, "strTest")))
         {
             err = 8;
-            goto exit_1;
         }
-    exit_1:
         args->dinit(args);
-        goto exit;
+    }
+    {
+        list_t *args1 = New_list(NULL);
+        list_t *args2 = New_list(NULL);
+
+        args1->pushFloatWithName(args1, "argtest1", 2.883);
+        args1->pushStrWithName(args1, "strtest1", "teststr");
+        args1->copyArg(args1, "argtest1", args2);
+        args1->copyArg(args1, "strtest1", args2);
+
+        if (1)
+        {
+            printf("the float get from args is:%f\r\n",
+                   args1->getFloatByName(args1, "argtest1"));
+
+            printf("the float copyed from arg1:%f\r\n",
+                   args2->getFloatByName(args2, "argtest1"));
+        }
+        if (2.8830f != args1->getFloatByName(args1, "argtest1"))
+        {
+            err = 9;
+        }
+
+        args1->dinit(args1);
+        args2->dinit(args2);
     }
 
     goto exit;

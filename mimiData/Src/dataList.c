@@ -282,9 +282,15 @@ static int copyArg(list_t *self, char *name, list_t *directList)
         return -1;
     }
     arg_t *argToBeCopy = self->getArgByIndex(self, index);
+    arg_t *argCopied = New_arg(NULL);
+    memcpy(argCopied->contant, argToBeCopy->contant, ARG_CONTANT_LENGTH);
+    memcpy(argCopied->name, argToBeCopy->name, ARG_NAME_LENGTH);
+    memcpy(argCopied->type, argToBeCopy->type, ARG_TYPE_LENGTH);
+
     directList->argLinkList->add(directList->argLinkList,
-                                 argToBeCopy,
-                                 (void *)argToBeCopy->dinit);
+                                 argCopied,
+                                 (void *)argCopied->dinit);
+    return 0;
 }
 
 static void init(list_t *self, list_t *args)
