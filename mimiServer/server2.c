@@ -70,6 +70,10 @@ static void *getPointer(server2_t *self, char *name)
 }
 static float getFloat(server2_t *self, char *name)
 {
+    return self->attributeList->getFloatByName(
+            self->attributeList,
+            name
+            );
 }
 void getStr(server2_t *self, char *name, char **strOut)
 {

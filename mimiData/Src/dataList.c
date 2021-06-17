@@ -110,6 +110,16 @@ exit:
     return val;
 }
 
+
+static float getFloatByName(list_t *self, char *name)
+{
+    float val = 0;
+    int index = 0;
+    index = self->getIndexByName(self, name);
+    val = self->getFloatByIndex(index);
+    return val;
+}
+
 static void *getPointerByIndex(list_t *self, int index)
 {
     void *pointer = NULL;
@@ -293,6 +303,7 @@ static void init(list_t *self, list_t *args)
     self->pushFloatWithName = pushFloatWithName;
     self->pushFloatWithDefaultName = pushFloatWithDefaultName;
     self->getFloatByIndex = getFloatByIndex;
+    self->getFloatByName = getFloatByName;
 
     self->pushPointerWithName = pushPointerWithName;
     self->getPointerByIndex = getPointerByIndex;
