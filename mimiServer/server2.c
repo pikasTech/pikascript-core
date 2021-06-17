@@ -112,12 +112,8 @@ static void init(server2_t *self, list_t *args)
     self->loadAttributeFromArgs = loadAttributeFromArgs;
 
     /* attrivute */
-    self->setInt64(self,
-                   "isEnable", 1);
-    self->setPointer(self,
-                     "context", self);
-
-    /* object */
+    self->setInt64(self, "isEnable", 1);
+    self->setPointer(self, "context", self);
 
     /* override */
 
