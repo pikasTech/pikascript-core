@@ -56,6 +56,7 @@ static void setPointer(arg_t *self, void *pointer)
         contantBuff[i] = pointerTemp;
         pointerTemp = pointerTemp >> 8;
     }
+    self->setContant(self, contantBuff);
 }
 static void setString(arg_t *self, void *string)
 {

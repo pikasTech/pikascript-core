@@ -93,9 +93,11 @@ static int pushFloatWithDefaultName(list_t *self, float argFloat)
 
 static int pushFloatWithName(list_t *self, char *name, float argFloat)
 {
-    sprintf((char *)self->contantBuff, "%f", argFloat);
-    loadName(self, name);
-    self->pushContant(self, "float");
+    arg_t *argNew = New_arg(NULL);
+    argNew->setType(argNew, "float");
+    argNew->setName(argNew, name);
+    argNew->setFloat(argNew, argFloat);
+    self->pushArg(self, argNew);
     return 0;
 }
 
@@ -140,15 +142,11 @@ static void *getPointerByName(list_t *self, char *name)
 
 static int pushPointerWithName(list_t *self, char *name, void *argPointer)
 {
-    unsigned long int pointerTemp = (unsigned long int)argPointer;
-    for (int i = 0; i < 8; i++)
-    {
-        self->contantBuff[i] = pointerTemp;
-        pointerTemp = pointerTemp >> 8;
-    }
-    loadName(self, name);
-    self->pushContant(self, "pointer");
-    return 0;
+    arg_t *argNew = New_arg(NULL);
+    argNew->setType(argNew, "pointer");
+    argNew->setName(argNew, name);
+    argNew->setPointer(argNew, argPointer);
+    self->pushArg(self, argNew);
 }
 
 static int pushStrWithName(list_t *self, char *name, char *strIn)
@@ -176,9 +174,7 @@ static int pushInt64WithName(list_t *self, char *name, long long int64In)
     argNew->setName(argNew, name);
     argNew->setInt64(argNew, int64In);
     argNew->setType(argNew, "int64");
-    self->argLinkList->add(self->argLinkList,
-                           argNew,
-                           (void *)argNew->dinit);
+    self->pushArg(self, argNew);
     return 0;
 }
 
@@ -304,6 +300,9 @@ static int isArgExist(list_t *self, char *name)
 
 static int pushArg(list_t *self, arg_t *arg)
 {
+    self->argLinkList->add(self->argLinkList,
+                           arg,
+                           (void *)arg->dinit);
 }
 
 static void init(list_t *self, list_t *args)
