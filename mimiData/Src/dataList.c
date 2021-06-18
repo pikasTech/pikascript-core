@@ -172,14 +172,13 @@ static int getStrByName(list_t *self, char *name, char **strOut)
 
 static int pushInt64WithName(list_t *self, char *name, long long int64In)
 {
-    unsigned long int int64Temp = int64In;
-    for (int i = 0; i < 8; i++)
-    {
-        self->contantBuff[i] = int64Temp;
-        int64Temp = int64Temp >> 8;
-    }
-    loadName(self, name);
-    self->pushContant(self, "int64");
+    arg_t *argNew = New_arg(NULL);
+    argNew->setName(argNew, name);
+    argNew->setInt64(argNew, int64In);
+    argNew->setType(argNew, "int64");
+    self->argLinkList->add(self->argLinkList,
+                           argNew,
+                           (void *)argNew->dinit);
     return 0;
 }
 
