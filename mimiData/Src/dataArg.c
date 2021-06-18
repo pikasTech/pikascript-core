@@ -28,6 +28,28 @@ static char *getContant(arg_t *self)
     return self->contant;
 }
 
+static void setInt64(arg_t *self, long long val)
+{
+}
+static void setFloat(arg_t *self, float val)
+{
+}
+static void setPointer(arg_t *self, void *pointer)
+{
+}
+static void setString(arg_t *self, void *string)
+{
+}
+static long long getInt64(arg_t *self)
+{
+}
+static float getFloat(arg_t *self)
+{
+}
+static long getString(arg_t *self, char **strOut)
+{
+}
+
 static void init(arg_t *self, void *voidPointer)
 {
     /* attrivute */
@@ -49,8 +71,10 @@ static void init(arg_t *self, void *voidPointer)
     self->dinit = deinit;
     self->setName = setName;
     self->setContant = setContant;
-    self->get = getContant;
+    self->getContant = getContant;
     self->setType = setType;
+
+    self->setInt64 = setInt64;
 
     /* object */
 

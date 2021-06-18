@@ -24,8 +24,18 @@ struct Class_arg
     void (*setName)(arg_t *self, char *name);
     void (*setContant)(arg_t *self, char *contant);
     void (*setType)(arg_t *self, char *type);
-    
-    char *(*get)(arg_t *self);
+
+    void (*setInt64)(arg_t *self, long long val);
+    void (*setFloat)(arg_t *self, float val);
+    void (*setPointer)(arg_t *self, void *pointer);
+    void (*setString)(arg_t *self, char *string);
+
+    long long (*getInt64)(arg_t *self);
+    float (*getFloat)(arg_t *self);
+    void *(*getPointer)(arg_t *self);
+    void (*getString)(arg_t *self, char **strOut);
+
+    char *(*getContant)(arg_t *self);
 
     /* virtual operation */
 
