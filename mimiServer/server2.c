@@ -30,9 +30,15 @@ static void disable(server2_t *self)
 
 static void setInt64(server2_t *self, char *name, long long val)
 {
-    self->attributeList->pushInt64WithName(self->attributeList,
-                                           name,
-                                           val);
+    if (!self->attributeList->isArgExist(self->attributeList, name))
+    {
+        self->attributeList->pushInt64WithName(self->attributeList,
+                                               name,
+                                               val);
+        return;
+    }
+    int index = self->attributeList->getIndexByName(self->attributeList, name);
+    arg_t *arg = self->attributeList->getArgByIndex(self->attributeList, index);
 }
 
 static void setPointer(server2_t *self, char *name, void *pointer)
@@ -83,8 +89,7 @@ void getStr(server2_t *self, char *name, char **strOut)
 
 static void loadAttributeFromArgs(server2_t *self, list_t *args, char *name)
 {
-    self->setPointer(self,
-                     name, args->getPointerByName(args, name));
+    args->copyArg(args, name, self->attributeList);
 }
 
 static void init(server2_t *self, list_t *args)
@@ -122,9 +127,8 @@ static void init(server2_t *self, list_t *args)
     {
         return;
     }
-    self->setPointer(self,
-                     "context", args->getPointerByName(args, "context"));
-    self->setInt64(self, "isEnable", args->getInt64ByName(args, "isEnable"));
+    self->loadAttributeFromArgs(self, args, "context");
+    self->loadAttributeFromArgs(self, args, "isEnable");
 }
 
 server2_t *New_server2(list_t *args)

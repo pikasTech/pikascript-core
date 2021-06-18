@@ -21,7 +21,8 @@ struct Class_arg
     void (*dinit)(arg_t *self);
     void (*init)(arg_t *self, void *voidPointer);
 
-    void (*put)(arg_t *self, char *name, char *in);
+    void (*setName)(arg_t *self, char *name);
+    void (*setContant)(arg_t *self, char *contant);
     void (*setType)(arg_t *self, char *type);
     
     char *(*get)(arg_t *self);

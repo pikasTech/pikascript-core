@@ -8,10 +8,14 @@ static void deinit(arg_t *self)
     DynMemPut(self->mem);
 }
 
-static void put(arg_t *self, char *name, char *in)
+static void setContant(arg_t *self, char *contant)
 {
-    memcpy(self->name, name,ARG_NAME_LENGTH);
-    memcpy(self->contant, in,ARG_CONTANT_LENGTH);
+    memcpy(self->contant, contant, ARG_CONTANT_LENGTH);
+}
+
+static void setName(arg_t *self, char *name)
+{
+    memcpy(self->name, name, ARG_NAME_LENGTH);
 }
 
 static void setType(arg_t *self, char *type)
@@ -19,7 +23,7 @@ static void setType(arg_t *self, char *type)
     memcpy(self->type, type, strGetSize(type));
 }
 
-static char *get(arg_t *self)
+static char *getContant(arg_t *self)
 {
     return self->contant;
 }
@@ -43,8 +47,9 @@ static void init(arg_t *self, void *voidPointer)
 
     /* operation */
     self->dinit = deinit;
-    self->put = put;
-    self->get = get;
+    self->setName = setName;
+    self->setContant = setContant;
+    self->get = getContant;
     self->setType = setType;
 
     /* object */

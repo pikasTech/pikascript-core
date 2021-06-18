@@ -122,7 +122,8 @@ static int pushStrWithName(argsConst_t *self, char *name, char *strIn)
         goto exit;
     }
     arg_t *argNew = New_arg(NULL);
-    argNew->put(argNew, name, strIn);
+    argNew->setName(argNew, name);
+    argNew->setContant(argNew, strIn);
     self->argList[self->count] = argNew;
     self->count++;
     goto exit;

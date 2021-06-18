@@ -1,7 +1,6 @@
 #ifndef _dataList__H
 #define _dataList__H
 #include "dataLink.h"
-#include "dataList.h"
 #include "dataMemory.h"
 
 typedef struct Class_Arglist list_t;
@@ -18,27 +17,25 @@ struct Class_Arglist
     void (*dinit)(list_t *self);
     void (*init)(list_t *self, list_t *args);
     int (*size)(list_t *self);
+
     int (*pushContant)(list_t *self, char *type);
     int (*getIndexByName)(list_t *self, char *name);
+    arg_t *(*getArgByIndex)(list_t *self, int index);
+    
+    int (*pushArg)(list_t *self, arg_t *arg);
     
     int (*copyArg)(list_t *self, char *name, list_t *directList);
-
-    arg_t *(*getArgByIndex)(list_t *self, int index);
-
     char *(*getTypeByName)(list_t *self, char *name);
+    int (*isArgExist)(list_t *self, char *name);
 
     int (*pushStrWithName)(list_t *self, char *name, char *strIn);
     int (*getStrByName)(list_t *self, char *name, char **strOut);
-
     int (*pushStrWithDefaultName)(list_t *self, char *strIn);
     int (*getStrByIndex)(list_t *self, int index, char **strOut);
 
     int (*pushFloatWithDefaultName)(list_t *self, float argFloat);
-
     int (*pushFloatWithName)(list_t *self, char *name, float argFloat);
-
     float (*getFloatByIndex)(list_t *self, int index);
-    
     float (*getFloatByName)(list_t *self, char *name);
     
     int (*pushPointerWithName)(list_t *self, char *name, void *argPointer);

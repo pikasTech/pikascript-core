@@ -222,7 +222,8 @@ static int pushContant(list_t *self, char *type)
     int errCode = 0;
 
     arg_t *argNew = New_arg(NULL);
-    argNew->put(argNew, (char *)self->nameBuff, (char *)self->contantBuff);
+    argNew->setName(argNew, (char *)self->nameBuff);
+    argNew->setContant(argNew, (char *)self->contantBuff);
     argNew->setType(argNew, type);
 
     self->argLinkList->add(self->argLinkList,
@@ -293,6 +294,19 @@ static int copyArg(list_t *self, char *name, list_t *directList)
     return 0;
 }
 
+static int isArgExist(list_t *self, char *name)
+{
+    if (-1 != self->getIndexByName(self, name))
+    {
+        return 1;
+    }
+    return 0;
+}
+
+static int pushArg(list_t *self, arg_t *arg)
+{
+}
+
 static void init(list_t *self, list_t *args)
 {
     /* attrivute */
@@ -314,8 +328,10 @@ static void init(list_t *self, list_t *args)
     self->pushContant = pushContant;
     self->getIndexByName = getIndexByName;
     self->getArgByIndex = getArgByIndex;
+    self->pushArg = pushArg;
     self->getTypeByName = getTypeByName;
     self->copyArg = copyArg;
+    self->isArgExist = isArgExist;
 
     self->pushStrWithName = pushStrWithName;
     self->pushStrWithDefaultName = pushStrWithDefaultName;
