@@ -39,7 +39,7 @@ extern "C"
 #include "test_link2.h"
 #include "test_timer.h"
 #include "test_server.h"
-#include "test_server2.h"
+#include "test_mimiProcess.h"
 }
 extern DMEM_STATE DMEMS;
 extern int error_num;

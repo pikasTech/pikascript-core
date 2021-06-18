@@ -1,79 +1,79 @@
-#include "server2.h"
+#include "mimiProcess.h"
 #include "dataArgs.h"
 #include "dataMemory.h"
 
-static void deinit(server2_t *self)
+static void deinit(process_t *self)
 {
     DynMemPut(self->mem);
     self->subServerList->dinit(self->subServerList);
     self->attributeList->dinit(self->attributeList);
 }
 
-static void update(server2_t *self, int systime)
+static void update(process_t *self, int systime)
 {
-    // return if lamp is not enable
+    // return if is not enable
     if (0 == self->getInt64(self, "isEnable"))
     {
         return;
     }
 }
 
-static void enable(server2_t *self)
+static void enable(process_t *self)
 {
     self->setInt64(self, "isEnable", 1);
 }
 
-static void disable(server2_t *self)
+static void disable(process_t *self)
 {
     self->setInt64(self, "isEnable", 0);
 }
 
-static void setInt64(server2_t *self, char *name, long long val)
+static void setInt64(process_t *self, char *name, long long val)
 {
     self->attributeList->setInt64WithName(self->attributeList, name, val);
 }
 
-static void setPointer(server2_t *self, char *name, void *pointer)
+static void setPointer(process_t *self, char *name, void *pointer)
 {
     self->attributeList->setPointerWithName(self->attributeList, name, pointer);
 }
 
-static void setFloat(server2_t *self, char *name, float value)
+static void setFloat(process_t *self, char *name, float value)
 {
     self->attributeList->setFloatWithName(self->attributeList, name, value);
 }
 
-static void setStr(server2_t *self, char *name, char *str)
+static void setStr(process_t *self, char *name, char *str)
 {
     self->attributeList->setStrWithName(self->attributeList, name, str);
 }
 
-static long long getInt64(server2_t *self, char *name)
+static long long getInt64(process_t *self, char *name)
 {
     return self->attributeList->getInt64ByName(self->attributeList, name);
 }
 
-static void *getPointer(server2_t *self, char *name)
+static void *getPointer(process_t *self, char *name)
 {
     return self->attributeList->getPointerByName(self->attributeList, name);
 }
 
-static float getFloat(server2_t *self, char *name)
+static float getFloat(process_t *self, char *name)
 {
     return self->attributeList->getFloatByName(self->attributeList, name);
 }
 
-void getStr(server2_t *self, char *name, char **strOut)
+void getStr(process_t *self, char *name, char **strOut)
 {
     self->attributeList->getStrByName(self->attributeList, name, strOut);
 }
 
-static void loadAttributeFromArgs(server2_t *self, args_t *args, char *name)
+static void loadAttributeFromArgs(process_t *self, args_t *args, char *name)
 {
     args->copyArg(args, name, self->attributeList);
 }
 
-static void init(server2_t *self, args_t *args)
+static void init(process_t *self, args_t *args)
 {
     /* List */
     self->subServerList = New_link(NULL);
@@ -112,10 +112,10 @@ static void init(server2_t *self, args_t *args)
     self->loadAttributeFromArgs(self, args, "isEnable");
 }
 
-server2_t *New_server2(args_t *args)
+process_t *New_server2(args_t *args)
 {
-    DMEM *mem = DynMemGet(sizeof(server2_t));
-    server2_t *self = mem->addr;
+    DMEM *mem = DynMemGet(sizeof(process_t));
+    process_t *self = mem->addr;
     self->mem = mem;
     self->init = init;
     self->init(self, args);

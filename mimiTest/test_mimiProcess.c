@@ -1,11 +1,11 @@
-#include "server2.h"
+#include "mimiProcess.h"
 
 int TEST_server2(int isShow)
 {
     int err = 0;
     args_t *args = New_args(NULL);
     args->setInt64WithName(args, "isEnable", 0);
-    server2_t *server = New_server2(args);
+    process_t *server = New_server2(args);
 
     if (isShow)
     {
