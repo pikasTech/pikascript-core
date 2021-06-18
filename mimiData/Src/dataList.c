@@ -9,11 +9,6 @@ static void deinit(list_t *self)
     self->argLinkList->dinit(self->argLinkList);
 }
 
-static void loadName(list_t *self, char *name)
-{
-    memcpy(self->nameBuff, name, ARG_NAME_LENGTH);
-}
-
 static void loadDefaultName(list_t *self)
 {
     sprintf((char *)self->nameBuff, "arg%d", (int)self->argLinkList->TopId);
@@ -142,22 +137,23 @@ static void *getPointerByName(list_t *self, char *name)
 
 static int pushPointerWithName(list_t *self, char *name, void *argPointer)
 {
+    int errCode = 0;
     arg_t *argNew = New_arg(NULL);
     argNew->setType(argNew, "pointer");
     argNew->setName(argNew, name);
     argNew->setPointer(argNew, argPointer);
     self->pushArg(self, argNew);
+    return errCode;
 }
 
 static int pushStrWithName(list_t *self, char *name, char *strIn)
 {
     int errCode = 0;
-    memcpy(self->contantBuff, strIn, ARG_CONTANT_LENGTH);
-    loadName(self, name);
-    self->pushContant(self, "string");
-    goto exit;
-
-exit:
+    arg_t *argNew = New_arg(NULL);
+    argNew->setType(argNew, "string");
+    argNew->setString(argNew, strIn);
+    argNew->setName(argNew, name);
+    self->pushArg(self, argNew);
     return errCode;
 }
 
@@ -303,6 +299,7 @@ static int pushArg(list_t *self, arg_t *arg)
     self->argLinkList->add(self->argLinkList,
                            arg,
                            (void *)arg->dinit);
+    return 0;
 }
 
 static void init(list_t *self, list_t *args)

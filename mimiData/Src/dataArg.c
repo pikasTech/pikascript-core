@@ -2,6 +2,7 @@
 #include "dataList.h"
 #include "dataMemory.h"
 #include "dataString.h"
+#include "stdlib.h"
 
 static void deinit(arg_t *self)
 {
@@ -37,14 +38,14 @@ static void setInt64(arg_t *self, long long val)
         contantBuff[i] = int64Temp;
         int64Temp = int64Temp >> 8;
     }
-    self->setContant(self, contantBuff);
+    self->setContant(self, (char *)contantBuff);
 }
 
 static void setFloat(arg_t *self, float val)
 {
     unsigned char contantBuff[ARG_CONTANT_LENGTH];
-    sprintf(contantBuff, "%f", val);
-    self->setContant(self, contantBuff);
+    sprintf((char *)contantBuff, "%f", val);
+    self->setContant(self, (char *)contantBuff);
 }
 
 static void setPointer(arg_t *self, void *pointer)
@@ -56,11 +57,11 @@ static void setPointer(arg_t *self, void *pointer)
         contantBuff[i] = pointerTemp;
         pointerTemp = pointerTemp >> 8;
     }
-    self->setContant(self, contantBuff);
+    self->setContant(self, (char *)contantBuff);
 }
-static void setString(arg_t *self, void *string)
+static void setString(arg_t *self, char *string)
 {
-    self->setContant(self, string);
+    self->setContant(self, (char *)string);
 }
 
 static long long getInt64(arg_t *self)
@@ -74,7 +75,7 @@ static long long getInt64(arg_t *self)
     return int64Temp;
 }
 
-static void* getPointer(arg_t *self)
+static void *getPointer(arg_t *self)
 {
     void *pointer = NULL;
     unsigned long int pointerTemp = 0;
