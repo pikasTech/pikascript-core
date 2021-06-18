@@ -39,23 +39,62 @@ static void setInt64(arg_t *self, long long val)
     }
     self->setContant(self, contantBuff);
 }
+
 static void setFloat(arg_t *self, float val)
 {
+    unsigned char contantBuff[ARG_CONTANT_LENGTH];
+    sprintf(contantBuff, "%f", val);
+    self->setContant(self, contantBuff);
 }
+
 static void setPointer(arg_t *self, void *pointer)
 {
+    unsigned long int pointerTemp = (unsigned long int)pointer;
+    unsigned char contantBuff[ARG_CONTANT_LENGTH];
+    for (int i = 0; i < 8; i++)
+    {
+        contantBuff[i] = pointerTemp;
+        pointerTemp = pointerTemp >> 8;
+    }
 }
 static void setString(arg_t *self, void *string)
 {
+    self->setContant(self, string);
 }
+
 static long long getInt64(arg_t *self)
 {
+    unsigned long long int64Temp = 0;
+    for (int i = 7; i > -1; i--)
+    {
+        int64Temp = int64Temp << 8;
+        int64Temp += ((unsigned char *)(self->contant))[i];
+    }
+    return int64Temp;
 }
+
+static void* getPointer(arg_t *self)
+{
+    void *pointer = NULL;
+    unsigned long int pointerTemp = 0;
+    for (int i = 7; i > -1; i--)
+    {
+        pointerTemp = pointerTemp << 8;
+        pointerTemp += ((unsigned char *)(self->contant))[i];
+    }
+    pointer = (void *)pointerTemp;
+    return pointer;
+}
+
 static float getFloat(arg_t *self)
 {
+    float val = 0;
+    val = atof(self->contant);
+    return val;
 }
-static long getString(arg_t *self, char **strOut)
+static char *getString(arg_t *self)
 {
+    return self->contant;
 }
 
 static void init(arg_t *self, void *voidPointer)
@@ -83,6 +122,14 @@ static void init(arg_t *self, void *voidPointer)
     self->setType = setType;
 
     self->setInt64 = setInt64;
+    self->setFloat = setFloat;
+    self->setPointer = setPointer;
+    self->setString = setString;
+
+    self->getInt64 = getInt64;
+    self->getFloat = getFloat;
+    self->getPointer = getPointer;
+    self->getString = getString;
 
     /* object */
 

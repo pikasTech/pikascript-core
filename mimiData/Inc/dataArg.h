@@ -33,7 +33,7 @@ struct Class_arg
     long long (*getInt64)(arg_t *self);
     float (*getFloat)(arg_t *self);
     void *(*getPointer)(arg_t *self);
-    void (*getString)(arg_t *self, char **strOut);
+    char *(*getString)(arg_t *self);
 
     char *(*getContant)(arg_t *self);
 
