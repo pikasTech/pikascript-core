@@ -87,7 +87,6 @@ static void *getPointer(arg_t *self)
     pointer = (void *)pointerTemp;
     return pointer;
 }
-
 static float getFloat(arg_t *self)
 {
     float val = 0;

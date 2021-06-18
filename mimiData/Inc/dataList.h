@@ -20,6 +20,7 @@ struct Class_Arglist
 
     int (*getIndexByName)(list_t *self, char *name);
     arg_t *(*getArgByIndex)(list_t *self, int index);
+    arg_t *(*getArgByName)(list_t *self, char *name);
     
     int (*pushArg)(list_t *self, arg_t *arg);
     

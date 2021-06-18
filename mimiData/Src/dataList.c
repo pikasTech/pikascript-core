@@ -52,35 +52,22 @@ exit:
 static int getStrByIndex(list_t *self, int index, char **strOut)
 {
     int errCode = 0;
-    if (index < 0)
-    {
-        errCode = 3;
-        goto exit;
-    }
-    if (index + 1 > self->argLinkList->TopId)
-    {
-        errCode = 1;
-        goto exit;
-    }
-    arg_t *arg = self->argLinkList->findNodeById(self->argLinkList, index)->contant;
+    arg_t *arg = self->getArgByIndex(self, index);
     *strOut = arg->contant;
-    goto exit;
-
-exit:
     return errCode;
 }
 
 static int pushStrWithDefaultName(list_t *self, char *strIn)
 {
     loadDefaultName(self);
-    self->pushStrWithName(self, self->nameBuff, strIn);
+    self->pushStrWithName(self, (char *)self->nameBuff, strIn);
     return 0;
 }
 
 static int pushFloatWithDefaultName(list_t *self, float argFloat)
 {
     loadDefaultName(self);
-    self->pushFloatWithName(self, self->nameBuff, argFloat);
+    self->pushFloatWithName(self, (char *)self->nameBuff, argFloat);
     return 0;
 }
 
@@ -97,40 +84,25 @@ static int pushFloatWithName(list_t *self, char *name, float argFloat)
 static float getFloatByIndex(list_t *self, int index)
 {
     float val = 0;
-    char *strOut = NULL;
-    self->getStrByIndex(self, index, &strOut);
-    val = atof(strOut);
-    goto exit;
-exit:
+    arg_t *arg = self->getArgByIndex(self, index);
+    val = arg->getFloat(arg);
     return val;
 }
 
 static void *getPointerByIndex(list_t *self, int index)
 {
     void *pointer = NULL;
-    char *strOut = NULL;
-    self->getStrByIndex(self, index, &strOut);
-    unsigned long int pointerTemp = 0;
-    for (int i = 7; i > -1; i--)
-    {
-        pointerTemp = pointerTemp << 8;
-        pointerTemp += ((unsigned char *)(strOut))[i];
-    }
-    pointer = (void *)pointerTemp;
-    goto exit;
-exit:
+    arg_t *arg = self->getArgByIndex(self, index);
+    pointer = arg->getPointer(arg);
     return pointer;
 }
 
 static void *getPointerByName(list_t *self, char *name)
 {
-    int index = 0;
-    index = self->getIndexByName(self, name);
-    if (-1 == index)
-    {
-        return NULL;
-    }
-    return self->getPointerByIndex(self, index);
+    void *pointer = NULL;
+    arg_t *arg = self->getArgByName(self, name);
+    pointer = arg->getPointer(arg);
+    return pointer;
 }
 
 static int pushPointerWithName(list_t *self, char *name, void *argPointer)
@@ -157,8 +129,8 @@ static int pushStrWithName(list_t *self, char *name, char *strIn)
 
 static int getStrByName(list_t *self, char *name, char **strOut)
 {
-    int index = self->getIndexByName(self, name);
-    self->getStrByIndex(self, index, strOut);
+    arg_t *arg = self->getArgByName(self, name);
+    *strOut = arg->contant;
     return 0;
 }
 
@@ -174,31 +146,14 @@ static int pushInt64WithName(list_t *self, char *name, long long int64In)
 
 static long long getInt64ByIndex(list_t *self, int index)
 {
-    long long int64Out = -1;
-    char *strOut = NULL;
-    if (index < 0)
-    {
-        goto exit;
-    }
-
-    self->getStrByIndex(self, index, &strOut);
-    unsigned long long int64Temp = 0;
-    for (int i = 7; i > -1; i--)
-    {
-        int64Temp = int64Temp << 8;
-        int64Temp += ((unsigned char *)(strOut))[i];
-    }
-    int64Out = int64Temp;
-    goto exit;
-exit:
-    return int64Out;
+    arg_t *arg = self->getArgByIndex(self, index);
+    return arg->getInt64(arg);
 }
 
 static long long getInt64ByName(list_t *self, char *name)
 {
-    int index = 0;
-    index = self->getIndexByName(self, name);
-    return self->getInt64ByIndex(self, index);
+    arg_t *arg = self->getArgByName(self, name);
+    return arg->getInt64(arg);
 }
 
 static int size(list_t *self)
@@ -208,43 +163,34 @@ static int size(list_t *self)
 
 char *getTypeByName(list_t *self, char *name)
 {
-    int index;
-    index = self->getIndexByName(self, name);
-    if (-1 == index)
-    {
-        return "[err]object No found!";
-    }
-    arg_t *arg = self->getArgByIndex(self, index);
+    arg_t *arg = self->getArgByName(self, name);
     return arg->type;
 }
 
 static arg_t *getArgByIndex(list_t *self, int index)
 {
     arg_t *arg;
+    if (index == -1)
+    {
+        return NULL;
+    }
     arg = self->argLinkList->findNodeById(self->argLinkList, index)->contant;
     return arg;
 }
 
 static float getFloatByName(list_t *self, char *name)
 {
-    int index = 0;
-    index = self->getIndexByName(self, name);
-    if (-1 == index)
-    {
-        return -1;
-    }
-    return getFloatByIndex(self, index);
+    arg_t *arg = self->getArgByName(self, name);
+    return arg->getFloat(arg);
 }
 
 static int copyArg(list_t *self, char *name, list_t *directList)
 {
-    int index = 0;
-    index = self->getIndexByName(self, name);
-    if (-1 == index)
+    arg_t *argToBeCopy = self->getArgByName(self, name);
+    if (NULL == argToBeCopy)
     {
-        return -1;
+        return 1;
     }
-    arg_t *argToBeCopy = self->getArgByIndex(self, index);
     arg_t *argCopied = New_arg(NULL);
     memcpy(argCopied->contant, argToBeCopy->contant, ARG_CONTANT_LENGTH);
     memcpy(argCopied->name, argToBeCopy->name, ARG_NAME_LENGTH);
@@ -273,6 +219,16 @@ static int pushArg(list_t *self, arg_t *arg)
     return 0;
 }
 
+static arg_t *getArgByName(list_t *self, char *name)
+{
+    int index = self->getIndexByName(self, name);
+    if (-1 == index)
+    {
+        return NULL;
+    }
+    return self->getArgByIndex(self, index);
+}
+
 static void init(list_t *self, list_t *args)
 {
     /* attrivute */
@@ -293,6 +249,7 @@ static void init(list_t *self, list_t *args)
     self->size = size;
     self->getIndexByName = getIndexByName;
     self->getArgByIndex = getArgByIndex;
+    self->getArgByName = getArgByName;
     self->pushArg = pushArg;
     self->getTypeByName = getTypeByName;
     self->copyArg = copyArg;
