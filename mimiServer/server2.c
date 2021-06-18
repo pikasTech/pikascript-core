@@ -12,7 +12,7 @@ static void deinit(server2_t *self)
 static void update(server2_t *self, int systime)
 {
     // return if lamp is not enable
-    if (0 == self->attributeList->getInt64ByName(self->attributeList, "isEnable"))
+    if (0 == self->getInt64(self, "isEnable"))
     {
         return;
     }
@@ -20,12 +20,12 @@ static void update(server2_t *self, int systime)
 
 static void enable(server2_t *self)
 {
-    self->attributeList->setInt64WithName(self->attributeList, "isEnable", 1);
+    self->setInt64(self, "isEnable", 1);
 }
 
 static void disable(server2_t *self)
 {
-    self->attributeList->setInt64WithName(self->attributeList, "isEnable", 0);
+    self->setInt64(self, "isEnable", 0);
 }
 
 static void setInt64(server2_t *self, char *name, long long val)
