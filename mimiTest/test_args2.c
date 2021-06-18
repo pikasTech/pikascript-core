@@ -1,9 +1,9 @@
-#include "dataList.h"
+#include "dataArgs.h"
 int TEST_args2(int isShow)
 {
     int err = 0;
     {
-        list_t *args = New_list(NULL);
+        args_t *args = New_args(NULL);
         float floatOut = 0;
         long long int64Out = 0;
         void *pointer = NULL;
@@ -69,8 +69,8 @@ int TEST_args2(int isShow)
         args->dinit(args);
     }
     {
-        list_t *args1 = New_list(NULL);
-        list_t *args2 = New_list(NULL);
+        args_t *args1 = New_args(NULL);
+        args_t *args2 = New_args(NULL);
 
         args1->pushFloatWithName(args1, "argtest1", 2.883);
         args1->pushStrWithName(args1, "strtest1", "teststr");

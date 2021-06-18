@@ -3,5 +3,5 @@
 #include "dataMemory.h"
 #include "server.h"
 
-server_t *New_server_allert(list_t *args);
+server_t *New_server_allert(args_t *args);
 #endif

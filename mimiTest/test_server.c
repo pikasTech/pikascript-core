@@ -3,7 +3,7 @@
 int TEST_server(int isShow)
 {
     int err = 0;
-    list_t *args = New_list(NULL);
+    args_t *args = New_args(NULL);
     args->pushInt64WithName(args, "isEnable", 0);
     server_t *server = New_server(args);
 

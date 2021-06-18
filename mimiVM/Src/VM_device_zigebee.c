@@ -2,7 +2,7 @@
 #include "VM_device.h"
 #include "dataMemory.h"
 
-static int _writeHandle(device_t *self, list_t *args_in)
+static int _writeHandle(device_t *self, args_t *args_in)
 {
     int err = 0;
 
@@ -21,7 +21,7 @@ exit:
     return err;
 }
 
-static void init_zigbee(device_t *self, list_t *args)
+static void init_zigbee(device_t *self, args_t *args)
 {
     /* attrivute */
 
@@ -33,7 +33,7 @@ static void init_zigbee(device_t *self, list_t *args)
     self->_writeHandle = _writeHandle;
 }
 
-device_t *New_device_zigbee(list_t *args)
+device_t *New_device_zigbee(args_t *args)
 {
     device_t *self = New_device(args);
     self->init = init_zigbee;

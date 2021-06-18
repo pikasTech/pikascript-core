@@ -1,6 +1,6 @@
 #include "gui2.h"
 #include "dataMemory.h"
-#include "dataList.h"
+#include "dataArgs.h"
 
 static void refresh(gui2_t *self)
 {
@@ -16,7 +16,7 @@ static void refresh(gui2_t *self)
     self->_refresh_periodic(self);
 }
 
-static void init_3key(gui2_t *self, list_t *args)
+static void init_3key(gui2_t *self, args_t *args)
 {
     /* attrivute */
 
@@ -28,7 +28,7 @@ static void init_3key(gui2_t *self, list_t *args)
     /* override */
 }
 
-gui2_t *New_gui2_3key(list_t *args)
+gui2_t *New_gui2_3key(args_t *args)
 {
     gui2_t *self = New_gui2(args);
     self->init = init_3key;

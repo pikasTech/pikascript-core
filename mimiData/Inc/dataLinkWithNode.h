@@ -1,7 +1,7 @@
 #ifndef __DATA_LINK_H
 #define __DATA_LINK_H
 
-#include "dataList.h"
+#include "dataArgs.h"
 #include "dataMemory.h"
 typedef struct dataTest
 {
@@ -26,10 +26,10 @@ typedef struct linkWithNode
     void (*deinit)(struct linkWithNode *);
     void (*port_deinit_data)(void *);
     void (*deinit_node)(struct linkWithNode *);
-    void (*init)(struct linkWithNode *self, list_t *args);
+    void (*init)(struct linkWithNode *self, args_t *args);
 
 } linkWithNode_t;
 
-linkWithNode_t *New_linkWithNode(list_t *args);
+linkWithNode_t *New_linkWithNode(args_t *args);
 
 #endif

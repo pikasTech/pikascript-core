@@ -59,7 +59,7 @@ static void update(server_t *self, int systime)
 	}
 }
 
-static void init_tempM(server_t *self, list_t *args)
+static void init_tempM(server_t *self, args_t *args)
 {
 	/* attrivute */
 
@@ -74,13 +74,13 @@ static void init_tempM(server_t *self, list_t *args)
 	server_t *panel = NULL;
 	
 	{
-		list_t *args = New_list(NULL);
+		args_t *args = New_args(NULL);
 		args->pushPointerWithName(args, "context", tempInfo);
 		allert = New_server_allert(args);
 		args->dinit(args);
 	}
 	{
-		list_t *args = New_list(NULL);
+		args_t *args = New_args(NULL);
 		args->pushInt64WithName(args, "isEnable", 0);
 		args->pushPointerWithName(args, "context", self);
 		panel = New_server_panelTemp(args);
@@ -104,7 +104,7 @@ static void init_tempM(server_t *self, list_t *args)
 	/* override */
 }
 
-server_t *New_server_tempM(list_t *args)
+server_t *New_server_tempM(args_t *args)
 {
 	server_t *self = New_server(args);
 	self->init = init_tempM;

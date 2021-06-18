@@ -1,5 +1,5 @@
 #include "server2.h"
-#include "dataList.h"
+#include "dataArgs.h"
 #include "dataMemory.h"
 
 static void deinit(server2_t *self)
@@ -87,16 +87,16 @@ void getStr(server2_t *self, char *name, char **strOut)
                                       strOut);
 }
 
-static void loadAttributeFromArgs(server2_t *self, list_t *args, char *name)
+static void loadAttributeFromArgs(server2_t *self, args_t *args, char *name)
 {
     args->copyArg(args, name, self->attributeList);
 }
 
-static void init(server2_t *self, list_t *args)
+static void init(server2_t *self, args_t *args)
 {
     /* List */
     self->subServerList = New_link(NULL);
-    self->attributeList = New_list(NULL);
+    self->attributeList = New_args(NULL);
 
     /* operation */
     self->dinit = deinit;
@@ -131,7 +131,7 @@ static void init(server2_t *self, list_t *args)
     self->loadAttributeFromArgs(self, args, "isEnable");
 }
 
-server2_t *New_server2(list_t *args)
+server2_t *New_server2(args_t *args)
 {
     DMEM *mem = DynMemGet(sizeof(server2_t));
     server2_t *self = mem->addr;

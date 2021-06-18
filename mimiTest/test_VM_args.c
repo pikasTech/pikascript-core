@@ -4,7 +4,7 @@
 int TEST_VM_args(int isShow)
 {
     int errCode = 0;
-    list_t *args = New_list(NULL);
+    args_t *args = New_args(NULL);
     args->pushStrWithDefaultName(args, "arg1");
     args->pushStrWithDefaultName(args, "arg2");
 

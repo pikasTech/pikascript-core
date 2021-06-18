@@ -1,4 +1,4 @@
-#include "dataList.h"
+#include "dataArgs.h"
 #include "dataMemory.h"
 #include "server.h"
 #include "gui_3key.h"
@@ -94,7 +94,7 @@ static vkey_t *VM_key_init_lamp(int KEY_id, void *context)
 }
 
 
-static void init_panelTemp(server_t *self, list_t *args)
+static void init_panelTemp(server_t *self, args_t *args)
 {
     /* attrivute */
 
@@ -117,7 +117,7 @@ static void init_panelTemp(server_t *self, list_t *args)
     vkey_t * key_1 = VM_key_init_lamp(1, self);
     vkey_t * key_2 = VM_key_init_lamp(2, self);
     {
-        list_t *args = New_list(NULL);
+        args_t *args = New_args(NULL);
         args->pushStrWithName(args, "title", "home");
         args->pushPointerWithName(args, "context", self);
         args->pushInt64WithName(args, "optionMax", 1);
@@ -131,7 +131,7 @@ static void init_panelTemp(server_t *self, list_t *args)
         args->dinit(args);
     }
     {
-        list_t *args = New_list(NULL);
+        args_t *args = New_args(NULL);
         args->pushStrWithName(args, "title", "select a val");
         args->pushPointerWithName(args, "context", self);
         args->pushInt64WithName(args, "optionMax", 3);
@@ -149,7 +149,7 @@ static void init_panelTemp(server_t *self, list_t *args)
         args->dinit(args);
     }
     {
-        list_t *args = New_list(NULL);
+        args_t *args = New_args(NULL);
         args->pushStrWithName(args, "title", "select a val");
         args->pushPointerWithName(args, "context", self);
         args->pushInt64WithName(args, "optionMax", 1);
@@ -163,7 +163,7 @@ static void init_panelTemp(server_t *self, list_t *args)
         args->dinit(args);
     }
     {
-        list_t *args = New_list(NULL);
+        args_t *args = New_args(NULL);
         args->pushStrWithName(args, "title", "temp1");
         args->pushPointerWithName(args, "context", self);
         args->pushInt64WithName(args, "optionMax", 0);
@@ -174,7 +174,7 @@ static void init_panelTemp(server_t *self, list_t *args)
         args->dinit(args);
     }
     {
-        list_t *args = New_list(NULL);
+        args_t *args = New_args(NULL);
         args->pushStrWithName(args, "title", "temp2");
         args->pushPointerWithName(args, "context", self);
         args->pushInt64WithName(args, "optionMax", 0);
@@ -185,7 +185,7 @@ static void init_panelTemp(server_t *self, list_t *args)
         args->dinit(args);
     }
     {
-        list_t *args = New_list(NULL);
+        args_t *args = New_args(NULL);
         args->pushStrWithName(args, "title", "hum1");
         args->pushPointerWithName(args, "context", self);
         args->pushInt64WithName(args, "optionMax", 0);
@@ -196,7 +196,7 @@ static void init_panelTemp(server_t *self, list_t *args)
         args->dinit(args);
     }
     {
-        list_t *args = New_list(NULL);
+        args_t *args = New_args(NULL);
         args->pushStrWithName(args, "title", "hum2");
         args->pushPointerWithName(args, "context", self);
         args->pushInt64WithName(args, "optionMax", 0);
@@ -207,7 +207,7 @@ static void init_panelTemp(server_t *self, list_t *args)
         args->dinit(args);
     }
     {
-        list_t *args = New_list(NULL);
+        args_t *args = New_args(NULL);
         args->pushStrWithName(args, "title", "temp1 allert");
         args->pushPointerWithName(args, "context", self);
         args->pushInt64WithName(args, "optionMax", 0);
@@ -218,7 +218,7 @@ static void init_panelTemp(server_t *self, list_t *args)
         args->dinit(args);
     }
     {
-        list_t *args = New_list(NULL);
+        args_t *args = New_args(NULL);
         args->pushStrWithName(args, "title", "temp2 allert");
         args->pushPointerWithName(args, "context", self);
         args->pushInt64WithName(args, "optionMax", 0);
@@ -250,7 +250,7 @@ static void init_panelTemp(server_t *self, list_t *args)
     /* override */
 }
 
-server_t *New_server_panelTemp(list_t *args)
+server_t *New_server_panelTemp(args_t *args)
 {
     server_t *self = New_server(args);
     self->init = init_panelTemp;

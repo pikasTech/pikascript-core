@@ -1,6 +1,6 @@
 #ifndef _gui2__H
 #define _gui2__H
-#include "dataList.h"
+#include "dataArgs.h"
 #include "dataMemory.h"
 typedef struct Class_gui gui2_t;
 struct Class_gui
@@ -20,7 +20,7 @@ struct Class_gui
 
     /* operation */
     void (*dinit)(gui2_t *self);
-    void (*init)(gui2_t *self, list_t *args);
+    void (*init)(gui2_t *self, args_t *args);
     void (*refresh)(gui2_t *gui);
     void (*refrash_optionPointer)(gui2_t *gui);
     void (*refrash_optionStr)(gui2_t *gui);
@@ -36,10 +36,10 @@ struct Class_gui
     void (*clear)(gui2_t *gui);
     void (*setTitle)(gui2_t *gui, char *title);
     void (*argHandle)(gui2_t *self,
-                      list_t *args,
+                      args_t *args,
                       char *argName,
                       void (*handle)(gui2_t *self,
-                                     list_t *args,
+                                     args_t *args,
                                      char *argName));
     void (*guiChange_callBack)(gui2_t *self);
 
@@ -50,5 +50,5 @@ struct Class_gui
     /* object */
 };
 
-gui2_t *New_gui2(list_t *args);
+gui2_t *New_gui2(args_t *args);
 #endif

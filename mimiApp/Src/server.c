@@ -1,5 +1,5 @@
 #include "server.h"
-#include "dataList.h"
+#include "dataArgs.h"
 #include "dataMemory.h"
 
 static void deinit(server_t *self)
@@ -29,24 +29,24 @@ static void disable(server_t *self)
 }
 
 static void argHandle_context(server_t *self,
-                              list_t *args,
+                              args_t *args,
                               char *argName)
 {
     self->context = args->getPointerByName(args, argName);
 }
 
 static void argHandle_isEnalbe(server_t *self,
-                               list_t *args,
+                               args_t *args,
                                char *argName)
 {
     self->isEnable = args->getInt64ByName(args, argName);
 }
 
 static void argHandle(server_t *self,
-                      list_t *args,
+                      args_t *args,
                       char *argName,
                       void (*handle)(server_t *self,
-                                     list_t *args,
+                                     args_t *args,
                                      char *argName))
 {
     if (-1 == args->getIndexByName(args, argName))
@@ -56,7 +56,7 @@ static void argHandle(server_t *self,
     handle(self, args, argName);
 }
 
-static void init(server_t *self, list_t *args)
+static void init(server_t *self, args_t *args)
 {
     /* attrivute */
     self->context = self;
@@ -101,7 +101,7 @@ static void init(server_t *self, list_t *args)
                     argHandle_context);
 }
 
-server_t *New_server(list_t *args)
+server_t *New_server(args_t *args)
 {
     DMEM *mem = DynMemGet(sizeof(server_t));
     server_t *self = mem->addr;

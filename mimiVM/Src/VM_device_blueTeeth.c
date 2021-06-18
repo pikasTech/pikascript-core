@@ -3,7 +3,7 @@
 #include "dataMemory.h"
 #include "dataString.h"
 
-static int _writeHandle(device_t *self, list_t *args_in)
+static int _writeHandle(device_t *self, args_t *args_in)
 {
     char *str = NULL;
     args_in->getStrByIndex(args_in, 0, &str);
@@ -11,7 +11,7 @@ static int _writeHandle(device_t *self, list_t *args_in)
     return 0;
 }
 
-static void init_blueTeeth(device_t *self, list_t *args)
+static void init_blueTeeth(device_t *self, args_t *args)
 {
     /* attrivute */
 
@@ -23,7 +23,7 @@ static void init_blueTeeth(device_t *self, list_t *args)
     self->_writeHandle = _writeHandle;
 }
 
-device_t *New_device_blueTeeth(list_t *args)
+device_t *New_device_blueTeeth(args_t *args)
 {
     device_t *self = New_device(args);
     self->init = init_blueTeeth;

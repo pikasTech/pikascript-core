@@ -1,5 +1,5 @@
 #include "shApp_set.h"
-#include "dataList.h"
+#include "dataArgs.h"
 #include "dataMemory.h"
 #include "server.h"
 #include "tempInfo.h"
@@ -25,7 +25,7 @@ static void deinit(shApp_set_t *self)
     DynMemPut(self->mem);
 }
 
-static void init(shApp_set_t *self, list_t *args)
+static void init(shApp_set_t *self, args_t *args)
 {
     /* attrivute */
     self->context = self;
@@ -39,7 +39,7 @@ static void init(shApp_set_t *self, list_t *args)
     /* override */
 }
 
-shApp_set_t *New_shApp_set(list_t *args)
+shApp_set_t *New_shApp_set(args_t *args)
 {
     DMEM *mem = DynMemGet(sizeof(shApp_set_t));
     shApp_set_t *self = mem->addr;

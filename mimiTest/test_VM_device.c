@@ -13,12 +13,12 @@ int TEST_VM_device(int isShow)
     device_t *voltage = New_device_voltage(NULL);
     device_t *light = New_device_light(NULL);
 
-    list_t *args_in = New_list(NULL);
-    list_t *args_in_zigbee = New_list(NULL);
-    list_t *args_in_voltage = New_list(NULL);
-    list_t *args_out = New_list(NULL);
-    list_t *args_out_voltage = New_list(NULL);
-    list_t *args_in_float = New_list(NULL);
+    args_t *args_in = New_args(NULL);
+    args_t *args_in_zigbee = New_args(NULL);
+    args_t *args_in_voltage = New_args(NULL);
+    args_t *args_out = New_args(NULL);
+    args_t *args_out_voltage = New_args(NULL);
+    args_t *args_in_float = New_args(NULL);
 
     float lightVarRead = light->read_float(light, NULL);
     if (isShow)

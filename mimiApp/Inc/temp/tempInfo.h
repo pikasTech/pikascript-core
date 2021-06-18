@@ -1,7 +1,7 @@
 #ifndef _tempInfo__H
 #define _tempInfo__H
 #include "dataMemory.h"
-#include "dataList.h"
+#include "dataArgs.h"
 typedef struct Class_tempInfo tempInfo_t;
 struct Class_tempInfo
 {
@@ -20,7 +20,7 @@ struct Class_tempInfo
 
     /* operation */
     void (*dinit)(tempInfo_t *self);
-    void (*init)(tempInfo_t *self, list_t *args);
+    void (*init)(tempInfo_t *self, args_t *args);
     void (*set)(tempInfo_t *self, char *varName, int var);
     int (*get)(tempInfo_t *self, char *varName);
 
@@ -29,5 +29,5 @@ struct Class_tempInfo
     /* object */
 };
 
-tempInfo_t *New_tempInfo(list_t *args);
+tempInfo_t *New_tempInfo(args_t *args);
 #endif

@@ -1,6 +1,6 @@
 #ifndef _server__H
 #define _server__H
-#include "dataList.h"
+#include "dataArgs.h"
 #include "dataLink.h"
 #include "dataMemory.h"
 typedef struct Class_server server_t;
@@ -21,15 +21,15 @@ struct Class_server
 
     /* operation */
     void (*dinit)(server_t *self);
-    void (*init)(server_t *self, list_t *args);
+    void (*init)(server_t *self, args_t *args);
     void (*update)(server_t *self, int sysytime);
     void (*enable)(server_t *self);
     void (*disable)(server_t *self);
     void (*argHandle)(server_t *self,
-                      list_t *args,
+                      args_t *args,
                       char *argName,
                       void (*handle)(server_t *self,
-                                     list_t *args,
+                                     args_t *args,
                                      char *argName));
 
     /* virtual operation */
@@ -37,5 +37,5 @@ struct Class_server
     /* object */
 };
 
-server_t *New_server(list_t *args);
+server_t *New_server(args_t *args);
 #endif

@@ -169,7 +169,7 @@ static void showLine(gui2_t *gui, int line, int cols, char *str)
 }
 
 static void argHandle_title(gui2_t *self,
-                            list_t *args,
+                            args_t *args,
                             char *argName)
 {
     char *title;
@@ -178,28 +178,28 @@ static void argHandle_title(gui2_t *self,
 }
 
 static void argHandle_context(gui2_t *self,
-                              list_t *args,
+                              args_t *args,
                               char *argName)
 {
     self->context = args->getPointerByName(args, argName);
 }
 
 static void argHandle_optionMax(gui2_t *self,
-                                list_t *args,
+                                args_t *args,
                                 char *argName)
 {
     self->option_pointer_max = args->getInt64ByName(args, argName);
 }
 
 static void argHandle_dataIndex(gui2_t *self,
-                                list_t *args,
+                                args_t *args,
                                 char *argName)
 {
     self->dataIndex = args->getInt64ByName(args, argName);
 }
 
 static void argHandle_optionStr0(gui2_t *self,
-                                 list_t *args,
+                                 args_t *args,
                                  char *argName)
 {
     char *str;
@@ -208,7 +208,7 @@ static void argHandle_optionStr0(gui2_t *self,
 }
 
 static void argHandle_optionStr1(gui2_t *self,
-                                 list_t *args,
+                                 args_t *args,
                                  char *argName)
 {
     char *str;
@@ -217,7 +217,7 @@ static void argHandle_optionStr1(gui2_t *self,
 }
 
 static void argHandle_optionStr2(gui2_t *self,
-                                 list_t *args,
+                                 args_t *args,
                                  char *argName)
 {
     char *str;
@@ -226,7 +226,7 @@ static void argHandle_optionStr2(gui2_t *self,
 }
 
 static void argHandle_optionStr3(gui2_t *self,
-                                 list_t *args,
+                                 args_t *args,
                                  char *argName)
 {
     char *str;
@@ -235,7 +235,7 @@ static void argHandle_optionStr3(gui2_t *self,
 }
 
 static void argHandle_optionStr4(gui2_t *self,
-                                 list_t *args,
+                                 args_t *args,
                                  char *argName)
 {
     char *str;
@@ -244,7 +244,7 @@ static void argHandle_optionStr4(gui2_t *self,
 }
 
 static void argHandle_optionCallBack0(gui2_t *self,
-                                      list_t *args,
+                                      args_t *args,
                                       char *argName)
 {
     char *str;
@@ -256,7 +256,7 @@ static void argHandle_optionCallBack0(gui2_t *self,
 }
 
 static void argHandle_optionCallBack1(gui2_t *self,
-                                      list_t *args,
+                                      args_t *args,
                                       char *argName)
 {
     char *str;
@@ -268,7 +268,7 @@ static void argHandle_optionCallBack1(gui2_t *self,
 }
 
 static void argHandle_optionCallBack2(gui2_t *self,
-                                      list_t *args,
+                                      args_t *args,
                                       char *argName)
 {
     char *str;
@@ -280,7 +280,7 @@ static void argHandle_optionCallBack2(gui2_t *self,
 }
 
 static void argHandle_optionCallBack3(gui2_t *self,
-                                      list_t *args,
+                                      args_t *args,
                                       char *argName)
 {
     char *str;
@@ -292,7 +292,7 @@ static void argHandle_optionCallBack3(gui2_t *self,
 }
 
 static void argHandle_optionCallBack4(gui2_t *self,
-                                      list_t *args,
+                                      args_t *args,
                                       char *argName)
 {
     char *str;
@@ -304,10 +304,10 @@ static void argHandle_optionCallBack4(gui2_t *self,
 }
 
 static void argHandle(gui2_t *self,
-                      list_t *args,
+                      args_t *args,
                       char *argName,
                       void (*handle)(gui2_t *self,
-                                     list_t *args,
+                                     args_t *args,
                                      char *argName))
 {
     if (-1 == args->getIndexByName(args, argName))
@@ -317,7 +317,7 @@ static void argHandle(gui2_t *self,
     handle(self, args, argName);
 }
 
-static void init(gui2_t *self, list_t *args)
+static void init(gui2_t *self, args_t *args)
 {
     /* attrivute */
     self->title[0] = 0;
@@ -425,7 +425,7 @@ static void init(gui2_t *self, list_t *args)
                     argHandle_dataIndex);
 }
 
-gui2_t *New_gui2(list_t *args)
+gui2_t *New_gui2(args_t *args)
 {
     DMEM *mem = DynMemGet(sizeof(gui2_t));
     gui2_t *self = mem->addr;

@@ -2,7 +2,7 @@
 #include "dataMemory.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "dataList.h"
+#include "dataArgs.h"
 
 static void deinit_data_default(void *self);
 void deinit_node(linkWithNode_t *self);
@@ -123,7 +123,7 @@ static void deinit_data_default(void *data_noType)
 
 
 
-void init(linkWithNode_t *self, list_t *args)
+void init(linkWithNode_t *self, args_t *args)
 {
     // load the functions
     self->add = linkNode_add;
@@ -142,7 +142,7 @@ void init(linkWithNode_t *self, list_t *args)
 }
 
 
-linkWithNode_t *New_linkWithNode(list_t *args)
+linkWithNode_t *New_linkWithNode(args_t *args)
 {
     //note: only the Head of link have the operations, other node donot have operations, so wehen operate other node, use the operations of Head.
 

@@ -3,5 +3,5 @@
 #include "dataMemory.h"
 #include "VM_device.h"
 
-device_t *New_device_blueTeeth(list_t *args);
+device_t *New_device_blueTeeth(args_t *args);
 #endif

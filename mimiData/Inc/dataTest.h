@@ -1,7 +1,7 @@
 #ifndef _dataTest__H
 #define _dataTest__H
 #include "dataMemory.h"
-#include "dataList.h"
+#include "dataArgs.h"
 typedef struct Class_dataTest dataTest_t;
 struct Class_dataTest
 {
@@ -13,12 +13,12 @@ struct Class_dataTest
 
     /* operation */
     void (*dinit)(dataTest_t *self);
-    void (*init)(dataTest_t *self, list_t *args);
+    void (*init)(dataTest_t *self, args_t *args);
 
     /* virtual operation */
 
     /* object */
 };
 
-dataTest_t *New_dataTest(list_t *args);
+dataTest_t *New_dataTest(args_t *args);
 #endif

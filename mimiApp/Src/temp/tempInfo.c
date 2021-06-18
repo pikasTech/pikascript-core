@@ -50,7 +50,7 @@ static void set(tempInfo_t *self, char *varName, int var)
     }
 }
 
-static void init(tempInfo_t *self, list_t *args)
+static void init(tempInfo_t *self, args_t *args)
 {
     /* attrivute */
     self->context = self;
@@ -74,7 +74,7 @@ static void init(tempInfo_t *self, list_t *args)
     /* override */
 }
 
-tempInfo_t *New_tempInfo(list_t *args)
+tempInfo_t *New_tempInfo(args_t *args)
 {
     DMEM *mem = DynMemGet(sizeof(tempInfo_t));
     tempInfo_t *self = mem->addr;

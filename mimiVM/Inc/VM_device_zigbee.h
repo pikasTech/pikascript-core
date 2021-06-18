@@ -3,5 +3,5 @@
 #include "dataMemory.h"
 #include "VM_device.h"
 
-device_t *New_device_zigbee(list_t *args);
+device_t *New_device_zigbee(args_t *args);
 #endif

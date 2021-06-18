@@ -1,6 +1,6 @@
 #ifndef _server2__H
 #define _server2__H
-#include "dataList.h"
+#include "dataArgs.h"
 #include "dataLink.h"
 #include "dataMemory.h"
 typedef struct Class_server2 server2_t;
@@ -12,11 +12,11 @@ struct Class_server2
 
     /* list */
     link_t *subServerList;
-    list_t *attributeList;
+    args_t *attributeList;
 
     /* operation */
     void (*dinit)(server2_t *self);
-    void (*init)(server2_t *self, list_t *args);
+    void (*init)(server2_t *self, args_t *args);
     void (*update)(server2_t *self, int sysytime);
     void (*enable)(server2_t *self);
     void (*disable)(server2_t *self);
@@ -33,12 +33,12 @@ struct Class_server2
     void (*setStr)(server2_t *self, char *name, char *str);
     void (*getStr)(server2_t *self, char *name, char **strOut);
 
-    void (*loadAttributeFromArgs)(server2_t *self, list_t *args, char *name);
+    void (*loadAttributeFromArgs)(server2_t *self, args_t *args, char *name);
 
     /* virtual operation */
 
     /* object */
 };
 
-server2_t *New_server2(list_t *args);
+server2_t *New_server2(args_t *args);
 #endif

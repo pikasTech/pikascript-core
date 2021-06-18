@@ -1,5 +1,5 @@
 #include "VM_device.h"
-#include "dataList.h"
+#include "dataArgs.h"
 #include "dataMemory.h"
 
 static void deinit(device_t *self)
@@ -7,7 +7,7 @@ static void deinit(device_t *self)
     DynMemPut(self->mem);
 }
 
-static int read(device_t *self, list_t *args_in, list_t *args_out)
+static int read(device_t *self, args_t *args_in, args_t *args_out)
 {
     int err = 0;
     //    if (NULL == args_in)
@@ -32,7 +32,7 @@ exit:
     return err;
 }
 
-static int _read_handle(device_t *self, list_t *args_in, list_t *args_out)
+static int _read_handle(device_t *self, args_t *args_in, args_t *args_out)
 {
     int err = 0;
 
@@ -56,7 +56,7 @@ exit:
     return err;
 }
 
-static int write(device_t *self, list_t *args_in)
+static int write(device_t *self, args_t *args_in)
 {
     int err = 0;
     if (NULL == args_in)
@@ -78,7 +78,7 @@ exit:
     return err;
 }
 
-static int _writeHandle(device_t *self, list_t *args_in)
+static int _writeHandle(device_t *self, args_t *args_in)
 {
     //_writeHandle not be ovrride
     int err = -1;
@@ -87,10 +87,10 @@ exit:
     return err;
 }
 
-static float read_float(device_t *self, list_t *args_in)
+static float read_float(device_t *self, args_t *args_in)
 {
     float val;
-    list_t *args_out = New_list(NULL);
+    args_t *args_out = New_args(NULL);
     self->read(self, args_in, args_out);
     // the first arg is float
     val = args_out->getFloatByIndex(args_out, 0);
@@ -104,7 +104,7 @@ exit:
 static int write_str(device_t *self, char *str)
 {
     int err = 0;
-    list_t *args_in = New_list(NULL);
+    args_t *args_in = New_args(NULL);
     args_in->pushStrWithDefaultName(args_in, str);
     // write str to the first arg
     self->write(self, args_in);
@@ -126,7 +126,7 @@ exit:
     return err;
 }
 
-static void init(device_t *self, list_t *args)
+static void init(device_t *self, args_t *args)
 {
     /* attrivute */
     self->context = self;
@@ -146,7 +146,7 @@ static void init(device_t *self, list_t *args)
     self->_writeHandle = _writeHandle;
 }
 
-device_t *New_device(list_t *args)
+device_t *New_device(args_t *args)
 {
     DMEM *mem = DynMemGet(sizeof(device_t));
     device_t *device = mem->addr;
