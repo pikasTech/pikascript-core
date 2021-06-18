@@ -234,10 +234,6 @@ static void init(list_t *self, list_t *args)
     /* attrivute */
     self->context = self;
     self->argLinkList = New_link(NULL);
-    for (int i = 0; i < ARG_CONTANT_LENGTH; i++)
-    {
-        self->contantBuff[i] = 0;
-    }
     for (int i = 0; i < ARG_NAME_LENGTH; i++)
     {
         self->nameBuff[i] = 0;

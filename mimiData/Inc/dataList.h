@@ -10,7 +10,6 @@ struct Class_Arglist
     DMEM *mem;
     void *context;
     link_t *argLinkList;
-    unsigned char contantBuff[ARG_CONTANT_LENGTH];
     unsigned char nameBuff[ARG_NAME_LENGTH];
 
     /* operation */
