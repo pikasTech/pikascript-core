@@ -18,7 +18,6 @@ struct Class_Arglist
     void (*init)(list_t *self, list_t *args);
     int (*size)(list_t *self);
 
-    int (*pushContant)(list_t *self, char *type);
     int (*getIndexByName)(list_t *self, char *name);
     arg_t *(*getArgByIndex)(list_t *self, int index);
     

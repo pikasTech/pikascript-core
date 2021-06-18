@@ -72,17 +72,15 @@ exit:
 
 static int pushStrWithDefaultName(list_t *self, char *strIn)
 {
-    memcpy(self->contantBuff, strIn, ARG_CONTANT_LENGTH);
     loadDefaultName(self);
-    self->pushContant(self, "string");
+    self->pushStrWithName(self, self->nameBuff, strIn);
     return 0;
 }
 
 static int pushFloatWithDefaultName(list_t *self, float argFloat)
 {
-    sprintf((char *)self->contantBuff, "%f", argFloat);
     loadDefaultName(self);
-    self->pushContant(self, "float");
+    self->pushFloatWithName(self, self->nameBuff, argFloat);
     return 0;
 }
 
@@ -208,33 +206,6 @@ static int size(list_t *self)
     return self->argLinkList->size(self->argLinkList);
 }
 
-static int pushContant(list_t *self, char *type)
-{
-    int errCode = 0;
-
-    arg_t *argNew = New_arg(NULL);
-    argNew->setName(argNew, (char *)self->nameBuff);
-    argNew->setContant(argNew, (char *)self->contantBuff);
-    argNew->setType(argNew, type);
-
-    self->argLinkList->add(self->argLinkList,
-                           argNew,
-                           (void *)argNew->dinit);
-
-    goto exit;
-
-exit:
-    for (int i = 0; i < ARG_CONTANT_LENGTH; i++)
-    {
-        self->contantBuff[i] = 0;
-    }
-    for (int i = 0; i < ARG_NAME_LENGTH; i++)
-    {
-        self->nameBuff[i] = 0;
-    }
-    return errCode;
-}
-
 char *getTypeByName(list_t *self, char *name)
 {
     int index;
@@ -320,7 +291,6 @@ static void init(list_t *self, list_t *args)
     self->dinit = deinit;
 
     self->size = size;
-    self->pushContant = pushContant;
     self->getIndexByName = getIndexByName;
     self->getArgByIndex = getArgByIndex;
     self->pushArg = pushArg;
