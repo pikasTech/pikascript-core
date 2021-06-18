@@ -77,7 +77,7 @@ int TEST_args2(int isShow)
         args1->copyArg(args1, "argtest1", args2);
         args1->copyArg(args1, "strtest1", args2);
 
-        if (1)
+        if (isShow)
         {
             printf("the float get from args is:%f\r\n",
                    args1->getFloatByName(args1, "argtest1"));

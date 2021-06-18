@@ -30,6 +30,14 @@ static char *getContant(arg_t *self)
 
 static void setInt64(arg_t *self, long long val)
 {
+    unsigned long int int64Temp = val;
+    unsigned char contantBuff[ARG_CONTANT_LENGTH];
+    for (int i = 0; i < 8; i++)
+    {
+        contantBuff[i] = int64Temp;
+        int64Temp = int64Temp >> 8;
+    }
+    self->setContant(self, contantBuff);
 }
 static void setFloat(arg_t *self, float val)
 {

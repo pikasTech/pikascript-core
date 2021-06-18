@@ -333,10 +333,9 @@ static void init(list_t *self, list_t *args)
     self->copyArg = copyArg;
     self->isArgExist = isArgExist;
 
-    self->pushStrWithName = pushStrWithName;
-    self->pushStrWithDefaultName = pushStrWithDefaultName;
-    self->getStrByIndex = getStrByIndex;
-    self->getStrByName = getStrByName;
+    self->pushInt64WithName = pushInt64WithName;
+    self->getInt64ByName = getInt64ByName;
+    self->getInt64ByIndex = getInt64ByIndex;
 
     self->pushFloatWithName = pushFloatWithName;
     self->pushFloatWithDefaultName = pushFloatWithDefaultName;
@@ -347,9 +346,10 @@ static void init(list_t *self, list_t *args)
     self->getPointerByIndex = getPointerByIndex;
     self->getPointerByName = getPointerByName;
 
-    self->pushInt64WithName = pushInt64WithName;
-    self->getInt64ByName = getInt64ByName;
-    self->getInt64ByIndex = getInt64ByIndex;
+    self->pushStrWithName = pushStrWithName;
+    self->pushStrWithDefaultName = pushStrWithDefaultName;
+    self->getStrByIndex = getStrByIndex;
+    self->getStrByName = getStrByName;
 
     /* object */
 

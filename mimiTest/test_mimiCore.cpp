@@ -342,11 +342,11 @@ void test_mimiCore(int isShow)
     ASSERT_RETURN(TEST_PORT_strprint_linux, isShow);
     ASSERT_RETURN(TEST_timer, isShow);
     ASSERT_RETURN(TEST_VM_args, isShow);
-    ASSERT_RETURN(TEST_VM_device, isShow);
+    // ASSERT_RETURN(TEST_VM_device, isShow);
     ASSERT_RETURN(TEST_link2, isShow);
     ASSERT_RETURN(TEST_args2, isShow);
     ASSERT_RETURN(TEST_server, isShow);
-    ASSERT_RETURN(TEST_server2, 1);
+    ASSERT_RETURN(TEST_server2, isShow);
     std::cout << "Test of mimiCore Finished! " << std::endl
               << std::endl
               << "Memory still used: " << DMEMS.blk_num << std::endl
