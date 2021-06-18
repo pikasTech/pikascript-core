@@ -20,19 +20,19 @@ static void update(server2_t *self, int systime)
 
 static void enable(server2_t *self)
 {
-    self->attributeList->pushInt64WithName(self->attributeList, "isEnable", 1);
+    self->attributeList->setInt64WithName(self->attributeList, "isEnable", 1);
 }
 
 static void disable(server2_t *self)
 {
-    self->attributeList->pushInt64WithName(self->attributeList, "isEnable", 0);
+    self->attributeList->setInt64WithName(self->attributeList, "isEnable", 0);
 }
 
 static void setInt64(server2_t *self, char *name, long long val)
 {
     if (!self->attributeList->isArgExist(self->attributeList, name))
     {
-        self->attributeList->pushInt64WithName(self->attributeList,
+        self->attributeList->setInt64WithName(self->attributeList,
                                                name,
                                                val);
         return;
@@ -43,21 +43,21 @@ static void setInt64(server2_t *self, char *name, long long val)
 
 static void setPointer(server2_t *self, char *name, void *pointer)
 {
-    self->attributeList->pushPointerWithName(self->attributeList,
+    self->attributeList->setPointerWithName(self->attributeList,
                                              name,
                                              pointer);
 }
 
 static void setFloat(server2_t *self, char *name, float value)
 {
-    self->attributeList->pushFloatWithName(self->attributeList,
+    self->attributeList->setFloatWithName(self->attributeList,
                                            name,
                                            value);
 }
 
 static void setStr(server2_t *self, char *name, char *str)
 {
-    self->attributeList->pushStrWithName(self->attributeList,
+    self->attributeList->setStrWithName(self->attributeList,
                                          name,
                                          str);
 }

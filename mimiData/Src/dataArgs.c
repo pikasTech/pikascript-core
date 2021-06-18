@@ -57,27 +57,27 @@ static int getStrByIndex(args_t *self, int index, char **strOut)
     return errCode;
 }
 
-static int pushStrWithDefaultName(args_t *self, char *strIn)
+static int setStrWithDefaultName(args_t *self, char *strIn)
 {
     loadDefaultName(self);
-    self->pushStrWithName(self, (char *)self->nameBuff, strIn);
+    self->setStrWithName(self, (char *)self->nameBuff, strIn);
     return 0;
 }
 
-static int pushFloatWithDefaultName(args_t *self, float argFloat)
+static int setFloatWithDefaultName(args_t *self, float argFloat)
 {
     loadDefaultName(self);
-    self->pushFloatWithName(self, (char *)self->nameBuff, argFloat);
+    self->setFloatWithName(self, (char *)self->nameBuff, argFloat);
     return 0;
 }
 
-static int pushFloatWithName(args_t *self, char *name, float argFloat)
+static int setFloatWithName(args_t *self, char *name, float argFloat)
 {
     arg_t *argNew = New_arg(NULL);
     argNew->setType(argNew, "float");
     argNew->setName(argNew, name);
     argNew->setFloat(argNew, argFloat);
-    self->pushArg(self, argNew);
+    self->setArg(self, argNew);
     return 0;
 }
 
@@ -105,25 +105,25 @@ static void *getPointerByName(args_t *self, char *name)
     return pointer;
 }
 
-static int pushPointerWithName(args_t *self, char *name, void *argPointer)
+static int setPointerWithName(args_t *self, char *name, void *argPointer)
 {
     int errCode = 0;
     arg_t *argNew = New_arg(NULL);
     argNew->setType(argNew, "pointer");
     argNew->setName(argNew, name);
     argNew->setPointer(argNew, argPointer);
-    self->pushArg(self, argNew);
+    self->setArg(self, argNew);
     return errCode;
 }
 
-static int pushStrWithName(args_t *self, char *name, char *strIn)
+static int setStrWithName(args_t *self, char *name, char *strIn)
 {
     int errCode = 0;
     arg_t *argNew = New_arg(NULL);
     argNew->setType(argNew, "string");
     argNew->setString(argNew, strIn);
     argNew->setName(argNew, name);
-    self->pushArg(self, argNew);
+    self->setArg(self, argNew);
     return errCode;
 }
 
@@ -134,13 +134,13 @@ static int getStrByName(args_t *self, char *name, char **strOut)
     return 0;
 }
 
-static int pushInt64WithName(args_t *self, char *name, long long int64In)
+static int setInt64WithName(args_t *self, char *name, long long int64In)
 {
     arg_t *argNew = New_arg(NULL);
     argNew->setName(argNew, name);
     argNew->setInt64(argNew, int64In);
     argNew->setType(argNew, "int64");
-    self->pushArg(self, argNew);
+    self->setArg(self, argNew);
     return 0;
 }
 
@@ -225,7 +225,7 @@ static int updateArg(args_t *self, arg_t *argNew)
     return 0;
 }
 
-static int pushArg(args_t *self, arg_t *arg)
+static int setArg(args_t *self, arg_t *arg)
 {
     if (!self->isArgExist(self, arg))
     {
@@ -234,7 +234,7 @@ static int pushArg(args_t *self, arg_t *arg)
                                (void *)arg->dinit);
         return 0;
     }
-    return self->updateArg(self, arg);
+    updateArg(self, arg);
 }
 
 static arg_t *getArgByName(args_t *self, char *name)
@@ -264,27 +264,26 @@ static void init(args_t *self, args_t *args)
     self->getIndexByName = getIndexByName;
     self->getArgByIndex = getArgByIndex;
     self->getArgByName = getArgByName;
-    self->pushArg = pushArg;
-    self->updateArg = updateArg;
+    self->setArg = setArg;
     self->getTypeByName = getTypeByName;
     self->copyArg = copyArg;
     self->isArgExist = isArgExist;
 
-    self->pushInt64WithName = pushInt64WithName;
+    self->setInt64WithName = setInt64WithName;
     self->getInt64ByName = getInt64ByName;
     self->getInt64ByIndex = getInt64ByIndex;
 
-    self->pushFloatWithName = pushFloatWithName;
-    self->pushFloatWithDefaultName = pushFloatWithDefaultName;
+    self->setFloatWithName = setFloatWithName;
+    self->setFloatWithDefaultName = setFloatWithDefaultName;
     self->getFloatByIndex = getFloatByIndex;
     self->getFloatByName = getFloatByName;
 
-    self->pushPointerWithName = pushPointerWithName;
+    self->setPointerWithName = setPointerWithName;
     self->getPointerByIndex = getPointerByIndex;
     self->getPointerByName = getPointerByName;
 
-    self->pushStrWithName = pushStrWithName;
-    self->pushStrWithDefaultName = pushStrWithDefaultName;
+    self->setStrWithName = setStrWithName;
+    self->setStrWithDefaultName = setStrWithDefaultName;
     self->getStrByIndex = getStrByIndex;
     self->getStrByName = getStrByName;
 

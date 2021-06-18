@@ -44,7 +44,7 @@ static int _read_handle(device_t *self, args_t *args_in, args_t *args_out)
             err = 1;
             goto exit;
         }
-        if (0 != args_out->pushStrWithDefaultName(args_out, arg))
+        if (0 != args_out->setStrWithDefaultName(args_out, arg))
         {
             err = 2;
             goto exit;
@@ -105,7 +105,7 @@ static int write_str(device_t *self, char *str)
 {
     int err = 0;
     args_t *args_in = New_args(NULL);
-    args_in->pushStrWithDefaultName(args_in, str);
+    args_in->setStrWithDefaultName(args_in, str);
     // write str to the first arg
     self->write(self, args_in);
     goto exit;

@@ -28,7 +28,7 @@ int TEST_VM_device(int isShow)
 
     float floatInput = 4.278;
     float floatOutput = 0;
-    args_in_float->pushFloatWithDefaultName(args_in_float, floatInput);
+    args_in_float->setFloatWithDefaultName(args_in_float, floatInput);
     floatOutput = device->read_float(device, args_in_float);
 
     if (isShow)
@@ -49,9 +49,9 @@ int TEST_VM_device(int isShow)
     }
 
     char *strOut1 = NULL, *strOut2 = NULL;
-    args_in->pushStrWithDefaultName(args_in, "arg1");
-    args_in->pushStrWithDefaultName(args_in, "arg2");
-    args_in_zigbee->pushStrWithDefaultName(args_in_zigbee, "test print to zigbee\r\n");
+    args_in->setStrWithDefaultName(args_in, "arg1");
+    args_in->setStrWithDefaultName(args_in, "arg2");
+    args_in_zigbee->setStrWithDefaultName(args_in_zigbee, "test print to zigbee\r\n");
 
     if (0 != device->read(device, args_in, args_out))
     {

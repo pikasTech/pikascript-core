@@ -8,14 +8,14 @@ int TEST_args2(int isShow)
         long long int64Out = 0;
         void *pointer = NULL;
         char *strOut = NULL;
-        args->pushFloatWithDefaultName(args, 24.5);
-        args->pushInt64WithName(args,
+        args->setFloatWithDefaultName(args, 24.5);
+        args->setInt64WithName(args,
                                 "int64Test",
                                 (long long)22221);
-        args->pushPointerWithName(args,
+        args->setPointerWithName(args,
                                   "pointerTest",
                                   (void *)2222322);
-        args->pushStrWithName(args, "strTest", "teeeds");
+        args->setStrWithName(args, "strTest", "teeeds");
 
         floatOut = args->getFloatByIndex(args, 0);
         int64Out = args->getInt64ByName(args, "int64Test");
@@ -72,8 +72,8 @@ int TEST_args2(int isShow)
         args_t *args1 = New_args(NULL);
         args_t *args2 = New_args(NULL);
 
-        args1->pushFloatWithName(args1, "argtest1", 2.883);
-        args1->pushStrWithName(args1, "strtest1", "teststr");
+        args1->setFloatWithName(args1, "argtest1", 2.883);
+        args1->setStrWithName(args1, "strtest1", "teststr");
         args1->copyArg(args1, "argtest1", args2);
         args1->copyArg(args1, "strtest1", args2);
 

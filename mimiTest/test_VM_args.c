@@ -5,8 +5,8 @@ int TEST_VM_args(int isShow)
 {
     int errCode = 0;
     args_t *args = New_args(NULL);
-    args->pushStrWithDefaultName(args, "arg1");
-    args->pushStrWithDefaultName(args, "arg2");
+    args->setStrWithDefaultName(args, "arg1");
+    args->setStrWithDefaultName(args, "arg2");
 
     char *arg1 = NULL, *arg2 = NULL;
     args->getStrByIndex(args, 0, &arg1);

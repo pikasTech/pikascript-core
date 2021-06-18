@@ -118,13 +118,13 @@ static void init_panelTemp(server_t *self, args_t *args)
     vkey_t * key_2 = VM_key_init_lamp(2, self);
     {
         args_t *args = New_args(NULL);
-        args->pushStrWithName(args, "title", "home");
-        args->pushPointerWithName(args, "context", self);
-        args->pushInt64WithName(args, "optionMax", 1);
-        args->pushStrWithName(args, "optionStr0", "watch val");
-        args->pushStrWithName(args, "optionStr1", "set allert");
-        args->pushStrWithName(args, "optionCallBack0", "guiChange");
-        args->pushStrWithName(args, "optionCallBack1", "guiChange");
+        args->setStrWithName(args, "title", "home");
+        args->setPointerWithName(args, "context", self);
+        args->setInt64WithName(args, "optionMax", 1);
+        args->setStrWithName(args, "optionStr0", "watch val");
+        args->setStrWithName(args, "optionStr1", "set allert");
+        args->setStrWithName(args, "optionCallBack0", "guiChange");
+        args->setStrWithName(args, "optionCallBack1", "guiChange");
 
         gui_home = New_gui2_3key(args);
 
@@ -132,17 +132,17 @@ static void init_panelTemp(server_t *self, args_t *args)
     }
     {
         args_t *args = New_args(NULL);
-        args->pushStrWithName(args, "title", "select a val");
-        args->pushPointerWithName(args, "context", self);
-        args->pushInt64WithName(args, "optionMax", 3);
-        args->pushStrWithName(args, "optionStr0", "temp1");
-        args->pushStrWithName(args, "optionStr1", "temp2");
-        args->pushStrWithName(args, "optionStr2", "hum1");
-        args->pushStrWithName(args, "optionStr3", "hum2");
-        args->pushStrWithName(args, "optionCallBack0", "guiChange");
-        args->pushStrWithName(args, "optionCallBack1", "guiChange");
-        args->pushStrWithName(args, "optionCallBack2", "guiChange");
-        args->pushStrWithName(args, "optionCallBack3", "guiChange");
+        args->setStrWithName(args, "title", "select a val");
+        args->setPointerWithName(args, "context", self);
+        args->setInt64WithName(args, "optionMax", 3);
+        args->setStrWithName(args, "optionStr0", "temp1");
+        args->setStrWithName(args, "optionStr1", "temp2");
+        args->setStrWithName(args, "optionStr2", "hum1");
+        args->setStrWithName(args, "optionStr3", "hum2");
+        args->setStrWithName(args, "optionCallBack0", "guiChange");
+        args->setStrWithName(args, "optionCallBack1", "guiChange");
+        args->setStrWithName(args, "optionCallBack2", "guiChange");
+        args->setStrWithName(args, "optionCallBack3", "guiChange");
 
         gui_observer = New_gui2_3key(args);
 
@@ -150,13 +150,13 @@ static void init_panelTemp(server_t *self, args_t *args)
     }
     {
         args_t *args = New_args(NULL);
-        args->pushStrWithName(args, "title", "select a val");
-        args->pushPointerWithName(args, "context", self);
-        args->pushInt64WithName(args, "optionMax", 1);
-        args->pushStrWithName(args, "optionStr0", "temp1");
-        args->pushStrWithName(args, "optionStr1", "temp2");
-        args->pushStrWithName(args, "optionCallBack0", "guiChange");
-        args->pushStrWithName(args, "optionCallBack1", "guiChange");
+        args->setStrWithName(args, "title", "select a val");
+        args->setPointerWithName(args, "context", self);
+        args->setInt64WithName(args, "optionMax", 1);
+        args->setStrWithName(args, "optionStr0", "temp1");
+        args->setStrWithName(args, "optionStr1", "temp2");
+        args->setStrWithName(args, "optionCallBack0", "guiChange");
+        args->setStrWithName(args, "optionCallBack1", "guiChange");
 
         gui_setAlert = New_gui2_3key(args);
 
@@ -164,10 +164,10 @@ static void init_panelTemp(server_t *self, args_t *args)
     }
     {
         args_t *args = New_args(NULL);
-        args->pushStrWithName(args, "title", "temp1");
-        args->pushPointerWithName(args, "context", self);
-        args->pushInt64WithName(args, "optionMax", 0);
-        args->pushInt64WithName(args, "dataIndex", 0);
+        args->setStrWithName(args, "title", "temp1");
+        args->setPointerWithName(args, "context", self);
+        args->setInt64WithName(args, "optionMax", 0);
+        args->setInt64WithName(args, "dataIndex", 0);
 
         gui_watch0 = New_gui2_watch(args);
 
@@ -175,10 +175,10 @@ static void init_panelTemp(server_t *self, args_t *args)
     }
     {
         args_t *args = New_args(NULL);
-        args->pushStrWithName(args, "title", "temp2");
-        args->pushPointerWithName(args, "context", self);
-        args->pushInt64WithName(args, "optionMax", 0);
-        args->pushInt64WithName(args, "dataIndex", 1);
+        args->setStrWithName(args, "title", "temp2");
+        args->setPointerWithName(args, "context", self);
+        args->setInt64WithName(args, "optionMax", 0);
+        args->setInt64WithName(args, "dataIndex", 1);
 
         gui_watch1 = New_gui2_watch(args);
 
@@ -186,10 +186,10 @@ static void init_panelTemp(server_t *self, args_t *args)
     }
     {
         args_t *args = New_args(NULL);
-        args->pushStrWithName(args, "title", "hum1");
-        args->pushPointerWithName(args, "context", self);
-        args->pushInt64WithName(args, "optionMax", 0);
-        args->pushInt64WithName(args, "dataIndex", 2);
+        args->setStrWithName(args, "title", "hum1");
+        args->setPointerWithName(args, "context", self);
+        args->setInt64WithName(args, "optionMax", 0);
+        args->setInt64WithName(args, "dataIndex", 2);
 
         gui_watch2 = New_gui2_watch(args);
 
@@ -197,10 +197,10 @@ static void init_panelTemp(server_t *self, args_t *args)
     }
     {
         args_t *args = New_args(NULL);
-        args->pushStrWithName(args, "title", "hum2");
-        args->pushPointerWithName(args, "context", self);
-        args->pushInt64WithName(args, "optionMax", 0);
-        args->pushInt64WithName(args, "dataIndex", 3);
+        args->setStrWithName(args, "title", "hum2");
+        args->setPointerWithName(args, "context", self);
+        args->setInt64WithName(args, "optionMax", 0);
+        args->setInt64WithName(args, "dataIndex", 3);
 
         gui_watch3 = New_gui2_watch(args);
 
@@ -208,10 +208,10 @@ static void init_panelTemp(server_t *self, args_t *args)
     }
     {
         args_t *args = New_args(NULL);
-        args->pushStrWithName(args, "title", "temp1 allert");
-        args->pushPointerWithName(args, "context", self);
-        args->pushInt64WithName(args, "optionMax", 0);
-        args->pushInt64WithName(args, "dataIndex", 4);
+        args->setStrWithName(args, "title", "temp1 allert");
+        args->setPointerWithName(args, "context", self);
+        args->setInt64WithName(args, "optionMax", 0);
+        args->setInt64WithName(args, "dataIndex", 4);
 
         gui_set0 = New_gui2_set(args);
 
@@ -219,10 +219,10 @@ static void init_panelTemp(server_t *self, args_t *args)
     }
     {
         args_t *args = New_args(NULL);
-        args->pushStrWithName(args, "title", "temp2 allert");
-        args->pushPointerWithName(args, "context", self);
-        args->pushInt64WithName(args, "optionMax", 0);
-        args->pushInt64WithName(args, "dataIndex", 5);
+        args->setStrWithName(args, "title", "temp2 allert");
+        args->setPointerWithName(args, "context", self);
+        args->setInt64WithName(args, "optionMax", 0);
+        args->setInt64WithName(args, "dataIndex", 5);
 
         gui_set1 = New_gui2_set(args);
 

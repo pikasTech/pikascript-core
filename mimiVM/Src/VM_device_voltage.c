@@ -10,7 +10,7 @@ static int _read_handle(device_t *self, args_t *args_in, args_t *args_out)
 		if(NULL == args_in)
 		{
 			val = (float)PORT_adc_get(1) * (3.3/4096);
-			args_out->pushFloatWithDefaultName(args_out, val);
+			args_out->setFloatWithDefaultName(args_out, val);
 			goto exit;
 		}
 		

@@ -8,7 +8,7 @@ int _read_handle(device_t *self, args_t *args_in, args_t *args_out)
     float val = 0;
     val_int = PORT_bh_data_read();
     val = (float)val_int;
-    args_out->pushFloatWithDefaultName(args_out, val);
+    args_out->setFloatWithDefaultName(args_out, val);
     return 0;
 }
 

@@ -21,28 +21,27 @@ struct Class_Arglist
     arg_t *(*getArgByIndex)(args_t *self, int index);
     arg_t *(*getArgByName)(args_t *self, char *name);
 
-    int (*pushArg)(args_t *self, arg_t *arg);
-    int (*updateArg)(args_t *self, arg_t *arg);
+    int (*setArg)(args_t *self, arg_t *arg);
 
     int (*copyArg)(args_t *self, char *name, args_t *directList);
     char *(*getTypeByName)(args_t *self, char *name);
     int (*isArgExist)(args_t *self, char *name);
 
-    int (*pushStrWithName)(args_t *self, char *name, char *strIn);
+    int (*setStrWithName)(args_t *self, char *name, char *strIn);
     int (*getStrByName)(args_t *self, char *name, char **strOut);
-    int (*pushStrWithDefaultName)(args_t *self, char *strIn);
+    int (*setStrWithDefaultName)(args_t *self, char *strIn);
     int (*getStrByIndex)(args_t *self, int index, char **strOut);
 
-    int (*pushFloatWithDefaultName)(args_t *self, float argFloat);
-    int (*pushFloatWithName)(args_t *self, char *name, float argFloat);
+    int (*setFloatWithDefaultName)(args_t *self, float argFloat);
+    int (*setFloatWithName)(args_t *self, char *name, float argFloat);
     float (*getFloatByIndex)(args_t *self, int index);
     float (*getFloatByName)(args_t *self, char *name);
 
-    int (*pushPointerWithName)(args_t *self, char *name, void *argPointer);
+    int (*setPointerWithName)(args_t *self, char *name, void *argPointer);
     void *(*getPointerByName)(args_t *self, char *name);
     void *(*getPointerByIndex)(args_t *self, int index);
 
-    int (*pushInt64WithName)(args_t *self, char *name, long long int64In);
+    int (*setInt64WithName)(args_t *self, char *name, long long int64In);
     long long (*getInt64ByName)(args_t *self, char *name);
     long long (*getInt64ByIndex)(args_t *self, int index);
 
