@@ -184,7 +184,7 @@ static float getFloatByName(args_t *self, char *name)
     return arg->getFloat(arg);
 }
 
-static int copyArg(args_t *self, char *name, args_t *directList)
+static int copyArg(args_t *self, char *name, args_t *directArgs)
 {
     arg_t *argToBeCopy = self->getArgByName(self, name);
     if (NULL == argToBeCopy)
@@ -196,9 +196,7 @@ static int copyArg(args_t *self, char *name, args_t *directList)
     memcpy(argCopied->name, argToBeCopy->name, ARG_NAME_LENGTH);
     memcpy(argCopied->type, argToBeCopy->type, ARG_TYPE_LENGTH);
 
-    directList->argLinkList->add(directList->argLinkList,
-                                 argCopied,
-                                 (void *)argCopied->dinit);
+    directArgs->setArg(directArgs, argCopied);
     return 0;
 }
 

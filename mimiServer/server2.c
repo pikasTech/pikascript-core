@@ -30,61 +30,42 @@ static void disable(server2_t *self)
 
 static void setInt64(server2_t *self, char *name, long long val)
 {
-    if (!self->attributeList->isArgExist(self->attributeList, name))
-    {
-        self->attributeList->setInt64WithName(self->attributeList,
-                                               name,
-                                               val);
-        return;
-    }
-    int index = self->attributeList->getIndexByName(self->attributeList, name);
-    arg_t *arg = self->attributeList->getArgByIndex(self->attributeList, index);
+    self->attributeList->setInt64WithName(self->attributeList, name, val);
 }
 
 static void setPointer(server2_t *self, char *name, void *pointer)
 {
-    self->attributeList->setPointerWithName(self->attributeList,
-                                             name,
-                                             pointer);
+    self->attributeList->setPointerWithName(self->attributeList, name, pointer);
 }
 
 static void setFloat(server2_t *self, char *name, float value)
 {
-    self->attributeList->setFloatWithName(self->attributeList,
-                                           name,
-                                           value);
+    self->attributeList->setFloatWithName(self->attributeList, name, value);
 }
 
 static void setStr(server2_t *self, char *name, char *str)
 {
-    self->attributeList->setStrWithName(self->attributeList,
-                                         name,
-                                         str);
+    self->attributeList->setStrWithName(self->attributeList, name, str);
 }
 
 static long long getInt64(server2_t *self, char *name)
 {
-    return self->attributeList->getInt64ByName(self->attributeList,
-                                               name);
+    return self->attributeList->getInt64ByName(self->attributeList, name);
 }
 
 static void *getPointer(server2_t *self, char *name)
 {
-    return self->attributeList->getPointerByName(self->attributeList,
-                                                 name);
+    return self->attributeList->getPointerByName(self->attributeList, name);
 }
 
 static float getFloat(server2_t *self, char *name)
 {
-    return self->attributeList->getFloatByName(self->attributeList,
-                                               name);
+    return self->attributeList->getFloatByName(self->attributeList, name);
 }
 
 void getStr(server2_t *self, char *name, char **strOut)
 {
-    self->attributeList->getStrByName(self->attributeList,
-                                      name,
-                                      strOut);
+    self->attributeList->getStrByName(self->attributeList, name, strOut);
 }
 
 static void loadAttributeFromArgs(server2_t *self, args_t *args, char *name)
