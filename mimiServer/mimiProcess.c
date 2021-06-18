@@ -16,8 +16,12 @@ static void update(process_t *self, int systime)
     {
         return;
     }
+    self->_updateHandle(self, systime);
 }
-
+static void _updateHandle(process_t *self, int systime)
+{
+    // override the handle function here
+}
 static void enable(process_t *self)
 {
     self->setInt64(self, "isEnable", 1);
@@ -102,6 +106,7 @@ static void init(process_t *self, args_t *args)
     self->setPointer(self, "context", self);
 
     /* override */
+    self->_updateHandle = _updateHandle;
 
     /* args */
     if (NULL == args)

@@ -36,6 +36,9 @@ struct Class_process
     void (*loadAttributeFromArgs)(process_t *self, args_t *args, char *name);
 
     /* virtual operation */
+    
+    void (*_updateHandle)(process_t *self, int systime);
+    
 
     /* object */
 };
