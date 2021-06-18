@@ -45,7 +45,7 @@ static void DeInit(VM_socket_t *socket)
 	DynMemPut(socket->mem);
 }
 
-static void open(VM_socket_t *socket)
+static void openSocket(VM_socket_t *socket)
 {
 	socket->isOpen = 1;
 	socket->hardware_update(socket);
@@ -193,7 +193,7 @@ VM_socket_t *VM_socket_init(void)
 	socket->Time_opened = 0;
 	socket->DeInit = DeInit;
 	socket->isOpen = 0;
-	socket->open = open;
+	socket->open = openSocket;
 	socket->close = close;
 	socket->hardware_update = hardware_update_default;
 	socket->isShowInfo = 0;

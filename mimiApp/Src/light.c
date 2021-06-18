@@ -6,7 +6,7 @@ static void deinit(light_t *light)
     DynMemPut(light->mem);
 }
 
-static void open(light_t *light)
+static void openLight(light_t *light)
 {
     light->PORT_setLight(1);
 }
@@ -27,7 +27,7 @@ light_t *Class_light_init(void)
     light->mem = mem;
     light->dinit = deinit;
 
-    light->open = open;
+    light->open = openLight;
     light->close = close;
     light->PORT_setLight = PORT_setLight;
     return light;
