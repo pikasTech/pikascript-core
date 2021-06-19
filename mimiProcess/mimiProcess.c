@@ -34,42 +34,42 @@ static void disable(mimiProcess_t *self)
 
 static void setInt64(mimiProcess_t *self, char *name, long long val)
 {
-    self->attributeList->setInt64WithName(self->attributeList, name, val);
+    self->attributeList->setInt(self->attributeList, name, val);
 }
 
 static void setPointer(mimiProcess_t *self, char *name, void *pointer)
 {
-    self->attributeList->setPointerWithName(self->attributeList, name, pointer);
+    self->attributeList->setPoi(self->attributeList, name, pointer);
 }
 
 static void setFloat(mimiProcess_t *self, char *name, float value)
 {
-    self->attributeList->setFloatWithName(self->attributeList, name, value);
+    self->attributeList->setFlt(self->attributeList, name, value);
 }
 
 static void setStr(mimiProcess_t *self, char *name, char *str)
 {
-    self->attributeList->setStrWithName(self->attributeList, name, str);
+    self->attributeList->setStr(self->attributeList, name, str);
 }
 
 static long long getInt64(mimiProcess_t *self, char *name)
 {
-    return self->attributeList->getInt64ByName(self->attributeList, name);
+    return self->attributeList->getInt(self->attributeList, name);
 }
 
 static void *getPointer(mimiProcess_t *self, char *name)
 {
-    return self->attributeList->getPointerByName(self->attributeList, name);
+    return self->attributeList->getPoi(self->attributeList, name);
 }
 
 static float getFloat(mimiProcess_t *self, char *name)
 {
-    return self->attributeList->getFloatByName(self->attributeList, name);
+    return self->attributeList->getFlt(self->attributeList, name);
 }
 
 void getStr(mimiProcess_t *self, char *name, char **strOut)
 {
-    self->attributeList->getStrByName(self->attributeList, name, strOut);
+    self->attributeList->getStr(self->attributeList, name, strOut);
 }
 
 static void loadAttributeFromArgs(mimiProcess_t *self, args_t *args, char *name)

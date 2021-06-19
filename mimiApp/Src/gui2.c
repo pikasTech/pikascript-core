@@ -173,7 +173,7 @@ static void argHandle_title(gui2_t *self,
                             char *argName)
 {
     char *title;
-    args->getStrByName(args, argName, &title);
+    args->getStr(args, argName, &title);
     self->setTitle(self, title);
 }
 
@@ -181,21 +181,21 @@ static void argHandle_context(gui2_t *self,
                               args_t *args,
                               char *argName)
 {
-    self->context = args->getPointerByName(args, argName);
+    self->context = args->getPoi(args, argName);
 }
 
 static void argHandle_optionMax(gui2_t *self,
                                 args_t *args,
                                 char *argName)
 {
-    self->option_pointer_max = args->getInt64ByName(args, argName);
+    self->option_pointer_max = args->getInt(args, argName);
 }
 
 static void argHandle_dataIndex(gui2_t *self,
                                 args_t *args,
                                 char *argName)
 {
-    self->dataIndex = args->getInt64ByName(args, argName);
+    self->dataIndex = args->getInt(args, argName);
 }
 
 static void argHandle_optionStr0(gui2_t *self,
@@ -203,7 +203,7 @@ static void argHandle_optionStr0(gui2_t *self,
                                  char *argName)
 {
     char *str;
-    args->getStrByName(args, argName, &str);
+    args->getStr(args, argName, &str);
     strPrint(self->option_str[0], str);
 }
 
@@ -212,7 +212,7 @@ static void argHandle_optionStr1(gui2_t *self,
                                  char *argName)
 {
     char *str;
-    args->getStrByName(args, argName, &str);
+    args->getStr(args, argName, &str);
     strPrint(self->option_str[1], str);
 }
 
@@ -221,7 +221,7 @@ static void argHandle_optionStr2(gui2_t *self,
                                  char *argName)
 {
     char *str;
-    args->getStrByName(args, argName, &str);
+    args->getStr(args, argName, &str);
     strPrint(self->option_str[2], str);
 }
 
@@ -230,7 +230,7 @@ static void argHandle_optionStr3(gui2_t *self,
                                  char *argName)
 {
     char *str;
-    args->getStrByName(args, argName, &str);
+    args->getStr(args, argName, &str);
     strPrint(self->option_str[3], str);
 }
 
@@ -239,7 +239,7 @@ static void argHandle_optionStr4(gui2_t *self,
                                  char *argName)
 {
     char *str;
-    args->getStrByName(args, argName, &str);
+    args->getStr(args, argName, &str);
     strPrint(self->option_str[4], str);
 }
 
@@ -248,7 +248,7 @@ static void argHandle_optionCallBack0(gui2_t *self,
                                       char *argName)
 {
     char *str;
-    args->getStrByName(args, argName, &str);
+    args->getStr(args, argName, &str);
     if (0 == strcmp("guiChange", str))
     {
         self->_option_callBack[0] = self->guiChange_callBack;
@@ -260,7 +260,7 @@ static void argHandle_optionCallBack1(gui2_t *self,
                                       char *argName)
 {
     char *str;
-    args->getStrByName(args, argName, &str);
+    args->getStr(args, argName, &str);
     if (0 == strcmp("guiChange", str))
     {
         self->_option_callBack[1] = self->guiChange_callBack;
@@ -272,7 +272,7 @@ static void argHandle_optionCallBack2(gui2_t *self,
                                       char *argName)
 {
     char *str;
-    args->getStrByName(args, argName, &str);
+    args->getStr(args, argName, &str);
     if (0 == strcmp("guiChange", str))
     {
         self->_option_callBack[2] = self->guiChange_callBack;
@@ -284,7 +284,7 @@ static void argHandle_optionCallBack3(gui2_t *self,
                                       char *argName)
 {
     char *str;
-    args->getStrByName(args, argName, &str);
+    args->getStr(args, argName, &str);
     if (0 == strcmp("guiChange", str))
     {
         self->_option_callBack[3] = self->guiChange_callBack;
@@ -296,7 +296,7 @@ static void argHandle_optionCallBack4(gui2_t *self,
                                       char *argName)
 {
     char *str;
-    args->getStrByName(args, argName, &str);
+    args->getStr(args, argName, &str);
     if (0 == strcmp("guiChange", str))
     {
         self->_option_callBack[4] = self->guiChange_callBack;

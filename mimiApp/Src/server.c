@@ -32,14 +32,14 @@ static void argHandle_context(server_t *self,
                               args_t *args,
                               char *argName)
 {
-    self->context = args->getPointerByName(args, argName);
+    self->context = args->getPoi(args, argName);
 }
 
 static void argHandle_isEnalbe(server_t *self,
                                args_t *args,
                                char *argName)
 {
-    self->isEnable = args->getInt64ByName(args, argName);
+    self->isEnable = args->getInt(args, argName);
 }
 
 static void argHandle(server_t *self,

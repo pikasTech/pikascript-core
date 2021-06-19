@@ -60,14 +60,14 @@ static int getStrByIndex(args_t *self, int index, char **strOut)
 static int setStrWithDefaultName(args_t *self, char *strIn)
 {
     loadDefaultName(self);
-    self->setStrWithName(self, (char *)self->nameBuff, strIn);
+    self->setStr(self, (char *)self->nameBuff, strIn);
     return 0;
 }
 
 static int setFloatWithDefaultName(args_t *self, float argFloat)
 {
     loadDefaultName(self);
-    self->setFloatWithName(self, (char *)self->nameBuff, argFloat);
+    self->setFlt(self, (char *)self->nameBuff, argFloat);
     return 0;
 }
 
@@ -272,23 +272,23 @@ static void init(args_t *self, args_t *args)
     self->copyArg = copyArg;
     self->isArgExist = isArgExist;
 
-    self->setInt64WithName = setInt64WithName;
-    self->getInt64ByName = getInt64ByName;
+    self->setInt = setInt64WithName;
+    self->getInt = getInt64ByName;
     self->getInt64ByIndex = getInt64ByIndex;
 
-    self->setFloatWithName = setFloatWithName;
+    self->setFlt = setFloatWithName;
+    self->getFlt = getFloatByName;
     self->setFloatWithDefaultName = setFloatWithDefaultName;
     self->getFloatByIndex = getFloatByIndex;
-    self->getFloatByName = getFloatByName;
 
-    self->setPointerWithName = setPointerWithName;
+    self->setPoi = setPointerWithName;
+    self->getPoi = getPointerByName;
     self->getPointerByIndex = getPointerByIndex;
-    self->getPointerByName = getPointerByName;
 
-    self->setStrWithName = setStrWithName;
+    self->setStr = setStrWithName;
+    self->getStr = getStrByName;
     self->setStrWithDefaultName = setStrWithDefaultName;
     self->getStrByIndex = getStrByIndex;
-    self->getStrByName = getStrByName;
 
     /* object */
 

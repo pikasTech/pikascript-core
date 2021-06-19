@@ -9,18 +9,18 @@ int TEST_args2(int isShow)
         void *pointer = NULL;
         char *strOut = NULL;
         args->setFloatWithDefaultName(args, 24.5);
-        args->setInt64WithName(args,
+        args->setInt(args,
                                 "int64Test",
                                 (long long)22221);
-        args->setPointerWithName(args,
+        args->setPoi(args,
                                   "pointerTest",
                                   (void *)2222322);
-        args->setStrWithName(args, "strTest", "teeeds");
+        args->setStr(args, "strTest", "teeeds");
 
         floatOut = args->getFloatByIndex(args, 0);
-        int64Out = args->getInt64ByName(args, "int64Test");
-        pointer = args->getPointerByName(args, "pointerTest");
-        args->getStrByName(args, "strTest", &strOut);
+        int64Out = args->getInt(args, "int64Test");
+        pointer = args->getPoi(args, "pointerTest");
+        args->getStr(args, "strTest", &strOut);
 
         if (isShow)
         {
@@ -72,20 +72,20 @@ int TEST_args2(int isShow)
         args_t *args1 = New_args(NULL);
         args_t *args2 = New_args(NULL);
 
-        args1->setFloatWithName(args1, "argtest1", 2.883);
-        args1->setStrWithName(args1, "strtest1", "teststr");
+        args1->setFlt(args1, "argtest1", 2.883);
+        args1->setStr(args1, "strtest1", "teststr");
         args1->copyArg(args1, "argtest1", args2);
         args1->copyArg(args1, "strtest1", args2);
 
         if (isShow)
         {
             printf("the float get from args is:%f\r\n",
-                   args1->getFloatByName(args1, "argtest1"));
+                   args1->getFlt(args1, "argtest1"));
 
             printf("the float copyed from arg1:%f\r\n",
-                   args2->getFloatByName(args2, "argtest1"));
+                   args2->getFlt(args2, "argtest1"));
         }
-        if (2.8830f != args1->getFloatByName(args1, "argtest1"))
+        if (2.8830f != args1->getFlt(args1, "argtest1"))
         {
             err = 9;
         }

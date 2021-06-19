@@ -27,22 +27,22 @@ struct Class_Arglist
     char *(*getTypeByName)(args_t *self, char *name);
     int (*isArgExist)(args_t *self, char *name);
 
-    int (*setStrWithName)(args_t *self, char *name, char *strIn);
-    int (*getStrByName)(args_t *self, char *name, char **strOut);
+    int (*setStr)(args_t *self, char *name, char *strIn);
+    int (*getStr)(args_t *self, char *name, char **strOut);
     int (*setStrWithDefaultName)(args_t *self, char *strIn);
     int (*getStrByIndex)(args_t *self, int index, char **strOut);
 
     int (*setFloatWithDefaultName)(args_t *self, float argFloat);
-    int (*setFloatWithName)(args_t *self, char *name, float argFloat);
+    int (*setFlt)(args_t *self, char *name, float argFloat);
     float (*getFloatByIndex)(args_t *self, int index);
-    float (*getFloatByName)(args_t *self, char *name);
+    float (*getFlt)(args_t *self, char *name);
 
-    int (*setPointerWithName)(args_t *self, char *name, void *argPointer);
-    void *(*getPointerByName)(args_t *self, char *name);
+    int (*setPoi)(args_t *self, char *name, void *argPointer);
+    void *(*getPoi)(args_t *self, char *name);
     void *(*getPointerByIndex)(args_t *self, int index);
 
-    int (*setInt64WithName)(args_t *self, char *name, long long int64In);
-    long long (*getInt64ByName)(args_t *self, char *name);
+    int (*setInt)(args_t *self, char *name, long long int64In);
+    long long (*getInt)(args_t *self, char *name);
     long long (*getInt64ByIndex)(args_t *self, int index);
 
     /* virtual operation */
