@@ -6,7 +6,7 @@ int TEST_server2(int isShow)
     int err = 0;
     args_t *args = New_args(NULL);
     args->setInt64WithName(args, "isEnable", 0);
-    process_t *process = New_process(args);
+    mimiProcess_t *process = New_process(args);
 
     if (isShow)
     {
