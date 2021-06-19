@@ -115,21 +115,17 @@ static int pushPointerWithName(argsConst_t *self, char *name, void *argPointer)
 
 static int pushStrWithName(argsConst_t *self, char *name, char *strIn)
 {
-    int errCode = 0;
     if (NULL == strIn)
     {
-        errCode = 1;
-        goto exit;
+				return 1;
     }
     arg_t *argNew = New_arg(NULL);
     argNew->setName(argNew, name);
     argNew->setContant(argNew, strIn);
     self->argList[self->count] = argNew;
     self->count++;
-    goto exit;
 
-exit:
-    return errCode;
+		return 0;
 }
 
 static int getStrByName(argsConst_t *self, char *name, char **strOut)

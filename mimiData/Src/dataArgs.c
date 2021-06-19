@@ -186,24 +186,19 @@ static float getFloatByName(args_t *self, char *name)
 
 static int copyArg(args_t *self, char *name, args_t *directArgs)
 {
-    int error = 0;
     arg_t *argToBeCopy = self->getArgByName(self, name);
     if (NULL == argToBeCopy)
     {
-        error = 1;
-        goto exit;
-    }
+				return 1;
+		}
     arg_t *argCopied = New_arg(NULL);
     memcpy(argCopied->contant, argToBeCopy->contant, ARG_CONTANT_LENGTH);
     memcpy(argCopied->name, argToBeCopy->name, ARG_NAME_LENGTH);
     memcpy(argCopied->type, argToBeCopy->type, ARG_TYPE_LENGTH);
 
     directArgs->setArg(directArgs, argCopied);
-    error = 0;
-    goto exit;
 
-exit:
-    return error;
+		return 0;
 }
 
 static int isArgExist(args_t *self, char *name)
@@ -238,7 +233,7 @@ static int setArg(args_t *self, arg_t *arg)
     {
         self->argLinkList->add(self->argLinkList,
                                arg,
-                               (void *)arg->dinit);
+                               (void (*)(void *))arg->dinit);
         return 0;
     }
     updateArg(self, arg);
