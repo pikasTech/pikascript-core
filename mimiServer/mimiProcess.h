@@ -43,5 +43,5 @@ struct Class_process
     /* object */
 };
 
-process_t *New_server2(args_t *args);
+process_t *New_process(args_t *args);
 #endif

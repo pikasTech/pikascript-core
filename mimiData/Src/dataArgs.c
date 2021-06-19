@@ -186,10 +186,12 @@ static float getFloatByName(args_t *self, char *name)
 
 static int copyArg(args_t *self, char *name, args_t *directArgs)
 {
+    int error = 0;
     arg_t *argToBeCopy = self->getArgByName(self, name);
     if (NULL == argToBeCopy)
     {
-        return 1;
+        error = 1;
+        goto exit;
     }
     arg_t *argCopied = New_arg(NULL);
     memcpy(argCopied->contant, argToBeCopy->contant, ARG_CONTANT_LENGTH);
@@ -197,7 +199,11 @@ static int copyArg(args_t *self, char *name, args_t *directArgs)
     memcpy(argCopied->type, argToBeCopy->type, ARG_TYPE_LENGTH);
 
     directArgs->setArg(directArgs, argCopied);
-    return 0;
+    error = 0;
+    goto exit;
+
+exit:
+    return error;
 }
 
 static int isArgExist(args_t *self, char *name)
@@ -211,6 +217,7 @@ static int isArgExist(args_t *self, char *name)
 
 static int updateArg(args_t *self, arg_t *argNew)
 {
+    // arg New must be a new arg
     arg_t *argOld = self->getArgByName(self, argNew->name);
 
     if (0 != strcmp(argOld->type, argNew->type))
@@ -220,12 +227,14 @@ static int updateArg(args_t *self, arg_t *argNew)
     }
 
     memcpy(argOld->contant, argNew->contant, ARG_CONTANT_LENGTH);
+    argNew->dinit(argNew);
     return 0;
 }
 
 static int setArg(args_t *self, arg_t *arg)
 {
-    if (!self->isArgExist(self, arg))
+    // input arg of setArg must be a new created arg
+    if (!self->isArgExist(self, arg->name))
     {
         self->argLinkList->add(self->argLinkList,
                                arg,
@@ -233,6 +242,7 @@ static int setArg(args_t *self, arg_t *arg)
         return 0;
     }
     updateArg(self, arg);
+    return 0;
 }
 
 static arg_t *getArgByName(args_t *self, char *name)

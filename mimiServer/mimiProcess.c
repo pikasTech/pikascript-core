@@ -117,7 +117,7 @@ static void init(process_t *self, args_t *args)
     self->loadAttributeFromArgs(self, args, "isEnable");
 }
 
-process_t *New_server2(args_t *args)
+process_t *New_process(args_t *args)
 {
     DMEM *mem = DynMemGet(sizeof(process_t));
     process_t *self = mem->addr;
