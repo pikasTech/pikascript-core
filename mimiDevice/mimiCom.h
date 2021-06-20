@@ -7,7 +7,6 @@ struct Class_mimiCom
 {
     /* attribute */
     DMEM *mem;
-    void *context;
     args_t *args;
 
     /* operation */

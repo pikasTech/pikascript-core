@@ -6,12 +6,12 @@ VM_core is a virtusl machine runing in stm32, the shell_driver is based on VM di
 #include "tim.h"
 #include "usart.h"
 #endif
-#include "VM_iot.h"
 #include "dataMemory.h"
 #include "dataLog.h"
 #include "mimiSH_config.h"
 #include "mimiSH_core.h"
 #include "dataString.h"
+#include "VM_iot.h"
 // #include "VM_gps.h"
 #include "mimiVM_core.h"
 #include <stdio.h>

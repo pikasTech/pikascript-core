@@ -38,13 +38,13 @@ static void getChar(mimiCom_t *self, char inputChar)
 static void init(mimiCom_t *self, args_t *initArgs)
 {
     /* attrivute */
-    self->context = self;
     self->args = New_args(NULL);
 
+    self->args->setPoi(self->args, "context", self);
+    self->args->setStr(self->args, "name", "com");
     self->args->setInt(self->args, "RxBuff_i", 0);
     self->args->setStr(self->args, "RxBuff", "");
     self->args->setStr(self->args, "RxSingleLine", "");
-    self->args->setStr(self->args, "name", "com");
 
     /* operation */
     self->dinit = deinit;
@@ -53,6 +53,14 @@ static void init(mimiCom_t *self, args_t *initArgs)
     /* object */
 
     /* override */
+
+    /* load args */
+    if (NULL == initArgs)
+    {
+        return;
+    }
+    initArgs->copyArg(initArgs, "context", self->args);
+    initArgs->copyArg(initArgs, "name", self->args);
 }
 
 mimiCom_t *New_mimiCom(args_t *args)
