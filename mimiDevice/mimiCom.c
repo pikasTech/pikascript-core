@@ -10,28 +10,14 @@ static void deinit(mimiCom_t *self)
 
 static void getChar(mimiCom_t *self, char inputChar)
 {
-    int RxBuff_i = (int)self->args->getInt(self->args, "RxBuff_i");
-    char *RxBuffer = NULL;
-    self->args->getStr(self->args, "RxBuff", &RxBuffer);
-
-    // return if there is too much rx
-    if (!(RxBuff_i < 256))
-    {
-        return;
-    }
-
     if (inputChar != '\r' && inputChar != '\n')
     {
-        strPrintWithSize(RxBuffer, &inputChar, 1, 0);
-
-        RxBuff_i++;
-
-        self->args->setStr(self->args, "RxBuff", RxBuffer);
-        self->args->setInt(self->args, "RxBuff_i", RxBuff_i);
+        strPrintWithSize(self->RxBuff, &inputChar, 1, 0);
     }
     if (inputChar == '\r')
     {
-        self->args->setStr(self->args, "RxSingleLine", RxBuffer);
+        self->args->setStr(self->args, "RxSingleLine", self->RxBuff);
+				self->RxBuff[0] = 0;
     }
 }
 
