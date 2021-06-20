@@ -90,7 +90,7 @@ static void init(mimiProcess_t *self, args_t *args)
     self->disable = disable;
 
     self->setInt64 = setInt64;
-    self->setPointer = setPointer;
+    self->setPoi = setPointer;
     self->setFloat = setFloat;
     self->setStr = setStr;
 
@@ -103,7 +103,7 @@ static void init(mimiProcess_t *self, args_t *args)
 
     /* attrivute */
     self->setInt64(self, "isEnable", 1);
-    self->setPointer(self, "context", self);
+    self->setPoi(self, "context", self);
 
     /* override */
     self->_updateHandle = _updateHandle;
@@ -117,7 +117,7 @@ static void init(mimiProcess_t *self, args_t *args)
     self->loadAttributeFromArgs(self, args, "isEnable");
 }
 
-mimiProcess_t *New_process(args_t *args)
+mimiProcess_t *New_mimiProcess(args_t *args)
 {
     DMEM *mem = DynMemGet(sizeof(mimiProcess_t));
     mimiProcess_t *self = mem->addr;

@@ -24,7 +24,7 @@ struct Class_process
     void (*setInt64)(mimiProcess_t *self, char *name, long long val);
     long long (*getInt64)(mimiProcess_t *self, char *name);
 
-    void (*setPointer)(mimiProcess_t *self, char *name, void *pointer);
+    void (*setPoi)(mimiProcess_t *self, char *name, void *pointer);
     void *(*getPointer)(mimiProcess_t *self, char *name);
 
     void (*setFloat)(mimiProcess_t *self, char *name, float value);
@@ -43,5 +43,5 @@ struct Class_process
     /* object */
 };
 
-mimiProcess_t *New_process(args_t *args);
+mimiProcess_t *New_mimiProcess(args_t *args);
 #endif

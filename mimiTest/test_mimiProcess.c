@@ -5,7 +5,7 @@ int TEST_mimiProcess(int isShow)
     int err = 0;
     args_t *args = New_args(NULL);
     args->setInt(args, "isEnable", 0);
-    mimiProcess_t *process = New_process(args);
+    mimiProcess_t *process = New_mimiProcess(args);
 
     if (isShow)
     {
