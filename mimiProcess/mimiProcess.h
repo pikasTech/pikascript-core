@@ -11,7 +11,7 @@ struct Class_process
     DMEM *mem;
 
     /* list */
-    link_t *subServerList;
+    link_t *subProcessList;
     args_t *attributeList;
 
     /* operation */
@@ -36,7 +36,7 @@ struct Class_process
     void (*loadAttributeFromArgs)(mimiProcess_t *self, args_t *args, char *name);
 
     /* virtual operation */
-    
+    void (*_dinitSubObject)(mimiProcess_t *self);
     void (*_updateHandle)(mimiProcess_t *self);
     
 

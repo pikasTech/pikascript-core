@@ -4,9 +4,10 @@
 
 static void deinit(mimiProcess_t *self)
 {
-    DynMemPut(self->mem);
-    self->subServerList->dinit(self->subServerList);
+    self->_dinitSubObject(self);
+    self->subProcessList->dinit(self->subProcessList);
     self->attributeList->dinit(self->attributeList);
+    DynMemPut(self->mem);
 }
 
 static void update(mimiProcess_t *self)
@@ -77,10 +78,15 @@ static void loadAttributeFromArgs(mimiProcess_t *self, args_t *args, char *name)
     args->copyArg(args, name, self->attributeList);
 }
 
+static void _dinitSubObject(mimiProcess_t *self)
+{
+    /* override in user code */
+}
+
 static void init(mimiProcess_t *self, args_t *args)
 {
     /* List */
-    self->subServerList = New_link(NULL);
+    self->subProcessList = New_link(NULL);
     self->attributeList = New_args(NULL);
 
     /* operation */
@@ -107,6 +113,7 @@ static void init(mimiProcess_t *self, args_t *args)
 
     /* override */
     self->_updateHandle = _updateHandle;
+    self->_dinitSubObject = _dinitSubObject;
 
     /* args */
     if (NULL == args)

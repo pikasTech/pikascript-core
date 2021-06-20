@@ -2,7 +2,6 @@
 #define __SHELL_CORE_H
 #include "dataMemory.h"
 #include "dataLinkWithNode.h"
-char *ShellCMDPush(char *CMD);
 int strGetArgs(char *CMD, char **argv);
 
 typedef struct cmdMap
