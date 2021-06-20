@@ -28,7 +28,6 @@ static void init(mimiCom_t *self, args_t *initArgs)
     self->RxBuff[0] = 0;
 
     self->args->setPoi(self->args, "context", self);
-    self->args->setStr(self->args, "name", "com");
     self->args->setStr(self->args, "RxSingleLine", "");
 
     /* operation */
@@ -45,7 +44,6 @@ static void init(mimiCom_t *self, args_t *initArgs)
         return;
     }
     initArgs->copyArg(initArgs, "context", self->args);
-    initArgs->copyArg(initArgs, "name", self->args);
 }
 
 mimiCom_t *New_mimiCom(args_t *args)

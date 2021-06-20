@@ -8,8 +8,8 @@ struct Class_mimiCom
     /* attribute */
     DMEM *mem;
     args_t *args;
-		char RxBuff[256];
-	
+    char RxBuff[256];
+
     /* operation */
     void (*dinit)(mimiCom_t *self);
     void (*init)(mimiCom_t *self, args_t *args);
