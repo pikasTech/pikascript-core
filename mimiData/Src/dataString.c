@@ -1,8 +1,8 @@
 #include "dataString.h"
 
-char *strPrintWithSize_unlimited(char *strOut, char *pData, unsigned short int Size, unsigned short int isClearBuff)
+char *strPrintWithSize_unlimited(char *strOut, char *pData, int Size)
 {
-	unsigned short int strOut_i = strGetSize_unlimited(strOut);
+	int strOut_i = strGetSize_unlimited(strOut);
 	for (int i = 0; i < Size; i++)
 	{
 		strOut[strOut_i + i] = pData[i];
@@ -31,7 +31,7 @@ char *strDeleteEnter(char *str)
     return str;
 }
 
-char *strPrintWithSize(char *strOut, char *pData, unsigned short int Size, unsigned short int isClearBuff)
+char *strPrintWithSize(char *strOut, char *pData, int Size)
 {
 	unsigned short int strOut_i = strGetSize(strOut);
 	for (int i = 0; i < Size; i++)
@@ -69,14 +69,14 @@ char *strPrint_unlimited(char *strOut, char *pData)
 {
 	unsigned short int Size = 0;
 	Size = strGetSize_unlimited(pData);
-	return strPrintWithSize_unlimited(strOut, pData, Size, 0);
+	return strPrintWithSize_unlimited(strOut, pData, Size);
 }
 
 char *strPrint(char *strOut, char *pData)
 {
 	unsigned short int Size = 0;
 	Size = strGetSize(pData);
-	return strPrintWithSize(strOut, pData, Size, 0);
+	return strPrintWithSize(strOut, pData, Size);
 }
 
 int isStartWith(char *str, char *strStart)

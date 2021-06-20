@@ -12,12 +12,12 @@ static void getChar(mimiCom_t *self, char inputChar)
 {
     if (inputChar != '\r' && inputChar != '\n')
     {
-        strPrintWithSize(self->RxBuff, &inputChar, 1, 0);
+        strPrintWithSize(self->RxBuff, &inputChar, 1);
     }
     if (inputChar == '\r')
     {
         self->args->setStr(self->args, "RxSingleLine", self->RxBuff);
-				self->RxBuff[0] = 0;
+        self->RxBuff[0] = 0;
     }
 }
 
@@ -25,11 +25,10 @@ static void init(mimiCom_t *self, args_t *initArgs)
 {
     /* attrivute */
     self->args = New_args(NULL);
+    self->RxBuff[0] = 0;
 
     self->args->setPoi(self->args, "context", self);
     self->args->setStr(self->args, "name", "com");
-    self->args->setInt(self->args, "RxBuff_i", 0);
-    self->args->setStr(self->args, "RxBuff", "");
     self->args->setStr(self->args, "RxSingleLine", "");
 
     /* operation */
