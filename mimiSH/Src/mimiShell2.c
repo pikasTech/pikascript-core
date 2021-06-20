@@ -184,11 +184,14 @@ static void sh_config(shell2_t *self)
 {
 }
 
-shell2_t *mimiShell2_init(args_t *initArgs)
+shell2_t *new_mimiShell2(args_t *initArgs)
 {
+	/* attribute */
 	DMEM *mem = DynMemGet(sizeof(shell2_t));
 	shell2_t *sh = (shell2_t *)(mem->addr);
 	sh->mem = mem;
+
+	/* operation */
 	sh->cmd = Shell_cmd;
 	sh->cmdMapHead = New_linkWithNode(NULL);
 	// set how to deinit the data of cmdMap Link
@@ -199,6 +202,8 @@ shell2_t *mimiShell2_init(args_t *initArgs)
 	sh->config = sh_config;
 	sh->dinit = dinit;
 	sh->detector = detector_shellLuancher;
+
+	/* override */
 	sh->config(sh);
 	return sh;
 }
