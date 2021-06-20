@@ -9,16 +9,16 @@ static void deinit(mimiProcess_t *self)
     self->attributeList->dinit(self->attributeList);
 }
 
-static void update(mimiProcess_t *self, int systime)
+static void update(mimiProcess_t *self)
 {
     // return if is not enable
     if (0 == self->getInt64(self, "isEnable"))
     {
         return;
     }
-    self->_updateHandle(self, systime);
+    self->_updateHandle(self);
 }
-static void _updateHandle(mimiProcess_t *self, int systime)
+static void _updateHandle(mimiProcess_t *self)
 {
     // override the handle function here
 }

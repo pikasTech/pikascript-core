@@ -8,6 +8,11 @@ static void deinit(mimiCom_t *self)
     self->args->dinit(self->args);
 }
 
+static void singleLineCallBackDefault(mimiCom_t *self)
+{
+    /* overRide it in user code */ 
+}
+
 static void getChar(mimiCom_t *self, char inputChar)
 {
     if (inputChar != '\r' && inputChar != '\n')
@@ -18,6 +23,7 @@ static void getChar(mimiCom_t *self, char inputChar)
     {
         self->args->setStr(self->args, "RxSingleLine", self->RxBuff);
         self->RxBuff[0] = 0;
+        self->_singleLineCallBack(self);
     }
 }
 
@@ -37,6 +43,7 @@ static void init(mimiCom_t *self, args_t *initArgs)
     /* object */
 
     /* override */
+    self->_singleLineCallBack = singleLineCallBackDefault;
 
     /* load args */
     if (NULL == initArgs)

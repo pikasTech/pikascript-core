@@ -17,7 +17,7 @@ struct Class_process
     /* operation */
     void (*dinit)(mimiProcess_t *self);
     void (*init)(mimiProcess_t *self, args_t *args);
-    void (*update)(mimiProcess_t *self, int sysytime);
+    void (*update)(mimiProcess_t *self);
     void (*enable)(mimiProcess_t *self);
     void (*disable)(mimiProcess_t *self);
 
@@ -37,7 +37,7 @@ struct Class_process
 
     /* virtual operation */
     
-    void (*_updateHandle)(mimiProcess_t *self, int systime);
+    void (*_updateHandle)(mimiProcess_t *self);
     
 
     /* object */

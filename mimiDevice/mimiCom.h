@@ -15,6 +15,7 @@ struct Class_mimiCom
     void (*init)(mimiCom_t *self, args_t *args);
 
     void (*getChar)(mimiCom_t *self, char inputChar);
+    void (*_singleLineCallBack)(mimiCom_t *self);
 
     /* virtual operation */
 
