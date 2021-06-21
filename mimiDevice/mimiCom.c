@@ -10,7 +10,7 @@ static void deinit(mimiCom_t *self)
 
 static void singleLineCallBackDefault(mimiCom_t *self)
 {
-    /* overRide it in user code */ 
+    /* overRide it in user code */
 }
 
 static void getChar(mimiCom_t *self, char inputChar)
@@ -27,6 +27,17 @@ static void getChar(mimiCom_t *self, char inputChar)
     }
 }
 
+
+static void _sendStringHandleDefault(mimiCom_t *self, char *stringToSend)
+{
+    /* override it in user code */
+}
+
+static void sendSting(mimiCom_t *self, char *stingToSend)
+{
+    self->_sendStringHandle(self, stingToSend);
+}
+
 static void init(mimiCom_t *self, args_t *initArgs)
 {
     /* attrivute */
@@ -39,11 +50,13 @@ static void init(mimiCom_t *self, args_t *initArgs)
     /* operation */
     self->dinit = deinit;
     self->getChar = getChar;
+    self->sendSting = sendSting;
 
     /* object */
 
     /* override */
     self->_singleLineCallBack = singleLineCallBackDefault;
+    self->_sendStringHandle = _sendStringHandleDefault;
 
     /* load args */
     if (NULL == initArgs)

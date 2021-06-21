@@ -19,7 +19,7 @@ static void update(mimiProcess_t *self)
     }
     self->_updateHandle(self);
 }
-static void _updateHandle(mimiProcess_t *self)
+static void _processRootUpdateHandle(mimiProcess_t *self)
 {
     // override the handle function here
 }
@@ -78,7 +78,7 @@ static void loadAttributeFromArgs(mimiProcess_t *self, args_t *args, char *name)
     args->copyArg(args, name, self->attributeList);
 }
 
-static void _beforDinit(mimiProcess_t *self)
+static void _beforDinitDefulat(mimiProcess_t *self)
 {
     /* override in user code */
 }
@@ -97,6 +97,11 @@ static void dinitSubProcess(mimiProcess_t *self, char *subProcessName)
 {
     mimiProcess_t *subProcess = self->getPointer(self, subProcessName);
     subProcess->dinit(subProcess);
+}
+
+static void _potableInitDefault(mimiProcess_t *self)
+{
+    /* override in user code, init the hardward dependence issues */
 }
 
 static void init(mimiProcess_t *self, args_t *args)
@@ -131,16 +136,19 @@ static void init(mimiProcess_t *self, args_t *args)
     self->setPoi(self, "context", self);
 
     /* override */
-    self->_updateHandle = _updateHandle;
-    self->_beforDinit = _beforDinit;
+    self->_updateHandle = _processRootUpdateHandle;
+    self->_beforDinit = _beforDinitDefulat;
+    self->_portableInit = _potableInitDefault;
 
     /* args */
-    if (NULL == args)
+    if (NULL != args)
     {
-        return;
+        self->loadAttributeFromArgs(self, args, "context");
+        self->loadAttributeFromArgs(self, args, "isEnable");
+        self->loadAttributeFromArgs(self, args, "_portableInit");
     }
-    self->loadAttributeFromArgs(self, args, "context");
-    self->loadAttributeFromArgs(self, args, "isEnable");
+
+
 }
 
 mimiProcess_t *New_mimiProcess(args_t *args)

@@ -99,6 +99,11 @@ static void *getPointerByName(args_t *self, char *name)
 {
     void *pointer = NULL;
     arg_t *arg = self->getArgByName(self, name);
+    if(NULL == arg)
+    {
+        return NULL;
+    }
+    
     pointer = arg->getPointer(arg);
     return pointer;
 }
