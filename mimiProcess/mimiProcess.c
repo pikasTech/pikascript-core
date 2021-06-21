@@ -87,7 +87,7 @@ static void addSubobject(mimiProcess_t *self, char *subObjectName, void *new_Obj
 {
     args_t *initArgs = New_args(NULL);
     initArgs->setPoi(initArgs, "context", self);
-    void *(*new_Object)(args_t * initArgs) = new_ObjectFun;
+    void *(*new_Object)(args_t * initArgs) = (void*(*)(args_t * ))new_ObjectFun;
     void *subObject = new_Object(initArgs);
     self->setPoi(self, subObjectName, subObject);
     initArgs->dinit(initArgs);
