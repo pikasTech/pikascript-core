@@ -49,12 +49,10 @@ exit:
     return id;
 }
 
-static int getStrByIndex(args_t *self, int index, char **strOut)
+static char *getStrByIndex(args_t *self, int index)
 {
-    int errCode = 0;
     arg_t *arg = self->getArgByIndex(self, index);
-    *strOut = arg->contant;
-    return errCode;
+    return arg->contant;
 }
 
 static int setStrWithDefaultName(args_t *self, char *strIn)
@@ -127,11 +125,10 @@ static int setStrWithName(args_t *self, char *name, char *strIn)
     return errCode;
 }
 
-static int getStrByName(args_t *self, char *name, char **strOut)
+static char *getStrByName(args_t *self, char *name)
 {
     arg_t *arg = self->getArgByName(self, name);
-    *strOut = arg->contant;
-    return 0;
+    return arg->contant;
 }
 
 static int setInt64WithName(args_t *self, char *name, long long int64In)
@@ -189,8 +186,8 @@ static int copyArg(args_t *self, char *name, args_t *directArgs)
     arg_t *argToBeCopy = self->getArgByName(self, name);
     if (NULL == argToBeCopy)
     {
-				return 1;
-		}
+        return 1;
+    }
     arg_t *argCopied = New_arg(NULL);
     memcpy(argCopied->contant, argToBeCopy->contant, ARG_CONTANT_LENGTH);
     memcpy(argCopied->name, argToBeCopy->name, ARG_NAME_LENGTH);
@@ -198,7 +195,7 @@ static int copyArg(args_t *self, char *name, args_t *directArgs)
 
     directArgs->setArg(directArgs, argCopied);
 
-		return 0;
+    return 0;
 }
 
 static int isArgExist(args_t *self, char *name)

@@ -5,8 +5,7 @@
 
 static int _writeHandle(device_t *self, args_t *args_in)
 {
-    char *str = NULL;
-    args_in->getStrByIndex(args_in, 0, &str);
+    char *str = args_in->getStrByIndex(args_in, 0);
     PORT_send_to_com(3, str);
     return 0;
 }

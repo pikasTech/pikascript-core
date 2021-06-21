@@ -68,9 +68,9 @@ static float getFloat(mimiProcess_t *self, char *name)
     return self->attributeList->getFlt(self->attributeList, name);
 }
 
-void getStr(mimiProcess_t *self, char *name, char **strOut)
+char *getStr(mimiProcess_t *self, char *name)
 {
-    self->attributeList->getStr(self->attributeList, name, strOut);
+    return self->attributeList->getStr(self->attributeList, name);
 }
 
 static void loadAttributeFromArgs(mimiProcess_t *self, args_t *args, char *name)

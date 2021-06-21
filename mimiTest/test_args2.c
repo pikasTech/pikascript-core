@@ -20,7 +20,7 @@ int TEST_args2(int isShow)
         floatOut = args->getFloatByIndex(args, 0);
         int64Out = args->getInt(args, "int64Test");
         pointer = args->getPoi(args, "pointerTest");
-        args->getStr(args, "strTest", &strOut);
+        strOut = args->getStr(args, "strTest");
 
         if (isShow)
         {

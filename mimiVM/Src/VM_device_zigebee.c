@@ -9,15 +9,10 @@ static int _writeHandle(device_t *self, args_t *args_in)
     if (args_in->size(args_in) == 1)
     {
         char *str_send = NULL;
-        if (0 != args_in->getStrByIndex(args_in, 0, &str_send))
-        {
-            err = 1;
-            goto exit;
-        }
+        str_send = args_in->getStrByIndex(args_in, 0);
         PORT_send_to_com(2, str_send);
     }
 
-exit:
     return err;
 }
 

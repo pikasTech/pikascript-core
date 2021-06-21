@@ -31,7 +31,7 @@ struct Class_process
     float (*getFloat)(mimiProcess_t *self, char *name);
 
     void (*setStr)(mimiProcess_t *self, char *name, char *str);
-    void (*getStr)(mimiProcess_t *self, char *name, char **strOut);
+    char *(*getStr)(mimiProcess_t *self, char *name);
 
     void (*loadAttributeFromArgs)(mimiProcess_t *self, args_t *args, char *name);
 

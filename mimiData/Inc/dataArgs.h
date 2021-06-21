@@ -28,9 +28,9 @@ struct Class_Arglist
     int (*isArgExist)(args_t *self, char *name);
 
     int (*setStr)(args_t *self, char *name, char *strIn);
-    int (*getStr)(args_t *self, char *name, char **strOut);
     int (*setStrWithDefaultName)(args_t *self, char *strIn);
-    int (*getStrByIndex)(args_t *self, int index, char **strOut);
+    char *(*getStr)(args_t *self, char *name);
+    char *(*getStrByIndex)(args_t *self, int index);
 
     int (*setFloatWithDefaultName)(args_t *self, float argFloat);
     int (*setFlt)(args_t *self, char *name, float argFloat);

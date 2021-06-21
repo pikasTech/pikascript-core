@@ -8,9 +8,8 @@ int TEST_VM_args(int isShow)
     args->setStrWithDefaultName(args, "arg1");
     args->setStrWithDefaultName(args, "arg2");
 
-    char *arg1 = NULL, *arg2 = NULL;
-    args->getStrByIndex(args, 0, &arg1);
-    args->getStrByIndex(args, 1, &arg2);
+    char *arg1 = args->getStrByIndex(args, 0);
+    char *arg2 = args->getStrByIndex(args, 1);
     if (isShow)
     {
         printf("the arg1 = %s\r\n", arg1);

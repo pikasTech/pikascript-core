@@ -59,8 +59,8 @@ int TEST_VM_device(int isShow)
         goto exit;
     }
 
-    args_out->getStrByIndex(args_out, 0, &strOut1);
-    args_out->getStrByIndex(args_out, 1, &strOut2);
+    strOut1 = args_out->getStrByIndex(args_out, 0);
+    strOut2 = args_out->getStrByIndex(args_out, 1);
 
     if (0 != strcmp(strOut1, "arg1"))
     {

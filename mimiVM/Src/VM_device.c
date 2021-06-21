@@ -39,11 +39,6 @@ static int _read_handle(device_t *self, args_t *args_in, args_t *args_out)
     for (int i = 0; i < args_in->size(args_in); i++)
     {
         char *arg = NULL;
-        if (0 != args_in->getStrByIndex(args_in, i, &arg))
-        {
-            err = 1;
-            goto exit;
-        }
         if (0 != args_out->setStrWithDefaultName(args_out, arg))
         {
             err = 2;
