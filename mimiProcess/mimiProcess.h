@@ -35,10 +35,14 @@ struct Class_process
 
     void (*loadAttributeFromArgs)(mimiProcess_t *self, args_t *args, char *name);
 
+    // subObject
+
+    void (*addSubobject)(mimiProcess_t *self, char *subObjectName, void *new_projcetFun);
+    void (*dinitSubProcess)(mimiProcess_t *self, char *subObjectName);
+
     /* virtual operation */
-    void (*_dinitSubObject)(mimiProcess_t *self);
+    void (*_beforDinit)(mimiProcess_t *self);
     void (*_updateHandle)(mimiProcess_t *self);
-    
 
     /* object */
 };

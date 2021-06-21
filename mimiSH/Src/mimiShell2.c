@@ -180,30 +180,38 @@ static void deinit_cmdMap_data(void *data_noType)
 	cmdMap->mem = NULL;
 }
 
-static void sh_config(shell2_t *self)
+static void _shConfig(shell2_t *self)
 {
+	/* override in user code */
+	/* you can add maps */
 }
 
-shell2_t *new_mimiShell2(args_t *initArgs)
+static void init(shell2_t *self, args_t *initArgs)
 {
 	/* attribute */
-	DMEM *mem = DynMemGet(sizeof(shell2_t));
-	shell2_t *sh = (shell2_t *)(mem->addr);
-	sh->mem = mem;
 
 	/* operation */
-	sh->cmd = Shell_cmd;
-	sh->cmdMapHead = New_linkWithNode(NULL);
+	self->cmd = Shell_cmd;
+	self->cmdMapHead = New_linkWithNode(NULL);
 	// set how to deinit the data of cmdMap Link
-	sh->cmdMapHead->port_deinit_data = deinit_cmdMap_data;
-	sh->addMap = Shell_addMap;
-	sh->listMap = Shell_listMap;
-	sh->test = Shell_test;
-	sh->config = sh_config;
-	sh->dinit = dinit;
-	sh->detector = detector_shellLuancher;
+	self->cmdMapHead->port_deinit_data = deinit_cmdMap_data;
+	self->addMap = Shell_addMap;
+	self->listMap = Shell_listMap;
+	self->test = Shell_test;
+	self->dinit = dinit;
+	self->detector = detector_shellLuancher;
 
 	/* override */
-	sh->config(sh);
-	return sh;
+	self->config = _shConfig;
+	self->config(self);
+}
+
+shell2_t *New_shell2(args_t *args)
+{
+	DMEM *mem = DynMemGet(sizeof(shell2_t));
+	shell2_t *self = mem->addr;
+	self->mem = mem;
+	self->init = init;
+	self->init(self, args);
+	return self;
 }

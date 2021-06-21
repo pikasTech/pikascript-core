@@ -1,4 +1,5 @@
 #include "mimiProcess.h"
+#include "mimiCom.h"
 
 int TEST_mimiProcess(int isShow)
 {

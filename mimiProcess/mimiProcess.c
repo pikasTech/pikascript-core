@@ -4,7 +4,7 @@
 
 static void deinit(mimiProcess_t *self)
 {
-    self->_dinitSubObject(self);
+    self->_beforDinit(self);
     self->subProcessList->dinit(self->subProcessList);
     self->attributeList->dinit(self->attributeList);
     DynMemPut(self->mem);
@@ -78,9 +78,25 @@ static void loadAttributeFromArgs(mimiProcess_t *self, args_t *args, char *name)
     args->copyArg(args, name, self->attributeList);
 }
 
-static void _dinitSubObject(mimiProcess_t *self)
+static void _beforDinit(mimiProcess_t *self)
 {
     /* override in user code */
+}
+
+static void addSubobject(mimiProcess_t *self, char *subObjectName, void *new_ObjectFun)
+{
+    args_t *initArgs = New_args(NULL);
+    initArgs->setPoi(initArgs, "context", self);
+    void *(*new_Object)(args_t * initArgs) = new_ObjectFun;
+    void *subObject = new_Object(initArgs);
+    self->setPoi(self, subObjectName, subObject);
+    initArgs->dinit(initArgs);
+}
+
+static void dinitSubProcess(mimiProcess_t *self, char *subProcessName)
+{
+    mimiProcess_t *subProcess = self->getPointer(self, subProcessName);
+    subProcess->dinit(subProcess);
 }
 
 static void init(mimiProcess_t *self, args_t *args)
@@ -106,6 +122,9 @@ static void init(mimiProcess_t *self, args_t *args)
     self->getStr = getStr;
 
     self->loadAttributeFromArgs = loadAttributeFromArgs;
+    // subObject
+    self->addSubobject = addSubobject;
+    self->dinitSubProcess = dinitSubProcess;
 
     /* attrivute */
     self->setInt64(self, "isEnable", 1);
@@ -113,7 +132,7 @@ static void init(mimiProcess_t *self, args_t *args)
 
     /* override */
     self->_updateHandle = _updateHandle;
-    self->_dinitSubObject = _dinitSubObject;
+    self->_beforDinit = _beforDinit;
 
     /* args */
     if (NULL == args)

@@ -26,6 +26,7 @@ struct Class_mimiShell2
     void (*addMap)(shell2_t *self, char *, void *(*)(int argc, char **argv));
     int (*listMap)(shell2_t *self, int);
     int (*test)(shell2_t *self, int);
+    void (*init)(shell2_t *self, args_t *args);
     void (*dinit)(shell2_t *self);
 
     /* override */
@@ -33,6 +34,6 @@ struct Class_mimiShell2
     void *(*detector)(void *(*fun_d)(char *, char *, void *(fun)(int, char **)), char *CMD, char *StartStr, void *(fun)(int argc, char **argv));
 };
 
-shell2_t *new_mimiShell2(args_t *initArgs);
+shell2_t *New_shell2(args_t *initArgs);
 
 #endif
