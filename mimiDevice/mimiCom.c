@@ -27,7 +27,6 @@ static void getChar(mimiCom_t *self, char inputChar)
     }
 }
 
-
 static void _sendStringHandleDefault(mimiCom_t *self, char *stringToSend)
 {
     /* override it in user code */

@@ -78,9 +78,19 @@ static void loadAttributeFromArgs(mimiProcess_t *self, args_t *args, char *name)
     args->copyArg(args, name, self->attributeList);
 }
 
-static void _beforDinitDefulat(mimiProcess_t *self)
+static void _beforDinit(mimiProcess_t *self)
 {
     /* override in user code */
+}
+
+static void addSubProcess(mimiProcess_t *self, char *subProcessName, void *new_ProcessFun)
+{
+    args_t *initArgs = New_args(NULL);
+    initArgs->setPoi(initArgs, "context", self);
+    void *(*new_Object)(args_t * initArgs) = new_ProcessFun;
+    void *subObject = new_Object(initArgs);
+    self->setPoi(self, subProcessName, subObject);
+    initArgs->dinit(initArgs);
 }
 
 static void addSubobject(mimiProcess_t *self, char *subObjectName, void *new_ObjectFun)
@@ -129,6 +139,7 @@ static void init(mimiProcess_t *self, args_t *args)
     self->loadAttributeFromArgs = loadAttributeFromArgs;
     // subObject
     self->addSubobject = addSubobject;
+    self->addSubProcess = addSubProcess;
     self->dinitSubProcess = dinitSubProcess;
 
     /* attrivute */
@@ -137,7 +148,7 @@ static void init(mimiProcess_t *self, args_t *args)
 
     /* override */
     self->_updateHandle = _processRootUpdateHandle;
-    self->_beforDinit = _beforDinitDefulat;
+    self->_beforDinit = _beforDinit;
     self->_portableInit = _potableInitDefault;
 
     /* args */

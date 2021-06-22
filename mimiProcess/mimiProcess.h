@@ -36,6 +36,7 @@ struct Class_process
 
     // subObject
     void (*addSubobject)(mimiProcess_t *self, char *subObjectName, void *new_projcetFun);
+    void (*addSubProcess)(mimiProcess_t *self, char *subObjectName, void *new_projcetFun);
 
     // subProcess
     void (*dinitSubProcess)(mimiProcess_t *self, char *subObjectName);
