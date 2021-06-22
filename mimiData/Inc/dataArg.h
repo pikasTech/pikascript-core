@@ -2,7 +2,7 @@
 #define _arg__H
 #include "dataMemory.h"
 
-#define ARG_CONTANT_LENGTH 128
+#define ARG_CONTANT_LENGTH 256
 #define ARG_NAME_LENGTH 32
 #define ARG_TYPE_LENGTH 32
 
