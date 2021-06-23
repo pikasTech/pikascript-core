@@ -34,7 +34,12 @@ struct Class_process
 
     // arg general operations
     void (*argBind)(mimiProcess_t *self, char *type, char *name, void *pointer);
-    char * (*argPinrt)(mimiProcess_t *self, char *name);
+    
+    void (*argBindInt)(mimiProcess_t *self, char*name,int* valPtr);
+    void (*argBindFloat)(mimiProcess_t *self, char*name,float* valPtr);
+    void (*argBindString)(mimiProcess_t *self, char*name,char** valPtr);
+    
+    char * (*argPrint)(mimiProcess_t *self, char *name);
 
     // args operations
     void (*loadAttributeFromArgs)(mimiProcess_t *self, args_t *args, char *name);

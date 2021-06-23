@@ -124,6 +124,21 @@ static char *argPinrt(mimiProcess_t *self, char *name)
     return self->attributeList->print(self->attributeList, name);
 }
 
+static void argBindInt(mimiProcess_t *self, char *name, int *valPtr)
+{
+    self->attributeList->bindInt(self->attributeList, name, valPtr);
+}
+
+static void argBindFloat(mimiProcess_t *self, char *name, float *valPtr)
+{
+    self->attributeList->bindFloat(self->attributeList, name, valPtr);
+}
+
+static void argBindString(mimiProcess_t *self, char *name, char **valPtr)
+{
+    self->attributeList->bindStr(self->attributeList, name, valPtr);
+}
+
 static void init(mimiProcess_t *self, args_t *args)
 {
     /* List */
@@ -146,9 +161,13 @@ static void init(mimiProcess_t *self, args_t *args)
     self->getFloat = getFloat;
     self->getStr = getStr;
 
+    self->argBindInt = argBindInt;
+    self->argBindFloat = argBindFloat;
+    self->argBindString = argBindString;
+
     // arg general operations
     self->argBind = argBind;
-    self->argPinrt = argPinrt;
+    self->argPrint = argPinrt;
 
     self->loadAttributeFromArgs = loadAttributeFromArgs;
     // subObject
