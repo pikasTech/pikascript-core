@@ -21,21 +21,20 @@ struct Class_process
     void (*enable)(mimiProcess_t *self);
     void (*disable)(mimiProcess_t *self);
 
-    // arg operations
+    // arg type operations
     void (*setInt)(mimiProcess_t *self, char *name, long long val);
-    long long (*getInt)(mimiProcess_t *self, char *name);
     void (*setPtr)(mimiProcess_t *self, char *name, void *pointer);
-    void *(*getPtr)(mimiProcess_t *self, char *name);
     void (*setFloat)(mimiProcess_t *self, char *name, float value);
-    float (*getFloat)(mimiProcess_t *self, char *name);
     void (*setStr)(mimiProcess_t *self, char *name, char *str);
+
+    void *(*getPtr)(mimiProcess_t *self, char *name);
+    float (*getFloat)(mimiProcess_t *self, char *name);
     char *(*getStr)(mimiProcess_t *self, char *name);
+    long long (*getInt)(mimiProcess_t *self, char *name);
 
     // arg general operations
     void (*argBind)(mimiProcess_t *self, char *type, char *name, void *pointer);
     char * (*argPinrt)(mimiProcess_t *self, char *name);
-    
-    
 
     // args operations
     void (*loadAttributeFromArgs)(mimiProcess_t *self, args_t *args, char *name);

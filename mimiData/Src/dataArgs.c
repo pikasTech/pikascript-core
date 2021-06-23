@@ -260,7 +260,7 @@ static arg_t *getArgByName(args_t *self, char *name)
     return self->getArgByIndex(self, index);
 }
 
-static void argBind(args_t *self, char *type, char *name, void *pointer)
+static void bind(args_t *self, char *type, char *name, void *pointer)
 {
     char typeWithBind[ARG_NAME_LENGTH] = "_bind-";
     strPrint(typeWithBind, type);
@@ -270,6 +270,21 @@ static void argBind(args_t *self, char *type, char *name, void *pointer)
     argNew->setPointer(argNew, pointer);
     self->setArg(self, argNew);
     return;
+}
+
+static void bindInt(args_t *self, char *name, int *intPtr)
+{
+    self->bind(self, "int", name, intPtr);
+}
+
+static void bindFloat(args_t *self, char *name, float *floatPtr)
+{
+    self->bind(self, "float", name, floatPtr);
+}
+
+static void bindStr(args_t *self, char *name, char **stringPtr)
+{
+    self->bind(self, "string", name, stringPtr);
 }
 
 static char *getPrintSring(args_t *self, char *name, char *valString)
@@ -313,6 +328,11 @@ static char *print(args_t *self, char *name)
         return getPrintStringFromFloat(self, name, val);
     }
 
+    if (mimiStrEqu(type, "string"))
+    {
+        return getStrByName(self, name);
+    }
+
     char bindTypePrefix[] = "_bind-";
     if (isStartWith(type, bindTypePrefix))
     {
@@ -329,6 +349,12 @@ static char *print(args_t *self, char *name)
             float *valPtr = self->getPtr(self, name);
             float val = *valPtr;
             return getPrintStringFromFloat(self, name, val);
+        }
+        if (mimiStrEqu(typeWithoutBind, "string"))
+        {
+            // the value of &string is equal to string it self
+            char *string = self->getPtr(self, name);
+            return string;
         }
     }
     return "[error: arg no found]";
@@ -375,11 +401,13 @@ static void init(args_t *self, args_t *args)
     self->getStrByIndex = getStrByIndex;
 
     /* arg general operations */
-    self->bind = argBind;
-
+    self->bind = bind;
+    self->bindInt = bindInt;
+    self->bindFloat = bindFloat;
+    self->bindStr = bindStr;
     self->print = print;
 
-    /* arg 
+    /* arg */
 
     /* object */
 

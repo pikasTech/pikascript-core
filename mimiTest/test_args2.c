@@ -151,6 +151,35 @@ int TEST_args2(int isShow)
         }
         args->dinit(args);
     }
+    {
+        args_t *args = New_args(NULL);
+        args->setStr(args, "testString", "test string print");
+        if (isShow)
+        {
+            printf("test string bind: %s\r\n", args->print(args, "testString"));
+        }
+        if (!mimiStrEqu("test string print", args->print(args, "testString")))
+        {
+            err = 25;
+            goto exit;
+        }
+        args->dinit(args);
+    }
+    {
+        args_t *args = New_args(NULL);
+        char strBindTest[] = "test string bind";
+        args->bindStr(args, "testStringBind", &strBindTest);
+        if (isShow)
+        {
+            printf("test string bind: %s\r\n", args->print(args, "testStringBind"));
+        }
+        if (!mimiStrEqu("test string bind", args->print(args, "testStringBind")))
+        {
+            err = 26;
+            goto exit;
+        }
+        args->dinit(args);
+    }
 
     goto exit;
 
