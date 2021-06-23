@@ -10,11 +10,11 @@ int TEST_args2(int isShow)
         char *strOut = NULL;
         args->setFloatWithDefaultName(args, 24.5);
         args->setInt(args,
-                                "int64Test",
-                                (long long)22221);
+                     "int64Test",
+                     (long long)22221);
         args->setPoi(args,
-                                  "pointerTest",
-                                  (void *)2222322);
+                     "pointerTest",
+                     (void *)2222322);
         args->setStr(args, "strTest", "teeeds");
 
         floatOut = args->getFloatByIndex(args, 0);
@@ -54,7 +54,7 @@ int TEST_args2(int isShow)
         {
             err = 5;
         }
-        if (0 != strcmp("int64", args->getTypeByName(args, "int64Test")))
+        if (0 != strcmp("int", args->getTypeByName(args, "int64Test")))
         {
             err = 6;
         }
@@ -72,7 +72,7 @@ int TEST_args2(int isShow)
         args_t *args1 = New_args(NULL);
         args_t *args2 = New_args(NULL);
 
-        args1->setFlt(args1, "argtest1", 2.883);
+        args1->setFloat(args1, "argtest1", 2.883);
         args1->setStr(args1, "strtest1", "teststr");
         args1->copyArg(args1, "argtest1", args2);
         args1->copyArg(args1, "strtest1", args2);
@@ -92,6 +92,27 @@ int TEST_args2(int isShow)
 
         args1->dinit(args1);
         args2->dinit(args2);
+    }
+    {
+        int testInt = 124;
+        args_t *args = New_args(NULL);
+        args->argBind(args, "int", "testInt", &testInt);
+        char *type = args->getTypeByName(args, "_bind-testInt");
+        if (isShow)
+        {
+            printf("arg bind type: %s\r\n", type);
+        }
+        args->dinit(args);
+    }
+    {
+        int testint = 12333;
+        args_t *args = New_args(NULL);
+        args->setInt(args, "testint", testint);
+        if (isShow)
+        {
+            printf("args print test int: %s\r\n", args->print(args, "testint"));
+        }
+        args->dinit(args);
     }
 
     goto exit;

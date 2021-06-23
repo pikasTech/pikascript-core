@@ -31,6 +31,11 @@ struct Class_process
     void (*setStr)(mimiProcess_t *self, char *name, char *str);
     char *(*getStr)(mimiProcess_t *self, char *name);
 
+    // arg bind operations
+    
+    void (*argBind)(mimiProcess_t *self, char *type, char *name, void *pointer);
+    
+
     // args operations
     void (*loadAttributeFromArgs)(mimiProcess_t *self, args_t *args, char *name);
 

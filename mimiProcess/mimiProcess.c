@@ -45,7 +45,7 @@ static void setPointer(mimiProcess_t *self, char *name, void *pointer)
 
 static void setFloat(mimiProcess_t *self, char *name, float value)
 {
-    self->attributeList->setFlt(self->attributeList, name, value);
+    self->attributeList->setFloat(self->attributeList, name, value);
 }
 
 static void setStr(mimiProcess_t *self, char *name, char *str)
@@ -97,7 +97,7 @@ static void addSubobject(mimiProcess_t *self, char *subObjectName, void *new_Obj
 {
     args_t *initArgs = New_args(NULL);
     initArgs->setPoi(initArgs, "context", self);
-    void *(*new_Object)(args_t * initArgs) = (void*(*)(args_t * ))new_ObjectFun;
+    void *(*new_Object)(args_t * initArgs) = (void *(*)(args_t *))new_ObjectFun;
     void *subObject = new_Object(initArgs);
     self->setPoi(self, subObjectName, subObject);
     initArgs->dinit(initArgs);
@@ -112,6 +112,11 @@ static void dinitSubProcess(mimiProcess_t *self, char *subProcessName)
 static void _potableInitDefault(mimiProcess_t *self)
 {
     /* override in user code, init the hardward dependence issues */
+}
+
+static void argBind(mimiProcess_t *self, char *type, char *name, void *pointer)
+{
+    self->attributeList->argBind(self->attributeList, type, name, pointer);
 }
 
 static void init(mimiProcess_t *self, args_t *args)
@@ -136,6 +141,9 @@ static void init(mimiProcess_t *self, args_t *args)
     self->getFloat = getFloat;
     self->getStr = getStr;
 
+    // arg bind operations
+    self->argBind = argBind;
+
     self->loadAttributeFromArgs = loadAttributeFromArgs;
     // subObject
     self->addSubobject = addSubobject;
@@ -158,8 +166,6 @@ static void init(mimiProcess_t *self, args_t *args)
         self->loadAttributeFromArgs(self, args, "isEnable");
         self->loadAttributeFromArgs(self, args, "_portableInit");
     }
-
-
 }
 
 mimiProcess_t *New_mimiProcess(args_t *args)

@@ -1,7 +1,9 @@
 #include "dataArgs.h"
 #include "dataLink.h"
 #include "dataMemory.h"
+#include "dataString.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 static void deinit(args_t *self)
 {
@@ -65,7 +67,7 @@ static int setStrWithDefaultName(args_t *self, char *strIn)
 static int setFloatWithDefaultName(args_t *self, float argFloat)
 {
     loadDefaultName(self);
-    self->setFlt(self, (char *)self->nameBuff, argFloat);
+    self->setFloat(self, (char *)self->nameBuff, argFloat);
     return 0;
 }
 
@@ -99,11 +101,11 @@ static void *getPointerByName(args_t *self, char *name)
 {
     void *pointer = NULL;
     arg_t *arg = self->getArgByName(self, name);
-    if(NULL == arg)
+    if (NULL == arg)
     {
         return NULL;
     }
-    
+
     pointer = arg->getPointer(arg);
     return pointer;
 }
@@ -141,7 +143,7 @@ static int setInt64WithName(args_t *self, char *name, long long int64In)
     arg_t *argNew = New_arg(NULL);
     argNew->setName(argNew, name);
     argNew->setInt64(argNew, int64In);
-    argNew->setType(argNew, "int64");
+    argNew->setType(argNew, "int");
     self->setArg(self, argNew);
     return 0;
 }
@@ -252,6 +254,29 @@ static arg_t *getArgByName(args_t *self, char *name)
     return self->getArgByIndex(self, index);
 }
 
+static void argBind(args_t *self, char *type, char *name, void *pointer)
+{
+    char nameWithBind[ARG_NAME_LENGTH] = "_bind-";
+    strPrint(nameWithBind, name);
+    self->setPoi(self, nameWithBind, pointer);
+}
+
+static char *print(args_t *self, char *name)
+{
+    char *type = self->getTypeByName(self, name);
+    if (0 == strcmp(type, "int"))
+    {
+        char printName[ARG_NAME_LENGTH] = {0};
+        strPrint(printName, "_print");
+        strPrint(printName, name);
+        char printString[ARG_CONTANT_LENGTH] = {0};
+        int val = self->getInt(self, name);
+        sprintf(printString, "%d", val);
+        self->setStr(self, printName, printString);
+        return self->getStr(self, printName);
+    }
+}
+
 static void init(args_t *self, args_t *args)
 {
     /* attrivute */
@@ -278,7 +303,7 @@ static void init(args_t *self, args_t *args)
     self->getInt = getInt64ByName;
     self->getInt64ByIndex = getInt64ByIndex;
 
-    self->setFlt = setFloatWithName;
+    self->setFloat = setFloatWithName;
     self->getFlt = getFloatByName;
     self->setFloatWithDefaultName = setFloatWithDefaultName;
     self->getFloatByIndex = getFloatByIndex;
@@ -291,6 +316,13 @@ static void init(args_t *self, args_t *args)
     self->getStr = getStrByName;
     self->setStrWithDefaultName = setStrWithDefaultName;
     self->getStrByIndex = getStrByIndex;
+
+    /* arg general operations */
+    self->argBind = argBind;
+
+    self->print = print;
+
+    /* arg 
 
     /* object */
 
