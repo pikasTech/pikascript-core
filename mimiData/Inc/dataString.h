@@ -8,5 +8,7 @@ char *strPrint(char *strOut, char *pData);
 int isStartWith(char *str, char *strStart);
 char *strDeleteEnter(char *str);
 char *strPrintWithSize(char *strOut, char *pData, int Size);
+int mimiStrEqu(char *str1, char *str2);
+void mimiStrRemovePrefix(char *inputStr, char *prefix, char *outputStr);
 
 #endif

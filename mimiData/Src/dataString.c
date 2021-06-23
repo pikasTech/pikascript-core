@@ -16,19 +16,19 @@ char *strPrintWithSize_unlimited(char *strOut, char *pData, int Size)
 
 char *strDeleteEnter(char *str)
 {
-    for (int i = 0; i < 256; i++)
-    {
-        if (0 == str[i])
-        {
-            return str;
-        }
-        if ('\n' == str[i])
-        {
-            str[i] = 0;
-            return str;
-        }
-    }
-    return str;
+	for (int i = 0; i < 256; i++)
+	{
+		if (0 == str[i])
+		{
+			return str;
+		}
+		if ('\n' == str[i])
+		{
+			str[i] = 0;
+			return str;
+		}
+	}
+	return str;
 }
 
 char *strPrintWithSize(char *strOut, char *pData, int Size)
@@ -91,4 +91,35 @@ int isStartWith(char *str, char *strStart)
 		}
 	}
 	return CMDName_get;
+}
+
+int mimiStrEqu(char *str1, char *str2)
+{
+	int size1 = strGetSize(str1);
+	int size2 = strGetSize(str2);
+	if (size1 != size2)
+	{
+		return 0; // not equal
+	}
+	for (int i = 0; i < size1; i++)
+	{
+		if (str1[i] != str2[i])
+		{
+			return 0; // not equal
+		}
+	}
+	return 1;
+}
+
+void mimiStrRemovePrefix(char *inputStr, char *prefix, char *outputStr)
+{
+	if (!isStartWith(inputStr, prefix))
+	{
+		return;
+	}
+
+	for (int i = strGetSize(prefix); i < strGetSize(inputStr); i++)
+	{
+		outputStr[i - strGetSize(prefix)] = inputStr[i];
+	}
 }

@@ -4,6 +4,7 @@
 #include "dataString.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 static void deinit(args_t *self)
 {
@@ -167,7 +168,12 @@ static int size(args_t *self)
 
 char *getTypeByName(args_t *self, char *name)
 {
-    arg_t *arg = self->getArgByName(self, name);
+    arg_t *arg = NULL;
+    arg = self->getArgByName(self, name);
+    if (NULL == arg)
+    {
+        return "[error: arg no found]";
+    }
     return arg->type;
 }
 
@@ -256,25 +262,76 @@ static arg_t *getArgByName(args_t *self, char *name)
 
 static void argBind(args_t *self, char *type, char *name, void *pointer)
 {
-    char nameWithBind[ARG_NAME_LENGTH] = "_bind-";
-    strPrint(nameWithBind, name);
-    self->setPoi(self, nameWithBind, pointer);
+    char typeWithBind[ARG_NAME_LENGTH] = "_bind-";
+    strPrint(typeWithBind, type);
+    arg_t *argNew = New_arg(NULL);
+    argNew->setType(argNew, typeWithBind);
+    argNew->setName(argNew, name);
+    argNew->setPointer(argNew, pointer);
+    self->setArg(self, argNew);
+    return;
+}
+
+static char *getPrintSring(args_t *self, char *name, char *valString)
+{
+    char printName[ARG_NAME_LENGTH] = {0};
+    strPrint(printName, "_print");
+    strPrint(printName, name);
+    char printString[ARG_CONTANT_LENGTH] = {0};
+    sprintf(printString, "%s", valString);
+    self->setStr(self, printName, printString);
+    return self->getStr(self, printName);
+}
+
+static char *getPrintStringFromInt(args_t *self, char *name, int val)
+{
+    char valString[ARG_CONTANT_LENGTH] = {0};
+    sprintf(valString, "%d", val);
+    return getPrintSring(self, name, valString);
+}
+
+static char *getPrintStringFromFloat(args_t *self, char *name, float val)
+{
+    char valString[ARG_CONTANT_LENGTH] = {0};
+    sprintf(valString, "%f", val);
+    return getPrintSring(self, name, valString);
 }
 
 static char *print(args_t *self, char *name)
 {
     char *type = self->getTypeByName(self, name);
-    if (0 == strcmp(type, "int"))
+
+    if (mimiStrEqu(type, "int"))
     {
-        char printName[ARG_NAME_LENGTH] = {0};
-        strPrint(printName, "_print");
-        strPrint(printName, name);
-        char printString[ARG_CONTANT_LENGTH] = {0};
         int val = self->getInt(self, name);
-        sprintf(printString, "%d", val);
-        self->setStr(self, printName, printString);
-        return self->getStr(self, printName);
+        return getPrintStringFromInt(self, name, val);
     }
+
+    if (mimiStrEqu(type, "float"))
+    {
+        float val = self->getFloat(self, name);
+        return getPrintStringFromFloat(self, name, val);
+    }
+
+    char bindTypePrefix[] = "_bind-";
+    if (isStartWith(type, bindTypePrefix))
+    {
+        char typeWithoutBind[ARG_TYPE_LENGTH] = {0};
+        mimiStrRemovePrefix(type, bindTypePrefix, typeWithoutBind);
+        if (mimiStrEqu(typeWithoutBind, "int"))
+        {
+            int *valPtr = self->getPtr(self, name);
+            int val = *valPtr;
+            return getPrintStringFromInt(self, name, val);
+        }
+        if (mimiStrEqu(typeWithoutBind, "float"))
+        {
+            float *valPtr = self->getPtr(self, name);
+            float val = *valPtr;
+            return getPrintStringFromFloat(self, name, val);
+        }
+    }
+    return "[error: arg no found]";
 }
 
 static void init(args_t *self, args_t *args)
@@ -304,12 +361,12 @@ static void init(args_t *self, args_t *args)
     self->getInt64ByIndex = getInt64ByIndex;
 
     self->setFloat = setFloatWithName;
-    self->getFlt = getFloatByName;
+    self->getFloat = getFloatByName;
     self->setFloatWithDefaultName = setFloatWithDefaultName;
     self->getFloatByIndex = getFloatByIndex;
 
     self->setPoi = setPointerWithName;
-    self->getPoi = getPointerByName;
+    self->getPtr = getPointerByName;
     self->getPointerByIndex = getPointerByIndex;
 
     self->setStr = setStrWithName;
@@ -318,7 +375,7 @@ static void init(args_t *self, args_t *args)
     self->getStrByIndex = getStrByIndex;
 
     /* arg general operations */
-    self->argBind = argBind;
+    self->bind = argBind;
 
     self->print = print;
 

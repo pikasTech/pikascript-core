@@ -180,7 +180,7 @@ static void argHandle_context(gui2_t *self,
                               args_t *args,
                               char *argName)
 {
-    self->context = args->getPoi(args, argName);
+    self->context = args->getPtr(args, argName);
 }
 
 static void argHandle_optionMax(gui2_t *self,

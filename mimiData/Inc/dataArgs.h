@@ -35,10 +35,10 @@ struct Class_Arglist
     int (*setFloatWithDefaultName)(args_t *self, float argFloat);
     int (*setFloat)(args_t *self, char *name, float argFloat);
     float (*getFloatByIndex)(args_t *self, int index);
-    float (*getFlt)(args_t *self, char *name);
+    float (*getFloat)(args_t *self, char *name);
 
     int (*setPoi)(args_t *self, char *name, void *argPointer);
-    void *(*getPoi)(args_t *self, char *name);
+    void *(*getPtr)(args_t *self, char *name);
     void *(*getPointerByIndex)(args_t *self, int index);
 
     int (*setInt)(args_t *self, char *name, long long int64In);
@@ -47,7 +47,7 @@ struct Class_Arglist
 
     /* arg bind operations */
     
-    void (*argBind)(args_t *self, char *type, char *name, void *pointer);
+    void (*bind)(args_t *self, char *type, char *name, void *pointer);
     
     /* arg general opeartion */
     char * (*print)(args_t *self, char *name);

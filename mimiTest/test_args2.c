@@ -1,4 +1,5 @@
 #include "dataArgs.h"
+#include "dataString.h"
 int TEST_args2(int isShow)
 {
     int err = 0;
@@ -19,7 +20,7 @@ int TEST_args2(int isShow)
 
         floatOut = args->getFloatByIndex(args, 0);
         int64Out = args->getInt(args, "int64Test");
-        pointer = args->getPoi(args, "pointerTest");
+        pointer = args->getPtr(args, "pointerTest");
         strOut = args->getStr(args, "strTest");
 
         if (isShow)
@@ -80,12 +81,12 @@ int TEST_args2(int isShow)
         if (isShow)
         {
             printf("the float get from args is:%f\r\n",
-                   args1->getFlt(args1, "argtest1"));
+                   args1->getFloat(args1, "argtest1"));
 
             printf("the float copyed from arg1:%f\r\n",
-                   args2->getFlt(args2, "argtest1"));
+                   args2->getFloat(args2, "argtest1"));
         }
-        if (2.8830f != args1->getFlt(args1, "argtest1"))
+        if (2.8830f != args1->getFloat(args1, "argtest1"))
         {
             err = 9;
         }
@@ -94,23 +95,59 @@ int TEST_args2(int isShow)
         args2->dinit(args2);
     }
     {
-        int testInt = 124;
-        args_t *args = New_args(NULL);
-        args->argBind(args, "int", "testInt", &testInt);
-        char *type = args->getTypeByName(args, "_bind-testInt");
-        if (isShow)
-        {
-            printf("arg bind type: %s\r\n", type);
-        }
-        args->dinit(args);
-    }
-    {
         int testint = 12333;
         args_t *args = New_args(NULL);
         args->setInt(args, "testint", testint);
         if (isShow)
         {
             printf("args print test int: %s\r\n", args->print(args, "testint"));
+        }
+        args->dinit(args);
+    }
+    {
+        int testInt = 124;
+        args_t *args = New_args(NULL);
+        args->bind(args, "int", "testInt", &testInt);
+        char *type = args->getTypeByName(args, "testInt");
+        args->print(args, "testInt");
+        if (isShow)
+        {
+            printf("arg bind type: %s\r\n", type);
+            printf("arg bind print: %s\r\n", args->print(args, "testInt"));
+        }
+        if (!mimiStrEqu("124", args->print(args, "testInt")))
+        {
+            err = 21;
+            goto exit;
+        }
+        args->dinit(args);
+    }
+    {
+        args_t *args = New_args(NULL);
+        args->setFloat(args, "testfloat", 1.42);
+        if (isShow)
+        {
+            printf("test arg print for float:%s\r\n", args->print(args, "testfloat"));
+        }
+        if (!mimiStrEqu("1.420000", args->print(args, "testfloat")))
+        {
+            err = 22;
+            goto exit;
+        }
+        args->dinit(args);
+    }
+    {
+        args_t *args = New_args(NULL);
+        float floatBindTest = 2.314;
+        args->bind(args, "float", "floatBind", &floatBindTest);
+        if (isShow)
+        {
+            printf("test float bind: %s\r\n", args->print(args, "floatBind"));
+        }
+        if (!mimiStrEqu("2.314000", args->print(args, "floatBind")))
+        {
+            err = 24;
+            goto exit;
         }
         args->dinit(args);
     }

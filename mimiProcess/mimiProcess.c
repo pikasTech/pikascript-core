@@ -60,12 +60,12 @@ static long long getInt64(mimiProcess_t *self, char *name)
 
 static void *getPointer(mimiProcess_t *self, char *name)
 {
-    return self->attributeList->getPoi(self->attributeList, name);
+    return self->attributeList->getPtr(self->attributeList, name);
 }
 
 static float getFloat(mimiProcess_t *self, char *name)
 {
-    return self->attributeList->getFlt(self->attributeList, name);
+    return self->attributeList->getFloat(self->attributeList, name);
 }
 
 char *getStr(mimiProcess_t *self, char *name)
@@ -116,7 +116,7 @@ static void _potableInitDefault(mimiProcess_t *self)
 
 static void argBind(mimiProcess_t *self, char *type, char *name, void *pointer)
 {
-    self->attributeList->argBind(self->attributeList, type, name, pointer);
+    self->attributeList->bind(self->attributeList, type, name, pointer);
 }
 
 static void init(mimiProcess_t *self, args_t *args)

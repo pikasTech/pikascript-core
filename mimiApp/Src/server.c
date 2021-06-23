@@ -32,7 +32,7 @@ static void argHandle_context(server_t *self,
                               args_t *args,
                               char *argName)
 {
-    self->context = args->getPoi(args, argName);
+    self->context = args->getPtr(args, argName);
 }
 
 static void argHandle_isEnalbe(server_t *self,
