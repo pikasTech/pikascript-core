@@ -22,18 +22,19 @@ struct Class_process
     void (*disable)(mimiProcess_t *self);
 
     // arg operations
-    void (*setInt64)(mimiProcess_t *self, char *name, long long val);
-    long long (*getInt64)(mimiProcess_t *self, char *name);
-    void (*setPoi)(mimiProcess_t *self, char *name, void *pointer);
-    void *(*getPointer)(mimiProcess_t *self, char *name);
+    void (*setInt)(mimiProcess_t *self, char *name, long long val);
+    long long (*getInt)(mimiProcess_t *self, char *name);
+    void (*setPtr)(mimiProcess_t *self, char *name, void *pointer);
+    void *(*getPtr)(mimiProcess_t *self, char *name);
     void (*setFloat)(mimiProcess_t *self, char *name, float value);
     float (*getFloat)(mimiProcess_t *self, char *name);
     void (*setStr)(mimiProcess_t *self, char *name, char *str);
     char *(*getStr)(mimiProcess_t *self, char *name);
 
-    // arg bind operations
-    
+    // arg general operations
     void (*argBind)(mimiProcess_t *self, char *type, char *name, void *pointer);
+    char * (*argPinrt)(mimiProcess_t *self, char *name);
+    
     
 
     // args operations

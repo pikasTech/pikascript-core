@@ -13,7 +13,7 @@ static void deinit(mimiProcess_t *self)
 static void update(mimiProcess_t *self)
 {
     // return if is not enable
-    if (0 == self->getInt64(self, "isEnable"))
+    if (0 == self->getInt(self, "isEnable"))
     {
         return;
     }
@@ -25,12 +25,12 @@ static void _processRootUpdateHandle(mimiProcess_t *self)
 }
 static void enable(mimiProcess_t *self)
 {
-    self->setInt64(self, "isEnable", 1);
+    self->setInt(self, "isEnable", 1);
 }
 
 static void disable(mimiProcess_t *self)
 {
-    self->setInt64(self, "isEnable", 0);
+    self->setInt(self, "isEnable", 0);
 }
 
 static void setInt64(mimiProcess_t *self, char *name, long long val)
@@ -89,7 +89,7 @@ static void addSubProcess(mimiProcess_t *self, char *subProcessName, void *new_P
     initArgs->setPoi(initArgs, "context", self);
     void *(*new_Object)(args_t * initArgs) = new_ProcessFun;
     void *subObject = new_Object(initArgs);
-    self->setPoi(self, subProcessName, subObject);
+    self->setPtr(self, subProcessName, subObject);
     initArgs->dinit(initArgs);
 }
 
@@ -99,13 +99,13 @@ static void addSubobject(mimiProcess_t *self, char *subObjectName, void *new_Obj
     initArgs->setPoi(initArgs, "context", self);
     void *(*new_Object)(args_t * initArgs) = (void *(*)(args_t *))new_ObjectFun;
     void *subObject = new_Object(initArgs);
-    self->setPoi(self, subObjectName, subObject);
+    self->setPtr(self, subObjectName, subObject);
     initArgs->dinit(initArgs);
 }
 
 static void dinitSubProcess(mimiProcess_t *self, char *subProcessName)
 {
-    mimiProcess_t *subProcess = self->getPointer(self, subProcessName);
+    mimiProcess_t *subProcess = self->getPtr(self, subProcessName);
     subProcess->dinit(subProcess);
 }
 
@@ -117,6 +117,11 @@ static void _potableInitDefault(mimiProcess_t *self)
 static void argBind(mimiProcess_t *self, char *type, char *name, void *pointer)
 {
     self->attributeList->bind(self->attributeList, type, name, pointer);
+}
+
+static char *argPinrt(mimiProcess_t *self, char *name)
+{
+    return self->attributeList->print(self->attributeList, name);
 }
 
 static void init(mimiProcess_t *self, args_t *args)
@@ -131,18 +136,19 @@ static void init(mimiProcess_t *self, args_t *args)
     self->enable = enable;
     self->disable = disable;
 
-    self->setInt64 = setInt64;
-    self->setPoi = setPointer;
+    self->setInt = setInt64;
+    self->setPtr = setPointer;
     self->setFloat = setFloat;
     self->setStr = setStr;
 
-    self->getInt64 = getInt64;
-    self->getPointer = getPointer;
+    self->getInt = getInt64;
+    self->getPtr = getPointer;
     self->getFloat = getFloat;
     self->getStr = getStr;
 
-    // arg bind operations
+    // arg general operations
     self->argBind = argBind;
+    self->argPinrt = argPinrt;
 
     self->loadAttributeFromArgs = loadAttributeFromArgs;
     // subObject
@@ -151,8 +157,8 @@ static void init(mimiProcess_t *self, args_t *args)
     self->dinitSubProcess = dinitSubProcess;
 
     /* attrivute */
-    self->setInt64(self, "isEnable", 1);
-    self->setPoi(self, "context", self);
+    self->setInt(self, "isEnable", 1);
+    self->setPtr(self, "context", self);
 
     /* override */
     self->_updateHandle = _processRootUpdateHandle;
