@@ -72,6 +72,35 @@ char *strPrint_unlimited(char *strOut, char *pData)
 	return strPrintWithSize_unlimited(strOut, pData, Size);
 }
 
+int devideStringBySign(char *string, char **argv, char sign)
+{
+	int argc = 0;
+	int i = 0;
+	//arg_i point to the arg operated now
+	int arg_i = 0;
+	// if not found ' ', then put chars from CMD to argv_tem
+	int char_i = 0;
+	for (i = 0; (i < strGetSize(string)); i++)
+	{
+		if (string[i] != sign)
+		{
+			argv[arg_i][char_i] = string[i];
+			char_i++;
+		}
+		if (string[i] == sign)
+		{
+			// write '\0' to the end of argv
+			argv[arg_i][char_i] = 0;
+			arg_i++;
+			char_i = 0;
+		}
+		// write '\0' to the end of last argv
+		argv[arg_i][char_i] = 0;
+	}
+	argc = arg_i + 1;
+	return argc;
+}
+
 char *strPrint(char *strOut, char *pData)
 {
 	unsigned short int Size = 0;
