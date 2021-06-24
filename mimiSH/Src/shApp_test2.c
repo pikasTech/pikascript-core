@@ -42,6 +42,6 @@ void *app_test2(int argc, char **argv)
 	char *CMD = argv[1];
 	// unsigned short int StartStrSize = argv[1][0];
 	unsigned short int StartStrSize = 0;
-	shell_base_test(CMD, StartStrSize, strOut);
+	shell_base_test2(CMD, StartStrSize, strOut);
 	return memOut;
 }
