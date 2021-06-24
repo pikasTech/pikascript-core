@@ -22,7 +22,6 @@ static int strGetArgs_With_Start_i(char *CMD, char **argv, int start_i)
 	int char_i = 0;
 	for (i = start_i; (i < strGetSize(CMD)); i++)
 	{
-
 		if (CMD[i] != ' ')
 		{
 			argv[arg_i][char_i] = CMD[i];
@@ -49,14 +48,14 @@ int mimiShell2_strGetArgs(char *CMD, char **argv)
 }
 
 // the detector of shell luancher, which can add info befor the strout
-static void *detector_shellLuancher(void *(*fun_d)(char *, char *, void *(fun)(int, char **)), char *CMD, char *StartStr, void *(fun)(int argc, char **argv))
+static void *detector_shellLuancher(void *(*fun_d)(char *, void *(fun)(int, char **)), char *CMD, void *(fun)(int argc, char **argv))
 {
 	DMEM *memOut;
 	DMEM *memAdd;
 	memAdd = DynMemGet(sizeof(char) * 256);
 	char *strAdd = memAdd->addr;
 	strAdd[0] = 0;
-	memOut = (DMEM *)fun_d(CMD, StartStr, fun);
+	memOut = (DMEM *)fun_d(CMD, fun);
 	if (NULL != memOut)
 	{
 		strPrint(strAdd, "myShell@STM32F405 >");
@@ -69,12 +68,11 @@ static void *detector_shellLuancher(void *(*fun_d)(char *, char *, void *(fun)(i
 }
 
 // the luancher of shell
-static void *shellLuancher(char *CMD, char *StartStr, void *(fun)(int argc, char **argv))
+static void *shellLuancher(char *CMD, void *(fun)(int argc, char **argv))
 {
 	char StartStrSize = 0;
 	int argc = 0;
 	DMEM *memOut;
-	StartStrSize = strGetSize(StartStr);
 	// sign in the argv memory
 	char *argv[16] = {0};
 	DMEM *mem[16] = {0};
@@ -108,14 +106,17 @@ static void *Shell_cmd(shell2_t *self, char *cmd)
 	{
 		cmdMap = (mimiShell2_cmdMap_t *)nodeNow->data;
 		name = cmdMap->cmdName;
-		if (isStartWith(cmd, name))
+		char nameWithSpace[SHELL2_CMD_NAME_LENGTH] = {0};
+		strPrint(nameWithSpace, name);
+		strPrint(nameWithSpace, " ");
+		if (isStartWith(cmd, nameWithSpace))
 		{
-			return self->detector(shellLuancher, cmd, name, cmdMap->cmdCallBack);
+			return self->detector(shellLuancher, cmd, cmdMap->cmdCallBack);
 		}
 		nodeNow = nodeNow->next;
 	}
 	// if the cmd is no found then call the app_cmdNoFoudn function
-	return self->detector(shellLuancher, cmd, "", app_cmdNofound);
+	return self->detector(shellLuancher, cmd, app_cmdNofound);
 }
 
 static void Shell_addMap(shell2_t *self, char *name, void *(*fun)(int argc, char **argv))

@@ -5,6 +5,8 @@
 #include "dataArgs.h"
 
 typedef struct Class_mimiShell2 shell2_t;
+#define SHELL2_CMD_NAME_LENGTH 32
+#define SHELL2_CMD_LENGTH 256
 
 int mimiShell2_strGetArgs(char *CMD, char **argv);
 
@@ -31,7 +33,10 @@ struct Class_mimiShell2
 
     /* override */
     void (*config)(shell2_t *self);
-    void *(*detector)(void *(*fun_d)(char *, char *, void *(fun)(int, char **)), char *CMD, char *StartStr, void *(fun)(int argc, char **argv));
+    void *(*detector)(void *(*fun_d)(char *,
+                                     void *(fun)(int, char **)),
+                      char *CMD,
+                      void *(fun)(int argc, char **argv));
 };
 
 shell2_t *New_shell2(args_t *initArgs);
