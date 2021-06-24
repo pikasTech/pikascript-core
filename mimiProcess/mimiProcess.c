@@ -87,7 +87,7 @@ static void addSubProcess(mimiProcess_t *self, char *subProcessName, void *new_P
 {
     args_t *initArgs = New_args(NULL);
     initArgs->setPoi(initArgs, "context", self);
-    void *(*new_Object)(args_t * initArgs) = new_ProcessFun;
+    void *(*new_Object)(args_t * initArgs) =(void *(*)(args_t *initArgs))new_ProcessFun;
     void *subObject = new_Object(initArgs);
     self->setPtr(self, subProcessName, subObject);
     initArgs->dinit(initArgs);

@@ -17,6 +17,8 @@ void *app_print(int argc, char **argv)
     ((char *)(memOut->addr))[0] = 0;
     mimiProcess_t *root = (mimiProcess_t *)atoi(ROOT_PTR);
     mimiProcess_t *processNow = root;
+    char *printStr = NULL;
+
     // sign in the argv memory
     char *processArgv[16] = {0};
     DMEM *processMem[16] = {0};
@@ -36,7 +38,7 @@ void *app_print(int argc, char **argv)
             goto exit;
         }
     }
-    char *printStr = processNow->argPrint(processNow, PRINT_NAME);
+		printStr = processNow->argPrint(processNow, PRINT_NAME);		
     memcpy(memOut->addr, printStr, ARG_CONTANT_LENGTH);
     goto exit;
 
