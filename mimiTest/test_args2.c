@@ -180,6 +180,55 @@ int TEST_args2(int isShow)
         }
         args->dinit(args);
     }
+    {
+        args_t *args = New_args(NULL);
+        args->setInt(args, "testInt", 1);
+        char *printOutBefore = args->print(args, "testInt");
+        if (isShow)
+        {
+            printf("test set int before: %s\r\n", printOutBefore);
+        }
+        if(!mimiStrEqu(printOutBefore, "1"))
+        {
+            return 14;
+        }
+        args->set(args, "testInt", "4");
+        char *printOutAfter = args->print(args, "testInt");
+        if (isShow)
+        {
+            printf("test set int after: %s\r\n", printOutAfter);
+        }
+        if(!mimiStrEqu(printOutAfter, "4"))
+        {
+            return 55;
+        }
+        args->dinit(args);
+    }
+    {
+        args_t *args = New_args(NULL);
+        char testStrBind[256] = "testtest";
+        args->bindStr(args, "testStr", &testStrBind);
+        char *printOutBefore = args->print(args, "testStr");
+        if (isShow)
+        {
+            printf("test set bind str before: %s\r\n", printOutBefore);
+        }
+        if(!mimiStrEqu(printOutBefore, "testtest"))
+        {
+            return 15;
+        }
+        args->set(args, "testStr", "ttww");
+        char *printOutAfter = args->print(args, "testStr");
+        if (isShow)
+        {
+            printf("test set bind str after: %s\r\n", printOutAfter);
+        }
+        if(!mimiStrEqu(printOutAfter, "ttww"))
+        {
+            return 56;
+        }
+        args->dinit(args);
+    }
 
     goto exit;
 

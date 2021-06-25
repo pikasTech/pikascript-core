@@ -45,12 +45,15 @@ struct Class_Arglist
     long long (*getInt)(args_t *self, char *name);
     long long (*getInt64ByIndex)(args_t *self, int index);
 
-    /* arg general opeartion */
-    void (*bind)(args_t *self, char *type, char *name, void *pointer);
-    char *(*print)(args_t *self, char *name);
     void (*bindInt)(args_t *self, char *name, int *intPtr);
     void (*bindFloat)(args_t *self, char *name, float *floatPtr);
     void (*bindStr)(args_t *self, char *name, char **stringPtr);
+    /* arg general opeartion */
+    void (*bind)(args_t *self, char *type, char *name, void *pointer);
+    char *(*print)(args_t *self, char *name);
+    
+    int (*set)(args_t *self, char*name, char*valueStr);
+    
 
     /* virtual operation */
 

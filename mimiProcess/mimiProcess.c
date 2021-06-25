@@ -139,6 +139,11 @@ static void argBindString(mimiProcess_t *self, char *name, char **valPtr)
     self->attributeList->bindStr(self->attributeList, name, valPtr);
 }
 
+static int argSet(mimiProcess_t *self, char *name, char *valStr)
+{
+    return self->attributeList->set(self->attributeList, name, valStr);
+}
+
 static void init(mimiProcess_t *self, args_t *args)
 {
     /* List */
@@ -168,6 +173,7 @@ static void init(mimiProcess_t *self, args_t *args)
     // arg general operations
     self->argBind = argBind;
     self->argPrint = argPinrt;
+    self->argSet = argSet;
 
     self->loadAttributeFromArgs = loadAttributeFromArgs;
     // subObject

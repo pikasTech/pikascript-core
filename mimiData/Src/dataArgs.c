@@ -360,6 +360,70 @@ static char *print(args_t *self, char *name)
     return "[error: arg no found]";
 }
 
+static int set(args_t *self, char *name, char *valStr)
+{
+    char *type = self->getTypeByName(self, name);
+
+    if (mimiStrEqu("[error: arg no found]",type))
+    {
+        return 1;
+    }
+
+    if (mimiStrEqu("int", type))
+    {
+        int val = atoi(valStr);
+        self->setInt(self, name, val);
+        // operation succeed
+        return 0;
+    }
+    if (mimiStrEqu("float", type))
+    {
+        float val = atof(valStr);
+        self->setFloat(self, name, val);
+        // operation succeed
+        return 0;
+    }
+    if (mimiStrEqu("string", type))
+    {
+        self->setStr(self, name, valStr);
+        // operation succeed
+        return 0;
+    }
+
+    char bindTypePrefix[] = "_bind-";
+    if (isStartWith(type, bindTypePrefix))
+    {
+        char typeWithoutBind[ARG_TYPE_LENGTH] = {0};
+        mimiStrRemovePrefix(type, bindTypePrefix, typeWithoutBind);
+        if (mimiStrEqu(typeWithoutBind, "int"))
+        {
+            int *valPtr = self->getPtr(self, name);
+            int val = atoi(valStr);
+            *valPtr = val;
+            // operation succeed
+            return 0;
+        }
+        if (mimiStrEqu(typeWithoutBind, "float"))
+        {
+            float *valPtr = self->getPtr(self, name);
+            float val = atof(valStr);
+            *valPtr = val;
+            // operation succeed
+            return 0;
+        }
+        if (mimiStrEqu(typeWithoutBind, "string"))
+        {
+            char *stringBinded = self->getPtr(self, name);
+            /* size add 1 to copy the '\0' */
+            memcpy(stringBinded, valStr, strGetSize(valStr) + 1);
+            // operation succeed
+            return 0;
+        }
+    }
+    // unknown error
+    return 2;
+}
+
 static void init(args_t *self, args_t *args)
 {
     /* attrivute */
@@ -406,6 +470,7 @@ static void init(args_t *self, args_t *args)
     self->bindFloat = bindFloat;
     self->bindStr = bindStr;
     self->print = print;
+    self->set = set;
 
     /* arg */
 
