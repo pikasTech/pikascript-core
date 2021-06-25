@@ -11,5 +11,6 @@ char *strPrintWithSize(char *strOut, char *pData, int Size);
 int mimiStrEqu(char *str1, char *str2);
 void mimiStrRemovePrefix(char *inputStr, char *prefix, char *outputStr);
 int devideStringBySign(char *string, char **argv, char sign);
+void getLastUnitBySign(char *stringIn, char *stringOut, char sign);
 
 #endif

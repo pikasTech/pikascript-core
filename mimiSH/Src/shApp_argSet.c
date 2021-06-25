@@ -20,7 +20,7 @@ mimiProcess_t *goToProcess(mimiProcess_t *root, char *processDirectory)
         directoryUnit[i][0] = 0;
     }
     int processArgc = devideStringBySign(processDirectory, directoryUnit, '.');
-    for (int i = 0; i < processArgc; i++)
+    for (int i = 0; i < processArgc - 1; i++)
     {
         processNow = processNow->getPtr(processNow, directoryUnit[i]);
         if (processNow == NULL)
@@ -39,8 +39,7 @@ exit:
 
 #define ROOT_PTR argv[argc - 1]
 #define PROCESS_DIR argv[1]
-#define SET_NAME argv[2]
-#define SET_VAL argv[3]
+#define SET_VAL argv[2]
 
 void *app_argSet(int argc, char **argv)
 {
@@ -55,7 +54,9 @@ void *app_argSet(int argc, char **argv)
         return (void *)memOut;
     }
 
-    int errCode = processNow->argSet(processNow, SET_NAME, SET_VAL);
+    char setName[32] = {0};
+    getLastUnitBySign(PROCESS_DIR, setName, '.');
+    int errCode = processNow->argSet(processNow, setName, SET_VAL);
     if (0 != errCode)
     {
         if (1 == errCode)

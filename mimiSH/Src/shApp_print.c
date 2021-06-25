@@ -10,7 +10,6 @@
 
 #define ROOT_PTR argv[argc - 1]
 #define PROCESS_DIR argv[1]
-#define PRINT_NAME argv[2]
 
 void *app_print(int argc, char **argv)
 {
@@ -24,9 +23,11 @@ void *app_print(int argc, char **argv)
         strPrint(memOut->addr, "[error: process no found]\r\n");
         return (void *)memOut;
     }
+    char printName[32] = {0};
+    getLastUnitBySign(PROCESS_DIR, printName, '.');
 
     char *printStr = NULL;
-    printStr = processNow->argPrint(processNow, PRINT_NAME);
+    printStr = processNow->argPrint(processNow, printName);
     memcpy(memOut->addr, printStr, ARG_CONTANT_LENGTH);
     strPrint(memOut->addr, "\r\n");
     return (void *)memOut;
