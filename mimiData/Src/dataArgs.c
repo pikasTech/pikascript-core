@@ -316,7 +316,7 @@ static char *getPrintStringFromPtr(args_t *self, char *name, void *val)
 {
     char valString[ARG_CONTANT_LENGTH] = {0};
     long long intVal = (long long)val;
-    sprintf(valString, "%x", val);
+    sprintf(valString, "0x%x", val);
     return getPrintSring(self, name, valString);
 }
 
