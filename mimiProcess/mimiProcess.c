@@ -7,7 +7,7 @@ static int dinitEachSubprocess(arg_t *argEach, args_t *handleArgs)
 {
     if (NULL != handleArgs)
     {
-        /* error: this handle not need handle args */
+        /* error: tOhis handle not need handle args */
         return 1;
     }
     if (mimiStrEqu(argEach->type, "_class-process"))
@@ -206,6 +206,7 @@ static void init(mimiProcess_t *self, args_t *args)
     /* attrivute */
     self->setInt(self, "isEnable", 1);
     self->setPtr(self, "context", self);
+    self->setStr(self, "class", "process");
 
     /* override */
     self->_updateHandle = _processRootUpdateHandle;

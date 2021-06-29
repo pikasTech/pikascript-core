@@ -312,6 +312,14 @@ static char *getPrintStringFromFloat(args_t *self, char *name, float val)
     return getPrintSring(self, name, valString);
 }
 
+static char *getPrintStringFromPtr(args_t *self, char *name, void *val)
+{
+    char valString[ARG_CONTANT_LENGTH] = {0};
+    long long intVal = (long long)val;
+    sprintf(valString, "%x", val);
+    return getPrintSring(self, name, valString);
+}
+
 static char *print(args_t *self, char *name)
 {
     char *type = self->getTypeByName(self, name);
@@ -331,6 +339,12 @@ static char *print(args_t *self, char *name)
     if (mimiStrEqu(type, "string"))
     {
         return getStrByName(self, name);
+    }
+
+    if (mimiStrEqu(type, "pointer"))
+    {
+        void *val = self->getPtr(self, name);
+        return getPrintStringFromPtr(self, name, val);
     }
 
     char bindTypePrefix[] = "_bind-";
