@@ -11,7 +11,6 @@ struct Class_process
     DMEM *mem;
 
     /* list */
-    link_t *subProcessList;
     args_t *attributeList;
 
     /* operation */
@@ -50,7 +49,7 @@ struct Class_process
     void (*addSubProcess)(mimiProcess_t *self, char *subObjectName, void *new_projcetFun);
 
     // subProcess
-    void (*dinitSubProcess)(mimiProcess_t *self, char *subObjectName);
+    void (*dinitSubProcessByName)(mimiProcess_t *self, char *subObjectName);
 
     /* virtual operation */
     void (*_beforDinit)(mimiProcess_t *self);

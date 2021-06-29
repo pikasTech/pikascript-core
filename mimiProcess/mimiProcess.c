@@ -1,11 +1,33 @@
 #include "mimiProcess.h"
 #include "dataArgs.h"
 #include "dataMemory.h"
+#include "dataString.h"
+
+static int dinitEachSubprocess(arg_t *argEach, args_t *handleArgs)
+{
+    if (NULL != handleArgs)
+    {
+        /* error: this handle not need handle args */
+        return 1;
+    }
+    if (mimiStrEqu(argEach->type, "_class-process"))
+    {
+        mimiProcess_t *subProcess = argEach->getPointer(argEach);
+        subProcess->dinit(subProcess);
+    }
+    return 0;
+}
+
+static void dinitAllSubProcess(mimiProcess_t *self)
+{
+    args_t *args = self->attributeList;
+    args->foreach (args, dinitEachSubprocess, NULL);
+}
 
 static void deinit(mimiProcess_t *self)
 {
     self->_beforDinit(self);
-    self->subProcessList->dinit(self->subProcessList);
+    dinitAllSubProcess(self);
     self->attributeList->dinit(self->attributeList);
     DynMemPut(self->mem);
 }
@@ -85,11 +107,12 @@ static void _beforDinit(mimiProcess_t *self)
 
 static void addSubProcess(mimiProcess_t *self, char *subProcessName, void *new_ProcessFun)
 {
+    args_t *attributeList = self->attributeList;
     args_t *initArgs = New_args(NULL);
     initArgs->setPoi(initArgs, "context", self);
-    void *(*new_Object)(args_t * initArgs) =(void *(*)(args_t *initArgs))new_ProcessFun;
-    void *subObject = new_Object(initArgs);
-    self->setPtr(self, subProcessName, subObject);
+    void *(*newProcessFun)(args_t * initArgs) = (void *(*)(args_t * initArgs)) new_ProcessFun;
+    void *subProcess = newProcessFun(initArgs);
+    attributeList->setObject(attributeList, subProcessName, "process", subProcess);
     initArgs->dinit(initArgs);
 }
 
@@ -103,7 +126,7 @@ static void addSubobject(mimiProcess_t *self, char *subObjectName, void *new_Obj
     initArgs->dinit(initArgs);
 }
 
-static void dinitSubProcess(mimiProcess_t *self, char *subProcessName)
+static void dinitSubProcessByName(mimiProcess_t *self, char *subProcessName)
 {
     mimiProcess_t *subProcess = self->getPtr(self, subProcessName);
     subProcess->dinit(subProcess);
@@ -147,7 +170,6 @@ static int argSet(mimiProcess_t *self, char *name, char *valStr)
 static void init(mimiProcess_t *self, args_t *args)
 {
     /* List */
-    self->subProcessList = New_link(NULL);
     self->attributeList = New_args(NULL);
 
     /* operation */
@@ -179,7 +201,7 @@ static void init(mimiProcess_t *self, args_t *args)
     // subObject
     self->addSubobject = addSubobject;
     self->addSubProcess = addSubProcess;
-    self->dinitSubProcess = dinitSubProcess;
+    self->dinitSubProcessByName = dinitSubProcessByName;
 
     /* attrivute */
     self->setInt(self, "isEnable", 1);

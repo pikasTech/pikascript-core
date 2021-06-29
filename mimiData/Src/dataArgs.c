@@ -36,13 +36,13 @@ static int getIndexByName(args_t *self, char *name)
                           "argName",
                           name);
     long long id = -1;
-    long long *pId = NULL;
-    pId = self->argLinkList->tranverse(self->argLinkList,
-                                       getIndexWhenNameMatch,
-                                       args);
-    if (NULL != pId)
+    long long *idPtr = NULL;
+    idPtr = self->argLinkList->tranverse(self->argLinkList,
+                                         getIndexWhenNameMatch,
+                                         args);
+    if (NULL != idPtr)
     {
-        id = *pId;
+        id = *idPtr;
         goto exit;
     }
     goto exit;
@@ -364,7 +364,7 @@ static int set(args_t *self, char *name, char *valStr)
 {
     char *type = self->getTypeByName(self, name);
 
-    if (mimiStrEqu("[error: arg no found]",type))
+    if (mimiStrEqu("[error: arg no found]", type))
     {
         return 1;
     }
@@ -424,6 +424,33 @@ static int set(args_t *self, char *name, char *valStr)
     return 2;
 }
 
+static int setObject(args_t *self, char *objectName, char *className, void *objectPtr)
+{
+    char typeWithClass[ARG_NAME_LENGTH] = "_class-";
+    strPrint(typeWithClass, className);
+    arg_t *argNew = New_arg(NULL);
+    argNew->setName(argNew, objectName);
+    argNew->setPointer(argNew, objectPtr);
+    argNew->setType(argNew, typeWithClass);
+    self->setArg(self, argNew);
+    return 0;
+}
+
+static int foreach(args_t *self, int (*eachHandle)(arg_t *argEach, args_t *handleArgs), args_t *handleArgs)
+{
+    int argsSize = self->size(self);
+    for (int i = 0; i < argsSize; i++)
+    {
+        arg_t *argNow = self->getArgByIndex(self, i);
+        if (NULL == argNow)
+        {
+            continue;
+        }
+        eachHandle(argNow, handleArgs);
+    }
+    return 0;
+}
+
 static void init(args_t *self, args_t *args)
 {
     /* attrivute */
@@ -471,6 +498,8 @@ static void init(args_t *self, args_t *args)
     self->bindStr = bindStr;
     self->print = print;
     self->set = set;
+    self->setObject = setObject;
+    self->foreach = foreach;
 
     /* arg */
 

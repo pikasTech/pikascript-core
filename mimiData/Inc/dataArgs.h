@@ -51,9 +51,10 @@ struct Class_Arglist
     /* arg general opeartion */
     void (*bind)(args_t *self, char *type, char *name, void *pointer);
     char *(*print)(args_t *self, char *name);
-    
-    int (*set)(args_t *self, char*name, char*valueStr);
-    
+
+    int (*set)(args_t *self, char *name, char *valueStr);
+    int (*setObject)(args_t *self, char *objectName, char *className, void *objectPtr);
+    int (*foreach)(args_t *self, int (*eachHandle)(arg_t *argEach, args_t *handleArgs), args_t *handleArgs);
 
     /* virtual operation */
 
