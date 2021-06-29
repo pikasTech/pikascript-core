@@ -16,7 +16,7 @@ void *app_print(int argc, char **argv)
     DMEM *memOut = DynMemGet(sizeof(char) * 256);
     ((char *)(memOut->addr))[0] = 0;
     mimiProcess_t *root = (mimiProcess_t *)atoi(ROOT_PTR);
-    mimiProcess_t *processNow = goToProcess(root, PROCESS_DIR);
+    mimiProcess_t *processNow = goToProcess(root, PROCESS_DIR, 1);
 
     if (NULL == processNow)
     {

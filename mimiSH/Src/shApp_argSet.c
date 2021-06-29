@@ -7,7 +7,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-mimiProcess_t *goToProcess(mimiProcess_t *root, char *processDirectory)
+mimiProcess_t *goToProcess(mimiProcess_t *root, char *processDirectory, int deepth)
 {
     mimiProcess_t *processNow = root;
     // sign in the argv memory
@@ -20,7 +20,7 @@ mimiProcess_t *goToProcess(mimiProcess_t *root, char *processDirectory)
         directoryUnit[i][0] = 0;
     }
     int processArgc = devideStringBySign(processDirectory, directoryUnit, '.');
-    for (int i = 0; i < processArgc - 1; i++)
+    for (int i = 0; i < processArgc - deepth; i++)
     {
         processNow = processNow->getPtr(processNow, directoryUnit[i]);
         if (processNow == NULL)
@@ -46,7 +46,7 @@ void *app_argSet(int argc, char **argv)
     DMEM *memOut = DynMemGet(sizeof(char) * 256);
     ((char *)(memOut->addr))[0] = 0;
     mimiProcess_t *root = (mimiProcess_t *)atoi(ROOT_PTR);
-    mimiProcess_t *processNow = goToProcess(root, PROCESS_DIR);
+    mimiProcess_t *processNow = goToProcess(root, PROCESS_DIR, 1);
 
     if (NULL == processNow)
     {
