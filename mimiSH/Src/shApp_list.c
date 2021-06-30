@@ -18,10 +18,17 @@ static int listEachHandleProcessArg(arg_t *argEach, args_t *handleArgs)
         return 1;
     }
     char strBuff[ARG_CONTANT_LENGTH] = {0};
-    memcpy(strBuff, handleArgs->getStr(handleArgs, "stringOut"), ARG_CONTANT_LENGTH);
-    strPrint(strBuff, argEach->name);
+    char *stringOut = handleArgs->getStr(handleArgs, "stringOut");
+    if (NULL == stringOut)
+    {
+        // stringOut no found
+        return 1;
+    }
+    memcpy(strBuff, stringOut, ARG_CONTANT_LENGTH);
+    strPrint(strBuff, argEach->nameConst);
     strPrint(strBuff, " ");
     handleArgs->setStr(handleArgs, "stringOut", strBuff);
+    return 0;
 }
 
 void *app_list(int argc, char **argv)

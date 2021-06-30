@@ -1,5 +1,4 @@
 #include "dataLinkNode.h"
-#include "dataArgsConst.h"
 #include "dataMemory.h"
 
 static void deinit(linkNode_t *self)
@@ -22,7 +21,7 @@ static int isId(linkNode_t *self, long long id)
     return 0;
 }
 
-static void init(linkNode_t *self, argsConst_t *args)
+static void init(linkNode_t *self, void *args)
 {
     /* attrivute */
     self->priorNode = NULL;
@@ -41,7 +40,7 @@ static void init(linkNode_t *self, argsConst_t *args)
     self->_contantDinit = NULL;
 }
 
-linkNode_t *New_linkNode(argsConst_t *args)
+linkNode_t *New_linkNode(void *args)
 {
     DMEM *mem = DynMemGet(sizeof(linkNode_t));
     linkNode_t *self = mem->addr;

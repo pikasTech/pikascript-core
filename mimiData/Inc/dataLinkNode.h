@@ -1,7 +1,6 @@
 #ifndef _linkNode__H
 #define _linkNode__H
 #include "dataMemory.h"
-#include "dataArgsConst.h"
 typedef struct Class_linkNode linkNode_t;
 struct Class_linkNode
 {
@@ -13,7 +12,7 @@ struct Class_linkNode
 
     /* operation */
     void (*dinit)(linkNode_t *self);
-    void (*init)(linkNode_t *self, argsConst_t *args);
+    void (*init)(linkNode_t *self, void *args);
 
     long long (*getId)(linkNode_t *self);
     int (*isId)(linkNode_t *self, long long id);
@@ -25,5 +24,5 @@ struct Class_linkNode
     void *contant;
 };
 
-linkNode_t *New_linkNode(argsConst_t *args);
+linkNode_t *New_linkNode(void *args);
 #endif

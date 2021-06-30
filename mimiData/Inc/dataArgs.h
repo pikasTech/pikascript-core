@@ -2,6 +2,7 @@
 #define _dataArgs__H
 #include "dataLink.h"
 #include "dataMemory.h"
+#include "dataArg.h"
 
 typedef struct Class_Arglist args_t;
 struct Class_Arglist
@@ -17,7 +18,6 @@ struct Class_Arglist
     void (*init)(args_t *self, args_t *args);
     int (*size)(args_t *self);
 
-    int (*getIndexByName)(args_t *self, char *name);
     arg_t *(*getArgByIndex)(args_t *self, int index);
     arg_t *(*getArgByName)(args_t *self, char *name);
 

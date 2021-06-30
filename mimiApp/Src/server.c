@@ -49,7 +49,7 @@ static void argHandle(server_t *self,
                                      args_t *args,
                                      char *argName))
 {
-    if (-1 == args->getIndexByName(args, argName))
+    if (NULL == args->getArgByName(args, argName))
     {
         return;
     }

@@ -10,7 +10,7 @@ static int dinitEachSubprocess(arg_t *argEach, args_t *handleArgs)
         /* error: tOhis handle not need handle args */
         return 1;
     }
-    if (mimiStrEqu(argEach->type, "_class-process"))
+    if (mimiStrEqu(argEach->typeConst, "_class-process"))
     {
         mimiProcess_t *subProcess = argEach->getPointer(argEach);
         subProcess->dinit(subProcess);

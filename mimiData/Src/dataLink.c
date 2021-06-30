@@ -1,6 +1,5 @@
 #include "dataLink.h"
 #include "dataMemory.h"
-#include "dataArgsConst.h"
 
 static void deinit(link_t *self)
 {
@@ -48,45 +47,24 @@ static int size(link_t *self)
     return size;
 }
 
-static void *getNodeWhenIdMate(linkNode_t *node, argsConst_t *args)
-{
-    long long id = args->getInt64ByName(args, "id");
-    if (node->isId(node, id))
-    {
-        return node;
-    }
-    return NULL;
-}
-
 static linkNode_t *findNodeById(link_t *self, long long id)
 {
-    linkNode_t *nodeOut = NULL;
-    argsConst_t *args = New_argsConst(NULL);
-    args->pushInt64WithName(args, "id", id);
-    nodeOut = self->tranverse(self, getNodeWhenIdMate, args);
-    args->dinit(args);
-    return nodeOut;
-}
-
-static void *tranverse(link_t *self,
-                       void *(*nodeOperation)(linkNode_t *node, argsConst_t *args),
-                       argsConst_t *args)
-{
-    linkNode_t *node = self->firstNode;
-    void *operationOut;
-    while (NULL != node)
+    linkNode_t *nodeNow = self->firstNode;
+    while (1)
     {
-        operationOut = nodeOperation(node, args);
-        if (NULL != operationOut)
+        if (nodeNow->id == id)
         {
-            return operationOut;
+            return nodeNow;
         }
-        node = node->nextNode;
+        if (nodeNow->nextNode == NULL)
+        {
+            return NULL;
+        }
+        nodeNow = nodeNow->nextNode;
     }
-    return NULL;
 }
 
-static void init(link_t *self, argsConst_t *args)
+static void init(link_t *self, void *args)
 {
     /* attrivute */
     self->firstNode = NULL;
@@ -97,14 +75,13 @@ static void init(link_t *self, argsConst_t *args)
     self->add = add;
     self->size = size;
     self->findNodeById = findNodeById;
-    self->tranverse = tranverse;
 
     /* object */
 
     /* override */
 }
 
-link_t *New_link(argsConst_t *args)
+link_t *New_link(void *args)
 {
     DMEM *mem = DynMemGet(sizeof(link_t));
     link_t *self = mem->addr;

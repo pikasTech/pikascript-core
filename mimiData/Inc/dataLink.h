@@ -1,6 +1,5 @@
 #ifndef _link2__H
 #define _link2__H
-#include "dataArgsConst.h"
 #include "dataLinkNode.h"
 #include "dataMemory.h"
 
@@ -14,13 +13,8 @@ struct Class_link
 
     /* operation */
     void (*dinit)(link_t *self);
-    void (*init)(link_t *self, argsConst_t *args);
+    void (*init)(link_t *self, void *args);
     void (*add)(link_t *self, void *contant, void (*_contantDinit)(void *contant));
-    void *(*tranverse)(
-        link_t *self,
-        void *(*fun)(linkNode_t *node, argsConst_t *args),
-        argsConst_t *args);
-
     linkNode_t *(*findNodeById)(link_t *self, long long id);
 
     int (*size)(link_t *self);
@@ -29,5 +23,5 @@ struct Class_link
     /* object */
 };
 
-link_t *New_link(argsConst_t *args);
+link_t *New_link(void *args);
 #endif

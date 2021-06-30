@@ -7,26 +7,59 @@
 static void deinit(arg_t *self)
 {
     DynMemPut(self->mem);
+    if (NULL != self->contantDynMem)
+    {
+        DynMemPut(self->contantDynMem);
+    }
+    if (NULL != self->nameDynMem)
+    {
+        DynMemPut(self->nameDynMem);
+    }
+    if (NULL != self->typeDynMem)
+    {
+        DynMemPut(self->typeDynMem);
+    }
 }
 
-static void setContant(arg_t *self, char *contant)
+static void setContant(arg_t *self, char *contant, int size)
 {
-    memcpy(self->contant, contant, ARG_CONTANT_LENGTH);
+    if (NULL != self->contantDynMem)
+    {
+        DynMemPut(self->contantDynMem);
+    }
+    self->contantDynMem = DynMemGet((size + 1) * sizeof(char));
+    memcpy(self->contantDynMem->addr, contant, size + 1);
 }
 
 static void setName(arg_t *self, char *name)
 {
-    memcpy(self->name, name, ARG_NAME_LENGTH);
+    memcpy(self->nameConst, name, ARG_NAME_LENGTH);
+    int size = strGetSize(name);
+    if (NULL != self->nameDynMem)
+    {
+        DynMemPut(self->nameDynMem);
+    }
+    self->nameDynMem = DynMemGet((size + 1) * sizeof(char));
+    // size + 1 to contain \0
+    memcpy(self->nameDynMem->addr, name, size + 1);
 }
 
 static void setType(arg_t *self, char *type)
 {
-    memcpy(self->type, type, strGetSize(type));
+    memcpy(self->typeConst, type, strGetSize(type));
+    int size = strGetSize(type);
+    if (NULL != self->typeDynMem)
+    {
+        DynMemPut(self->typeDynMem);
+    }
+    self->typeDynMem = DynMemGet((size + 1) * sizeof(char));
+    memcpy(self->typeDynMem->addr, type, size + 1);
 }
 
 static char *getContant(arg_t *self)
 {
-    return self->contant;
+    // return self->contactConst;
+    return self->contantDynMem->addr;
 }
 
 static void setInt64(arg_t *self, long long val)
@@ -35,17 +68,18 @@ static void setInt64(arg_t *self, long long val)
     unsigned char contantBuff[ARG_CONTANT_LENGTH];
     for (int i = 0; i < 8; i++)
     {
+        // add 0x30 to void \0
         contantBuff[i] = int64Temp;
         int64Temp = int64Temp >> 8;
     }
-    self->setContant(self, (char *)contantBuff);
+    self->setContant(self, (char *)contantBuff, 8);
 }
 
 static void setFloat(arg_t *self, float val)
 {
-    unsigned char contantBuff[ARG_CONTANT_LENGTH];
+    char contantBuff[ARG_CONTANT_LENGTH];
     sprintf((char *)contantBuff, "%f", val);
-    self->setContant(self, (char *)contantBuff);
+    self->setContant(self, (char *)contantBuff, strGetSize(contantBuff));
 }
 
 static void setPointer(arg_t *self, void *pointer)
@@ -54,14 +88,15 @@ static void setPointer(arg_t *self, void *pointer)
     unsigned char contantBuff[ARG_CONTANT_LENGTH];
     for (int i = 0; i < 8; i++)
     {
+        // aboid \0
         contantBuff[i] = pointerTemp;
         pointerTemp = pointerTemp >> 8;
     }
-    self->setContant(self, (char *)contantBuff);
+    self->setContant(self, (char *)contantBuff, 8);
 }
 static void setString(arg_t *self, char *string)
 {
-    self->setContant(self, (char *)string);
+    self->setContant(self,  string, strGetSize(string));
 }
 
 static long long getInt64(arg_t *self)
@@ -69,8 +104,9 @@ static long long getInt64(arg_t *self)
     unsigned long long int64Temp = 0;
     for (int i = 7; i > -1; i--)
     {
-        int64Temp = int64Temp << 8;
-        int64Temp += ((unsigned char *)(self->contant))[i];
+        // add 0x30 to avoid 0
+        int64Temp = (int64Temp << 8);
+        int64Temp += ((unsigned char *)(self->contantDynMem->addr))[i];
     }
     return int64Temp;
 }
@@ -81,8 +117,9 @@ static void *getPointer(arg_t *self)
     unsigned long int pointerTemp = 0;
     for (int i = 7; i > -1; i--)
     {
-        pointerTemp = pointerTemp << 8;
-        pointerTemp += ((unsigned char *)(self->contant))[i];
+        // avoid \0
+        pointerTemp = (pointerTemp << 8);
+        pointerTemp += ((unsigned char *)(self->contantDynMem->addr))[i];
     }
     pointer = (void *)pointerTemp;
     return pointer;
@@ -90,29 +127,29 @@ static void *getPointer(arg_t *self)
 static float getFloat(arg_t *self)
 {
     float val = 0;
-    val = atof(self->contant);
+    val = atof(self->contantDynMem->addr);
     return val;
 }
 static char *getString(arg_t *self)
 {
-    return self->contant;
+    return self->contantDynMem->addr;
 }
 
 static void init(arg_t *self, void *voidPointer)
 {
     /* attrivute */
     self->context = self;
-    for (int i = 0; i < ARG_CONTANT_LENGTH; i++)
-    {
-        self->contant[i] = 0;
-    }
+    self->contantDynMem = NULL;
+    self->nameDynMem = NULL;
+    self->typeDynMem = NULL;
+
     for (int i = 0; i < ARG_NAME_LENGTH; i++)
     {
-        self->name[i] = 0;
+        self->nameConst[i] = 0;
     }
     for (int i = 0; i < ARG_TYPE_LENGTH; i++)
     {
-        self->type[i] = 0;
+        self->typeConst[i] = 0;
     }
 
     /* operation */

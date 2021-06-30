@@ -17,45 +17,14 @@ static void loadDefaultName(args_t *self)
     sprintf((char *)self->nameBuff, "arg%d", (int)self->argLinkList->TopId);
 }
 
-static void *getIndexWhenNameMatch(linkNode_t *node, argsConst_t *args)
-{
-    arg_t *arg = node->contant;
-    char *argName = NULL;
-    args->getStrByName(args, "argName", &argName);
-    if (0 == strcmp(arg->name, argName))
-    {
-        return &(node->id);
-    }
-    return NULL;
-}
-
-static int getIndexByName(args_t *self, char *name)
-{
-    argsConst_t *args = New_argsConst(NULL);
-    args->pushStrWithName(args,
-                          "argName",
-                          name);
-    long long id = -1;
-    long long *idPtr = NULL;
-    idPtr = self->argLinkList->tranverse(self->argLinkList,
-                                         getIndexWhenNameMatch,
-                                         args);
-    if (NULL != idPtr)
-    {
-        id = *idPtr;
-        goto exit;
-    }
-    goto exit;
-
-exit:
-    args->dinit(args);
-    return id;
-}
-
 static char *getStrByIndex(args_t *self, int index)
 {
     arg_t *arg = self->getArgByIndex(self, index);
-    return arg->contant;
+    if (NULL == arg)
+    {
+        return NULL;
+    }
+    return arg->contantDynMem->addr;
 }
 
 static int setStrWithDefaultName(args_t *self, char *strIn)
@@ -136,7 +105,11 @@ static int setStrWithName(args_t *self, char *name, char *strIn)
 static char *getStrByName(args_t *self, char *name)
 {
     arg_t *arg = self->getArgByName(self, name);
-    return arg->contant;
+    if(NULL == arg->contantDynMem)
+    {
+        return NULL;
+    }
+    return arg->contantDynMem->addr;
 }
 
 static int setInt64WithName(args_t *self, char *name, long long int64In)
@@ -174,7 +147,7 @@ char *getTypeByName(args_t *self, char *name)
     {
         return "[error: arg no found]";
     }
-    return arg->type;
+    return arg->typeConst;
 }
 
 static arg_t *getArgByIndex(args_t *self, int index)
@@ -184,7 +157,12 @@ static arg_t *getArgByIndex(args_t *self, int index)
     {
         return NULL;
     }
-    arg = self->argLinkList->findNodeById(self->argLinkList, index)->contant;
+    linkNode_t *node = self->argLinkList->findNodeById(self->argLinkList,index);
+    if (NULL == node)
+    {
+        return NULL;
+    }
+    arg = node->contant;
     return arg;
 }
 
@@ -202,9 +180,9 @@ static int copyArg(args_t *self, char *name, args_t *directArgs)
         return 1;
     }
     arg_t *argCopied = New_arg(NULL);
-    memcpy(argCopied->contant, argToBeCopy->contant, ARG_CONTANT_LENGTH);
-    memcpy(argCopied->name, argToBeCopy->name, ARG_NAME_LENGTH);
-    memcpy(argCopied->type, argToBeCopy->type, ARG_TYPE_LENGTH);
+    argCopied->setContant(argCopied, argToBeCopy->contantDynMem->addr, argToBeCopy->contantDynMem->size);
+    memcpy(argCopied->nameConst, argToBeCopy->nameConst, ARG_NAME_LENGTH);
+    memcpy(argCopied->typeConst, argToBeCopy->typeConst, ARG_TYPE_LENGTH);
 
     directArgs->setArg(directArgs, argCopied);
 
@@ -213,7 +191,7 @@ static int copyArg(args_t *self, char *name, args_t *directArgs)
 
 static int isArgExist(args_t *self, char *name)
 {
-    if (-1 != self->getIndexByName(self, name))
+    if (NULL != self->getArgByName(self, name))
     {
         return 1;
     }
@@ -223,23 +201,22 @@ static int isArgExist(args_t *self, char *name)
 static int updateArg(args_t *self, arg_t *argNew)
 {
     // arg New must be a new arg
-    arg_t *argOld = self->getArgByName(self, argNew->name);
+    arg_t *argOld = self->getArgByName(self, argNew->nameConst);
 
-    if (0 != strcmp(argOld->type, argNew->type))
+    if (0 != strcmp(argOld->typeConst, argNew->typeConst))
     {
         return 1;
         // type do not match
     }
-
-    memcpy(argOld->contant, argNew->contant, ARG_CONTANT_LENGTH);
+    argOld->setContant(argOld, argNew->contantDynMem->addr, argNew->contantDynMem->size);
     argNew->dinit(argNew);
     return 0;
 }
 
 static int setArg(args_t *self, arg_t *arg)
 {
-    // input arg of setArg must be a new created arg
-    if (!self->isArgExist(self, arg->name))
+   
+    if (!self->isArgExist(self, arg->nameConst))
     {
         self->argLinkList->add(self->argLinkList,
                                arg,
@@ -252,12 +229,24 @@ static int setArg(args_t *self, arg_t *arg)
 
 static arg_t *getArgByName(args_t *self, char *name)
 {
-    int index = self->getIndexByName(self, name);
-    if (-1 == index)
+    linkNode_t *nodeNow = self->argLinkList->firstNode;
+    if (NULL == nodeNow)
     {
         return NULL;
     }
-    return self->getArgByIndex(self, index);
+    while(1)
+    {
+        arg_t *arg = nodeNow->contant;
+        if(0 == strcmp(name, arg->nameConst))
+        {
+            return arg;
+        }
+        if(NULL == nodeNow->nextNode)
+        {
+            return NULL;
+        }
+        nodeNow = nodeNow->nextNode;
+    }
 }
 
 static void bind(args_t *self, char *type, char *name, void *pointer)
@@ -479,7 +468,6 @@ static void init(args_t *self, args_t *args)
     self->dinit = deinit;
 
     self->size = size;
-    self->getIndexByName = getIndexByName;
     self->getArgByIndex = getArgByIndex;
     self->getArgByName = getArgByName;
     self->setArg = setArg;

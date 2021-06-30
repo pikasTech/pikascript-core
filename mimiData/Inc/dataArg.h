@@ -13,16 +13,19 @@ struct Class_arg
     DMEM *mem;
     void *context;
 
-    char contant[ARG_CONTANT_LENGTH];
-    char name[ARG_NAME_LENGTH];
-    char type[ARG_TYPE_LENGTH];
+    DMEM *contantDynMem;
+    DMEM *nameDynMem;
+    DMEM *typeDynMem;
+
+    char nameConst[ARG_NAME_LENGTH];
+    char typeConst[ARG_TYPE_LENGTH];
 
     /* operation */
     void (*dinit)(arg_t *self);
     void (*init)(arg_t *self, void *voidPointer);
 
     void (*setName)(arg_t *self, char *name);
-    void (*setContant)(arg_t *self, char *contant);
+    void (*setContant)(arg_t *self, char *contant, int size);
     void (*setType)(arg_t *self, char *type);
 
     void (*setInt64)(arg_t *self, long long val);
