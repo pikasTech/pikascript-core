@@ -33,7 +33,6 @@ static void setContant(arg_t *self, char *contant, int size)
 
 static void setName(arg_t *self, char *name)
 {
-    memcpy(self->nameConst, name, ARG_NAME_LENGTH);
     int size = strGetSize(name);
     if (NULL != self->nameDynMem)
     {
@@ -46,7 +45,6 @@ static void setName(arg_t *self, char *name)
 
 static void setType(arg_t *self, char *type)
 {
-    memcpy(self->typeConst, type, strGetSize(type));
     int size = strGetSize(type);
     if (NULL != self->typeDynMem)
     {
@@ -142,15 +140,6 @@ static void init(arg_t *self, void *voidPointer)
     self->contantDynMem = NULL;
     self->nameDynMem = NULL;
     self->typeDynMem = NULL;
-
-    for (int i = 0; i < ARG_NAME_LENGTH; i++)
-    {
-        self->nameConst[i] = 0;
-    }
-    for (int i = 0; i < ARG_TYPE_LENGTH; i++)
-    {
-        self->typeConst[i] = 0;
-    }
 
     /* operation */
     self->dinit = deinit;

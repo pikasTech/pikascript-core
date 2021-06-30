@@ -17,9 +17,6 @@ struct Class_arg
     DMEM *nameDynMem;
     DMEM *typeDynMem;
 
-    char nameConst[ARG_NAME_LENGTH];
-    char typeConst[ARG_TYPE_LENGTH];
-
     /* operation */
     void (*dinit)(arg_t *self);
     void (*init)(arg_t *self, void *voidPointer);

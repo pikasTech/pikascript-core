@@ -25,7 +25,7 @@ static int listEachHandleProcessArg(arg_t *argEach, args_t *handleArgs)
         return 1;
     }
     memcpy(strBuff, stringOut, ARG_CONTANT_LENGTH);
-    strPrint(strBuff, argEach->nameConst);
+    strPrint(strBuff, argEach->nameDynMem->addr);
     strPrint(strBuff, " ");
     handleArgs->setStr(handleArgs, "stringOut", strBuff);
     return 0;

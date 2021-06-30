@@ -147,7 +147,7 @@ char *getTypeByName(args_t *self, char *name)
     {
         return "[error: arg no found]";
     }
-    return arg->typeConst;
+    return arg->typeDynMem->addr;
 }
 
 static arg_t *getArgByIndex(args_t *self, int index)
@@ -181,8 +181,8 @@ static int copyArg(args_t *self, char *name, args_t *directArgs)
     }
     arg_t *argCopied = New_arg(NULL);
     argCopied->setContant(argCopied, argToBeCopy->contantDynMem->addr, argToBeCopy->contantDynMem->size);
-    memcpy(argCopied->nameConst, argToBeCopy->nameConst, ARG_NAME_LENGTH);
-    memcpy(argCopied->typeConst, argToBeCopy->typeConst, ARG_TYPE_LENGTH);
+    argCopied->setName(argCopied, argToBeCopy->nameDynMem->addr);
+    argCopied->setType(argCopied, argToBeCopy->typeDynMem->addr);
 
     directArgs->setArg(directArgs, argCopied);
 
@@ -201,9 +201,9 @@ static int isArgExist(args_t *self, char *name)
 static int updateArg(args_t *self, arg_t *argNew)
 {
     // arg New must be a new arg
-    arg_t *argOld = self->getArgByName(self, argNew->nameConst);
+    arg_t *argOld = self->getArgByName(self, argNew->nameDynMem->addr);
 
-    if (0 != strcmp(argOld->typeConst, argNew->typeConst))
+    if (0 != strcmp(argOld->typeDynMem->addr, argNew->typeDynMem->addr))
     {
         return 1;
         // type do not match
@@ -216,7 +216,7 @@ static int updateArg(args_t *self, arg_t *argNew)
 static int setArg(args_t *self, arg_t *arg)
 {
    
-    if (!self->isArgExist(self, arg->nameConst))
+    if (!self->isArgExist(self, arg->nameDynMem->addr))
     {
         self->argLinkList->add(self->argLinkList,
                                arg,
@@ -237,7 +237,7 @@ static arg_t *getArgByName(args_t *self, char *name)
     while(1)
     {
         arg_t *arg = nodeNow->contant;
-        if(0 == strcmp(name, arg->nameConst))
+        if(0 == strcmp(name, arg->nameDynMem->addr))
         {
             return arg;
         }
