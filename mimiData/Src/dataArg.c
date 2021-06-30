@@ -63,7 +63,7 @@ static char *getContant(arg_t *self)
 static void setInt64(arg_t *self, long long val)
 {
     unsigned long int int64Temp = val;
-    unsigned char contantBuff[ARG_CONTANT_LENGTH];
+    unsigned char contantBuff[256];
     for (int i = 0; i < 8; i++)
     {
         // add 0x30 to void \0
@@ -75,7 +75,7 @@ static void setInt64(arg_t *self, long long val)
 
 static void setFloat(arg_t *self, float val)
 {
-    char contantBuff[ARG_CONTANT_LENGTH];
+    char contantBuff[256];
     sprintf((char *)contantBuff, "%f", val);
     self->setContant(self, (char *)contantBuff, strGetSize(contantBuff));
 }
@@ -83,7 +83,7 @@ static void setFloat(arg_t *self, float val)
 static void setPointer(arg_t *self, void *pointer)
 {
     unsigned long int pointerTemp = (unsigned long int)pointer;
-    unsigned char contantBuff[ARG_CONTANT_LENGTH];
+    unsigned char contantBuff[256];
     for (int i = 0; i < 8; i++)
     {
         // aboid \0

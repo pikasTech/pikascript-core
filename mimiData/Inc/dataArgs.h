@@ -11,7 +11,7 @@ struct Class_Arglist
     DMEM *mem;
     void *context;
     link_t *argLinkList;
-    unsigned char nameBuff[ARG_NAME_LENGTH];
+    unsigned char nameBuff[32];
 
     /* operation */
     void (*dinit)(args_t *self);

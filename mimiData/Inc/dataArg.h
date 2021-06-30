@@ -2,10 +2,6 @@
 #define _arg__H
 #include "dataMemory.h"
 
-#define ARG_CONTANT_LENGTH 256
-#define ARG_NAME_LENGTH 32
-#define ARG_TYPE_LENGTH 32
-
 typedef struct Class_arg arg_t;
 struct Class_arg
 {

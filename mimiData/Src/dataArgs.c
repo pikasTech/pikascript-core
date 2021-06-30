@@ -251,7 +251,7 @@ static arg_t *getArgByName(args_t *self, char *name)
 
 static void bind(args_t *self, char *type, char *name, void *pointer)
 {
-    char typeWithBind[ARG_NAME_LENGTH] = "_bind-";
+    char typeWithBind[32] = "_bind-";
     strPrint(typeWithBind, type);
     arg_t *argNew = New_arg(NULL);
     argNew->setType(argNew, typeWithBind);
@@ -278,10 +278,10 @@ static void bindStr(args_t *self, char *name, char **stringPtr)
 
 static char *getPrintSring(args_t *self, char *name, char *valString)
 {
-    char printName[ARG_NAME_LENGTH] = {0};
+    char printName[32] = {0};
     strPrint(printName, ".print-");
     strPrint(printName, name);
-    char printString[ARG_CONTANT_LENGTH] = {0};
+    char printString[256] = {0};
     sprintf(printString, "%s", valString);
     self->setStr(self, printName, printString);
     return self->getStr(self, printName);
@@ -289,21 +289,21 @@ static char *getPrintSring(args_t *self, char *name, char *valString)
 
 static char *getPrintStringFromInt(args_t *self, char *name, int val)
 {
-    char valString[ARG_CONTANT_LENGTH] = {0};
+    char valString[256] = {0};
     sprintf(valString, "%d", val);
     return getPrintSring(self, name, valString);
 }
 
 static char *getPrintStringFromFloat(args_t *self, char *name, float val)
 {
-    char valString[ARG_CONTANT_LENGTH] = {0};
+    char valString[256] = {0};
     sprintf(valString, "%f", val);
     return getPrintSring(self, name, valString);
 }
 
 static char *getPrintStringFromPtr(args_t *self, char *name, void *val)
 {
-    char valString[ARG_CONTANT_LENGTH] = {0};
+    char valString[256] = {0};
     long long intVal = (long long)val;
     sprintf(valString, "0x%x", val);
     return getPrintSring(self, name, valString);
@@ -339,7 +339,7 @@ static char *print(args_t *self, char *name)
     char bindTypePrefix[] = "_bind-";
     if (isStartWith(type, bindTypePrefix))
     {
-        char typeWithoutBind[ARG_TYPE_LENGTH] = {0};
+        char typeWithoutBind[32] = {0};
         mimiStrRemovePrefix(type, bindTypePrefix, typeWithoutBind);
         if (mimiStrEqu(typeWithoutBind, "int"))
         {
@@ -396,7 +396,7 @@ static int set(args_t *self, char *name, char *valStr)
     char bindTypePrefix[] = "_bind-";
     if (isStartWith(type, bindTypePrefix))
     {
-        char typeWithoutBind[ARG_TYPE_LENGTH] = {0};
+        char typeWithoutBind[32] = {0};
         mimiStrRemovePrefix(type, bindTypePrefix, typeWithoutBind);
         if (mimiStrEqu(typeWithoutBind, "int"))
         {
@@ -429,7 +429,7 @@ static int set(args_t *self, char *name, char *valStr)
 
 static int setObject(args_t *self, char *objectName, char *className, void *objectPtr)
 {
-    char typeWithClass[ARG_NAME_LENGTH] = "_class-";
+    char typeWithClass[32] = "_class-";
     strPrint(typeWithClass, className);
     arg_t *argNew = New_arg(NULL);
     argNew->setName(argNew, objectName);
@@ -459,7 +459,7 @@ static void init(args_t *self, args_t *args)
     /* attrivute */
     self->context = self;
     self->argLinkList = New_link(NULL);
-    for (int i = 0; i < ARG_NAME_LENGTH; i++)
+    for (int i = 0; i < 32; i++)
     {
         self->nameBuff[i] = 0;
     }

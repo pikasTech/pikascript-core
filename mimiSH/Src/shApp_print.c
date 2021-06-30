@@ -28,7 +28,7 @@ void *app_print(int argc, char **argv)
 
     char *printStr = NULL;
     printStr = processNow->argPrint(processNow, printName);
-    memcpy(memOut->addr, printStr, ARG_CONTANT_LENGTH);
+    memcpy(memOut->addr, printStr, 256);
     strPrint(memOut->addr, "\r\n");
     return (void *)memOut;
 }
