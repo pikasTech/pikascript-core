@@ -206,7 +206,6 @@ static void init(mimiProcess_t *self, args_t *args)
     /* attrivute */
     self->setInt(self, "isEnable", 1);
     self->setPtr(self, "context", self);
-    self->setStr(self, "class", "process");
 
     /* override */
     self->_updateHandle = _processRootUpdateHandle;

@@ -1,7 +1,6 @@
 #include "dataArgsConst.h"
 #include "dataArg.h"
-#include "dataMemory.h"
-#include "dataString.h"
+#include "dataMemory.h" #include "dataString.h"
 #include "string.h"
 #include <stdlib.h>
 static void deinit(argsConst_t *self)
@@ -117,7 +116,7 @@ static int pushStrWithName(argsConst_t *self, char *name, char *strIn)
 {
     if (NULL == strIn)
     {
-				return 1;
+        return 1;
     }
     arg_t *argNew = New_arg(NULL);
     argNew->setName(argNew, name);
@@ -125,7 +124,7 @@ static int pushStrWithName(argsConst_t *self, char *name, char *strIn)
     self->argList[self->count] = argNew;
     self->count++;
 
-		return 0;
+    return 0;
 }
 
 static int getStrByName(argsConst_t *self, char *name, char **strOut)

@@ -290,7 +290,7 @@ static void bindStr(args_t *self, char *name, char **stringPtr)
 static char *getPrintSring(args_t *self, char *name, char *valString)
 {
     char printName[ARG_NAME_LENGTH] = {0};
-    strPrint(printName, "_print-");
+    strPrint(printName, ".print-");
     strPrint(printName, name);
     char printString[ARG_CONTANT_LENGTH] = {0};
     sprintf(printString, "%s", valString);
