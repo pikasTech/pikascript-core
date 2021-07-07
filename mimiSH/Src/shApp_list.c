@@ -2,12 +2,12 @@
 #include "dataString.h"
 #include "mimiProcess.h"
 #include "shApp_argSet.h"
+#include "mimiShell2.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdlib.h>
 
-#define ROOT_PTR argv[argc - 1]
 #define PROCESS_DIR argv[1]
 
 static int listEachHandleProcessArg(arg_t *argEach, args_t *handleArgs)
@@ -31,14 +31,14 @@ static int listEachHandleProcessArg(arg_t *argEach, args_t *handleArgs)
     return 0;
 }
 
-void *app_list(int argc, char **argv)
+void *app_list(shell2_t *shell, int argc, char **argv)
 {
     DMEM *memOut = DynMemGet(sizeof(char) * 256);
     ((char *)(memOut->addr))[0] = 0;
-    mimiProcess_t *root = (mimiProcess_t *)atoi(ROOT_PTR);
+    mimiProcess_t *root = shell->context;
     mimiProcess_t *processNow = NULL;
 
-    if (argc == 2)
+    if (argc == 1)
     {
         processNow = root;
     }

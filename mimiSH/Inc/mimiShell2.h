@@ -22,10 +22,11 @@ struct Class_mimiShell2
     /* attribute */
     DMEM *mem;
     linkWithNode_t *cmdMapHead;
+    void * context;
 
     /* operation */
     void *(*cmd)(shell2_t *self, char *);
-    void (*addMap)(shell2_t *self, char *, void *(*)(int argc, char **argv));
+    void (*addMap)(shell2_t *self, char *, void *(*)(shell2_t *shell, int argc, char **argv));
     int (*listMap)(shell2_t *self, int);
     int (*test)(shell2_t *self, int);
     void (*init)(shell2_t *self, args_t *args);
@@ -33,8 +34,7 @@ struct Class_mimiShell2
 
     /* override */
     void (*config)(shell2_t *self);
-    void *(*detector)(void *(*fun_d)(char *,
-                                     void *(fun)(int, char **)),
+    void *(*detector)(shell2_t *self, void *(*fun_d)(char *, void *(fun)(int, char **)),
                       char *CMD,
                       void *(fun)(int argc, char **argv));
 };

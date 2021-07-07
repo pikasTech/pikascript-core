@@ -1,10 +1,11 @@
 #include "shApp_argv.h"
 #include "dataMemory.h"
 #include "dataString.h"
+#include "mimiShell2.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-void *app_argv_main2(int argc, char **argv)
+void *app_argv_main2(shell2_t *shell, int argc, char **argv)
 {
 	DMEM *memOut = DynMemGet(sizeof(char) * 256);
 	char *strOut = (char *)(memOut->addr);

@@ -3,6 +3,7 @@
 #include "dataString.h"
 #include "mimiProcess.h"
 #include <stdio.h>
+#include "mimiShell2.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdlib.h>
@@ -49,11 +50,11 @@ exit:
 #define PROCESS_DIR argv[1]
 #define SET_VAL argv[2]
 
-void *app_argSet(int argc, char **argv)
+void *app_argSet(shell2_t *shell, int argc, char **argv)
 {
     DMEM *memOut = DynMemGet(sizeof(char) * 256);
     ((char *)(memOut->addr))[0] = 0;
-    mimiProcess_t *root = (mimiProcess_t *)atoi(ROOT_PTR);
+    mimiProcess_t *root = shell->context;
     mimiProcess_t *processNow = goToProcess(root, PROCESS_DIR, 1);
 
     if (NULL == processNow)

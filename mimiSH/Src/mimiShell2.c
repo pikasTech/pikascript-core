@@ -9,7 +9,7 @@
 // used to config the cmdMap of sh
 
 // the only application the core need to load
-#include "shApp_cmdNoFound.h"
+#include "shApp_cmdNoFound2.h"
 
 // start_i is used to skip severl chars in the frount of CMD
 static int strGetArgs_With_Start_i(char *CMD, char **argv, int start_i)
@@ -48,14 +48,17 @@ int mimiShell2_strGetArgs(char *CMD, char **argv)
 }
 
 // the detector of shell luancher, which can add info befor the strout
-static void *detector_shellLuancher(void *(*fun_d)(char *, void *(fun)(int, char **)), char *CMD, void *(fun)(int argc, char **argv))
+static void *detector_shellLuancher(shell2_t *self,
+									void *(*fun_d)(shell2_t *, char *, void *(fun)(shell2_t *, int, char **)),
+									char *CMD,
+									void *(fun)(shell2_t *, int argc, char **argv))
 {
 	DMEM *memOut;
 	DMEM *memAdd;
 	memAdd = DynMemGet(sizeof(char) * 256);
 	char *strAdd = memAdd->addr;
 	strAdd[0] = 0;
-	memOut = (DMEM *)fun_d(CMD, fun);
+	memOut = (DMEM *)fun_d(self, CMD, fun);
 	if (NULL != memOut)
 	{
 		strPrint(strAdd, "myShell@STM32F405 >");
@@ -68,7 +71,7 @@ static void *detector_shellLuancher(void *(*fun_d)(char *, void *(fun)(int, char
 }
 
 // the luancher of shell
-static void *shellLuancher(char *CMD, void *(fun)(int argc, char **argv))
+static void *shellLuancher(shell2_t *self, char *CMD, void *(fun)(shell2_t *, int argc, char **argv))
 {
 	char StartStrSize = 0;
 	int argc = 0;
@@ -87,7 +90,7 @@ static void *shellLuancher(char *CMD, void *(fun)(int argc, char **argv))
 	argc = strGetArgs_With_Start_i(CMD, argv, StartStrSize);
 
 	//call the fun
-	memOut = (DMEM *)fun(argc, argv);
+	memOut = (DMEM *)fun(self, argc, argv);
 	//free the argv memory
 	for (int i = 0; i < 16; i++)
 	{
@@ -109,17 +112,17 @@ static void *Shell_cmd(shell2_t *self, char *cmd)
 		char nameWithSpace[SHELL2_CMD_NAME_LENGTH] = {0};
 		strPrint(nameWithSpace, name);
 		strPrint(nameWithSpace, " ");
-		if (isStartWith(cmd, nameWithSpace))
+		if (isStartWith(cmd, name))
 		{
-			return self->detector(shellLuancher, cmd, cmdMap->cmdCallBack);
+			return self->detector(self, shellLuancher, cmd, cmdMap->cmdCallBack);
 		}
 		nodeNow = nodeNow->next;
 	}
 	// if the cmd is no found then call the app_cmdNoFoudn function
-	return self->detector(shellLuancher, cmd, app_cmdNofound);
+	return self->detector(self, shellLuancher, cmd, app_cmdNofound2);
 }
 
-static void Shell_addMap(shell2_t *self, char *name, void *(*fun)(int argc, char **argv))
+static void Shell_addMap(shell2_t *self, char *name, void *(*fun)(shell2_t *shell, int argc, char **argv))
 {
 	DMEM *mem;
 	mem = DynMemGet(sizeof(mimiShell2_cmdMap_t));
@@ -192,6 +195,7 @@ static void init(shell2_t *self, args_t *initArgs)
 	/* attribute */
 
 	/* operation */
+	self->context =self;
 	self->cmd = Shell_cmd;
 	self->cmdMapHead = New_linkWithNode(NULL);
 	// set how to deinit the data of cmdMap Link

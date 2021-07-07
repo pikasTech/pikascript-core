@@ -1,4 +1,5 @@
 #ifndef __APP_PRINT_H
 #define __APP_PRINT_H
-void *app_print(int argc, char **argv);
+#include "mimiShell2.h"
+void *app_print(shell2_t *shell, int argc, char **argv);
 #endif

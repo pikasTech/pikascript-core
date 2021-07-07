@@ -1,6 +1,7 @@
 #include "shApp_test2.h"
 #include "dataMemory.h"
 #include "dataString.h"
+#include "mimiShell2.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -34,7 +35,7 @@ char *shell_base_test2(char *CMD, unsigned short int StartStrSize, char *strOut)
 	return strPrint(strOut, "Finished\r\n");
 }
 
-void *app_test2(int argc, char **argv)
+void *app_test2(shell2_t *shell, int argc, char **argv)
 {
 	DMEM *memOut = DynMemGet(sizeof(char) * 256);
 	char *strOut = (char *)(memOut->addr);
