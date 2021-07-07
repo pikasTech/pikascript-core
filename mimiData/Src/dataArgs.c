@@ -279,7 +279,7 @@ static void bindStr(Args *self, char *name, char **stringPtr)
 static char *getPrintSring(Args *self, char *name, char *valString)
 {
     char printName[32] = {0};
-    strPrint(printName, ".print-");
+    strPrint(printName, "[printBuff]");
     strPrint(printName, name);
     char printString[256] = {0};
     sprintf(printString, "%s", valString);

@@ -55,6 +55,11 @@ struct Class_process
     void (*_beforDinit)(MimiProcess *self);
     void (*_updateHandle)(MimiProcess *self);
 
+    /* event operation */
+    
+    void (*subscribe)(MimiProcess *self, char *subscribeVarName, void(*handle)(MimiProcess *self));
+    
+
     /* object */
 };
 

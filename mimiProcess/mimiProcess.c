@@ -45,6 +45,20 @@ static void _processRootUpdateHandle(MimiProcess *self)
 {
     // override the handle function here
 }
+
+static void subscribeHandle(MimiProcess *self, char *name)
+{
+    const char prefix[] = "[subscribe]";
+    char subscribeName[256] = {0};
+    strPrint(subscribeName, prefix);
+    strPrint(subscribeName, name);
+    void (*subscribeHandler)(MimiProcess * self) = self->getPtr(self, subscribeName);
+    if (NULL != subscribeHandler)
+    {
+        subscribeHandler(self);
+    }
+}
+
 static void enable(MimiProcess *self)
 {
     self->setInt(self, "isEnable", 1);
@@ -58,21 +72,25 @@ static void disable(MimiProcess *self)
 static void setInt64(MimiProcess *self, char *name, long long val)
 {
     self->attributeList->setInt(self->attributeList, name, val);
+    subscribeHandle(self, name);
 }
 
 static void setPointer(MimiProcess *self, char *name, void *pointer)
 {
     self->attributeList->setPtr(self->attributeList, name, pointer);
+    subscribeHandle(self, name);
 }
 
 static void setFloat(MimiProcess *self, char *name, float value)
 {
     self->attributeList->setFloat(self->attributeList, name, value);
+    subscribeHandle(self, name);
 }
 
 static void setStr(MimiProcess *self, char *name, char *str)
 {
     self->attributeList->setStr(self->attributeList, name, str);
+    subscribeHandle(self, name);
 }
 
 static long long getInt64(MimiProcess *self, char *name)
@@ -98,6 +116,7 @@ char *getStr(MimiProcess *self, char *name)
 static void loadAttributeFromArgs(MimiProcess *self, Args *args, char *name)
 {
     args->copyArg(args, name, self->attributeList);
+    subscribeHandle(self, name);
 }
 
 static void _beforDinit(MimiProcess *self)
@@ -167,6 +186,17 @@ static int argSet(MimiProcess *self, char *name, char *valStr)
     return self->attributeList->set(self->attributeList, name, valStr);
 }
 
+static void subscribe(MimiProcess *self,
+                      char *subscribeVarName,
+                      void (*handle)(MimiProcess *self))
+{
+    const char prefix[] = "[subscribe]";
+    char argName[256] = {0};
+    strPrint(argName, prefix);
+    strPrint(argName, subscribeVarName);
+    self->setPtr(self, argName, handle);
+}
+
 static void init(MimiProcess *self, Args *args)
 {
     /* List */
@@ -210,6 +240,9 @@ static void init(MimiProcess *self, Args *args)
     /* override */
     self->_updateHandle = _processRootUpdateHandle;
     self->_beforDinit = _beforDinit;
+
+    /* event operation */
+    self->subscribe = subscribe;
 
     /* args */
     if (NULL != args)
