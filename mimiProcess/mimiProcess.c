@@ -62,7 +62,7 @@ static void setInt64(mimiProcess_t *self, char *name, long long val)
 
 static void setPointer(mimiProcess_t *self, char *name, void *pointer)
 {
-    self->attributeList->setPoi(self->attributeList, name, pointer);
+    self->attributeList->setPtr(self->attributeList, name, pointer);
 }
 
 static void setFloat(mimiProcess_t *self, char *name, float value)
@@ -109,7 +109,7 @@ static void addSubProcess(mimiProcess_t *self, char *subProcessName, void *new_P
 {
     args_t *attributeList = self->attributeList;
     args_t *initArgs = New_args(NULL);
-    initArgs->setPoi(initArgs, "context", self);
+    initArgs->setPtr(initArgs, "context", self);
     void *(*newProcessFun)(args_t * initArgs) = (void *(*)(args_t * initArgs)) new_ProcessFun;
     void *subProcess = newProcessFun(initArgs);
     attributeList->setObject(attributeList, subProcessName, "process", subProcess);
@@ -119,7 +119,7 @@ static void addSubProcess(mimiProcess_t *self, char *subProcessName, void *new_P
 static void addSubobject(mimiProcess_t *self, char *subObjectName, void *new_ObjectFun)
 {
     args_t *initArgs = New_args(NULL);
-    initArgs->setPoi(initArgs, "context", self);
+    initArgs->setPtr(initArgs, "context", self);
     void *(*new_Object)(args_t * initArgs) = (void *(*)(args_t *))new_ObjectFun;
     void *subObject = new_Object(initArgs);
     self->setPtr(self, subObjectName, subObject);

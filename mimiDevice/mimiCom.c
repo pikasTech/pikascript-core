@@ -43,7 +43,7 @@ static void init(mimiCom_t *self, args_t *initArgs)
     self->args = New_args(NULL);
     self->RxBuff[0] = 0;
 
-    self->args->setPoi(self->args, "context", self);
+    self->args->setPtr(self->args, "context", self);
     self->args->setStr(self->args, "RxSingleLine", "");
 
     /* operation */

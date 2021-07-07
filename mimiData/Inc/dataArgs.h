@@ -37,7 +37,7 @@ struct Class_Arglist
     float (*getFloatByIndex)(args_t *self, int index);
     float (*getFloat)(args_t *self, char *name);
 
-    int (*setPoi)(args_t *self, char *name, void *argPointer);
+    int (*setPtr)(args_t *self, char *name, void *argPointer);
     void *(*getPtr)(args_t *self, char *name);
     void *(*getPointerByIndex)(args_t *self, int index);
 

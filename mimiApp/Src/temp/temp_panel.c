@@ -119,7 +119,7 @@ static void init_panelTemp(server_t *self, args_t *args)
     {
         args_t *args = New_args(NULL);
         args->setStr(args, "title", "home");
-        args->setPoi(args, "context", self);
+        args->setPtr(args, "context", self);
         args->setInt(args, "optionMax", 1);
         args->setStr(args, "optionStr0", "watch val");
         args->setStr(args, "optionStr1", "set allert");
@@ -133,7 +133,7 @@ static void init_panelTemp(server_t *self, args_t *args)
     {
         args_t *args = New_args(NULL);
         args->setStr(args, "title", "select a val");
-        args->setPoi(args, "context", self);
+        args->setPtr(args, "context", self);
         args->setInt(args, "optionMax", 3);
         args->setStr(args, "optionStr0", "temp1");
         args->setStr(args, "optionStr1", "temp2");
@@ -151,7 +151,7 @@ static void init_panelTemp(server_t *self, args_t *args)
     {
         args_t *args = New_args(NULL);
         args->setStr(args, "title", "select a val");
-        args->setPoi(args, "context", self);
+        args->setPtr(args, "context", self);
         args->setInt(args, "optionMax", 1);
         args->setStr(args, "optionStr0", "temp1");
         args->setStr(args, "optionStr1", "temp2");
@@ -165,7 +165,7 @@ static void init_panelTemp(server_t *self, args_t *args)
     {
         args_t *args = New_args(NULL);
         args->setStr(args, "title", "temp1");
-        args->setPoi(args, "context", self);
+        args->setPtr(args, "context", self);
         args->setInt(args, "optionMax", 0);
         args->setInt(args, "dataIndex", 0);
 
@@ -176,7 +176,7 @@ static void init_panelTemp(server_t *self, args_t *args)
     {
         args_t *args = New_args(NULL);
         args->setStr(args, "title", "temp2");
-        args->setPoi(args, "context", self);
+        args->setPtr(args, "context", self);
         args->setInt(args, "optionMax", 0);
         args->setInt(args, "dataIndex", 1);
 
@@ -187,7 +187,7 @@ static void init_panelTemp(server_t *self, args_t *args)
     {
         args_t *args = New_args(NULL);
         args->setStr(args, "title", "hum1");
-        args->setPoi(args, "context", self);
+        args->setPtr(args, "context", self);
         args->setInt(args, "optionMax", 0);
         args->setInt(args, "dataIndex", 2);
 
@@ -198,7 +198,7 @@ static void init_panelTemp(server_t *self, args_t *args)
     {
         args_t *args = New_args(NULL);
         args->setStr(args, "title", "hum2");
-        args->setPoi(args, "context", self);
+        args->setPtr(args, "context", self);
         args->setInt(args, "optionMax", 0);
         args->setInt(args, "dataIndex", 3);
 
@@ -209,7 +209,7 @@ static void init_panelTemp(server_t *self, args_t *args)
     {
         args_t *args = New_args(NULL);
         args->setStr(args, "title", "temp1 allert");
-        args->setPoi(args, "context", self);
+        args->setPtr(args, "context", self);
         args->setInt(args, "optionMax", 0);
         args->setInt(args, "dataIndex", 4);
 
@@ -220,7 +220,7 @@ static void init_panelTemp(server_t *self, args_t *args)
     {
         args_t *args = New_args(NULL);
         args->setStr(args, "title", "temp2 allert");
-        args->setPoi(args, "context", self);
+        args->setPtr(args, "context", self);
         args->setInt(args, "optionMax", 0);
         args->setInt(args, "dataIndex", 5);
 

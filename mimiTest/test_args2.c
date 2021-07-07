@@ -13,7 +13,7 @@ int TEST_args2(int isShow)
         args->setInt(args,
                      "int64Test",
                      (long long)22221);
-        args->setPoi(args,
+        args->setPtr(args,
                      "pointerTest",
                      (void *)2222322);
         args->setStr(args, "strTest", "teeeds");

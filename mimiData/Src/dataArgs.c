@@ -484,7 +484,7 @@ static void init(args_t *self, args_t *args)
     self->setFloatWithDefaultName = setFloatWithDefaultName;
     self->getFloatByIndex = getFloatByIndex;
 
-    self->setPoi = setPointerWithName;
+    self->setPtr = setPointerWithName;
     self->getPtr = getPointerByName;
     self->getPointerByIndex = getPointerByIndex;
 
