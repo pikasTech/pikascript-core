@@ -88,6 +88,6 @@ int TEST_timer(int isShow)
     goto exit;
 
 exit:
-    timer->dinit(timer);
+    timer->deinit(timer);
     return err;
 }

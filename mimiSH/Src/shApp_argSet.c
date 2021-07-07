@@ -8,9 +8,9 @@
 #include <string.h>
 #include <stdlib.h>
 
-mimiProcess_t *goToProcess(mimiProcess_t *root, char *processDirectory, int deepth)
+MimiProcess *goToProcess(MimiProcess *root, char *processDirectory, int deepth)
 {
-    mimiProcess_t *processNow = root;
+    MimiProcess *processNow = root;
     // sign in the argv memory
     char *directoryUnit[16] = {0};
     DMEM *processMem[16] = {0};
@@ -50,12 +50,12 @@ exit:
 #define PROCESS_DIR argv[1]
 #define SET_VAL argv[2]
 
-void *app_argSet(shell2_t *shell, int argc, char **argv)
+void *app_argSet(Shell2 *shell, int argc, char **argv)
 {
     DMEM *memOut = DynMemGet(sizeof(char) * 256);
     ((char *)(memOut->addr))[0] = 0;
-    mimiProcess_t *root = shell->context;
-    mimiProcess_t *processNow = goToProcess(root, PROCESS_DIR, 1);
+    MimiProcess *root = shell->context;
+    MimiProcess *processNow = goToProcess(root, PROCESS_DIR, 1);
 
     if (NULL == processNow)
     {

@@ -4,5 +4,5 @@
 #include "dataArgs.h"
 #include "server.h"
 
-server_t *New_server_panelTemp(args_t *args);
+server_t *New_server_panelTemp(Args *args);
 #endif

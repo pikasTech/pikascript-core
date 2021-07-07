@@ -7,7 +7,7 @@ typedef struct Class_timer mTimer_t;
 struct Class_timer
 {
     DMEM *mem;
-    void (*dinit)(mTimer_t *timer);
+    void (*deinit)(mTimer_t *timer);
 
     /* attribute */
     unsigned char isEnable;

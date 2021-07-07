@@ -25,7 +25,7 @@ light_t *Class_light_init(void)
     DMEM *mem = DynMemGet(sizeof(light_t));
     light_t *light = mem->addr;
     light->mem = mem;
-    light->dinit = deinit;
+    light->deinit = deinit;
 
     light->open = openLight;
     light->close = close;

@@ -3,25 +3,25 @@
 #include "dataLinkNode.h"
 #include "dataMemory.h"
 
-typedef struct Class_link link_t;
+typedef struct Class_link Link;
 struct Class_link
 {
     /* attribute */
     DMEM *mem;
-    linkNode_t *firstNode;
+    LinkNode *firstNode;
     long long TopId;
 
     /* operation */
-    void (*dinit)(link_t *self);
-    void (*init)(link_t *self, void *args);
-    void (*add)(link_t *self, void *contant, void (*_contantDinit)(void *contant));
-    linkNode_t *(*findNodeById)(link_t *self, long long id);
+    void (*deinit)(Link *self);
+    void (*init)(Link *self, void *args);
+    void (*add)(Link *self, void *contant, void (*_contantDinit)(void *contant));
+    LinkNode *(*findNodeById)(Link *self, long long id);
 
-    int (*size)(link_t *self);
+    int (*size)(Link *self);
     /* virtual operation */
 
     /* object */
 };
 
-link_t *New_link(void *args);
+Link *New_link(void *args);
 #endif

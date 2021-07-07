@@ -12,13 +12,13 @@ struct Class_shApp_set
     void *(*sh_main)(int argc, char **argv);
 
     /* operation */
-    void (*dinit)(shApp_set_t *self);
-    void (*init)(shApp_set_t *self, args_t *args);
+    void (*deinit)(shApp_set_t *self);
+    void (*init)(shApp_set_t *self, Args *args);
 
     /* virtual operation */
 
     /* object */
 };
 
-shApp_set_t *New_shApp_set(args_t *args);
+shApp_set_t *New_shApp_set(Args *args);
 #endif

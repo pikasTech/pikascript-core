@@ -22,7 +22,7 @@ sgui_t *SH_sgui_init(void)
     DMEM *mem = DynMemGet(sizeof(sgui_t));
     sgui_t *sgui = mem->addr;
     sgui->mem = mem;
-    sgui->dinit = deinit;
+    sgui->deinit = deinit;
     sgui->sh_main = sh_main;
     return sgui;
 }

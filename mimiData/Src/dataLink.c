@@ -1,27 +1,27 @@
 #include "dataLink.h"
 #include "dataMemory.h"
 
-static void deinit(link_t *self)
+static void deinit(Link *self)
 {
     DynMemPut(self->mem);
-    linkNode_t *nowNode = self->firstNode;
+    LinkNode *nowNode = self->firstNode;
     while (NULL != nowNode)
     {
-        nowNode->dinit(nowNode);
+        nowNode->deinit(nowNode);
         nowNode = nowNode->nextNode;
     }
 }
 
-static void add(link_t *self, void *contant, void (*_contantDinit)(void *contant))
+static void add(Link *self, void *contant, void (*_contantDinit)(void *contant))
 {
-    linkNode_t *NewNode = New_linkNode(NULL);
+    LinkNode *NewNode = New_linkNode(NULL);
     NewNode->contant = contant;
     NewNode->_contantDinit = _contantDinit;
     NewNode->id = self->TopId;
     self->TopId++;
 
     // old first node become new second node
-    linkNode_t *secondNode = self->firstNode;
+    LinkNode *secondNode = self->firstNode;
 
     // change the first node to new node
     self->firstNode = NewNode;
@@ -34,9 +34,9 @@ static void add(link_t *self, void *contant, void (*_contantDinit)(void *contant
     self->firstNode->nextNode = secondNode;
 }
 
-static int size(link_t *self)
+static int size(Link *self)
 {
-    linkNode_t *NowNode;
+    LinkNode *NowNode;
     int size = 0;
     NowNode = self->firstNode;
     while (NULL != NowNode)
@@ -47,9 +47,9 @@ static int size(link_t *self)
     return size;
 }
 
-static linkNode_t *findNodeById(link_t *self, long long id)
+static LinkNode *findNodeById(Link *self, long long id)
 {
-    linkNode_t *nodeNow = self->firstNode;
+    LinkNode *nodeNow = self->firstNode;
     while (1)
     {
         if (nodeNow->id == id)
@@ -64,14 +64,14 @@ static linkNode_t *findNodeById(link_t *self, long long id)
     }
 }
 
-static void init(link_t *self, void *args)
+static void init(Link *self, void *args)
 {
     /* attrivute */
     self->firstNode = NULL;
     self->TopId = 0;
 
     /* operation */
-    self->dinit = deinit;
+    self->deinit = deinit;
     self->add = add;
     self->size = size;
     self->findNodeById = findNodeById;
@@ -81,10 +81,10 @@ static void init(link_t *self, void *args)
     /* override */
 }
 
-link_t *New_link(void *args)
+Link *New_link(void *args)
 {
-    DMEM *mem = DynMemGet(sizeof(link_t));
-    link_t *self = mem->addr;
+    DMEM *mem = DynMemGet(sizeof(Link));
+    Link *self = mem->addr;
     self->mem = mem;
     self->init = init;
     self->init(self, args);

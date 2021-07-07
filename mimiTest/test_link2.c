@@ -6,16 +6,16 @@
 int TEST_link2(int isShow)
 {
     int err = 0;
-    link_t *link = New_link(NULL);
+    Link *link = New_link(NULL);
     dataTest_t *data1 = New_dataTest(NULL);
     dataTest_t *data2 = New_dataTest(NULL);
 
     data1->a = 2;
     data1->b = 5;
-    link->add(link, data1, (void *)data1->dinit);
+    link->add(link, data1, (void *)data1->deinit);
     data2->a = 4;
     data2->b = 21;
-    link->add(link, data2, (void *)data2->dinit);
+    link->add(link, data2, (void *)data2->deinit);
 
     dataTest_t *data1InLink = link->findNodeById(link, 0)->contant;
     dataTest_t *data2InLink = link->findNodeById(link, 1)->contant;
@@ -61,6 +61,6 @@ int TEST_link2(int isShow)
 
     goto exit;
 exit:
-    link->dinit(link);
+    link->deinit(link);
     return err;
 }

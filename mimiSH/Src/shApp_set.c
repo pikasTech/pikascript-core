@@ -25,21 +25,21 @@ static void deinit(shApp_set_t *self)
     DynMemPut(self->mem);
 }
 
-static void init(shApp_set_t *self, args_t *args)
+static void init(shApp_set_t *self, Args *args)
 {
     /* attrivute */
     self->context = self;
     self->sh_main = sh_main;
 
     /* operation */
-    self->dinit = deinit;
+    self->deinit = deinit;
 
     /* object */
 
     /* override */
 }
 
-shApp_set_t *New_shApp_set(args_t *args)
+shApp_set_t *New_shApp_set(Args *args)
 {
     DMEM *mem = DynMemGet(sizeof(shApp_set_t));
     shApp_set_t *self = mem->addr;

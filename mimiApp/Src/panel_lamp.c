@@ -185,7 +185,7 @@ panel_lamp_t *NEW_Class_panel_lamp(void)
     DMEM *mem = DynMemGet(sizeof(panel_lamp_t));
     panel_lamp_t *panel = mem->addr;
     panel->mem = mem;
-    panel->dinit = deinit;
+    panel->deinit = deinit;
     panel->refresh_periodic_observer = refresh_periodic_void;
     panel->closeLight_callBack = default_callBack;
     panel->openLight_callBack = default_callBack;

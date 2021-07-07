@@ -3,7 +3,7 @@
 #include "dataMemory.h"
 #include "dataString.h"
 
-static int dinitEachSubprocess(arg_t *argEach, args_t *handleArgs)
+static int dinitEachSubprocess(Arg *argEach, Args *handleArgs)
 {
     if (NULL != handleArgs)
     {
@@ -12,27 +12,27 @@ static int dinitEachSubprocess(arg_t *argEach, args_t *handleArgs)
     }
     if (mimiStrEqu(argEach->typeDynMem->addr, "_class-process"))
     {
-        mimiProcess_t *subProcess = argEach->getPointer(argEach);
-        subProcess->dinit(subProcess);
+        MimiProcess *subProcess = argEach->getPointer(argEach);
+        subProcess->deinit(subProcess);
     }
     return 0;
 }
 
-static void dinitAllSubProcess(mimiProcess_t *self)
+static void dinitAllSubProcess(MimiProcess *self)
 {
-    args_t *args = self->attributeList;
+    Args *args = self->attributeList;
     args->foreach (args, dinitEachSubprocess, NULL);
 }
 
-static void deinit(mimiProcess_t *self)
+static void deinit(MimiProcess *self)
 {
     self->_beforDinit(self);
     dinitAllSubProcess(self);
-    self->attributeList->dinit(self->attributeList);
+    self->attributeList->deinit(self->attributeList);
     DynMemPut(self->mem);
 }
 
-static void update(mimiProcess_t *self)
+static void update(MimiProcess *self)
 {
     // return if is not enable
     if (0 == self->getInt(self, "isEnable"))
@@ -41,139 +41,139 @@ static void update(mimiProcess_t *self)
     }
     self->_updateHandle(self);
 }
-static void _processRootUpdateHandle(mimiProcess_t *self)
+static void _processRootUpdateHandle(MimiProcess *self)
 {
     // override the handle function here
 }
-static void enable(mimiProcess_t *self)
+static void enable(MimiProcess *self)
 {
     self->setInt(self, "isEnable", 1);
 }
 
-static void disable(mimiProcess_t *self)
+static void disable(MimiProcess *self)
 {
     self->setInt(self, "isEnable", 0);
 }
 
-static void setInt64(mimiProcess_t *self, char *name, long long val)
+static void setInt64(MimiProcess *self, char *name, long long val)
 {
     self->attributeList->setInt(self->attributeList, name, val);
 }
 
-static void setPointer(mimiProcess_t *self, char *name, void *pointer)
+static void setPointer(MimiProcess *self, char *name, void *pointer)
 {
     self->attributeList->setPtr(self->attributeList, name, pointer);
 }
 
-static void setFloat(mimiProcess_t *self, char *name, float value)
+static void setFloat(MimiProcess *self, char *name, float value)
 {
     self->attributeList->setFloat(self->attributeList, name, value);
 }
 
-static void setStr(mimiProcess_t *self, char *name, char *str)
+static void setStr(MimiProcess *self, char *name, char *str)
 {
     self->attributeList->setStr(self->attributeList, name, str);
 }
 
-static long long getInt64(mimiProcess_t *self, char *name)
+static long long getInt64(MimiProcess *self, char *name)
 {
     return self->attributeList->getInt(self->attributeList, name);
 }
 
-static void *getPointer(mimiProcess_t *self, char *name)
+static void *getPointer(MimiProcess *self, char *name)
 {
     return self->attributeList->getPtr(self->attributeList, name);
 }
 
-static float getFloat(mimiProcess_t *self, char *name)
+static float getFloat(MimiProcess *self, char *name)
 {
     return self->attributeList->getFloat(self->attributeList, name);
 }
 
-char *getStr(mimiProcess_t *self, char *name)
+char *getStr(MimiProcess *self, char *name)
 {
     return self->attributeList->getStr(self->attributeList, name);
 }
 
-static void loadAttributeFromArgs(mimiProcess_t *self, args_t *args, char *name)
+static void loadAttributeFromArgs(MimiProcess *self, Args *args, char *name)
 {
     args->copyArg(args, name, self->attributeList);
 }
 
-static void _beforDinit(mimiProcess_t *self)
+static void _beforDinit(MimiProcess *self)
 {
     /* override in user code */
 }
 
-static void addSubProcess(mimiProcess_t *self, char *subProcessName, void *new_ProcessFun)
+static void addSubProcess(MimiProcess *self, char *subProcessName, void *new_ProcessFun)
 {
-    args_t *attributeList = self->attributeList;
-    args_t *initArgs = New_args(NULL);
+    Args *attributeList = self->attributeList;
+    Args *initArgs = New_args(NULL);
     initArgs->setPtr(initArgs, "context", self);
-    void *(*newProcessFun)(args_t * initArgs) = (void *(*)(args_t * initArgs)) new_ProcessFun;
+    void *(*newProcessFun)(Args * initArgs) = (void *(*)(Args * initArgs)) new_ProcessFun;
     void *subProcess = newProcessFun(initArgs);
     attributeList->setObject(attributeList, subProcessName, "process", subProcess);
-    initArgs->dinit(initArgs);
+    initArgs->deinit(initArgs);
 }
 
-static void addSubobject(mimiProcess_t *self, char *subObjectName, void *new_ObjectFun)
+static void addSubobject(MimiProcess *self, char *subObjectName, void *new_ObjectFun)
 {
-    args_t *initArgs = New_args(NULL);
+    Args *initArgs = New_args(NULL);
     initArgs->setPtr(initArgs, "context", self);
-    void *(*new_Object)(args_t * initArgs) = (void *(*)(args_t *))new_ObjectFun;
+    void *(*new_Object)(Args * initArgs) = (void *(*)(Args *))new_ObjectFun;
     void *subObject = new_Object(initArgs);
     self->setPtr(self, subObjectName, subObject);
-    initArgs->dinit(initArgs);
+    initArgs->deinit(initArgs);
 }
 
-static void dinitSubProcessByName(mimiProcess_t *self, char *subProcessName)
+static void dinitSubProcessByName(MimiProcess *self, char *subProcessName)
 {
-    mimiProcess_t *subProcess = self->getPtr(self, subProcessName);
-    subProcess->dinit(subProcess);
+    MimiProcess *subProcess = self->getPtr(self, subProcessName);
+    subProcess->deinit(subProcess);
 }
 
-static void _potableInitDefault(mimiProcess_t *self)
+static void _potableInitDefault(MimiProcess *self)
 {
     /* override in user code, init the hardward dependence issues */
 }
 
-static void argBind(mimiProcess_t *self, char *type, char *name, void *pointer)
+static void argBind(MimiProcess *self, char *type, char *name, void *pointer)
 {
     self->attributeList->bind(self->attributeList, type, name, pointer);
 }
 
-static char *argPinrt(mimiProcess_t *self, char *name)
+static char *argPinrt(MimiProcess *self, char *name)
 {
     return self->attributeList->print(self->attributeList, name);
 }
 
-static void argBindInt(mimiProcess_t *self, char *name, int *valPtr)
+static void argBindInt(MimiProcess *self, char *name, int *valPtr)
 {
     self->attributeList->bindInt(self->attributeList, name, valPtr);
 }
 
-static void argBindFloat(mimiProcess_t *self, char *name, float *valPtr)
+static void argBindFloat(MimiProcess *self, char *name, float *valPtr)
 {
     self->attributeList->bindFloat(self->attributeList, name, valPtr);
 }
 
-static void argBindString(mimiProcess_t *self, char *name, char **valPtr)
+static void argBindString(MimiProcess *self, char *name, char **valPtr)
 {
     self->attributeList->bindStr(self->attributeList, name, valPtr);
 }
 
-static int argSet(mimiProcess_t *self, char *name, char *valStr)
+static int argSet(MimiProcess *self, char *name, char *valStr)
 {
     return self->attributeList->set(self->attributeList, name, valStr);
 }
 
-static void init(mimiProcess_t *self, args_t *args)
+static void init(MimiProcess *self, Args *args)
 {
     /* List */
     self->attributeList = New_args(NULL);
 
     /* operation */
-    self->dinit = deinit;
+    self->deinit = deinit;
     self->update = update;
     self->enable = enable;
     self->disable = disable;
@@ -219,10 +219,10 @@ static void init(mimiProcess_t *self, args_t *args)
     }
 }
 
-mimiProcess_t *New_mimiProcess(args_t *args)
+MimiProcess *New_mimiProcess(Args *args)
 {
-    DMEM *mem = DynMemGet(sizeof(mimiProcess_t));
-    mimiProcess_t *self = mem->addr;
+    DMEM *mem = DynMemGet(sizeof(MimiProcess));
+    MimiProcess *self = mem->addr;
     self->mem = mem;
     self->init = init;
     self->init(self, args);

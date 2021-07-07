@@ -94,7 +94,7 @@ static vkey_t *VM_key_init_lamp(int KEY_id, void *context)
 }
 
 
-static void init_panelTemp(server_t *self, args_t *args)
+static void init_panelTemp(server_t *self, Args *args)
 {
     /* attrivute */
 
@@ -117,7 +117,7 @@ static void init_panelTemp(server_t *self, args_t *args)
     vkey_t * key_1 = VM_key_init_lamp(1, self);
     vkey_t * key_2 = VM_key_init_lamp(2, self);
     {
-        args_t *args = New_args(NULL);
+        Args *args = New_args(NULL);
         args->setStr(args, "title", "home");
         args->setPtr(args, "context", self);
         args->setInt(args, "optionMax", 1);
@@ -128,10 +128,10 @@ static void init_panelTemp(server_t *self, args_t *args)
 
         gui_home = New_gui2_3key(args);
 
-        args->dinit(args);
+        args->deinit(args);
     }
     {
-        args_t *args = New_args(NULL);
+        Args *args = New_args(NULL);
         args->setStr(args, "title", "select a val");
         args->setPtr(args, "context", self);
         args->setInt(args, "optionMax", 3);
@@ -146,10 +146,10 @@ static void init_panelTemp(server_t *self, args_t *args)
 
         gui_observer = New_gui2_3key(args);
 
-        args->dinit(args);
+        args->deinit(args);
     }
     {
-        args_t *args = New_args(NULL);
+        Args *args = New_args(NULL);
         args->setStr(args, "title", "select a val");
         args->setPtr(args, "context", self);
         args->setInt(args, "optionMax", 1);
@@ -160,10 +160,10 @@ static void init_panelTemp(server_t *self, args_t *args)
 
         gui_setAlert = New_gui2_3key(args);
 
-        args->dinit(args);
+        args->deinit(args);
     }
     {
-        args_t *args = New_args(NULL);
+        Args *args = New_args(NULL);
         args->setStr(args, "title", "temp1");
         args->setPtr(args, "context", self);
         args->setInt(args, "optionMax", 0);
@@ -171,10 +171,10 @@ static void init_panelTemp(server_t *self, args_t *args)
 
         gui_watch0 = New_gui2_watch(args);
 
-        args->dinit(args);
+        args->deinit(args);
     }
     {
-        args_t *args = New_args(NULL);
+        Args *args = New_args(NULL);
         args->setStr(args, "title", "temp2");
         args->setPtr(args, "context", self);
         args->setInt(args, "optionMax", 0);
@@ -182,10 +182,10 @@ static void init_panelTemp(server_t *self, args_t *args)
 
         gui_watch1 = New_gui2_watch(args);
 
-        args->dinit(args);
+        args->deinit(args);
     }
     {
-        args_t *args = New_args(NULL);
+        Args *args = New_args(NULL);
         args->setStr(args, "title", "hum1");
         args->setPtr(args, "context", self);
         args->setInt(args, "optionMax", 0);
@@ -193,10 +193,10 @@ static void init_panelTemp(server_t *self, args_t *args)
 
         gui_watch2 = New_gui2_watch(args);
 
-        args->dinit(args);
+        args->deinit(args);
     }
     {
-        args_t *args = New_args(NULL);
+        Args *args = New_args(NULL);
         args->setStr(args, "title", "hum2");
         args->setPtr(args, "context", self);
         args->setInt(args, "optionMax", 0);
@@ -204,10 +204,10 @@ static void init_panelTemp(server_t *self, args_t *args)
 
         gui_watch3 = New_gui2_watch(args);
 
-        args->dinit(args);
+        args->deinit(args);
     }
     {
-        args_t *args = New_args(NULL);
+        Args *args = New_args(NULL);
         args->setStr(args, "title", "temp1 allert");
         args->setPtr(args, "context", self);
         args->setInt(args, "optionMax", 0);
@@ -215,10 +215,10 @@ static void init_panelTemp(server_t *self, args_t *args)
 
         gui_set0 = New_gui2_set(args);
 
-        args->dinit(args);
+        args->deinit(args);
     }
     {
-        args_t *args = New_args(NULL);
+        Args *args = New_args(NULL);
         args->setStr(args, "title", "temp2 allert");
         args->setPtr(args, "context", self);
         args->setInt(args, "optionMax", 0);
@@ -226,7 +226,7 @@ static void init_panelTemp(server_t *self, args_t *args)
 
         gui_set1 = New_gui2_set(args);
 
-        args->dinit(args);
+        args->deinit(args);
     }
 
     gui_main = gui_home;
@@ -250,7 +250,7 @@ static void init_panelTemp(server_t *self, args_t *args)
     /* override */
 }
 
-server_t *New_server_panelTemp(args_t *args)
+server_t *New_server_panelTemp(Args *args)
 {
     server_t *self = New_server(args);
     self->init = init_panelTemp;

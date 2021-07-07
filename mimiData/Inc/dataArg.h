@@ -2,7 +2,7 @@
 #define _arg__H
 #include "dataMemory.h"
 
-typedef struct Class_arg arg_t;
+typedef struct Class_arg Arg;
 struct Class_arg
 {
     /* attribute */
@@ -14,29 +14,29 @@ struct Class_arg
     DMEM *typeDynMem;
 
     /* operation */
-    void (*dinit)(arg_t *self);
-    void (*init)(arg_t *self, void *voidPointer);
+    void (*deinit)(Arg *self);
+    void (*init)(Arg *self, void *voidPointer);
 
-    void (*setName)(arg_t *self, char *name);
-    void (*setContant)(arg_t *self, char *contant, int size);
-    void (*setType)(arg_t *self, char *type);
+    void (*setName)(Arg *self, char *name);
+    void (*setContant)(Arg *self, char *contant, int size);
+    void (*setType)(Arg *self, char *type);
 
-    void (*setInt64)(arg_t *self, long long val);
-    void (*setFloat)(arg_t *self, float val);
-    void (*setPointer)(arg_t *self, void *pointer);
-    void (*setString)(arg_t *self, char *string);
+    void (*setInt64)(Arg *self, long long val);
+    void (*setFloat)(Arg *self, float val);
+    void (*setPointer)(Arg *self, void *pointer);
+    void (*setString)(Arg *self, char *string);
 
-    long long (*getInt64)(arg_t *self);
-    float (*getFloat)(arg_t *self);
-    void *(*getPointer)(arg_t *self);
-    char *(*getString)(arg_t *self);
+    long long (*getInt64)(Arg *self);
+    float (*getFloat)(Arg *self);
+    void *(*getPointer)(Arg *self);
+    char *(*getString)(Arg *self);
 
-    char *(*getContant)(arg_t *self);
+    char *(*getContant)(Arg *self);
 
     /* virtual operation */
 
     /* object */
 };
 
-arg_t *New_arg(void *voidPointer);
+Arg *New_arg(void *voidPointer);
 #endif

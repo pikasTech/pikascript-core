@@ -16,7 +16,7 @@ static void refresh(gui2_t *self)
     self->_refresh_periodic(self);
 }
 
-static void init_3key(gui2_t *self, args_t *args)
+static void init_3key(gui2_t *self, Args *args)
 {
     /* attrivute */
 
@@ -28,7 +28,7 @@ static void init_3key(gui2_t *self, args_t *args)
     /* override */
 }
 
-gui2_t *New_gui2_3key(args_t *args)
+gui2_t *New_gui2_3key(Args *args)
 {
     gui2_t *self = New_gui2(args);
     self->init = init_3key;

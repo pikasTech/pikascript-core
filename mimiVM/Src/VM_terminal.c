@@ -38,7 +38,7 @@ terminal_t *VM_terminal_init(void)
 {
     DMEM *mem = DynMemGet(sizeof(terminal_t));
     terminal_t *terminal = mem->addr;
-    terminal->dinit = deinit;
+    terminal->deinit = deinit;
     terminal->callBack_char = callBack_char;
     terminal->PORT_VM_terminal_getChar = PORT_VM_terminal_getChar;
     terminal->update = update;

@@ -3,7 +3,7 @@
 #include "dataArgs.h"
 #include "dataLink.h"
 #include "dataMemory.h"
-typedef struct Class_process mimiProcess_t;
+typedef struct Class_process MimiProcess;
 
 struct Class_process
 {
@@ -11,52 +11,52 @@ struct Class_process
     DMEM *mem;
 
     /* list */
-    args_t *attributeList;
+    Args *attributeList;
 
     /* operation */
-    void (*dinit)(mimiProcess_t *self);
-    void (*init)(mimiProcess_t *self, args_t *args);
-    void (*update)(mimiProcess_t *self);
-    void (*enable)(mimiProcess_t *self);
-    void (*disable)(mimiProcess_t *self);
+    void (*deinit)(MimiProcess *self);
+    void (*init)(MimiProcess *self, Args *args);
+    void (*update)(MimiProcess *self);
+    void (*enable)(MimiProcess *self);
+    void (*disable)(MimiProcess *self);
 
     // arg type operations
-    void (*setInt)(mimiProcess_t *self, char *name, long long val);
-    void (*setPtr)(mimiProcess_t *self, char *name, void *pointer);
-    void (*setFloat)(mimiProcess_t *self, char *name, float value);
-    void (*setStr)(mimiProcess_t *self, char *name, char *str);
+    void (*setInt)(MimiProcess *self, char *name, long long val);
+    void (*setPtr)(MimiProcess *self, char *name, void *pointer);
+    void (*setFloat)(MimiProcess *self, char *name, float value);
+    void (*setStr)(MimiProcess *self, char *name, char *str);
 
-    void *(*getPtr)(mimiProcess_t *self, char *name);
-    float (*getFloat)(mimiProcess_t *self, char *name);
-    char *(*getStr)(mimiProcess_t *self, char *name);
-    long long (*getInt)(mimiProcess_t *self, char *name);
+    void *(*getPtr)(MimiProcess *self, char *name);
+    float (*getFloat)(MimiProcess *self, char *name);
+    char *(*getStr)(MimiProcess *self, char *name);
+    long long (*getInt)(MimiProcess *self, char *name);
 
     // arg general operations
-    void (*argBind)(mimiProcess_t *self, char *type, char *name, void *pointer);
-    int (*argSet)(mimiProcess_t *self, char *name, char *valStr);
+    void (*argBind)(MimiProcess *self, char *type, char *name, void *pointer);
+    int (*argSet)(MimiProcess *self, char *name, char *valStr);
     
-    void (*argBindInt)(mimiProcess_t *self, char*name,int* valPtr);
-    void (*argBindFloat)(mimiProcess_t *self, char*name,float* valPtr);
-    void (*argBindString)(mimiProcess_t *self, char*name,char** valPtr);
+    void (*argBindInt)(MimiProcess *self, char*name,int* valPtr);
+    void (*argBindFloat)(MimiProcess *self, char*name,float* valPtr);
+    void (*argBindString)(MimiProcess *self, char*name,char** valPtr);
     
-    char * (*argPrint)(mimiProcess_t *self, char *name);
+    char * (*argPrint)(MimiProcess *self, char *name);
 
     // args operations
-    void (*loadAttributeFromArgs)(mimiProcess_t *self, args_t *args, char *name);
+    void (*loadAttributeFromArgs)(MimiProcess *self, Args *args, char *name);
 
     // subObject
-    void (*addSubobject)(mimiProcess_t *self, char *subObjectName, void *new_projcetFun);
-    void (*addSubProcess)(mimiProcess_t *self, char *subObjectName, void *new_projcetFun);
+    void (*addSubobject)(MimiProcess *self, char *subObjectName, void *new_projcetFun);
+    void (*addSubProcess)(MimiProcess *self, char *subObjectName, void *new_projcetFun);
 
     // subProcess
-    void (*dinitSubProcessByName)(mimiProcess_t *self, char *subObjectName);
+    void (*dinitSubProcessByName)(MimiProcess *self, char *subObjectName);
 
     /* virtual operation */
-    void (*_beforDinit)(mimiProcess_t *self);
-    void (*_updateHandle)(mimiProcess_t *self);
+    void (*_beforDinit)(MimiProcess *self);
+    void (*_updateHandle)(MimiProcess *self);
 
     /* object */
 };
 
-mimiProcess_t *New_mimiProcess(args_t *args);
+MimiProcess *New_mimiProcess(Args *args);
 #endif

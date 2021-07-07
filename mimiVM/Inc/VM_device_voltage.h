@@ -3,5 +3,5 @@
 #include "dataMemory.h"
 #include "VM_device.h"
 
-device_t *New_device_voltage(args_t *args);
+device_t *New_device_voltage(Args *args);
 #endif

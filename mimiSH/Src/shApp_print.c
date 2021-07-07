@@ -11,12 +11,12 @@
 
 #define PROCESS_DIR argv[1]
 
-void *app_print(shell2_t *shell, int argc, char **argv)
+void *app_print(Shell2 *shell, int argc, char **argv)
 {
     DMEM *memOut = DynMemGet(sizeof(char) * 256);
     ((char *)(memOut->addr))[0] = 0;
-    mimiProcess_t *root = shell->context;
-    mimiProcess_t *processNow = goToProcess(root, PROCESS_DIR, 1);
+    MimiProcess *root = shell->context;
+    MimiProcess *processNow = goToProcess(root, PROCESS_DIR, 1);
 
     if (NULL == processNow)
     {

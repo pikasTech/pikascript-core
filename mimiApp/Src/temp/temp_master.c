@@ -59,7 +59,7 @@ static void update(server_t *self, int systime)
 	}
 }
 
-static void init_tempM(server_t *self, args_t *args)
+static void init_tempM(server_t *self, Args *args)
 {
 	/* attrivute */
 
@@ -74,17 +74,17 @@ static void init_tempM(server_t *self, args_t *args)
 	server_t *panel = NULL;
 	
 	{
-		args_t *args = New_args(NULL);
+		Args *args = New_args(NULL);
 		args->setPtr(args, "context", tempInfo);
 		allert = New_server_allert(args);
-		args->dinit(args);
+		args->deinit(args);
 	}
 	{
-		args_t *args = New_args(NULL);
+		Args *args = New_args(NULL);
 		args->setInt(args, "isEnable", 0);
 		args->setPtr(args, "context", self);
 		panel = New_server_panelTemp(args);
-		args->dinit(args);
+		args->deinit(args);
 	}
 
 	allertInfo_t *allertInfo = allert->subObjectList[0];
@@ -104,7 +104,7 @@ static void init_tempM(server_t *self, args_t *args)
 	/* override */
 }
 
-server_t *New_server_tempM(args_t *args)
+server_t *New_server_tempM(Args *args)
 {
 	server_t *self = New_server(args);
 	self->init = init_tempM;

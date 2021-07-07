@@ -12,13 +12,13 @@ struct Class_allertInfo
     int allert_temp2;
 
     /* operation */
-    void (*dinit)(allertInfo_t *self);
-    void (*init)(allertInfo_t *self, args_t *args);
+    void (*deinit)(allertInfo_t *self);
+    void (*init)(allertInfo_t *self, Args *args);
 
     /* virtual operation */
 
     /* object */
 };
 
-allertInfo_t *New_allertInfo(args_t *args);
+allertInfo_t *New_allertInfo(Args *args);
 #endif

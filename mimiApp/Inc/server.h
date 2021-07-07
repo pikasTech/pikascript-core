@@ -14,22 +14,22 @@ struct Class_server
     DMEM *mem;
     void *context;
     int isEnable;
-    link_t *subOjbectLinkList;
-    link_t *subAttributeLinkList;
+    Link *subOjbectLinkList;
+    Link *subAttributeLinkList;
     void *subObjectList[SERVER_SUB_OBJECT_LIST_LENGTH];
     void *subAttributeList[SERVER_SUB_ATTRIBUTE_LIST_LENGTH];
 
     /* operation */
-    void (*dinit)(server_t *self);
-    void (*init)(server_t *self, args_t *args);
+    void (*deinit)(server_t *self);
+    void (*init)(server_t *self, Args *args);
     void (*update)(server_t *self, int sysytime);
     void (*enable)(server_t *self);
     void (*disable)(server_t *self);
     void (*argHandle)(server_t *self,
-                      args_t *args,
+                      Args *args,
                       char *argName,
                       void (*handle)(server_t *self,
-                                     args_t *args,
+                                     Args *args,
                                      char *argName));
 
     /* virtual operation */
@@ -37,5 +37,5 @@ struct Class_server
     /* object */
 };
 
-server_t *New_server(args_t *args);
+server_t *New_server(Args *args);
 #endif

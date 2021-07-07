@@ -1,7 +1,7 @@
 #include "server.h"
 #include "dataMemory.h"
 
-static void init_tempS(server_t *self, args_t *args)
+static void init_tempS(server_t *self, Args *args)
 {
     /* attrivute */
 
@@ -12,7 +12,7 @@ static void init_tempS(server_t *self, args_t *args)
     /* override */
 }
 
-server_t *New_server_tempS(args_t *args)
+server_t *New_server_tempS(Args *args)
 {
     server_t *self = New_server(args);
     self->init = init_tempS;

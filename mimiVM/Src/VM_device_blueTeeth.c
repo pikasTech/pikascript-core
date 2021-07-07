@@ -3,14 +3,14 @@
 #include "dataMemory.h"
 #include "dataString.h"
 
-static int _writeHandle(device_t *self, args_t *args_in)
+static int _writeHandle(device_t *self, Args *args_in)
 {
     char *str = args_in->getStrByIndex(args_in, 0);
     PORT_send_to_com(3, str);
     return 0;
 }
 
-static void init_blueTeeth(device_t *self, args_t *args)
+static void init_blueTeeth(device_t *self, Args *args)
 {
     /* attrivute */
 
@@ -22,7 +22,7 @@ static void init_blueTeeth(device_t *self, args_t *args)
     self->_writeHandle = _writeHandle;
 }
 
-device_t *New_device_blueTeeth(args_t *args)
+device_t *New_device_blueTeeth(Args *args)
 {
     device_t *self = New_device(args);
     self->init = init_blueTeeth;

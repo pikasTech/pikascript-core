@@ -4,7 +4,7 @@
 #include "dataLinkWithNode.h"
 #include "dataArgs.h"
 
-typedef struct Class_mimiShell2 shell2_t;
+typedef struct Class_mimiShell2 Shell2;
 #define SHELL2_CMD_NAME_LENGTH 32
 #define SHELL2_CMD_LENGTH 256
 
@@ -25,20 +25,20 @@ struct Class_mimiShell2
     void * context;
 
     /* operation */
-    void *(*cmd)(shell2_t *self, char *);
-    void (*addMap)(shell2_t *self, char *, void *(*)(shell2_t *shell, int argc, char **argv));
-    int (*listMap)(shell2_t *self, int);
-    int (*test)(shell2_t *self, int);
-    void (*init)(shell2_t *self, args_t *args);
-    void (*dinit)(shell2_t *self);
+    void *(*cmd)(Shell2 *self, char *);
+    void (*addMap)(Shell2 *self, char *, void *(*)(Shell2 *shell, int argc, char **argv));
+    int (*listMap)(Shell2 *self, int);
+    int (*test)(Shell2 *self, int);
+    void (*init)(Shell2 *self, Args *args);
+    void (*deinit)(Shell2 *self);
 
     /* override */
-    void (*config)(shell2_t *self);
-    void *(*detector)(shell2_t *self, void *(*fun_d)(char *, void *(fun)(int, char **)),
+    void (*config)(Shell2 *self);
+    void *(*detector)(Shell2 *self, void *(*fun_d)(char *, void *(fun)(int, char **)),
                       char *CMD,
                       void *(fun)(int argc, char **argv));
 };
 
-shell2_t *New_shell2(args_t *initArgs);
+Shell2 *New_shell2(Args *initArgs);
 
 #endif

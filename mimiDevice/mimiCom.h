@@ -2,27 +2,27 @@
 #define _mimiCom__H
 #include "dataMemory.h"
 #include "dataArgs.h"
-typedef struct Class_mimiCom mimiCom_t;
+typedef struct Class_mimiCom MimiCom;
 struct Class_mimiCom
 {
     /* attribute */
     DMEM *mem;
-    args_t *args;
+    Args *args;
     char RxBuff[256];
 
     /* operation */
-    void (*dinit)(mimiCom_t *self);
-    void (*init)(mimiCom_t *self, args_t *args);
+    void (*deinit)(MimiCom *self);
+    void (*init)(MimiCom *self, Args *args);
 
-    void (*getChar)(mimiCom_t *self, char inputChar);
-    void (*sendSting)(mimiCom_t *self, char *stingToSend);
+    void (*getChar)(MimiCom *self, char inputChar);
+    void (*sendSting)(MimiCom *self, char *stingToSend);
 
     /* virtual operation */
-    void (*_singleLineCallBack)(mimiCom_t *self);
-    void (*_sendStringHandle)(mimiCom_t *self, char *stingToSend);
+    void (*_singleLineCallBack)(MimiCom *self);
+    void (*_sendStringHandle)(MimiCom *self, char *stingToSend);
 
     /* object */
 };
 
-mimiCom_t *New_mimiCom(args_t *args);
+MimiCom *New_mimiCom(Args *args);
 #endif

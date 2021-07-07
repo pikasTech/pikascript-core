@@ -5,8 +5,8 @@
 static void deinit(server_t *self)
 {
     DynMemPut(self->mem);
-    self->subOjbectLinkList->dinit(self->subOjbectLinkList);
-    self->subAttributeLinkList->dinit(self->subAttributeLinkList);
+    self->subOjbectLinkList->deinit(self->subOjbectLinkList);
+    self->subAttributeLinkList->deinit(self->subAttributeLinkList);
 }
 
 static void update(server_t *self, int systime)
@@ -29,24 +29,24 @@ static void disable(server_t *self)
 }
 
 static void argHandle_context(server_t *self,
-                              args_t *args,
+                              Args *args,
                               char *argName)
 {
     self->context = args->getPtr(args, argName);
 }
 
 static void argHandle_isEnalbe(server_t *self,
-                               args_t *args,
+                               Args *args,
                                char *argName)
 {
     self->isEnable = args->getInt(args, argName);
 }
 
 static void argHandle(server_t *self,
-                      args_t *args,
+                      Args *args,
                       char *argName,
                       void (*handle)(server_t *self,
-                                     args_t *args,
+                                     Args *args,
                                      char *argName))
 {
     if (NULL == args->getArgByName(args, argName))
@@ -56,7 +56,7 @@ static void argHandle(server_t *self,
     handle(self, args, argName);
 }
 
-static void init(server_t *self, args_t *args)
+static void init(server_t *self, Args *args)
 {
     /* attrivute */
     self->context = self;
@@ -76,7 +76,7 @@ static void init(server_t *self, args_t *args)
     }
 
     /* operation */
-    self->dinit = deinit;
+    self->deinit = deinit;
     self->update = update;
     self->enable = enable;
     self->disable = disable;
@@ -101,7 +101,7 @@ static void init(server_t *self, args_t *args)
                     argHandle_context);
 }
 
-server_t *New_server(args_t *args)
+server_t *New_server(Args *args)
 {
     DMEM *mem = DynMemGet(sizeof(server_t));
     server_t *self = mem->addr;

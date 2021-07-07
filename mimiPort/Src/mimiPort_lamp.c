@@ -10,7 +10,7 @@ mimiPort_lamp_t *Class_mimiPort_lamp_init(void)
     DMEM *mem = DynMemGet(sizeof(mimiPort_lamp_t));
     mimiPort_lamp_t *mimiPort_lamp = mem->addr;
     mimiPort_lamp->mem = mem;
-    mimiPort_lamp->dinit = deinit;
+    mimiPort_lamp->deinit = deinit;
     return mimiPort_lamp;
 }
 

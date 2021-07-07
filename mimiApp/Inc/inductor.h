@@ -5,7 +5,7 @@ typedef struct Class_inductor inductor_t;
 struct Class_inductor
 {
     DMEM *mem;
-    void (*dinit)(inductor_t *inductor);
+    void (*deinit)(inductor_t *inductor);
     void (*update)(inductor_t *inductor, int systeme);
     int (*PORT_stateUpdate)(void);
     int state;

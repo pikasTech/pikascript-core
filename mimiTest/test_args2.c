@@ -4,7 +4,7 @@ int TEST_args2(int isShow)
 {
     int err = 0;
     {
-        args_t *args = New_args(NULL);
+        Args *args = New_args(NULL);
         float floatOut = 0;
         long long int64Out = 0;
         void *pointer = NULL;
@@ -67,11 +67,11 @@ int TEST_args2(int isShow)
         {
             err = 8;
         }
-        args->dinit(args);
+        args->deinit(args);
     }
     {
-        args_t *args1 = New_args(NULL);
-        args_t *args2 = New_args(NULL);
+        Args *args1 = New_args(NULL);
+        Args *args2 = New_args(NULL);
 
         args1->setFloat(args1, "argtest1", 2.883);
         args1->setStr(args1, "strtest1", "teststr");
@@ -91,22 +91,22 @@ int TEST_args2(int isShow)
             err = 9;
         }
 
-        args1->dinit(args1);
-        args2->dinit(args2);
+        args1->deinit(args1);
+        args2->deinit(args2);
     }
     {
         int testint = 12333;
-        args_t *args = New_args(NULL);
+        Args *args = New_args(NULL);
         args->setInt(args, "testint", testint);
         if (isShow)
         {
             printf("args print test int: %s\r\n", args->print(args, "testint"));
         }
-        args->dinit(args);
+        args->deinit(args);
     }
     {
         int testInt = 124;
-        args_t *args = New_args(NULL);
+        Args *args = New_args(NULL);
         args->bind(args, "int", "testInt", &testInt);
         char *type = args->getTypeByName(args, "testInt");
         args->print(args, "testInt");
@@ -120,10 +120,10 @@ int TEST_args2(int isShow)
             err = 21;
             goto exit;
         }
-        args->dinit(args);
+        args->deinit(args);
     }
     {
-        args_t *args = New_args(NULL);
+        Args *args = New_args(NULL);
         args->setFloat(args, "testfloat", 1.42);
         if (isShow)
         {
@@ -134,10 +134,10 @@ int TEST_args2(int isShow)
             err = 22;
             goto exit;
         }
-        args->dinit(args);
+        args->deinit(args);
     }
     {
-        args_t *args = New_args(NULL);
+        Args *args = New_args(NULL);
         float floatBindTest = 2.314;
         args->bind(args, "float", "floatBind", &floatBindTest);
         if (isShow)
@@ -149,10 +149,10 @@ int TEST_args2(int isShow)
             err = 24;
             goto exit;
         }
-        args->dinit(args);
+        args->deinit(args);
     }
     {
-        args_t *args = New_args(NULL);
+        Args *args = New_args(NULL);
         args->setStr(args, "testString", "test string print");
         if (isShow)
         {
@@ -163,10 +163,10 @@ int TEST_args2(int isShow)
             err = 25;
             goto exit;
         }
-        args->dinit(args);
+        args->deinit(args);
     }
     {
-        args_t *args = New_args(NULL);
+        Args *args = New_args(NULL);
         char strBindTest[] = "test string bind";
         args->bindStr(args, "testStringBind", &strBindTest);
         if (isShow)
@@ -178,10 +178,10 @@ int TEST_args2(int isShow)
             err = 26;
             goto exit;
         }
-        args->dinit(args);
+        args->deinit(args);
     }
     {
-        args_t *args = New_args(NULL);
+        Args *args = New_args(NULL);
         args->setInt(args, "testInt", 1);
         char *printOutBefore = args->print(args, "testInt");
         if (isShow)
@@ -202,10 +202,10 @@ int TEST_args2(int isShow)
         {
             return 55;
         }
-        args->dinit(args);
+        args->deinit(args);
     }
     {
-        args_t *args = New_args(NULL);
+        Args *args = New_args(NULL);
         char testStrBind[256] = "testtest";
         args->bindStr(args, "testStr", &testStrBind);
         char *printOutBefore = args->print(args, "testStr");
@@ -227,7 +227,7 @@ int TEST_args2(int isShow)
         {
             return 56;
         }
-        args->dinit(args);
+        args->deinit(args);
     }
 
     goto exit;

@@ -19,8 +19,8 @@ struct Class_gui
     gui2_t *next_gui[5];
 
     /* operation */
-    void (*dinit)(gui2_t *self);
-    void (*init)(gui2_t *self, args_t *args);
+    void (*deinit)(gui2_t *self);
+    void (*init)(gui2_t *self, Args *args);
     void (*refresh)(gui2_t *gui);
     void (*refrash_optionPointer)(gui2_t *gui);
     void (*refrash_optionStr)(gui2_t *gui);
@@ -36,10 +36,10 @@ struct Class_gui
     void (*clear)(gui2_t *gui);
     void (*setTitle)(gui2_t *gui, char *title);
     void (*argHandle)(gui2_t *self,
-                      args_t *args,
+                      Args *args,
                       char *argName,
                       void (*handle)(gui2_t *self,
-                                     args_t *args,
+                                     Args *args,
                                      char *argName));
     void (*guiChange_callBack)(gui2_t *self);
 
@@ -50,5 +50,5 @@ struct Class_gui
     /* object */
 };
 
-gui2_t *New_gui2(args_t *args);
+gui2_t *New_gui2(Args *args);
 #endif

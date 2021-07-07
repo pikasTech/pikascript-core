@@ -3,7 +3,7 @@
 
 int TEST_mimiCom(int isShow)
 {
-    mimiCom_t *com = New_mimiCom(NULL);
+    MimiCom *com = New_mimiCom(NULL);
 
     com->getChar(com, 'a');
     com->getChar(com, 'a');
@@ -17,6 +17,6 @@ int TEST_mimiCom(int isShow)
         printf("Single Line is: %s\r\n", RxSingleLine);
     }
 
-    com->dinit(com);
+    com->deinit(com);
     return 0;
 }

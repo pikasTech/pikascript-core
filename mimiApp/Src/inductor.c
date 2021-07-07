@@ -62,7 +62,7 @@ inductor_t *Class_inductor_NEW(void)
     inductor->state = 0;
     inductor->mem = mem;
     inductor->enable = 0;
-    inductor->dinit = deinit;
+    inductor->deinit = deinit;
     inductor->PORT_stateUpdate = PORT_stateUpdate;
     inductor->context = inductor;
     inductor->update = update;

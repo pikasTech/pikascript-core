@@ -4,7 +4,7 @@
 static void deinit(mTimer_t *timer)
 {
     DynMemPut(timer->mem);
-    timer->callback->dinit(timer->callback);
+    timer->callback->deinit(timer->callback);
 }
 
 static void enable(mTimer_t *timer)
@@ -53,7 +53,7 @@ mTimer_t *Class_timer_init(void (*_handler)(callback_t *callback))
     DMEM *mem = DynMemGet(sizeof(mTimer_t));
     mTimer_t *timer = mem->addr;
     timer->mem = mem;
-    timer->dinit = deinit;
+    timer->deinit = deinit;
 
     /* attribute */
     timer->isEnable = 0;

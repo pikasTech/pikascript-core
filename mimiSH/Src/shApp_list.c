@@ -10,7 +10,7 @@
 
 #define PROCESS_DIR argv[1]
 
-static int listEachHandleProcessArg(arg_t *argEach, args_t *handleArgs)
+static int listEachHandleProcessArg(Arg *argEach, Args *handleArgs)
 {
     if (NULL == handleArgs)
     {
@@ -31,12 +31,12 @@ static int listEachHandleProcessArg(arg_t *argEach, args_t *handleArgs)
     return 0;
 }
 
-void *app_list(shell2_t *shell, int argc, char **argv)
+void *app_list(Shell2 *shell, int argc, char **argv)
 {
     DMEM *memOut = DynMemGet(sizeof(char) * 256);
     ((char *)(memOut->addr))[0] = 0;
-    mimiProcess_t *root = shell->context;
-    mimiProcess_t *processNow = NULL;
+    MimiProcess *root = shell->context;
+    MimiProcess *processNow = NULL;
 
     if (argc == 1)
     {
@@ -53,12 +53,12 @@ void *app_list(shell2_t *shell, int argc, char **argv)
         return (void *)memOut;
     }
 
-    args_t *handleArgs = New_args(NULL);
+    Args *handleArgs = New_args(NULL);
     handleArgs->setStr(handleArgs, "stringOut", "");
-    args_t *processArgs = processNow->attributeList;
+    Args *processArgs = processNow->attributeList;
     processArgs->foreach (processArgs, listEachHandleProcessArg, handleArgs);
     memcpy(memOut->addr, handleArgs->getStr(handleArgs, "stringOut"), 256);
-    handleArgs->dinit(handleArgs);
+    handleArgs->deinit(handleArgs);
     strPrint(memOut->addr, "\r\n");
     return (void *)memOut;
 }

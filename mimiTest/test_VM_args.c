@@ -4,7 +4,7 @@
 int TEST_VM_args(int isShow)
 {
     int errCode = 0;
-    args_t *args = New_args(NULL);
+    Args *args = New_args(NULL);
     args->setStrWithDefaultName(args, "arg1");
     args->setStrWithDefaultName(args, "arg2");
 
@@ -30,6 +30,6 @@ int TEST_VM_args(int isShow)
     goto exit;
 
 exit:
-    args->dinit(args);
+    args->deinit(args);
     return errCode;
 }

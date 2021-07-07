@@ -2,18 +2,18 @@
 #include "dataMemory.h"
 #include "dataString.h"
 
-static void deinit(mimiCom_t *self)
+static void deinit(MimiCom *self)
 {
     DynMemPut(self->mem);
-    self->args->dinit(self->args);
+    self->args->deinit(self->args);
 }
 
-static void singleLineCallBackDefault(mimiCom_t *self)
+static void singleLineCallBackDefault(MimiCom *self)
 {
     /* overRide it in user code */
 }
 
-static void getChar(mimiCom_t *self, char inputChar)
+static void getChar(MimiCom *self, char inputChar)
 {
     if (inputChar != '\r' && inputChar != '\n')
     {
@@ -27,17 +27,17 @@ static void getChar(mimiCom_t *self, char inputChar)
     }
 }
 
-static void _sendStringHandleDefault(mimiCom_t *self, char *stringToSend)
+static void _sendStringHandleDefault(MimiCom *self, char *stringToSend)
 {
     /* override it in user code */
 }
 
-static void sendSting(mimiCom_t *self, char *stingToSend)
+static void sendSting(MimiCom *self, char *stingToSend)
 {
     self->_sendStringHandle(self, stingToSend);
 }
 
-static void init(mimiCom_t *self, args_t *initArgs)
+static void init(MimiCom *self, Args *initArgs)
 {
     /* attrivute */
     self->args = New_args(NULL);
@@ -47,7 +47,7 @@ static void init(mimiCom_t *self, args_t *initArgs)
     self->args->setStr(self->args, "RxSingleLine", "");
 
     /* operation */
-    self->dinit = deinit;
+    self->deinit = deinit;
     self->getChar = getChar;
     self->sendSting = sendSting;
 
@@ -65,10 +65,10 @@ static void init(mimiCom_t *self, args_t *initArgs)
     initArgs->copyArg(initArgs, "context", self->args);
 }
 
-mimiCom_t *New_mimiCom(args_t *args)
+MimiCom *New_mimiCom(Args *args)
 {
-    DMEM *mem = DynMemGet(sizeof(mimiCom_t));
-    mimiCom_t *self = mem->addr;
+    DMEM *mem = DynMemGet(sizeof(MimiCom));
+    MimiCom *self = mem->addr;
     self->mem = mem;
     self->init = init;
     self->init(self, args);

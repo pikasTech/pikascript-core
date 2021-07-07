@@ -2,7 +2,7 @@
 #include "VM_device.h"
 #include "dataMemory.h"
 
-int _read_handle(device_t *self, args_t *args_in, args_t *args_out)
+int _read_handle(device_t *self, Args *args_in, Args *args_out)
 {
     unsigned short int val_int = 0;
     float val = 0;
@@ -12,7 +12,7 @@ int _read_handle(device_t *self, args_t *args_in, args_t *args_out)
     return 0;
 }
 
-static void init_light(device_t *self, args_t *args)
+static void init_light(device_t *self, Args *args)
 {
     PORT_bh_Init();
     PORT_bh_data_send(BHPowOn);
@@ -28,7 +28,7 @@ static void init_light(device_t *self, args_t *args)
     self->_read_handle = _read_handle;
 }
 
-device_t *New_device_light(args_t *args)
+device_t *New_device_light(Args *args)
 {
     device_t *self = New_device(args);
     self->init = init_light;

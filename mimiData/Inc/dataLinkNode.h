@@ -1,21 +1,21 @@
 #ifndef _linkNode__H
 #define _linkNode__H
 #include "dataMemory.h"
-typedef struct Class_linkNode linkNode_t;
+typedef struct Class_linkNode LinkNode;
 struct Class_linkNode
 {
     /* attribute */
     DMEM *mem;
-    linkNode_t *priorNode;
-    linkNode_t *nextNode;
+    LinkNode *priorNode;
+    LinkNode *nextNode;
     long long id;
 
     /* operation */
-    void (*dinit)(linkNode_t *self);
-    void (*init)(linkNode_t *self, void *args);
+    void (*deinit)(LinkNode *self);
+    void (*init)(LinkNode *self, void *args);
 
-    long long (*getId)(linkNode_t *self);
-    int (*isId)(linkNode_t *self, long long id);
+    long long (*getId)(LinkNode *self);
+    int (*isId)(LinkNode *self, long long id);
 
     /* virtual operation */
     void (*_contantDinit)(void *contant);
@@ -24,5 +24,5 @@ struct Class_linkNode
     void *contant;
 };
 
-linkNode_t *New_linkNode(void *args);
+LinkNode *New_linkNode(void *args);
 #endif

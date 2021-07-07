@@ -6,20 +6,20 @@
 #include <stdio.h>
 #include <string.h>
 
-static void deinit(args_t *self)
+static void deinit(Args *self)
 {
     DynMemPut(self->mem);
-    self->argLinkList->dinit(self->argLinkList);
+    self->argLinkList->deinit(self->argLinkList);
 }
 
-static void loadDefaultName(args_t *self)
+static void loadDefaultName(Args *self)
 {
     sprintf((char *)self->nameBuff, "arg%d", (int)self->argLinkList->TopId);
 }
 
-static char *getStrByIndex(args_t *self, int index)
+static char *getStrByIndex(Args *self, int index)
 {
-    arg_t *arg = self->getArgByIndex(self, index);
+    Arg *arg = self->getArgByIndex(self, index);
     if (NULL == arg)
     {
         return NULL;
@@ -27,23 +27,23 @@ static char *getStrByIndex(args_t *self, int index)
     return arg->contantDynMem->addr;
 }
 
-static int setStrWithDefaultName(args_t *self, char *strIn)
+static int setStrWithDefaultName(Args *self, char *strIn)
 {
     loadDefaultName(self);
     self->setStr(self, (char *)self->nameBuff, strIn);
     return 0;
 }
 
-static int setFloatWithDefaultName(args_t *self, float argFloat)
+static int setFloatWithDefaultName(Args *self, float argFloat)
 {
     loadDefaultName(self);
     self->setFloat(self, (char *)self->nameBuff, argFloat);
     return 0;
 }
 
-static int setFloatWithName(args_t *self, char *name, float argFloat)
+static int setFloatWithName(Args *self, char *name, float argFloat)
 {
-    arg_t *argNew = New_arg(NULL);
+    Arg *argNew = New_arg(NULL);
     argNew->setType(argNew, "float");
     argNew->setName(argNew, name);
     argNew->setFloat(argNew, argFloat);
@@ -51,26 +51,26 @@ static int setFloatWithName(args_t *self, char *name, float argFloat)
     return 0;
 }
 
-static float getFloatByIndex(args_t *self, int index)
+static float getFloatByIndex(Args *self, int index)
 {
     float val = 0;
-    arg_t *arg = self->getArgByIndex(self, index);
+    Arg *arg = self->getArgByIndex(self, index);
     val = arg->getFloat(arg);
     return val;
 }
 
-static void *getPointerByIndex(args_t *self, int index)
+static void *getPointerByIndex(Args *self, int index)
 {
     void *pointer = NULL;
-    arg_t *arg = self->getArgByIndex(self, index);
+    Arg *arg = self->getArgByIndex(self, index);
     pointer = arg->getPointer(arg);
     return pointer;
 }
 
-static void *getPointerByName(args_t *self, char *name)
+static void *getPointerByName(Args *self, char *name)
 {
     void *pointer = NULL;
-    arg_t *arg = self->getArgByName(self, name);
+    Arg *arg = self->getArgByName(self, name);
     if (NULL == arg)
     {
         return NULL;
@@ -80,10 +80,10 @@ static void *getPointerByName(args_t *self, char *name)
     return pointer;
 }
 
-static int setPointerWithName(args_t *self, char *name, void *argPointer)
+static int setPointerWithName(Args *self, char *name, void *argPointer)
 {
     int errCode = 0;
-    arg_t *argNew = New_arg(NULL);
+    Arg *argNew = New_arg(NULL);
     argNew->setType(argNew, "pointer");
     argNew->setName(argNew, name);
     argNew->setPointer(argNew, argPointer);
@@ -91,10 +91,10 @@ static int setPointerWithName(args_t *self, char *name, void *argPointer)
     return errCode;
 }
 
-static int setStrWithName(args_t *self, char *name, char *strIn)
+static int setStrWithName(Args *self, char *name, char *strIn)
 {
     int errCode = 0;
-    arg_t *argNew = New_arg(NULL);
+    Arg *argNew = New_arg(NULL);
     argNew->setType(argNew, "string");
     argNew->setString(argNew, strIn);
     argNew->setName(argNew, name);
@@ -102,9 +102,9 @@ static int setStrWithName(args_t *self, char *name, char *strIn)
     return errCode;
 }
 
-static char *getStrByName(args_t *self, char *name)
+static char *getStrByName(Args *self, char *name)
 {
-    arg_t *arg = self->getArgByName(self, name);
+    Arg *arg = self->getArgByName(self, name);
     if(NULL == arg->contantDynMem)
     {
         return NULL;
@@ -112,9 +112,9 @@ static char *getStrByName(args_t *self, char *name)
     return arg->contantDynMem->addr;
 }
 
-static int setInt64WithName(args_t *self, char *name, long long int64In)
+static int setInt64WithName(Args *self, char *name, long long int64In)
 {
-    arg_t *argNew = New_arg(NULL);
+    Arg *argNew = New_arg(NULL);
     argNew->setName(argNew, name);
     argNew->setInt64(argNew, int64In);
     argNew->setType(argNew, "int");
@@ -122,26 +122,26 @@ static int setInt64WithName(args_t *self, char *name, long long int64In)
     return 0;
 }
 
-static long long getInt64ByIndex(args_t *self, int index)
+static long long getInt64ByIndex(Args *self, int index)
 {
-    arg_t *arg = self->getArgByIndex(self, index);
+    Arg *arg = self->getArgByIndex(self, index);
     return arg->getInt64(arg);
 }
 
-static long long getInt64ByName(args_t *self, char *name)
+static long long getInt64ByName(Args *self, char *name)
 {
-    arg_t *arg = self->getArgByName(self, name);
+    Arg *arg = self->getArgByName(self, name);
     return arg->getInt64(arg);
 }
 
-static int size(args_t *self)
+static int size(Args *self)
 {
     return self->argLinkList->size(self->argLinkList);
 }
 
-char *getTypeByName(args_t *self, char *name)
+char *getTypeByName(Args *self, char *name)
 {
-    arg_t *arg = NULL;
+    Arg *arg = NULL;
     arg = self->getArgByName(self, name);
     if (NULL == arg)
     {
@@ -150,14 +150,14 @@ char *getTypeByName(args_t *self, char *name)
     return arg->typeDynMem->addr;
 }
 
-static arg_t *getArgByIndex(args_t *self, int index)
+static Arg *getArgByIndex(Args *self, int index)
 {
-    arg_t *arg;
+    Arg *arg;
     if (index == -1)
     {
         return NULL;
     }
-    linkNode_t *node = self->argLinkList->findNodeById(self->argLinkList,index);
+    LinkNode *node = self->argLinkList->findNodeById(self->argLinkList,index);
     if (NULL == node)
     {
         return NULL;
@@ -166,20 +166,20 @@ static arg_t *getArgByIndex(args_t *self, int index)
     return arg;
 }
 
-static float getFloatByName(args_t *self, char *name)
+static float getFloatByName(Args *self, char *name)
 {
-    arg_t *arg = self->getArgByName(self, name);
+    Arg *arg = self->getArgByName(self, name);
     return arg->getFloat(arg);
 }
 
-static int copyArg(args_t *self, char *name, args_t *directArgs)
+static int copyArg(Args *self, char *name, Args *directArgs)
 {
-    arg_t *argToBeCopy = self->getArgByName(self, name);
+    Arg *argToBeCopy = self->getArgByName(self, name);
     if (NULL == argToBeCopy)
     {
         return 1;
     }
-    arg_t *argCopied = New_arg(NULL);
+    Arg *argCopied = New_arg(NULL);
     argCopied->setContant(argCopied, argToBeCopy->contantDynMem->addr, argToBeCopy->contantDynMem->size);
     argCopied->setName(argCopied, argToBeCopy->nameDynMem->addr);
     argCopied->setType(argCopied, argToBeCopy->typeDynMem->addr);
@@ -189,7 +189,7 @@ static int copyArg(args_t *self, char *name, args_t *directArgs)
     return 0;
 }
 
-static int isArgExist(args_t *self, char *name)
+static int isArgExist(Args *self, char *name)
 {
     if (NULL != self->getArgByName(self, name))
     {
@@ -198,10 +198,10 @@ static int isArgExist(args_t *self, char *name)
     return 0;
 }
 
-static int updateArg(args_t *self, arg_t *argNew)
+static int updateArg(Args *self, Arg *argNew)
 {
     // arg New must be a new arg
-    arg_t *argOld = self->getArgByName(self, argNew->nameDynMem->addr);
+    Arg *argOld = self->getArgByName(self, argNew->nameDynMem->addr);
 
     if (0 != strcmp(argOld->typeDynMem->addr, argNew->typeDynMem->addr))
     {
@@ -209,34 +209,34 @@ static int updateArg(args_t *self, arg_t *argNew)
         // type do not match
     }
     argOld->setContant(argOld, argNew->contantDynMem->addr, argNew->contantDynMem->size);
-    argNew->dinit(argNew);
+    argNew->deinit(argNew);
     return 0;
 }
 
-static int setArg(args_t *self, arg_t *arg)
+static int setArg(Args *self, Arg *arg)
 {
    
     if (!self->isArgExist(self, arg->nameDynMem->addr))
     {
         self->argLinkList->add(self->argLinkList,
                                arg,
-                               (void (*)(void *))arg->dinit);
+                               (void (*)(void *))arg->deinit);
         return 0;
     }
     updateArg(self, arg);
     return 0;
 }
 
-static arg_t *getArgByName(args_t *self, char *name)
+static Arg *getArgByName(Args *self, char *name)
 {
-    linkNode_t *nodeNow = self->argLinkList->firstNode;
+    LinkNode *nodeNow = self->argLinkList->firstNode;
     if (NULL == nodeNow)
     {
         return NULL;
     }
     while(1)
     {
-        arg_t *arg = nodeNow->contant;
+        Arg *arg = nodeNow->contant;
         if(0 == strcmp(name, arg->nameDynMem->addr))
         {
             return arg;
@@ -249,11 +249,11 @@ static arg_t *getArgByName(args_t *self, char *name)
     }
 }
 
-static void bind(args_t *self, char *type, char *name, void *pointer)
+static void bind(Args *self, char *type, char *name, void *pointer)
 {
     char typeWithBind[32] = "_bind-";
     strPrint(typeWithBind, type);
-    arg_t *argNew = New_arg(NULL);
+    Arg *argNew = New_arg(NULL);
     argNew->setType(argNew, typeWithBind);
     argNew->setName(argNew, name);
     argNew->setPointer(argNew, pointer);
@@ -261,22 +261,22 @@ static void bind(args_t *self, char *type, char *name, void *pointer)
     return;
 }
 
-static void bindInt(args_t *self, char *name, int *intPtr)
+static void bindInt(Args *self, char *name, int *intPtr)
 {
     self->bind(self, "int", name, intPtr);
 }
 
-static void bindFloat(args_t *self, char *name, float *floatPtr)
+static void bindFloat(Args *self, char *name, float *floatPtr)
 {
     self->bind(self, "float", name, floatPtr);
 }
 
-static void bindStr(args_t *self, char *name, char **stringPtr)
+static void bindStr(Args *self, char *name, char **stringPtr)
 {
     self->bind(self, "string", name, stringPtr);
 }
 
-static char *getPrintSring(args_t *self, char *name, char *valString)
+static char *getPrintSring(Args *self, char *name, char *valString)
 {
     char printName[32] = {0};
     strPrint(printName, ".print-");
@@ -287,21 +287,21 @@ static char *getPrintSring(args_t *self, char *name, char *valString)
     return self->getStr(self, printName);
 }
 
-static char *getPrintStringFromInt(args_t *self, char *name, int val)
+static char *getPrintStringFromInt(Args *self, char *name, int val)
 {
     char valString[256] = {0};
     sprintf(valString, "%d", val);
     return getPrintSring(self, name, valString);
 }
 
-static char *getPrintStringFromFloat(args_t *self, char *name, float val)
+static char *getPrintStringFromFloat(Args *self, char *name, float val)
 {
     char valString[256] = {0};
     sprintf(valString, "%f", val);
     return getPrintSring(self, name, valString);
 }
 
-static char *getPrintStringFromPtr(args_t *self, char *name, void *val)
+static char *getPrintStringFromPtr(Args *self, char *name, void *val)
 {
     char valString[256] = {0};
     long long intVal = (long long)val;
@@ -309,7 +309,7 @@ static char *getPrintStringFromPtr(args_t *self, char *name, void *val)
     return getPrintSring(self, name, valString);
 }
 
-static char *print(args_t *self, char *name)
+static char *print(Args *self, char *name)
 {
     char *type = self->getTypeByName(self, name);
 
@@ -363,7 +363,7 @@ static char *print(args_t *self, char *name)
     return "[error: arg no found]";
 }
 
-static int set(args_t *self, char *name, char *valStr)
+static int set(Args *self, char *name, char *valStr)
 {
     char *type = self->getTypeByName(self, name);
 
@@ -427,11 +427,11 @@ static int set(args_t *self, char *name, char *valStr)
     return 2;
 }
 
-static int setObject(args_t *self, char *objectName, char *className, void *objectPtr)
+static int setObject(Args *self, char *objectName, char *className, void *objectPtr)
 {
     char typeWithClass[32] = "_class-";
     strPrint(typeWithClass, className);
-    arg_t *argNew = New_arg(NULL);
+    Arg *argNew = New_arg(NULL);
     argNew->setName(argNew, objectName);
     argNew->setPointer(argNew, objectPtr);
     argNew->setType(argNew, typeWithClass);
@@ -439,12 +439,12 @@ static int setObject(args_t *self, char *objectName, char *className, void *obje
     return 0;
 }
 
-static int foreach(args_t *self, int (*eachHandle)(arg_t *argEach, args_t *handleArgs), args_t *handleArgs)
+static int foreach(Args *self, int (*eachHandle)(Arg *argEach, Args *handleArgs), Args *handleArgs)
 {
     int argsSize = self->size(self);
     for (int i = 0; i < argsSize; i++)
     {
-        arg_t *argNow = self->getArgByIndex(self, i);
+        Arg *argNow = self->getArgByIndex(self, i);
         if (NULL == argNow)
         {
             continue;
@@ -454,7 +454,7 @@ static int foreach(args_t *self, int (*eachHandle)(arg_t *argEach, args_t *handl
     return 0;
 }
 
-static void init(args_t *self, args_t *args)
+static void init(Args *self, Args *args)
 {
     /* attrivute */
     self->context = self;
@@ -465,7 +465,7 @@ static void init(args_t *self, args_t *args)
     }
 
     /* operation */
-    self->dinit = deinit;
+    self->deinit = deinit;
 
     self->size = size;
     self->getArgByIndex = getArgByIndex;
@@ -510,10 +510,10 @@ static void init(args_t *self, args_t *args)
     /* override */
 }
 
-args_t *New_args(args_t *args)
+Args *New_args(Args *args)
 {
-    DMEM *mem = DynMemGet(sizeof(args_t));
-    args_t *self = mem->addr;
+    DMEM *mem = DynMemGet(sizeof(Args));
+    Args *self = mem->addr;
     self->mem = mem;
     self->init = init;
     self->init(self, args);

@@ -6,7 +6,7 @@ typedef struct Class_panel_lamp panel_lamp_t;
 struct Class_panel_lamp
 {
     DMEM *mem;
-    void (*dinit)(panel_lamp_t *panel);
+    void (*deinit)(panel_lamp_t *panel);
     VMgui_t *gui_main;
 
     VMgui_t *gui_manual;

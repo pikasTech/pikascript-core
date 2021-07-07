@@ -12,13 +12,13 @@ struct Class_dataTest
     int b;
 
     /* operation */
-    void (*dinit)(dataTest_t *self);
-    void (*init)(dataTest_t *self, args_t *args);
+    void (*deinit)(dataTest_t *self);
+    void (*init)(dataTest_t *self, Args *args);
 
     /* virtual operation */
 
     /* object */
 };
 
-dataTest_t *New_dataTest(args_t *args);
+dataTest_t *New_dataTest(Args *args);
 #endif

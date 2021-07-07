@@ -5,7 +5,7 @@ typedef struct Class_goods goods_t;
 struct Class_goods
 {
     DMEM *mem;
-    void (*dinit)(goods_t *goods);
+    void (*deinit)(goods_t *goods);
 
     char name[32];
     int price;

@@ -7,7 +7,7 @@ static void deinit(dataTest_t *self)
     DynMemPut(self->mem);
 }
 
-static void init(dataTest_t *self, args_t *args)
+static void init(dataTest_t *self, Args *args)
 {
     /* attrivute */
     self->context = self;
@@ -15,14 +15,14 @@ static void init(dataTest_t *self, args_t *args)
     self->b = 0;
 
     /* operation */
-    self->dinit = deinit;
+    self->deinit = deinit;
 
     /* object */
 
     /* override */
 }
 
-dataTest_t *New_dataTest(args_t *args)
+dataTest_t *New_dataTest(Args *args)
 {
     DMEM *mem = DynMemGet(sizeof(dataTest_t));
     dataTest_t *self = mem->addr;

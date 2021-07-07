@@ -15,7 +15,7 @@
 static void deinit(lamp_t *lamp)
 {
     DynMemPut(lamp->mem);
-    lamp->panel->dinit(lamp->panel);
+    lamp->panel->deinit(lamp->panel);
 }
 
 static void update(lamp_t *self, int systime)
@@ -304,7 +304,7 @@ lamp_t *Class_lamp_init(void)
     DMEM *mem = DynMemGet(sizeof(lamp_t));
     lamp_t *lamp = mem->addr;
     lamp->mem = mem;
-    lamp->dinit = deinit;
+    lamp->deinit = deinit;
 
     /* attribute */
     lamp->voltage = 0;

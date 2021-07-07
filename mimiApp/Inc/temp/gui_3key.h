@@ -4,5 +4,5 @@
 #include "dataArgs.h"
 #include "gui2.h"
 
-gui2_t *New_gui2_3key(args_t *args);
+gui2_t *New_gui2_3key(Args *args);
 #endif

@@ -14,7 +14,7 @@ struct Class_lamp
 {
   /* base */
   DMEM *mem;
-  void (*dinit)(lamp_t *lamp);
+  void (*deinit)(lamp_t *lamp);
 
   /* attribute */
   float voltage;

@@ -5,7 +5,7 @@ typedef struct Class_callback callback_t;
 struct Class_callback
 {
     DMEM *mem;
-    void (*dinit)(callback_t *callback);
+    void (*deinit)(callback_t *callback);
     void (*update)(callback_t *callback);
 
 

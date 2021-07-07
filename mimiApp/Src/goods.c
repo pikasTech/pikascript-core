@@ -20,7 +20,7 @@ goods_t *Class_goods_init(void)
     DMEM *mem = DynMemGet(sizeof(goods_t));
     goods_t *goods = mem->addr;
     goods->mem = mem;
-    goods->dinit = deinit;
+    goods->deinit = deinit;
     goods->setName = setName;
 
     goods->setName(goods, "goods_default");

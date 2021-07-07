@@ -10,20 +10,20 @@ struct Class_device
     void *context;
 
     /* operation */
-    void (*dinit)(device_t *self);
-    void (*init)(device_t *self, args_t *args);
-    int (*read)(device_t *self, args_t *args_in, args_t *args_out);
-    float (*read_float)(device_t *self, args_t *args_in);
-    int (*write)(device_t *self, args_t *args_in);
+    void (*deinit)(device_t *self);
+    void (*init)(device_t *self, Args *args);
+    int (*read)(device_t *self, Args *args_in, Args *args_out);
+    float (*read_float)(device_t *self, Args *args_in);
+    int (*write)(device_t *self, Args *args_in);
     int (*write_str)(device_t *self, char *str);
 		int (*print)(device_t *self, char *str, float val);
 	
     /* virtual operation */
-    int (*_read_handle)(device_t *self, args_t *args_in, args_t *args_out);
-    int (*_writeHandle)(device_t *self, args_t *args_in);
+    int (*_read_handle)(device_t *self, Args *args_in, Args *args_out);
+    int (*_writeHandle)(device_t *self, Args *args_in);
 
     /* object */
 };
 
-device_t *New_device(args_t *args);
+device_t *New_device(Args *args);
 #endif

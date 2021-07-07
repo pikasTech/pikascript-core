@@ -3,13 +3,13 @@
 int TEST_server(int isShow)
 {
     int err = 0;
-    args_t *args = New_args(NULL);
+    Args *args = New_args(NULL);
     args->setInt(args, "isEnable", 0);
     server_t *server = New_server(args);
 
     goto exit;
 exit:
-    args->dinit(args);
-    server->dinit(server);
+    args->deinit(args);
+    server->deinit(server);
     return err;
 }

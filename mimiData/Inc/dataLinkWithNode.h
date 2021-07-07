@@ -26,10 +26,10 @@ typedef struct linkWithNode
     void (*deinit)(struct linkWithNode *);
     void (*port_deinit_data)(void *);
     void (*deinit_node)(struct linkWithNode *);
-    void (*init)(struct linkWithNode *self, args_t *args);
+    void (*init)(struct linkWithNode *self, Args *args);
 
 } linkWithNode_t;
 
-linkWithNode_t *New_linkWithNode(args_t *args);
+linkWithNode_t *New_linkWithNode(Args *args);
 
 #endif

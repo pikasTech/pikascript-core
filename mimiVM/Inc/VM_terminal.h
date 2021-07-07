@@ -5,7 +5,7 @@ typedef struct VM_terminal terminal_t;
 struct VM_terminal
 {
     DMEM *mem;
-    void (*dinit)(terminal_t *terminal);
+    void (*deinit)(terminal_t *terminal);
 
     void (*callBack_char)(terminal_t *terminal, char ch);
     void (*update)(terminal_t *terminal);

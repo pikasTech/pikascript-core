@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-void *app_argv_main2(shell2_t *shell, int argc, char **argv)
+void *app_argv_main2(Shell2 *shell, int argc, char **argv)
 {
 	DMEM *memOut = DynMemGet(sizeof(char) * 256);
 	char *strOut = (char *)(memOut->addr);

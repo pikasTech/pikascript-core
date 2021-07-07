@@ -123,7 +123,7 @@ static void deinit_data_default(void *data_noType)
 
 
 
-void init(linkWithNode_t *self, args_t *args)
+void init(linkWithNode_t *self, Args *args)
 {
     // load the functions
     self->add = linkNode_add;
@@ -142,7 +142,7 @@ void init(linkWithNode_t *self, args_t *args)
 }
 
 
-linkWithNode_t *New_linkWithNode(args_t *args)
+linkWithNode_t *New_linkWithNode(Args *args)
 {
     //note: only the Head of link have the operations, other node donot have operations, so wehen operate other node, use the operations of Head.
 

@@ -6,7 +6,7 @@ typedef struct Class_mimiPort_lamp mimiPort_lamp_t;
 struct Class_mimiPort_lamp
 {
     DMEM *mem;
-    void (*dinit)(mimiPort_lamp_t *mimiPort_lamp);
+    void (*deinit)(mimiPort_lamp_t *mimiPort_lamp);
 };
 mimiPort_lamp_t *Class_mimiPort_lamp_init(void);
 

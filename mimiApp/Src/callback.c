@@ -60,7 +60,7 @@ callback_t *Class_callback_init(void)
     DMEM *mem = DynMemGet(sizeof(callback_t));
     callback_t *callback = mem->addr;
     callback->mem = mem;
-    callback->dinit = deinit;
+    callback->deinit = deinit;
 
     /* attribute */
     callback->flag = 0;

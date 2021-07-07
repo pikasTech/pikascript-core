@@ -6,7 +6,7 @@ static void deinit(allertInfo_t *self)
     DynMemPut(self->mem);
 }
 
-static void init(allertInfo_t *self, args_t *args)
+static void init(allertInfo_t *self, Args *args)
 {
     /* attrivute */
     self->context = self;
@@ -14,14 +14,14 @@ static void init(allertInfo_t *self, args_t *args)
     self->allert_temp2 = 28;
 
     /* operation */
-    self->dinit = deinit;
+    self->deinit = deinit;
 
     /* object */
 
     /* override */
 }
 
-allertInfo_t *New_allertInfo(args_t *args)
+allertInfo_t *New_allertInfo(Args *args)
 {
     DMEM *mem = DynMemGet(sizeof(allertInfo_t));
     allertInfo_t *self = mem->addr;

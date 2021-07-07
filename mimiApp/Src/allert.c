@@ -38,7 +38,7 @@ static void update(server_t *self, int systime)
     return;
 }
 
-static void init_allert(server_t *self, args_t *args)
+static void init_allert(server_t *self, Args *args)
 {
     /* attrivute */
 
@@ -51,7 +51,7 @@ static void init_allert(server_t *self, args_t *args)
     /* override */
 }
 
-server_t *New_server_allert(args_t *args)
+server_t *New_server_allert(Args *args)
 {
     server_t *self = New_server(args);
     self->init = init_allert;

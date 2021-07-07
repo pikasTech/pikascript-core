@@ -18,7 +18,7 @@ static void refresh_periodic_watch(gui2_t *self)
     }
 }
 
-static void init_watch(gui2_t *self, args_t *args)
+static void init_watch(gui2_t *self, Args *args)
 {
     /* attrivute */
 
@@ -31,7 +31,7 @@ static void init_watch(gui2_t *self, args_t *args)
     /* override */
 }
 
-gui2_t *New_gui2_watch(args_t *args)
+gui2_t *New_gui2_watch(Args *args)
 {
     gui2_t *self = New_gui2_3key(args);
     self->init = init_watch;

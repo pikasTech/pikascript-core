@@ -5,18 +5,18 @@
 int TEST_mimiProcess(int isShow)
 {
     {
-        args_t *args = New_args(NULL);
+        Args *args = New_args(NULL);
         args->setInt(args, "isEnable", 0);
-        mimiProcess_t *process = New_mimiProcess(args);
+        MimiProcess *process = New_mimiProcess(args);
         if (isShow)
         {
             printf("the isEnable = %d\r\n", (int)process->attributeList->getInt(process->attributeList, "isEnable"));
         }
-        args->dinit(args);
-        process->dinit(process);
+        args->deinit(args);
+        process->deinit(process);
     }
     {
-        mimiProcess_t *process = New_mimiProcess(NULL);
+        MimiProcess *process = New_mimiProcess(NULL);
         float floatTest = 12.231;
         process->argBindFloat(process, "testFloatBind", &floatTest);
         if (isShow)
@@ -27,7 +27,7 @@ int TEST_mimiProcess(int isShow)
         {
             return 1;
         }
-        process->dinit(process);
+        process->deinit(process);
     }
     return 0;
 }

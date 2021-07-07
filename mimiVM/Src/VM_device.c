@@ -7,7 +7,7 @@ static void deinit(device_t *self)
     DynMemPut(self->mem);
 }
 
-static int read(device_t *self, args_t *args_in, args_t *args_out)
+static int read(device_t *self, Args *args_in, Args *args_out)
 {
     int err = 0;
     //    if (NULL == args_in)
@@ -32,7 +32,7 @@ exit:
     return err;
 }
 
-static int _read_handle(device_t *self, args_t *args_in, args_t *args_out)
+static int _read_handle(device_t *self, Args *args_in, Args *args_out)
 {
     int err = 0;
 
@@ -51,7 +51,7 @@ exit:
     return err;
 }
 
-static int write(device_t *self, args_t *args_in)
+static int write(device_t *self, Args *args_in)
 {
     int err = 0;
     if (NULL == args_in)
@@ -73,7 +73,7 @@ exit:
     return err;
 }
 
-static int _writeHandle(device_t *self, args_t *args_in)
+static int _writeHandle(device_t *self, Args *args_in)
 {
     //_writeHandle not be ovrride
     int err = -1;
@@ -82,30 +82,30 @@ exit:
     return err;
 }
 
-static float read_float(device_t *self, args_t *args_in)
+static float read_float(device_t *self, Args *args_in)
 {
     float val;
-    args_t *args_out = New_args(NULL);
+    Args *args_out = New_args(NULL);
     self->read(self, args_in, args_out);
     // the first arg is float
     val = args_out->getFloatByIndex(args_out, 0);
     goto exit;
 
 exit:
-    args_out->dinit(args_out);
+    args_out->deinit(args_out);
     return val;
 }
 
 static int write_str(device_t *self, char *str)
 {
     int err = 0;
-    args_t *args_in = New_args(NULL);
+    Args *args_in = New_args(NULL);
     args_in->setStrWithDefaultName(args_in, str);
     // write str to the first arg
     self->write(self, args_in);
     goto exit;
 exit:
-    args_in->dinit(args_in);
+    args_in->deinit(args_in);
     return err;
 }
 
@@ -121,13 +121,13 @@ exit:
     return err;
 }
 
-static void init(device_t *self, args_t *args)
+static void init(device_t *self, Args *args)
 {
     /* attrivute */
     self->context = self;
 
     /* operation */
-    self->dinit = deinit;
+    self->deinit = deinit;
     self->read = read;
     self->write = write;
     self->read_float = read_float;
@@ -141,7 +141,7 @@ static void init(device_t *self, args_t *args)
     self->_writeHandle = _writeHandle;
 }
 
-device_t *New_device(args_t *args)
+device_t *New_device(Args *args)
 {
     DMEM *mem = DynMemGet(sizeof(device_t));
     device_t *device = mem->addr;

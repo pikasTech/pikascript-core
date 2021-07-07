@@ -13,12 +13,12 @@ int TEST_VM_device(int isShow)
     device_t *voltage = New_device_voltage(NULL);
     device_t *light = New_device_light(NULL);
 
-    args_t *args_in = New_args(NULL);
-    args_t *args_in_zigbee = New_args(NULL);
-    args_t *args_in_voltage = New_args(NULL);
-    args_t *args_out = New_args(NULL);
-    args_t *args_out_voltage = New_args(NULL);
-    args_t *args_in_float = New_args(NULL);
+    Args *args_in = New_args(NULL);
+    Args *args_in_zigbee = New_args(NULL);
+    Args *args_in_voltage = New_args(NULL);
+    Args *args_out = New_args(NULL);
+    Args *args_out_voltage = New_args(NULL);
+    Args *args_in_float = New_args(NULL);
 
     float lightVarRead = light->read_float(light, NULL);
     if (isShow)
@@ -98,15 +98,15 @@ int TEST_VM_device(int isShow)
     }
 
 exit:
-    device->dinit(device);
-    args_in->dinit(args_in);
-    args_in_zigbee->dinit(args_in_zigbee);
-    args_in_voltage->dinit(args_in_voltage);
-    args_out->dinit(args_out);
-    args_out_voltage->dinit(args_out_voltage);
-    args_in_float->dinit(args_in_float);
-    zigbee->dinit(zigbee);
-    voltage->dinit(voltage);
-    light->dinit(light);
+    device->deinit(device);
+    args_in->deinit(args_in);
+    args_in_zigbee->deinit(args_in_zigbee);
+    args_in_voltage->deinit(args_in_voltage);
+    args_out->deinit(args_out);
+    args_out_voltage->deinit(args_out_voltage);
+    args_in_float->deinit(args_in_float);
+    zigbee->deinit(zigbee);
+    voltage->deinit(voltage);
+    light->deinit(light);
     return err;
 }

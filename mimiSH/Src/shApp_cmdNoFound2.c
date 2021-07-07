@@ -3,7 +3,7 @@
 #include "dataMemory.h"
 #include "dataString.h"
 #include <stdlib.h>
-void *app_cmdNofound2(shell2_t *self, int argc, char **argv)
+void *app_cmdNofound2(Shell2 *self, int argc, char **argv)
 {
     DMEM *memOut = DynMemGet(sizeof(char) * 256);
     char *strOut = (char *)(memOut->addr);

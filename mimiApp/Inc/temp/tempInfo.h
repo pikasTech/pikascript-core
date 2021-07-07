@@ -19,8 +19,8 @@ struct Class_tempInfo
 		int addr_hum2;
 
     /* operation */
-    void (*dinit)(tempInfo_t *self);
-    void (*init)(tempInfo_t *self, args_t *args);
+    void (*deinit)(tempInfo_t *self);
+    void (*init)(tempInfo_t *self, Args *args);
     void (*set)(tempInfo_t *self, char *varName, int var);
     int (*get)(tempInfo_t *self, char *varName);
 
@@ -29,5 +29,5 @@ struct Class_tempInfo
     /* object */
 };
 
-tempInfo_t *New_tempInfo(args_t *args);
+tempInfo_t *New_tempInfo(Args *args);
 #endif
