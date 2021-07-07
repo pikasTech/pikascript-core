@@ -210,14 +210,12 @@ static void init(mimiProcess_t *self, args_t *args)
     /* override */
     self->_updateHandle = _processRootUpdateHandle;
     self->_beforDinit = _beforDinit;
-    self->_portableInit = _potableInitDefault;
 
     /* args */
     if (NULL != args)
     {
         self->loadAttributeFromArgs(self, args, "context");
         self->loadAttributeFromArgs(self, args, "isEnable");
-        self->loadAttributeFromArgs(self, args, "_portableInit");
     }
 }
 

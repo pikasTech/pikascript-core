@@ -54,7 +54,6 @@ struct Class_process
     /* virtual operation */
     void (*_beforDinit)(mimiProcess_t *self);
     void (*_updateHandle)(mimiProcess_t *self);
-    void (*_portableInit)(mimiProcess_t *self);
 
     /* object */
 };
