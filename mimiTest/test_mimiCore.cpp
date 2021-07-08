@@ -8,12 +8,12 @@ extern "C"
 #include "mimiTest.h"
 #include <string.h>
 // cores
-#include "mimiShell2.h"
+#include "mimiShell.h"
 // SubTest
 #include "dataMemory.h"
-#include "test_args2.h"
+#include "test_args.h"
 #include "test_dataLog.h"
-#include "test_link2.h"
+#include "test_link.h"
 #include "test_mimiProcess.h"
 // Device
 #include "test_mimiCom.h"

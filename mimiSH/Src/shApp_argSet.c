@@ -3,7 +3,7 @@
 #include "dataString.h"
 #include "mimiProcess.h"
 #include <stdio.h>
-#include "mimiShell2.h"
+#include "mimiShell.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdlib.h>

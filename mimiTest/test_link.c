@@ -1,4 +1,4 @@
-#include "test_link2.h"
+#include "test_link.h"
 #include "dataLink.h"
 #include "dataTest.h"
 #include <stdio.h>

@@ -1,7 +1,7 @@
-#include "shApp_test2.h"
+#include "shApp_test.h"
 #include "dataMemory.h"
 #include "dataString.h"
-#include "mimiShell2.h"
+#include "mimiShell.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
