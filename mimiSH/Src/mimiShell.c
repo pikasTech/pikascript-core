@@ -107,7 +107,9 @@ static int luanchShellWhenNameMatch(Arg *argNow, Args *argsHandle)
 	Shell *shell = argsHandle->getPtr(argsHandle, "shell");
 
 	char *name = argNow->nameDynMem->addr;
-	if (isStartWith(cmd, name))
+	char arg0[32] = {0};
+	getFirstUnitBySign(cmd, arg0, ' ');
+	if (mimiStrEqu(arg0, name))
 	{
 		argsHandle->setPtr(argsHandle,
 						   "shellOut",
