@@ -10,7 +10,7 @@
 
 #define PROCESS_DIR argv[1]
 
-static int listEachHandleProcessArg(Arg *argEach, Args *handleArgs)
+static int listEachProcessArg(Arg *argEach, Args *handleArgs)
 {
     if (NULL == handleArgs)
     {
@@ -56,7 +56,7 @@ void *app_list(Shell *shell, int argc, char **argv)
     Args *handleArgs = New_args(NULL);
     handleArgs->setStr(handleArgs, "stringOut", "");
     Args *processArgs = processNow->attributeList;
-    processArgs->foreach (processArgs, listEachHandleProcessArg, handleArgs);
+    processArgs->foreach (processArgs, listEachProcessArg, handleArgs);
     memcpy(memOut->addr, handleArgs->getStr(handleArgs, "stringOut"), 256);
     handleArgs->deinit(handleArgs);
     strPrint(memOut->addr, "\r\n");

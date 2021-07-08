@@ -125,7 +125,7 @@ static int setInt64WithName(Args *self, char *name, long long int64In)
 static long long getInt64ByIndex(Args *self, int index)
 {
     Arg *arg = self->getArgByIndex(self, index);
-    if(NULL == arg)
+    if (NULL == arg)
     {
         return -999999999;
     }
@@ -135,7 +135,7 @@ static long long getInt64ByIndex(Args *self, int index)
 static long long getInt64ByName(Args *self, char *name)
 {
     Arg *arg = self->getArg(self, name);
-    if(NULL == arg)
+    if (NULL == arg)
     {
         return -999999999;
     }
@@ -449,15 +449,21 @@ static int setObject(Args *self, char *objectName, char *className, void *object
 
 static int foreach (Args *self, int (*eachHandle)(Arg *argEach, Args *handleArgs), Args * handleArgs)
 {
-    int argsSize = self->getSize(self);
-    for (int i = 0; i < argsSize; i++)
+    LinkNode *nodeNow = self->argLinkList->firstNode;
+    while (1)
     {
-        Arg *argNow = self->getArgByIndex(self, i);
+        Arg *argNow = nodeNow->contant;
         if (NULL == argNow)
         {
             continue;
         }
         eachHandle(argNow, handleArgs);
+
+        if (NULL == nodeNow->nextNode)
+        {
+            break;
+        }
+        nodeNow = nodeNow->nextNode;
     }
     return 0;
 }

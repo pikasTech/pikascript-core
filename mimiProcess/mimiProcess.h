@@ -34,12 +34,12 @@ struct Class_process
     // arg general operations
     void (*argBind)(MimiProcess *self, char *type, char *name, void *pointer);
     int (*argSet)(MimiProcess *self, char *name, char *valStr);
-    
-    void (*argBindInt)(MimiProcess *self, char*name,int* valPtr);
-    void (*argBindFloat)(MimiProcess *self, char*name,float* valPtr);
-    void (*argBindString)(MimiProcess *self, char*name,char** valPtr);
-    
-    char * (*argPrint)(MimiProcess *self, char *name);
+
+    void (*argBindInt)(MimiProcess *self, char *name, int *valPtr);
+    void (*argBindFloat)(MimiProcess *self, char *name, float *valPtr);
+    void (*argBindString)(MimiProcess *self, char *name, char **valPtr);
+
+    char *(*argPrint)(MimiProcess *self, char *name);
 
     // args operations
     void (*loadAttributeFromArgs)(MimiProcess *self, Args *args, char *name);
@@ -47,6 +47,7 @@ struct Class_process
     // subObject
     void (*addSubobject)(MimiProcess *self, char *subObjectName, void *new_projcetFun);
     void (*addSubProcess)(MimiProcess *self, char *subObjectName, void *new_projcetFun);
+    MimiProcess *(*getSubProcess)(MimiProcess *self, char *name);
 
     // subProcess
     void (*dinitSubProcessByName)(MimiProcess *self, char *subObjectName);
@@ -56,9 +57,8 @@ struct Class_process
     void (*_updateHandle)(MimiProcess *self);
 
     /* event operation */
-    
-    void (*subscribe)(MimiProcess *self, char *subscribeVarName, void(*handle)(MimiProcess *self));
-    
+
+    void (*subscribe)(MimiProcess *self, char *subscribeVarName, void (*handle)(MimiProcess *self));
 
     /* object */
 };

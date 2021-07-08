@@ -103,8 +103,10 @@ static void *shellLuancher(Shell *self,
 
 static int luanchShellWhenNameMatch(Arg *argNow, Args *argsHandle)
 {
-	char *cmd = argsHandle->getStr(argsHandle, "cmd");
-	Shell *shell = argsHandle->getPtr(argsHandle, "shell");
+	char *cmd = argsHandle->getStr(argsHandle,
+								   "cmd");
+	Shell *shell = argsHandle->getPtr(argsHandle,
+									  "shell");
 
 	char *name = argNow->nameDynMem->addr;
 	char arg0[32] = {0};

@@ -126,13 +126,12 @@ static void _beforDinit(MimiProcess *self)
 
 static void addSubProcess(MimiProcess *self, char *subProcessName, void *new_ProcessFun)
 {
-    Args *attributeList = self->attributeList;
-    Args *initArgs = New_args(NULL);
-    initArgs->setPtr(initArgs, "context", self);
-    void *(*newProcessFun)(Args * initArgs) = (void *(*)(Args * initArgs)) new_ProcessFun;
-    void *subProcess = newProcessFun(initArgs);
-    attributeList->setObject(attributeList, subProcessName, "process", subProcess);
-    initArgs->deinit(initArgs);
+    /* sp-init means subprocess init */
+    const char prifix[] = "[sp-init]";
+    char nameBuff[64] = {0};
+    strPrint(nameBuff, prifix);
+    strPrint(nameBuff, subProcessName);
+    self->setPtr(self, nameBuff, new_ProcessFun);
 }
 
 static void addSubobject(MimiProcess *self, char *subObjectName, void *new_ObjectFun)
@@ -197,6 +196,45 @@ static void subscribe(MimiProcess *self,
     self->setPtr(self, argName, handle);
 }
 
+static MimiProcess *getSubProcess(MimiProcess *self, char *name)
+{
+    /* check subprocess */
+    if (!self->attributeList->isArgExist(self->attributeList,
+                                         name))
+    {
+        /* no inited subprocess, check subprocess init fun*/
+        const char prifix[] = "[sp-init]";
+        char initFunName[64] = {0};
+        strPrint(initFunName, prifix);
+        strPrint(initFunName, name);
+        if (!self->attributeList->isArgExist(self->attributeList,
+                                             initFunName))
+        {
+            /* no init fun, could not found subprocess */
+            return NULL;
+        }
+        /* init the subprocess */
+        Args *attributeList = self->attributeList;
+        Args *initArgs = New_args(NULL);
+        initArgs->setPtr(initArgs, "context", self);
+        void *(*newProcessFun)(Args * initArgs) = (void *(*)(Args * initArgs)) self->attributeList->getPtr(self->attributeList,
+                                                                                                           initFunName);
+        void *subProcess = newProcessFun(initArgs);
+        attributeList->setObject(attributeList, name, "process", subProcess);
+        initArgs->deinit(initArgs);
+    }
+
+    /* finded subscribe, check type*/
+    char *type = self->attributeList->getType(self->attributeList,
+                                              name);
+    if (!mimiStrEqu("_class-process", type))
+    {
+        /* type error, could not found subprocess */
+        return NULL;
+    }
+    return self->getPtr(self, name);
+}
+
 static void init(MimiProcess *self, Args *args)
 {
     /* List */
@@ -231,6 +269,7 @@ static void init(MimiProcess *self, Args *args)
     // subObject
     self->addSubobject = addSubobject;
     self->addSubProcess = addSubProcess;
+    self->getSubProcess = getSubProcess;
     self->dinitSubProcessByName = dinitSubProcessByName;
 
     /* attrivute */

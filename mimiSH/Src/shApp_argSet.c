@@ -23,16 +23,7 @@ MimiProcess *goToProcess(MimiProcess *root, char *processDirectory, int deepth)
     int processArgc = devideStringBySign(processDirectory, directoryUnit, '.');
     for (int i = 0; i < processArgc - deepth; i++)
     {
-        char *type = processNow->attributeList->getType(processNow->attributeList,
-                                                        directoryUnit[i]);
-        if (!mimiStrEqu(type, "_class-process"))
-        {
-            processNow = NULL;
-            goto exit;
-        }
-
-        processNow = processNow->getPtr(processNow, directoryUnit[i]);
-
+        processNow = processNow->getSubProcess(processNow, directoryUnit[i]);
         if (processNow == NULL)
         {
             goto exit;
