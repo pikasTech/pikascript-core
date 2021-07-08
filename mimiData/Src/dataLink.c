@@ -56,6 +56,10 @@ static void removeNode(Link *self, void *contant)
 
     LinkNode *nextNode = nodeToDelete->nextNode;
     LinkNode *priorNode = nodeToDelete->priorNode;
+    if(nodeToDelete == self->firstNode)
+    {
+        self->firstNode = nodeToDelete->nextNode;
+    }
 
     if (NULL != priorNode)
     {
