@@ -1,7 +1,6 @@
 #ifndef __MIMI_SHELL2_H
 #define __MIMI_SHELL2_H
 #include "dataMemory.h"
-#include "dataLinkWithNode.h"
 #include "dataArgs.h"
 
 typedef struct Class_mimiShell2 Shell2;
@@ -10,19 +9,13 @@ typedef struct Class_mimiShell2 Shell2;
 
 int mimiShell2_strGetArgs(char *CMD, char **argv);
 
-typedef struct mimiShell2_cmdMap
-{
-    DMEM *mem;
-    char *cmdName;
-    void *(*cmdCallBack)(int, char **);
-} mimiShell2_cmdMap_t;
-
 struct Class_mimiShell2
 {
     /* attribute */
     DMEM *mem;
-    linkWithNode_t *cmdMapHead;
-    void * context;
+    Args *mapList;
+
+    void *context;
 
     /* operation */
     void *(*cmd)(Shell2 *self, char *);

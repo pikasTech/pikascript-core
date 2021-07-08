@@ -1,7 +1,6 @@
 // don't modify the mimiSH_core !!
 #include "mimiShell2.h"
 #include "dataMemory.h"
-#include "dataLinkWithNode.h"
 #include "dataString.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -71,7 +70,9 @@ static void *detector_shellLuancher(Shell2 *self,
 }
 
 // the luancher of shell
-static void *shellLuancher(Shell2 *self, char *CMD, void *(fun)(Shell2 *, int argc, char **argv))
+static void *shellLuancher(Shell2 *self,
+						   char *CMD,
+						   void *(fun)(Shell2 *, int argc, char **argv))
 {
 	char StartStrSize = 0;
 	int argc = 0;
@@ -100,44 +101,69 @@ static void *shellLuancher(Shell2 *self, char *CMD, void *(fun)(Shell2 *, int ar
 	return memOut;
 }
 
-static void *Shell_cmd(Shell2 *self, char *cmd)
+static int luanchShellWhenNameMatch(Arg *argNow, Args *argsHandle)
 {
-	char *name;
-	mimiShell2_cmdMap_t *cmdMap;
-	linkWithNode_t *nodeNow = self->cmdMapHead->next;
-	while (NULL != nodeNow)
+	char *cmd = argsHandle->getStr(argsHandle, "cmd");
+	Shell2 *shell = argsHandle->getPtr(argsHandle, "shell");
+
+	char *name = argNow->nameDynMem->addr;
+	if (isStartWith(cmd, name))
 	{
-		cmdMap = (mimiShell2_cmdMap_t *)nodeNow->data;
-		name = cmdMap->cmdName;
-		char nameWithSpace[SHELL2_CMD_NAME_LENGTH] = {0};
-		strPrint(nameWithSpace, name);
-		strPrint(nameWithSpace, " ");
-		if (isStartWith(cmd, name))
-		{
-			return self->detector(self, shellLuancher, cmd, cmdMap->cmdCallBack);
-		}
-		nodeNow = nodeNow->next;
+		argsHandle->setPtr(argsHandle,
+						   "shellOut",
+						   shell->detector(shell,
+										   shellLuancher,
+										   cmd,
+										   argNow->getPtr(argNow)));
+		argsHandle->setStr(argsHandle,
+						   "succeed", "succeed");
 	}
-	// if the cmd is no found then call the app_cmdNoFoudn function
-	return self->detector(self, shellLuancher, cmd, app_cmdNofound2);
+	return 0;
 }
 
-static void Shell_addMap(Shell2 *self, char *name, void *(*fun)(Shell2 *shell, int argc, char **argv))
+static void *Shell_cmd(Shell2 *self, char *cmd)
 {
-	DMEM *mem;
-	mem = DynMemGet(sizeof(mimiShell2_cmdMap_t));
-	mimiShell2_cmdMap_t *cmdMap = (mimiShell2_cmdMap_t *)(mem->addr);
-	cmdMap->mem = mem;
-	cmdMap->cmdName = name;
-	cmdMap->cmdCallBack = fun;
-	self->cmdMapHead->add(self->cmdMapHead, cmdMap);
+	Args *argsHandle = New_args(NULL);
+	argsHandle->setStr(argsHandle,
+					   "cmd", cmd);
+	argsHandle->setPtr(argsHandle,
+					   "shell", self);
+	void *shellOut = NULL;
+	self->mapList->foreach (self->mapList,
+							luanchShellWhenNameMatch, argsHandle);
+	if (argsHandle->isArgExist(argsHandle,
+							   "succeed"))
+	{
+		// ok
+		shellOut = argsHandle->getPtr(argsHandle,
+									  "shellOut");
+		goto exit;
+	}
+
+	// if the cmd is no found then call the app_cmdNoFoudn function
+	shellOut = self->detector(self, shellLuancher, cmd, app_cmdNofound2);
+	goto exit;
+
+exit:
+	argsHandle->deinit(argsHandle);
+	return shellOut;
+}
+
+static void Shell_addMap(Shell2 *self,
+						 char *name,
+						 void *(*fun)(Shell2 *shell,
+									  int argc,
+									  char **argv))
+{
+	self->mapList->setPtr(self->mapList,
+						  name, fun);
 }
 
 static int Shell_listMap(Shell2 *self, int isShow)
 {
 	// cmdMap_t *cmdMap;
 	int size;
-	size = self->cmdMapHead->size(self->cmdMapHead);
+	size = self->mapList->getSize(self->mapList);
 
 	if (isShow)
 	{
@@ -173,15 +199,8 @@ static int Shell_test(Shell2 *self, int isShow)
 
 static void deinit(Shell2 *self)
 {
-	self->cmdMapHead->deinit(self->cmdMapHead);
+	self->mapList->deinit(self->mapList);
 	DynMemPut(self->mem);
-}
-
-static void deinit_cmdMap_data(void *data_noType)
-{
-	mimiShell2_cmdMap_t *cmdMap = data_noType;
-	DynMemPut(cmdMap->mem);
-	cmdMap->mem = NULL;
 }
 
 static void _shConfig(Shell2 *self)
@@ -195,11 +214,10 @@ static void init(Shell2 *self, Args *initArgs)
 	/* attribute */
 
 	/* operation */
-	self->context =self;
+	self->context = self;
 	self->cmd = Shell_cmd;
-	self->cmdMapHead = New_linkWithNode(NULL);
+	self->mapList = New_args(NULL);
 	// set how to deinit the data of cmdMap Link
-	self->cmdMapHead->port_deinit_data = deinit_cmdMap_data;
 	self->addMap = Shell_addMap;
 	self->listMap = Shell_listMap;
 	self->test = Shell_test;
