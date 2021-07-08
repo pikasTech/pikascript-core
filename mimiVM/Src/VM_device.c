@@ -36,7 +36,7 @@ static int _read_handle(device_t *self, Args *args_in, Args *args_out)
 {
     int err = 0;
 
-    for (int i = 0; i < args_in->size(args_in); i++)
+    for (int i = 0; i < args_in->getSize(args_in); i++)
     {
         char *arg = NULL;
         if (0 != args_out->setStrWithDefaultName(args_out, arg))
@@ -59,7 +59,7 @@ static int write(device_t *self, Args *args_in)
         err = 1;
         goto exit;
     }
-    if (0 == args_in->size(args_in))
+    if (0 == args_in->getSize(args_in))
     {
         err = 3;
         goto exit;

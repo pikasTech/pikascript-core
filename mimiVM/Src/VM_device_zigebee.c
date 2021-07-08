@@ -6,7 +6,7 @@ static int _writeHandle(device_t *self, Args *args_in)
 {
     int err = 0;
 
-    if (args_in->size(args_in) == 1)
+    if (args_in->getSize(args_in) == 1)
     {
         char *str_send = NULL;
         str_send = args_in->getStrByIndex(args_in, 0);

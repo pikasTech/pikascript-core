@@ -14,10 +14,12 @@ struct Class_link
     /* operation */
     void (*deinit)(Link *self);
     void (*init)(Link *self, void *args);
-    void (*add)(Link *self, void *contant, void (*_contantDinit)(void *contant));
-    LinkNode *(*findNodeById)(Link *self, long long id);
+    void (*addNode)(Link *self, void *contant, void (*_contantDinit)(void *contant));
+    void (*removeNode)(Link *self, void *contant);
 
-    int (*size)(Link *self);
+    LinkNode *(*getNode)(Link *self, long long id);
+
+    int (*getSize)(Link *self);
     /* virtual operation */
 
     /* object */

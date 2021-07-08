@@ -21,15 +21,15 @@ struct Class_arg
     void (*setContant)(Arg *self, char *contant, int size);
     void (*setType)(Arg *self, char *type);
 
-    void (*setInt64)(Arg *self, long long val);
+    void (*setInt)(Arg *self, long long val);
     void (*setFloat)(Arg *self, float val);
-    void (*setPointer)(Arg *self, void *pointer);
-    void (*setString)(Arg *self, char *string);
+    void (*setPtr)(Arg *self, void *pointer);
+    void (*setStr)(Arg *self, char *string);
 
-    long long (*getInt64)(Arg *self);
+    long long (*getInt)(Arg *self);
     float (*getFloat)(Arg *self);
-    void *(*getPointer)(Arg *self);
-    char *(*getString)(Arg *self);
+    void *(*getPtr)(Arg *self);
+    char *(*getStr)(Arg *self);
 
     char *(*getContant)(Arg *self);
 

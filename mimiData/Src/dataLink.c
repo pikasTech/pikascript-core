@@ -1,4 +1,5 @@
 #include "dataLink.h"
+#include "dataLinkNode.h"
 #include "dataMemory.h"
 
 static void deinit(Link *self)
@@ -12,7 +13,7 @@ static void deinit(Link *self)
     }
 }
 
-static void add(Link *self, void *contant, void (*_contantDinit)(void *contant))
+static void addNode(Link *self, void *contant, void (*_contantDinit)(void *contant))
 {
     LinkNode *NewNode = New_linkNode(NULL);
     NewNode->contant = contant;
@@ -34,7 +35,44 @@ static void add(Link *self, void *contant, void (*_contantDinit)(void *contant))
     self->firstNode->nextNode = secondNode;
 }
 
-static int size(Link *self)
+static void removeNode(Link *self, void *contant)
+{
+    LinkNode *nodeToDelete = NULL;
+    LinkNode *nodeNow = self->firstNode;
+    while (1)
+    {
+        if (nodeNow->contant == contant)
+        {
+            nodeToDelete = nodeNow;
+            break;
+        }
+        if (nodeNow->nextNode == NULL)
+        {
+            // error, node no found
+            return;
+        }
+        nodeNow = nodeNow->nextNode;
+    }
+
+    LinkNode *nextNode = nodeToDelete->nextNode;
+    LinkNode *priorNode = nodeToDelete->priorNode;
+
+    if (NULL != priorNode)
+    {
+        priorNode->nextNode = nextNode;
+    }
+
+    if (NULL != nextNode)
+    {
+        nextNode->priorNode = priorNode;
+    }
+
+    // deinit the node
+    nodeToDelete->deinit(nodeToDelete);
+    return;
+}
+
+static int getSize(Link *self)
 {
     LinkNode *NowNode;
     int size = 0;
@@ -47,7 +85,7 @@ static int size(Link *self)
     return size;
 }
 
-static LinkNode *findNodeById(Link *self, long long id)
+static LinkNode *getNode(Link *self, long long id)
 {
     LinkNode *nodeNow = self->firstNode;
     while (1)
@@ -72,9 +110,11 @@ static void init(Link *self, void *args)
 
     /* operation */
     self->deinit = deinit;
-    self->add = add;
-    self->size = size;
-    self->findNodeById = findNodeById;
+    self->getSize = getSize;
+
+    self->addNode = addNode;
+    self->getNode = getNode;
+    self->removeNode = removeNode;
 
     /* object */
 

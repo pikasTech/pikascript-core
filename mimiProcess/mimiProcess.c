@@ -12,7 +12,7 @@ static int dinitEachSubprocess(Arg *argEach, Args *handleArgs)
     }
     if (mimiStrEqu(argEach->typeDynMem->addr, "_class-process"))
     {
-        MimiProcess *subProcess = argEach->getPointer(argEach);
+        MimiProcess *subProcess = argEach->getPtr(argEach);
         subProcess->deinit(subProcess);
     }
     return 0;

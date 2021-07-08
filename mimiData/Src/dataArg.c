@@ -143,20 +143,23 @@ static void init(Arg *self, void *voidPointer)
 
     /* operation */
     self->deinit = deinit;
+
+    // low level operation
     self->setName = setName;
     self->setContant = setContant;
-    self->getContant = getContant;
     self->setType = setType;
+    self->getContant = getContant;
 
-    self->setInt64 = setInt64;
+    // high level operation
+    self->setInt = setInt64;
     self->setFloat = setFloat;
-    self->setPointer = setPointer;
-    self->setString = setString;
+    self->setPtr = setPointer;
+    self->setStr = setString;
 
-    self->getInt64 = getInt64;
+    self->getInt = getInt64;
     self->getFloat = getFloat;
-    self->getPointer = getPointer;
-    self->getString = getString;
+    self->getPtr = getPointer;
+    self->getStr = getString;
 
     /* object */
 

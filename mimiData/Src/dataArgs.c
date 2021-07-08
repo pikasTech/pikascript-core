@@ -63,20 +63,20 @@ static void *getPointerByIndex(Args *self, int index)
 {
     void *pointer = NULL;
     Arg *arg = self->getArgByIndex(self, index);
-    pointer = arg->getPointer(arg);
+    pointer = arg->getPtr(arg);
     return pointer;
 }
 
 static void *getPointerByName(Args *self, char *name)
 {
     void *pointer = NULL;
-    Arg *arg = self->getArgByName(self, name);
+    Arg *arg = self->getArg(self, name);
     if (NULL == arg)
     {
         return NULL;
     }
 
-    pointer = arg->getPointer(arg);
+    pointer = arg->getPtr(arg);
     return pointer;
 }
 
@@ -86,7 +86,7 @@ static int setPointerWithName(Args *self, char *name, void *argPointer)
     Arg *argNew = New_arg(NULL);
     argNew->setType(argNew, "pointer");
     argNew->setName(argNew, name);
-    argNew->setPointer(argNew, argPointer);
+    argNew->setPtr(argNew, argPointer);
     self->setArg(self, argNew);
     return errCode;
 }
@@ -96,7 +96,7 @@ static int setStrWithName(Args *self, char *name, char *strIn)
     int errCode = 0;
     Arg *argNew = New_arg(NULL);
     argNew->setType(argNew, "string");
-    argNew->setString(argNew, strIn);
+    argNew->setStr(argNew, strIn);
     argNew->setName(argNew, name);
     self->setArg(self, argNew);
     return errCode;
@@ -104,8 +104,8 @@ static int setStrWithName(Args *self, char *name, char *strIn)
 
 static char *getStrByName(Args *self, char *name)
 {
-    Arg *arg = self->getArgByName(self, name);
-    if(NULL == arg->contantDynMem)
+    Arg *arg = self->getArg(self, name);
+    if (NULL == arg->contantDynMem)
     {
         return NULL;
     }
@@ -116,7 +116,7 @@ static int setInt64WithName(Args *self, char *name, long long int64In)
 {
     Arg *argNew = New_arg(NULL);
     argNew->setName(argNew, name);
-    argNew->setInt64(argNew, int64In);
+    argNew->setInt(argNew, int64In);
     argNew->setType(argNew, "int");
     self->setArg(self, argNew);
     return 0;
@@ -125,24 +125,32 @@ static int setInt64WithName(Args *self, char *name, long long int64In)
 static long long getInt64ByIndex(Args *self, int index)
 {
     Arg *arg = self->getArgByIndex(self, index);
-    return arg->getInt64(arg);
+    if(NULL == arg)
+    {
+        return -999999999;
+    }
+    return arg->getInt(arg);
 }
 
 static long long getInt64ByName(Args *self, char *name)
 {
-    Arg *arg = self->getArgByName(self, name);
-    return arg->getInt64(arg);
+    Arg *arg = self->getArg(self, name);
+    if(NULL == arg)
+    {
+        return -999999999;
+    }
+    return arg->getInt(arg);
 }
 
-static int size(Args *self)
+static int getSize(Args *self)
 {
-    return self->argLinkList->size(self->argLinkList);
+    return self->argLinkList->getSize(self->argLinkList);
 }
 
 char *getTypeByName(Args *self, char *name)
 {
     Arg *arg = NULL;
-    arg = self->getArgByName(self, name);
+    arg = self->getArg(self, name);
     if (NULL == arg)
     {
         return "[error: arg no found]";
@@ -157,7 +165,7 @@ static Arg *getArgByIndex(Args *self, int index)
     {
         return NULL;
     }
-    LinkNode *node = self->argLinkList->findNodeById(self->argLinkList,index);
+    LinkNode *node = self->argLinkList->getNode(self->argLinkList, index);
     if (NULL == node)
     {
         return NULL;
@@ -168,13 +176,13 @@ static Arg *getArgByIndex(Args *self, int index)
 
 static float getFloatByName(Args *self, char *name)
 {
-    Arg *arg = self->getArgByName(self, name);
+    Arg *arg = self->getArg(self, name);
     return arg->getFloat(arg);
 }
 
 static int copyArg(Args *self, char *name, Args *directArgs)
 {
-    Arg *argToBeCopy = self->getArgByName(self, name);
+    Arg *argToBeCopy = self->getArg(self, name);
     if (NULL == argToBeCopy)
     {
         return 1;
@@ -191,7 +199,7 @@ static int copyArg(Args *self, char *name, Args *directArgs)
 
 static int isArgExist(Args *self, char *name)
 {
-    if (NULL != self->getArgByName(self, name))
+    if (NULL != self->getArg(self, name))
     {
         return 1;
     }
@@ -201,7 +209,7 @@ static int isArgExist(Args *self, char *name)
 static int updateArg(Args *self, Arg *argNew)
 {
     // arg New must be a new arg
-    Arg *argOld = self->getArgByName(self, argNew->nameDynMem->addr);
+    Arg *argOld = self->getArg(self, argNew->nameDynMem->addr);
 
     if (0 != strcmp(argOld->typeDynMem->addr, argNew->typeDynMem->addr))
     {
@@ -215,12 +223,12 @@ static int updateArg(Args *self, Arg *argNew)
 
 static int setArg(Args *self, Arg *arg)
 {
-   
+
     if (!self->isArgExist(self, arg->nameDynMem->addr))
     {
-        self->argLinkList->add(self->argLinkList,
-                               arg,
-                               (void (*)(void *))arg->deinit);
+        self->argLinkList->addNode(self->argLinkList,
+                                   arg,
+                                   (void (*)(void *))arg->deinit);
         return 0;
     }
     updateArg(self, arg);
@@ -234,14 +242,14 @@ static Arg *getArgByName(Args *self, char *name)
     {
         return NULL;
     }
-    while(1)
+    while (1)
     {
         Arg *arg = nodeNow->contant;
-        if(0 == strcmp(name, arg->nameDynMem->addr))
+        if (0 == strcmp(name, arg->nameDynMem->addr))
         {
             return arg;
         }
-        if(NULL == nodeNow->nextNode)
+        if (NULL == nodeNow->nextNode)
         {
             return NULL;
         }
@@ -256,7 +264,7 @@ static void bind(Args *self, char *type, char *name, void *pointer)
     Arg *argNew = New_arg(NULL);
     argNew->setType(argNew, typeWithBind);
     argNew->setName(argNew, name);
-    argNew->setPointer(argNew, pointer);
+    argNew->setPtr(argNew, pointer);
     self->setArg(self, argNew);
     return;
 }
@@ -311,7 +319,7 @@ static char *getPrintStringFromPtr(Args *self, char *name, void *val)
 
 static char *print(Args *self, char *name)
 {
-    char *type = self->getTypeByName(self, name);
+    char *type = self->getType(self, name);
 
     if (mimiStrEqu(type, "int"))
     {
@@ -365,7 +373,7 @@ static char *print(Args *self, char *name)
 
 static int set(Args *self, char *name, char *valStr)
 {
-    char *type = self->getTypeByName(self, name);
+    char *type = self->getType(self, name);
 
     if (mimiStrEqu("[error: arg no found]", type))
     {
@@ -433,15 +441,15 @@ static int setObject(Args *self, char *objectName, char *className, void *object
     strPrint(typeWithClass, className);
     Arg *argNew = New_arg(NULL);
     argNew->setName(argNew, objectName);
-    argNew->setPointer(argNew, objectPtr);
+    argNew->setPtr(argNew, objectPtr);
     argNew->setType(argNew, typeWithClass);
     self->setArg(self, argNew);
     return 0;
 }
 
-static int foreach(Args *self, int (*eachHandle)(Arg *argEach, Args *handleArgs), Args *handleArgs)
+static int foreach (Args *self, int (*eachHandle)(Arg *argEach, Args *handleArgs), Args * handleArgs)
 {
-    int argsSize = self->size(self);
+    int argsSize = self->getSize(self);
     for (int i = 0; i < argsSize; i++)
     {
         Arg *argNow = self->getArgByIndex(self, i);
@@ -452,6 +460,13 @@ static int foreach(Args *self, int (*eachHandle)(Arg *argEach, Args *handleArgs)
         eachHandle(argNow, handleArgs);
     }
     return 0;
+}
+
+static void removeArg(Args *self, char *name)
+{
+    Arg *argNow = self->getArg(self, name);
+    self->argLinkList->removeNode(self->argLinkList,
+                                  argNow);
 }
 
 static void init(Args *self, Args *args)
@@ -467,17 +482,23 @@ static void init(Args *self, Args *args)
     /* operation */
     self->deinit = deinit;
 
-    self->size = size;
-    self->getArgByIndex = getArgByIndex;
-    self->getArgByName = getArgByName;
+    self->getSize = getSize;
+
+    /* arg operation */
     self->setArg = setArg;
-    self->getTypeByName = getTypeByName;
+    self->getArg = getArgByName;
+    self->removeArg = removeArg;
+    self->getArgByIndex = getArgByIndex;
     self->copyArg = copyArg;
     self->isArgExist = isArgExist;
 
+    /* type operation */
+    self->getType = getTypeByName;
+
+    /* typed operation */
     self->setInt = setInt64WithName;
     self->getInt = getInt64ByName;
-    self->getInt64ByIndex = getInt64ByIndex;
+    self->getIntByIndex = getInt64ByIndex;
 
     self->setFloat = setFloatWithName;
     self->getFloat = getFloatByName;
@@ -493,11 +514,12 @@ static void init(Args *self, Args *args)
     self->setStrWithDefaultName = setStrWithDefaultName;
     self->getStrByIndex = getStrByIndex;
 
-    /* arg general operations */
+    /* bind general operations */
     self->bind = bind;
     self->bindInt = bindInt;
     self->bindFloat = bindFloat;
     self->bindStr = bindStr;
+    /* general operation */
     self->print = print;
     self->set = set;
     self->setObject = setObject;

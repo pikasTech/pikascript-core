@@ -26,13 +26,13 @@ int TEST_args2(int isShow)
         if (isShow)
         {
             printf("the float output is: %f\r\n", floatOut);
-            printf("the float type is: [%s]\r\n", args->getTypeByName(args, "arg0"));
+            printf("the float type is: [%s]\r\n", args->getType(args, "arg0"));
             printf("the int64 output is: %d\r\n", (int)int64Out);
-            printf("the int64 type is: [%s]\r\n", args->getTypeByName(args, "int64Test"));
+            printf("the int64 type is: [%s]\r\n", args->getType(args, "int64Test"));
             printf("the pointer output is: %d\r\n", (int)(long long)pointer);
-            printf("the pointer type is: [%s]\r\n", args->getTypeByName(args, "pointerTest"));
+            printf("the pointer type is: [%s]\r\n", args->getType(args, "pointerTest"));
             printf("the string output is: %s\r\n", strOut);
-            printf("the string type is: [%s]\r\n", args->getTypeByName(args, "strTest"));
+            printf("the string type is: [%s]\r\n", args->getType(args, "strTest"));
         }
 
         if ((float)24.5 != floatOut)
@@ -51,19 +51,19 @@ int TEST_args2(int isShow)
         {
             err = 4;
         }
-        if (0 != strcmp("float", args->getTypeByName(args, "arg0")))
+        if (0 != strcmp("float", args->getType(args, "arg0")))
         {
             err = 5;
         }
-        if (0 != strcmp("int", args->getTypeByName(args, "int64Test")))
+        if (0 != strcmp("int", args->getType(args, "int64Test")))
         {
             err = 6;
         }
-        if (0 != strcmp("pointer", args->getTypeByName(args, "pointerTest")))
+        if (0 != strcmp("pointer", args->getType(args, "pointerTest")))
         {
             err = 7;
         }
-        if (0 != strcmp("string", args->getTypeByName(args, "strTest")))
+        if (0 != strcmp("string", args->getType(args, "strTest")))
         {
             err = 8;
         }
@@ -108,7 +108,7 @@ int TEST_args2(int isShow)
         int testInt = 124;
         Args *args = New_args(NULL);
         args->bind(args, "int", "testInt", &testInt);
-        char *type = args->getTypeByName(args, "testInt");
+        char *type = args->getType(args, "testInt");
         args->print(args, "testInt");
         if (isShow)
         {
@@ -188,7 +188,7 @@ int TEST_args2(int isShow)
         {
             printf("test set int before: %s\r\n", printOutBefore);
         }
-        if(!mimiStrEqu(printOutBefore, "1"))
+        if (!mimiStrEqu(printOutBefore, "1"))
         {
             return 14;
         }
@@ -198,7 +198,7 @@ int TEST_args2(int isShow)
         {
             printf("test set int after: %s\r\n", printOutAfter);
         }
-        if(!mimiStrEqu(printOutAfter, "4"))
+        if (!mimiStrEqu(printOutAfter, "4"))
         {
             return 55;
         }
@@ -213,7 +213,7 @@ int TEST_args2(int isShow)
         {
             printf("test set bind str before: %s\r\n", printOutBefore);
         }
-        if(!mimiStrEqu(printOutBefore, "testtest"))
+        if (!mimiStrEqu(printOutBefore, "testtest"))
         {
             return 15;
         }
@@ -223,9 +223,28 @@ int TEST_args2(int isShow)
         {
             printf("test set bind str after: %s\r\n", printOutAfter);
         }
-        if(!mimiStrEqu(printOutAfter, "ttww"))
+        if (!mimiStrEqu(printOutAfter, "ttww"))
         {
             return 56;
+        }
+        args->deinit(args);
+    }
+    {
+        Args *args = New_args(NULL);
+        args->setInt(args, "test", 13);
+        args->setInt(args, "kw", 25);
+        if (isShow)
+        {
+            printf("before remove arg\r\n");
+            printf("the size of args is %d\r\n", args->getSize(args));
+            printf("the val of arg test is %d\r\n", args->getInt(args, "test"));
+        }
+        args->removeArg(args, "test");
+        if (isShow)
+        {
+            printf("before remove arg\r\n");
+            printf("the size of args is %d\r\n", args->getSize(args));
+            printf("the val of arg test is %d\r\n", args->getInt(args, "test"));
         }
         args->deinit(args);
     }

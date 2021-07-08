@@ -16,15 +16,16 @@ struct Class_Arglist
     /* operation */
     void (*deinit)(Args *self);
     void (*init)(Args *self, Args *args);
-    int (*size)(Args *self);
+    int (*getSize)(Args *self);
 
     Arg *(*getArgByIndex)(Args *self, int index);
-    Arg *(*getArgByName)(Args *self, char *name);
+    Arg *(*getArg)(Args *self, char *name);
+    void (*removeArg)(Args *self, char *name);
 
     int (*setArg)(Args *self, Arg *arg);
 
     int (*copyArg)(Args *self, char *name, Args *directList);
-    char *(*getTypeByName)(Args *self, char *name);
+    char *(*getType)(Args *self, char *name);
     int (*isArgExist)(Args *self, char *name);
 
     int (*setStr)(Args *self, char *name, char *strIn);
@@ -43,7 +44,7 @@ struct Class_Arglist
 
     int (*setInt)(Args *self, char *name, long long int64In);
     long long (*getInt)(Args *self, char *name);
-    long long (*getInt64ByIndex)(Args *self, int index);
+    long long (*getIntByIndex)(Args *self, int index);
 
     void (*bindInt)(Args *self, char *name, int *intPtr);
     void (*bindFloat)(Args *self, char *name, float *floatPtr);
