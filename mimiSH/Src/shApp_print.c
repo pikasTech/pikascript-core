@@ -11,7 +11,7 @@
 
 #define PROCESS_DIR argv[1]
 
-void *app_print(Shell2 *shell, int argc, char **argv)
+void *app_print(Shell *shell, int argc, char **argv)
 {
     DMEM *memOut = DynMemGet(sizeof(char) * 256);
     ((char *)(memOut->addr))[0] = 0;

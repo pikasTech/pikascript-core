@@ -50,7 +50,7 @@ exit:
 #define PROCESS_DIR argv[1]
 #define SET_VAL argv[2]
 
-void *app_argSet(Shell2 *shell, int argc, char **argv)
+void *app_argSet(Shell *shell, int argc, char **argv)
 {
     DMEM *memOut = DynMemGet(sizeof(char) * 256);
     ((char *)(memOut->addr))[0] = 0;

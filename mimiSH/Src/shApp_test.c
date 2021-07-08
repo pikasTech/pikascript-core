@@ -35,7 +35,7 @@ char *shell_base_test2(char *CMD, unsigned short int StartStrSize, char *strOut)
 	return strPrint(strOut, "Finished\r\n");
 }
 
-void *app_test2(Shell2 *shell, int argc, char **argv)
+void *app_test2(Shell *shell, int argc, char **argv)
 {
 	DMEM *memOut = DynMemGet(sizeof(char) * 256);
 	char *strOut = (char *)(memOut->addr);

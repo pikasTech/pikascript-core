@@ -31,7 +31,7 @@ static int listEachHandleProcessArg(Arg *argEach, Args *handleArgs)
     return 0;
 }
 
-void *app_list(Shell2 *shell, int argc, char **argv)
+void *app_list(Shell *shell, int argc, char **argv)
 {
     DMEM *memOut = DynMemGet(sizeof(char) * 256);
     ((char *)(memOut->addr))[0] = 0;

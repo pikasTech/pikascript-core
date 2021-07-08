@@ -47,10 +47,10 @@ int mimiShell2_strGetArgs(char *CMD, char **argv)
 }
 
 // the detector of shell luancher, which can add info befor the strout
-static void *detector_shellLuancher(Shell2 *self,
-									void *(*fun_d)(Shell2 *, char *, void *(fun)(Shell2 *, int, char **)),
+static void *detector_shellLuancher(Shell *self,
+									void *(*fun_d)(Shell *, char *, void *(fun)(Shell *, int, char **)),
 									char *CMD,
-									void *(fun)(Shell2 *, int argc, char **argv))
+									void *(fun)(Shell *, int argc, char **argv))
 {
 	DMEM *memOut;
 	DMEM *memAdd;
@@ -70,9 +70,9 @@ static void *detector_shellLuancher(Shell2 *self,
 }
 
 // the luancher of shell
-static void *shellLuancher(Shell2 *self,
+static void *shellLuancher(Shell *self,
 						   char *CMD,
-						   void *(fun)(Shell2 *, int argc, char **argv))
+						   void *(fun)(Shell *, int argc, char **argv))
 {
 	char StartStrSize = 0;
 	int argc = 0;
@@ -104,7 +104,7 @@ static void *shellLuancher(Shell2 *self,
 static int luanchShellWhenNameMatch(Arg *argNow, Args *argsHandle)
 {
 	char *cmd = argsHandle->getStr(argsHandle, "cmd");
-	Shell2 *shell = argsHandle->getPtr(argsHandle, "shell");
+	Shell *shell = argsHandle->getPtr(argsHandle, "shell");
 
 	char *name = argNow->nameDynMem->addr;
 	if (isStartWith(cmd, name))
@@ -121,7 +121,7 @@ static int luanchShellWhenNameMatch(Arg *argNow, Args *argsHandle)
 	return 0;
 }
 
-static void *Shell_cmd(Shell2 *self, char *cmd)
+static void *Shell_cmd(Shell *self, char *cmd)
 {
 	Args *argsHandle = New_args(NULL);
 	argsHandle->setStr(argsHandle,
@@ -149,9 +149,9 @@ exit:
 	return shellOut;
 }
 
-static void Shell_addMap(Shell2 *self,
+static void Shell_addMap(Shell *self,
 						 char *name,
-						 void *(*fun)(Shell2 *shell,
+						 void *(*fun)(Shell *shell,
 									  int argc,
 									  char **argv))
 {
@@ -159,7 +159,7 @@ static void Shell_addMap(Shell2 *self,
 						  name, fun);
 }
 
-static int Shell_listMap(Shell2 *self, int isShow)
+static int Shell_listMap(Shell *self, int isShow)
 {
 	// cmdMap_t *cmdMap;
 	int size;
@@ -172,7 +172,7 @@ static int Shell_listMap(Shell2 *self, int isShow)
 	return size;
 }
 
-static int Shell_test(Shell2 *self, int isShow)
+static int Shell_test(Shell *self, int isShow)
 {
 	char *outstr = 0;
 	int size;
@@ -197,19 +197,19 @@ static int Shell_test(Shell2 *self, int isShow)
 	return 0;
 }
 
-static void deinit(Shell2 *self)
+static void deinit(Shell *self)
 {
 	self->mapList->deinit(self->mapList);
 	DynMemPut(self->mem);
 }
 
-static void _shConfig(Shell2 *self)
+static void _shConfig(Shell *self)
 {
 	/* override in user code */
 	/* you can add maps */
 }
 
-static void init(Shell2 *self, Args *initArgs)
+static void init(Shell *self, Args *initArgs)
 {
 	/* attribute */
 
@@ -229,10 +229,10 @@ static void init(Shell2 *self, Args *initArgs)
 	self->config(self);
 }
 
-Shell2 *New_shell2(Args *args)
+Shell *New_shell(Args *args)
 {
-	DMEM *mem = DynMemGet(sizeof(Shell2));
-	Shell2 *self = mem->addr;
+	DMEM *mem = DynMemGet(sizeof(Shell));
+	Shell *self = mem->addr;
 	self->mem = mem;
 	self->init = init;
 	self->init(self, args);

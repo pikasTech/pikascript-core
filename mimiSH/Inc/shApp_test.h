@@ -3,5 +3,5 @@
 #include "mimiShell.h"
 
 char *shell_base_test2(char *CMD, unsigned short int StartStrSize, char *strOut);
-void *app_test2(Shell2 *shell, int argc, char **argv);
+void *app_test2(Shell *shell, int argc, char **argv);
 #endif
