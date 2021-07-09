@@ -63,5 +63,5 @@ struct Class_process
     /* object */
 };
 
-MimiProcess *New_mimiProcess(Args *args);
+MimiProcess *New_MimiProcess(Args *args);
 #endif

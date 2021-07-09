@@ -1,4 +1,4 @@
-#include "mimiProcess.h"
+#include "MimiProcess.h"
 #include "mimiCom.h"
 #include "dataString.h"
 
@@ -7,7 +7,7 @@ int TEST_mimiProcess(int isShow)
     {
         Args *args = New_args(NULL);
         args->setInt(args, "isEnable", 0);
-        MimiProcess *process = New_mimiProcess(args);
+        MimiProcess *process = New_MimiProcess(args);
         if (isShow)
         {
             printf("the isEnable = %d\r\n", (int)process->attributeList->getInt(process->attributeList, "isEnable"));
@@ -16,7 +16,7 @@ int TEST_mimiProcess(int isShow)
         process->deinit(process);
     }
     {
-        MimiProcess *process = New_mimiProcess(NULL);
+        MimiProcess *process = New_MimiProcess(NULL);
         float floatTest = 12.231;
         process->argBindFloat(process, "testFloatBind", &floatTest);
         if (isShow)

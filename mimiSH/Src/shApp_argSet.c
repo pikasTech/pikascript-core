@@ -1,7 +1,7 @@
 #include "shApp_argSet.h"
 #include "dataMemory.h"
 #include "dataString.h"
-#include "mimiProcess.h"
+#include "MimiProcess.h"
 #include <stdio.h>
 #include "mimiShell.h"
 #include <stdlib.h>

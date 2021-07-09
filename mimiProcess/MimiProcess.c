@@ -1,4 +1,4 @@
-#include "mimiProcess.h"
+#include "MimiProcess.h"
 #include "dataArgs.h"
 #include "dataMemory.h"
 #include "dataString.h"
@@ -286,7 +286,7 @@ static void init(MimiProcess *self, Args *args)
     }
 }
 
-MimiProcess *New_mimiProcess(Args *args)
+MimiProcess *New_MimiProcess(Args *args)
 {
     DMEM *mem = DynMemGet(sizeof(MimiProcess));
     MimiProcess *self = mem->addr;
