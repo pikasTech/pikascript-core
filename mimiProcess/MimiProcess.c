@@ -127,7 +127,7 @@ static void _beforDinit(MimiProcess *self)
 static void addSubProcess(MimiProcess *self, char *subProcessName, void *new_ProcessFun)
 {
     /* class means subprocess init */
-    char prifix[] = "[class]";
+    char prifix[] = "[cls]";
     char nameBuff[64] = {0};
     strPrint(nameBuff, prifix);
     strPrint(nameBuff, subProcessName);
@@ -193,7 +193,7 @@ static void subscribe(MimiProcess *self,
 
 static MimiProcess *initSubProcess(MimiProcess *self, char *name)
 {
-    char prifix[] = "[class]";
+    char prifix[] = "[cls]";
     char initFunName[64] = {0};
     strPrint(initFunName, prifix);
     strPrint(initFunName, name);
