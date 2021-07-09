@@ -26,7 +26,7 @@ void *app_argSet(Shell *shell, int argc, char **argv)
     }
 
     char setName[32] = {0};
-    getLastUnitBySign(PROCESS_DIR, setName, '.');
+    getLastTokenBySign(PROCESS_DIR, setName, '.');
     int errCode = processNow->argSet(processNow, setName, SET_VAL);
     if (0 != errCode)
     {

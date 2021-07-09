@@ -72,7 +72,7 @@ char *strPrint_unlimited(char *strOut, char *pData)
 	return strPrintWithSize_unlimited(strOut, pData, Size);
 }
 
-void getLastUnitBySign(char *stringIn, char *stringOut, char sign)
+void getLastTokenBySign(char *stringIn, char *stringOut, char sign)
 {
 	int size = strGetSize(stringIn);
 	char strOutBuff[256] = {0};

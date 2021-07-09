@@ -69,48 +69,80 @@ static void disable(MimiProcess *self)
     self->setInt(self, "isEnable", 0);
 }
 
-static void setInt64(MimiProcess *self, char *name, long long val)
+static void setInt64(MimiProcess *self, char *argDir, long long val)
 {
-    self->attributeList->setInt(self->attributeList, name, val);
-    subscribeHandle(self, name);
+    MimiProcess *processNow = self->goToProcess(self, argDir, 1);
+    char name[64] = {0};
+    getLastTokenBySign(argDir, name, '.');
+    processNow->attributeList->setInt(processNow->attributeList,
+                                      name, val);
+    subscribeHandle(processNow, name);
 }
 
-static void setPointer(MimiProcess *self, char *name, void *pointer)
+static void setPointer(MimiProcess *self, char *argDir, void *pointer)
 {
-    self->attributeList->setPtr(self->attributeList, name, pointer);
-    subscribeHandle(self, name);
+    MimiProcess *processNow = self->goToProcess(self, argDir, 1);
+    char name[64] = {0};
+    getLastTokenBySign(argDir, name, '.');
+    processNow->attributeList->setPtr(processNow->attributeList,
+                                      name, pointer);
+    subscribeHandle(processNow, name);
 }
 
-static void setFloat(MimiProcess *self, char *name, float value)
+static void setFloat(MimiProcess *self, char *argDir, float value)
 {
-    self->attributeList->setFloat(self->attributeList, name, value);
-    subscribeHandle(self, name);
+    MimiProcess *processNow = self->goToProcess(self, argDir, 1);
+    char name[64] = {0};
+    getLastTokenBySign(argDir, name, '.');
+    processNow->attributeList->setFloat(processNow->attributeList,
+                                      name, value);
+    subscribeHandle(processNow, name);
 }
 
-static void setStr(MimiProcess *self, char *name, char *str)
+static void setStr(MimiProcess *self, char *argDir, char *str)
 {
-    self->attributeList->setStr(self->attributeList, name, str);
-    subscribeHandle(self, name);
+    MimiProcess *processNow = self->goToProcess(self, argDir, 1);
+    char name[64] = {0};
+    getLastTokenBySign(argDir, name, '.');
+    processNow->attributeList->setStr(processNow->attributeList,
+                                      name, str);
+    subscribeHandle(processNow, name);
 }
 
-static long long getInt64(MimiProcess *self, char *name)
+static long long getInt64(MimiProcess *self, char *argDir)
 {
-    return self->attributeList->getInt(self->attributeList, name);
+    MimiProcess *processNow = self->goToProcess(self, argDir, 1);
+    char argName[64] = {0};
+    getLastTokenBySign(argDir, argName, '.');
+    return processNow->attributeList->getInt(processNow->attributeList,
+                                             argName);
 }
 
-static void *getPointer(MimiProcess *self, char *name)
+static void *getPointer(MimiProcess *self, char *argDir)
 {
-    return self->attributeList->getPtr(self->attributeList, name);
+    MimiProcess *processNow = self->goToProcess(self, argDir, 1);
+    char argName[64] = {0};
+    getLastTokenBySign(argDir, argName, '.');
+    return processNow->attributeList->getPtr(processNow->attributeList,
+                                             argName);
 }
 
-static float getFloat(MimiProcess *self, char *name)
+static float getFloat(MimiProcess *self, char *argDir)
 {
-    return self->attributeList->getFloat(self->attributeList, name);
+    MimiProcess *processNow = self->goToProcess(self, argDir, 1);
+    char argName[64] = {0};
+    getLastTokenBySign(argDir, argName, '.');
+    return processNow->attributeList->getFloat(processNow->attributeList,
+                                               argName);
 }
 
-char *getStr(MimiProcess *self, char *name)
+char *getStr(MimiProcess *self, char *argDir)
 {
-    return self->attributeList->getStr(self->attributeList, name);
+    MimiProcess *processNow = self->goToProcess(self, argDir, 1);
+    char argName[64] = {0};
+    getLastTokenBySign(argDir, argName, '.');
+    return processNow->attributeList->getStr(processNow->attributeList,
+                                             argName);
 }
 
 static void loadAttributeFromArgs(MimiProcess *self, Args *args, char *name)
@@ -237,22 +269,22 @@ static MimiProcess *getSubProcess(MimiProcess *self, char *name)
     return self->getPtr(self, name);
 }
 
-static MimiProcess *goToProcess(MimiProcess *root, char *processDirectory, int deepth)
+static MimiProcess *goToProcess(MimiProcess *self, char *processDirectory, int keepToken)
 {
-    MimiProcess *processNow = root;
+    MimiProcess *processNow = self;
     // sign in the argv memory
-    char *directoryUnit[16] = {0};
-    DMEM *processMem[16] = {0};
+    char *token[16] = {0};
+    DMEM *tokenMem[16] = {0};
     for (int i = 0; i < 16; i++)
     {
-        processMem[i] = DynMemGet(sizeof(char) * 256);
-        directoryUnit[i] = (char *)processMem[i]->addr;
-        directoryUnit[i][0] = 0;
+        tokenMem[i] = DynMemGet(sizeof(char) * 256);
+        token[i] = (char *)tokenMem[i]->addr;
+        token[i][0] = 0;
     }
-    int processArgc = devideStringBySign(processDirectory, directoryUnit, '.');
-    for (int i = 0; i < processArgc - deepth; i++)
+    int processArgc = devideStringBySign(processDirectory, token, '.');
+    for (int i = 0; i < processArgc - keepToken; i++)
     {
-        processNow = processNow->getSubProcess(processNow, directoryUnit[i]);
+        processNow = processNow->getSubProcess(processNow, token[i]);
         if (processNow == NULL)
         {
             goto exit;
@@ -262,7 +294,7 @@ static MimiProcess *goToProcess(MimiProcess *root, char *processDirectory, int d
 exit:
     for (int i = 0; i < 16; i++)
     {
-        DynMemPut(processMem[i]);
+        DynMemPut(tokenMem[i]);
     }
     return processNow;
 }
@@ -319,7 +351,6 @@ static void init(MimiProcess *self, Args *args)
     if (NULL != args)
     {
         self->loadAttributeFromArgs(self, args, "context");
-        self->loadAttributeFromArgs(self, args, "isEnable");
     }
 }
 

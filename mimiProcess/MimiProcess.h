@@ -49,7 +49,7 @@ struct Class_process
     void (*addSubobject)(MimiProcess *self, char *subObjectName, void *new_projcetFun);
     void (*addSubProcess)(MimiProcess *self, char *subObjectName, void *new_projcetFun);
     MimiProcess *(*getSubProcess)(MimiProcess *self, char *name);
-    MimiProcess *(*goToProcess)(MimiProcess *root, char *processDirectory, int deepth);
+    MimiProcess *(*goToProcess)(MimiProcess *self, char *processDirectory, int deepth);
 
     // subProcess
     void (*dinitSubProcessByName)(MimiProcess *self, char *subObjectName);
