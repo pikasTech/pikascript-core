@@ -48,7 +48,7 @@ static void _processRootUpdateHandle(MimiProcess *self)
 
 static void subscribeHandle(MimiProcess *self, char *name)
 {
-    const char prefix[] = "[subscribe]";
+    char prefix[] = "[subscribe]";
     char subscribeName[256] = {0};
     strPrint(subscribeName, prefix);
     strPrint(subscribeName, name);
@@ -127,7 +127,7 @@ static void _beforDinit(MimiProcess *self)
 static void addSubProcess(MimiProcess *self, char *subProcessName, void *new_ProcessFun)
 {
     /* sp-init means subprocess init */
-    const char prifix[] = "[sp-init]";
+    char prifix[] = "[sp-init]";
     char nameBuff[64] = {0};
     strPrint(nameBuff, prifix);
     strPrint(nameBuff, subProcessName);
@@ -189,7 +189,7 @@ static void subscribe(MimiProcess *self,
                       char *subscribeVarName,
                       void (*handle)(MimiProcess *self))
 {
-    const char prefix[] = "[subscribe]";
+    char prefix[] = "[subscribe]";
     char argName[256] = {0};
     strPrint(argName, prefix);
     strPrint(argName, subscribeVarName);
@@ -203,7 +203,7 @@ static MimiProcess *getSubProcess(MimiProcess *self, char *name)
                                          name))
     {
         /* no inited subprocess, check subprocess init fun*/
-        const char prifix[] = "[sp-init]";
+        char prifix[] = "[sp-init]";
         char initFunName[64] = {0};
         strPrint(initFunName, prifix);
         strPrint(initFunName, name);
