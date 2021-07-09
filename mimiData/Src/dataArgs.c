@@ -312,8 +312,8 @@ static char *getPrintStringFromFloat(Args *self, char *name, float val)
 static char *getPrintStringFromPtr(Args *self, char *name, void *val)
 {
     char valString[256] = {0};
-    long long intVal = (long long)val;
-    sprintf(valString, "0x%x", val);
+    unsigned int intVal = (unsigned int)val;
+    sprintf(valString, "0x%x", intVal);
     return getPrintSring(self, name, valString);
 }
 

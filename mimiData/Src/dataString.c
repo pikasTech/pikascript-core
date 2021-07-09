@@ -97,7 +97,6 @@ void getLastUnitBySign(char *stringIn, char *stringOut, char sign)
 void getFirstUnitBySign(char *stringIn, char *stringOut, char sign)
 {
 	int size = strGetSize(stringIn);
-	char strOutBuff[256] = {0};
 	for (int i = 0; i < size; i++)
 	{
 		if (stringIn[i] != sign)

@@ -168,7 +168,7 @@ int TEST_args2(int isShow)
     {
         Args *args = New_args(NULL);
         char strBindTest[] = "test string bind";
-        args->bindStr(args, "testStringBind", &strBindTest);
+        args->bindStr(args, "testStringBind", (char **)&strBindTest);
         if (isShow)
         {
             printf("test string bind: %s\r\n", args->print(args, "testStringBind"));
@@ -207,7 +207,7 @@ int TEST_args2(int isShow)
     {
         Args *args = New_args(NULL);
         char testStrBind[256] = "testtest";
-        args->bindStr(args, "testStr", &testStrBind);
+        args->bindStr(args, "testStr", (char **)&testStrBind);
         char *printOutBefore = args->print(args, "testStr");
         if (isShow)
         {
@@ -237,14 +237,14 @@ int TEST_args2(int isShow)
         {
             printf("before remove arg\r\n");
             printf("the size of args is %d\r\n", args->getSize(args));
-            printf("the val of arg test is %d\r\n", args->getInt(args, "test"));
+            printf("the val of arg test is %d\r\n", (int)args->getInt(args, "test"));
         }
         args->removeArg(args, "test");
         if (isShow)
         {
             printf("before remove arg\r\n");
             printf("the size of args is %d\r\n", args->getSize(args));
-            printf("the val of arg test is %d\r\n", args->getInt(args, "test"));
+            printf("the val of arg test is %d\r\n", (int)args->getInt(args, "test"));
         }
         args->deinit(args);
     }

@@ -150,11 +150,6 @@ static void dinitSubProcessByName(MimiProcess *self, char *subProcessName)
     subProcess->deinit(subProcess);
 }
 
-static void _potableInitDefault(MimiProcess *self)
-{
-    /* override in user code, init the hardward dependence issues */
-}
-
 static void argBind(MimiProcess *self, char *type, char *name, void *pointer)
 {
     self->attributeList->bind(self->attributeList, type, name, pointer);

@@ -27,9 +27,9 @@ struct Class_mimiShell2
 
     /* override */
     void (*config)(Shell *self);
-    void *(*detector)(Shell *self, void *(*fun_d)(char *, void *(fun)(int, char **)),
+    void *(*detector)(Shell *self, void *(*fun_d)(Shell *self, char *, void *(fun)(Shell *self, int, char **)),
                       char *CMD,
-                      void *(fun)(int argc, char **argv));
+                      void *(fun)(Shell *self, int argc, char **argv));
 };
 
 Shell *New_shell(Args *initArgs);
