@@ -16,7 +16,7 @@ void *app_print(Shell *shell, int argc, char **argv)
     DMEM *memOut = DynMemGet(sizeof(char) * 256);
     ((char *)(memOut->addr))[0] = 0;
     MimiProcess *root = shell->context;
-    MimiProcess *processNow = goToProcess(root, PROCESS_DIR, 1);
+    MimiProcess *processNow = root->goToProcess(root, PROCESS_DIR, 1);
 
     if (NULL == processNow)
     {

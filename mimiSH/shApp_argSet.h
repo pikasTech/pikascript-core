@@ -3,5 +3,4 @@
 #include "MimiProcess.h"
 #include "mimiShell.h"
 void *app_argSet(Shell *shell, int argc, char **argv);
-MimiProcess *goToProcess(MimiProcess *root, char *processDirectory, int deepth);
 #endif

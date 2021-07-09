@@ -237,6 +237,36 @@ static MimiProcess *getSubProcess(MimiProcess *self, char *name)
     return self->getPtr(self, name);
 }
 
+static MimiProcess *goToProcess(MimiProcess *root, char *processDirectory, int deepth)
+{
+    MimiProcess *processNow = root;
+    // sign in the argv memory
+    char *directoryUnit[16] = {0};
+    DMEM *processMem[16] = {0};
+    for (int i = 0; i < 16; i++)
+    {
+        processMem[i] = DynMemGet(sizeof(char) * 256);
+        directoryUnit[i] = (char *)processMem[i]->addr;
+        directoryUnit[i][0] = 0;
+    }
+    int processArgc = devideStringBySign(processDirectory, directoryUnit, '.');
+    for (int i = 0; i < processArgc - deepth; i++)
+    {
+        processNow = processNow->getSubProcess(processNow, directoryUnit[i]);
+        if (processNow == NULL)
+        {
+            goto exit;
+        }
+    }
+    goto exit;
+exit:
+    for (int i = 0; i < 16; i++)
+    {
+        DynMemPut(processMem[i]);
+    }
+    return processNow;
+}
+
 static void init(MimiProcess *self, Args *args)
 {
     /* List */
@@ -272,6 +302,7 @@ static void init(MimiProcess *self, Args *args)
     self->addSubobject = addSubobject;
     self->addSubProcess = addSubProcess;
     self->getSubProcess = getSubProcess;
+    self->goToProcess = goToProcess;
     self->dinitSubProcessByName = dinitSubProcessByName;
 
     /* attrivute */

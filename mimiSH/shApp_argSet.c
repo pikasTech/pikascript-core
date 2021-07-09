@@ -8,36 +8,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-MimiProcess *goToProcess(MimiProcess *root, char *processDirectory, int deepth)
-{
-    MimiProcess *processNow = root;
-    // sign in the argv memory
-    char *directoryUnit[16] = {0};
-    DMEM *processMem[16] = {0};
-    for (int i = 0; i < 16; i++)
-    {
-        processMem[i] = DynMemGet(sizeof(char) * 256);
-        directoryUnit[i] = (char *)processMem[i]->addr;
-        directoryUnit[i][0] = 0;
-    }
-    int processArgc = devideStringBySign(processDirectory, directoryUnit, '.');
-    for (int i = 0; i < processArgc - deepth; i++)
-    {
-        processNow = processNow->getSubProcess(processNow, directoryUnit[i]);
-        if (processNow == NULL)
-        {
-            goto exit;
-        }
-    }
-    goto exit;
-exit:
-    for (int i = 0; i < 16; i++)
-    {
-        DynMemPut(processMem[i]);
-    }
-    return processNow;
-}
-
 #define ROOT_PTR argv[argc - 1]
 #define PROCESS_DIR argv[1]
 #define SET_VAL argv[2]
@@ -47,7 +17,7 @@ void *app_argSet(Shell *shell, int argc, char **argv)
     DMEM *memOut = DynMemGet(sizeof(char) * 256);
     ((char *)(memOut->addr))[0] = 0;
     MimiProcess *root = shell->context;
-    MimiProcess *processNow = goToProcess(root, PROCESS_DIR, 1);
+    MimiProcess *processNow = root->goToProcess(root, PROCESS_DIR, 1);
 
     if (NULL == processNow)
     {

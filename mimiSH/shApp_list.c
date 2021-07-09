@@ -44,7 +44,7 @@ void *app_list(Shell *shell, int argc, char **argv)
     }
     else
     {
-        processNow = goToProcess(root, PROCESS_DIR, 0);
+        processNow = root->goToProcess(root, PROCESS_DIR, 0);
     }
 
     if (NULL == processNow)
