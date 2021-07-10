@@ -15,6 +15,41 @@ char *strPrintWithSize_unlimited(char *strOut, char *pData, int Size)
 	return strOut;
 }
 
+char *strCut(char *strOut, char *strIn, char startSign, char endSign)
+{
+	int Size = strGetSize(strIn);
+	int isStart = 0;
+	int isEnd = 0;
+	int iOut = 0;
+	for (int i = 0; i < Size; i++)
+	{
+		if (strIn[i] == startSign)
+		{
+			isStart = 1;
+			continue;
+		}
+		if (strIn[i] == endSign)
+		{
+			isEnd = 1;
+			break;
+		}
+		if (isStart)
+		{
+			strOut[iOut] = strIn[i];
+			iOut++;
+		}
+	}
+	/* add \0 */
+	strOut[iOut] = 0;
+	if (isStart && isEnd)
+	{
+		/* succeed */
+		return strOut;
+	}
+	/* faild */
+	return NULL;
+}
+
 char *strDeleteEnter(char *str)
 {
 	for (int i = 0; i < 256; i++)
@@ -30,6 +65,23 @@ char *strDeleteEnter(char *str)
 		}
 	}
 	return str;
+}
+
+char *strDeleteChar(char *strOut, char *strIn, char ch)
+{
+	int iOut = 0;
+	for (int i = 0; i < strGetSize(strIn); i++)
+	{
+		if (ch == strIn[i])
+		{
+			continue;
+		}
+		strOut[iOut] = strIn[i];
+		iOut++;
+	}
+	/* add \0 */
+	strOut[iOut] = 0;
+	return strOut;
 }
 
 char *strAppendWithSize(char *strOut, char *pData, int Size)
@@ -70,14 +122,14 @@ unsigned short int strGetSize(char *pData)
 	return Size;
 }
 
-char *strPrint_unlimited(char *strOut, char *pData)
+char *strAppend_unlimited(char *strOut, char *pData)
 {
 	unsigned short int Size = 0;
 	Size = strGetSize_unlimited(pData);
 	return strPrintWithSize_unlimited(strOut, pData, Size);
 }
 
-void getLastTokenBySign(char *stringIn, char *stringOut, char sign)
+char *getLastToken(char *stringIn, char *stringOut, char sign)
 {
 	int size = strGetSize(stringIn);
 	char strOutBuff[256] = {0};
@@ -93,13 +145,14 @@ void getLastTokenBySign(char *stringIn, char *stringOut, char sign)
 		}
 	}
 	int buffSize = strGetSize(strOutBuff);
-	for (int i = 0; i < buffSize ; i++)
+	for (int i = 0; i < buffSize; i++)
 	{
-		stringOut[i] = strOutBuff[buffSize - i -1];
+		stringOut[i] = strOutBuff[buffSize - i - 1];
 	}
+	return stringOut;
 }
 
-void getFirstUnitBySign(char *stringIn, char *stringOut, char sign)
+char *getFirstToken(char *stringIn, char *stringOut, char sign)
 {
 	int size = strGetSize(stringIn);
 	for (int i = 0; i < size; i++)
@@ -113,9 +166,10 @@ void getFirstUnitBySign(char *stringIn, char *stringOut, char sign)
 			break;
 		}
 	}
+	return stringOut;
 }
 
-int devideStringBySign(char *string, char **argv, char sign)
+int getToken(char *string, char **argv, char sign)
 {
 	int argc = 0;
 	int i = 0;
@@ -183,15 +237,16 @@ int mimiStrEqu(char *str1, char *str2)
 	return 1;
 }
 
-void mimiStrRemovePrefix(char *inputStr, char *prefix, char *outputStr)
+char *mimiStrRemovePrefix(char *inputStr, char *prefix, char *outputStr)
 {
 	if (!isStartWith(inputStr, prefix))
 	{
-		return;
+		return NULL;
 	}
 
 	for (int i = strGetSize(prefix); i < strGetSize(inputStr); i++)
 	{
 		outputStr[i - strGetSize(prefix)] = inputStr[i];
 	}
+	return outputStr;
 }

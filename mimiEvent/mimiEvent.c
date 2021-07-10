@@ -12,7 +12,7 @@ static void publish(MimiObj *self, Args *args)
     MimiObj *publisher = self->getObj(self, argDir, 1);
     char *folloedArgName = publisher->getStr(publisher, "fansList.fansInfo.followedArgName");
     char argName[64] = {0};
-    getLastTokenBySign(argDir, argName, '.');
+    getLastToken(argDir, argName, '.');
     if (!mimiStrEqu(argName, folloedArgName))
     {
         return;
@@ -30,7 +30,7 @@ static void follow(MimiObj *self, Args *args)
     MimiObj *publisher = self->getObj(self, argDir, 1);
     MimiObj *fansInfo = publisher->getObj(publisher, "fansList.fansInfo", 0);
     char argName[64];
-    getLastTokenBySign(argDir, argName, '.');
+    getLastToken(argDir, argName, '.');
 
     fansInfo->setPtr(fansInfo, "fansPtr", self);
     fansInfo->setPtr(fansInfo, "handle", handle);

@@ -62,7 +62,7 @@ static void setInt64(MimiObj *self, char *argDir, long long val)
 {
     MimiObj *obj = self->getObj(self, argDir, 1);
     char name[64] = {0};
-    getLastTokenBySign(argDir, name, '.');
+    getLastToken(argDir, name, '.');
     obj->attributeList->setInt(obj->attributeList,
                                name, val);
 }
@@ -71,7 +71,7 @@ static void setPointer(MimiObj *self, char *argDir, void *pointer)
 {
     MimiObj *obj = self->getObj(self, argDir, 1);
     char name[64] = {0};
-    getLastTokenBySign(argDir, name, '.');
+    getLastToken(argDir, name, '.');
     obj->attributeList->setPtr(obj->attributeList,
                                name, pointer);
 }
@@ -80,7 +80,7 @@ static void setFloat(MimiObj *self, char *argDir, float value)
 {
     MimiObj *obj = self->getObj(self, argDir, 1);
     char name[64] = {0};
-    getLastTokenBySign(argDir, name, '.');
+    getLastToken(argDir, name, '.');
     obj->attributeList->setFloat(obj->attributeList,
                                  name, value);
 }
@@ -89,7 +89,7 @@ static void setStr(MimiObj *self, char *argDir, char *str)
 {
     MimiObj *obj = self->getObj(self, argDir, 1);
     char name[64] = {0};
-    getLastTokenBySign(argDir, name, '.');
+    getLastToken(argDir, name, '.');
     obj->attributeList->setStr(obj->attributeList,
                                name, str);
 }
@@ -98,7 +98,7 @@ static long long getInt64(MimiObj *self, char *argDir)
 {
     MimiObj *obj = self->getObj(self, argDir, 1);
     char argName[64] = {0};
-    getLastTokenBySign(argDir, argName, '.');
+    getLastToken(argDir, argName, '.');
     return obj->attributeList->getInt(obj->attributeList,
                                       argName);
 }
@@ -107,7 +107,7 @@ static void *getPointer(MimiObj *self, char *argDir)
 {
     MimiObj *obj = self->getObj(self, argDir, 1);
     char argName[64] = {0};
-    getLastTokenBySign(argDir, argName, '.');
+    getLastToken(argDir, argName, '.');
     return obj->attributeList->getPtr(obj->attributeList,
                                       argName);
 }
@@ -116,7 +116,7 @@ static float getFloat(MimiObj *self, char *argDir)
 {
     MimiObj *obj = self->getObj(self, argDir, 1);
     char argName[64] = {0};
-    getLastTokenBySign(argDir, argName, '.');
+    getLastToken(argDir, argName, '.');
     return obj->attributeList->getFloat(obj->attributeList,
                                         argName);
 }
@@ -125,7 +125,7 @@ char *getStr(MimiObj *self, char *argDir)
 {
     MimiObj *obj = self->getObj(self, argDir, 1);
     char argName[64] = {0};
-    getLastTokenBySign(argDir, argName, '.');
+    getLastToken(argDir, argName, '.');
     return obj->attributeList->getStr(obj->attributeList,
                                       argName);
 }
@@ -195,7 +195,7 @@ static int set(MimiObj *self, char *argDir, char *valStr)
 {
     MimiObj *obj = self->getObj(self, argDir, 1);
     char argName[64] = {0};
-    getLastTokenBySign(argDir, argName, '.');
+    getLastToken(argDir, argName, '.');
     return obj->attributeList->set(obj->attributeList, argName, valStr);
 }
 
@@ -206,7 +206,7 @@ static void follow(MimiObj *self,
     MimiObj *publisher = self->getObj(self, argDir, 1);
     MimiObj *fansInfo = publisher->getObj(publisher, "fansList.fansInfo", 0);
     char argName[64];
-    getLastTokenBySign(argDir, argName, '.');
+    getLastToken(argDir, argName, '.');
 
     fansInfo->setPtr(fansInfo, "fansPtr", self);
     fansInfo->setPtr(fansInfo, "handle", handle);
@@ -273,7 +273,7 @@ static MimiObj *getObj(MimiObj *self, char *processDirectory, int keepToken)
         token[i] = (char *)tokenMem[i]->addr;
         token[i][0] = 0;
     }
-    int processArgc = devideStringBySign(processDirectory, token, '.');
+    int processArgc = getToken(processDirectory, token, '.');
     for (int i = 0; i < processArgc - keepToken; i++)
     {
         obj = obj->getDirectObj(obj, token[i]);
@@ -311,10 +311,21 @@ static void setMethod(MimiObj *self,
                                    name, "method", method);
 }
 
-static void runMethod(MimiObj *self, char *methodName, Args *args)
+static void runMethod(MimiObj *self, char *methodDir, Args *args)
 {
-    void (*method)(MimiObj * self, Args * args) = self->getPtr(self, methodName);
+    void (*method)(MimiObj * self, Args * args) = self->getPtr(self, methodDir);
     method(self, args);
+}
+
+static void run(MimiObj *self, char *cmd)
+{
+    char strBuff[256] = {0};
+    strDeleteChar(strBuff, cmd, ' ');
+    if (NULL == strCut(strBuff, strBuff, '(', ')'))
+    {
+        /* not found '(' or ')', faild */
+        return;
+    }
 }
 
 static void init(MimiObj *self, Args *args)
@@ -360,6 +371,7 @@ static void init(MimiObj *self, Args *args)
     /* method */
     self->setMethod = setMethod;
     self->runMethod = runMethod;
+    self->run = run;
 
     /* override */
     self->_updateHandle = RootUpdateHandle;

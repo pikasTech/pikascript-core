@@ -1,17 +1,26 @@
 #ifndef __MY_TEST_TOOLS_H 
 #define __MY_TEST_TOOLS_H 
 
+/* size */
 unsigned short int strGetSize(char *pData);
 unsigned short int strGetSize_unlimited(char *pData);
-char *strPrint_unlimited(char *strOut, char *pData);
+/* append */
 char *strAppend(char *strOut, char *pData);
-int isStartWith(char *str, char *strStart);
-char *strDeleteEnter(char *str);
+char *strAppend_unlimited(char *strOut, char *pData);
 char *strAppendWithSize(char *strOut, char *pData, int Size);
+/* cut */
+char *strCut(char *strOut, char *strIn, char startSign, char endSign);
+/* assert */
+int isStartWith(char *str, char *strStart);
 int mimiStrEqu(char *str1, char *str2);
-void mimiStrRemovePrefix(char *inputStr, char *prefix, char *outputStr);
-int devideStringBySign(char *string, char **argv, char sign);
-void getFirstUnitBySign(char *stringIn, char *stringOut, char sign);
-void getLastTokenBySign(char *stringIn, char *stringOut, char sign);
+/* delete */
+char *strDeleteEnter(char *str);
+char *strDeleteChar(char *strOut, char *strIn, char ch);
+/* prefix */
+char *mimiStrRemovePrefix(char *inputStr, char *prefix, char *outputStr);
+/* token */
+int getToken(char *string, char **argv, char sign);
+char *getFirstToken(char *stringIn, char *stringOut, char sign);
+char *getLastToken(char *stringIn, char *stringOut, char sign);
 
 #endif

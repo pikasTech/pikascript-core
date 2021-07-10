@@ -2,6 +2,11 @@
 #include "mimiCom.h"
 #include "dataString.h"
 
+void hello(MimiObj *obj, Args *args)
+{
+    printf("hello, %s!\r\n", args->getStr(args, "name"));
+}
+
 int TEST_MimiObj(int isShow)
 {
     {
@@ -28,6 +33,13 @@ int TEST_MimiObj(int isShow)
             return 1;
         }
         process->deinit(process);
+    }
+    {
+        MimiObj *obj = New_MimiObj(NULL);
+        obj->setMethod(obj, "hello", hello);
+        obj->run(obj, "hello(name = world)");
+
+        obj->deinit(obj);
     }
     return 0;
 }

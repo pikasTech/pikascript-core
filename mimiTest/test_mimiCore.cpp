@@ -35,7 +35,7 @@ void test_mimiCore(int isShow)
     ASSERT_RETURN(TEST_Event, 1);
     std::cout << "Test of mimiCore Finished! " << std::endl
               << std::endl
-              << "Memory still used: " << (float)DMEMS.blk_num * 32 / 1024 << "kB" << std::endl
+              << "Memory still used: " << (float)DMEMS.blk_num * 32 / 1024 << " kB" << std::endl
               << "There is " << error_num << " error(s)" << std::endl
               << "There is " << memory_warnning_num << " memory warnning(s)" << std::endl
               << "================================" << std::endl;

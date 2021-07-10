@@ -11,10 +11,10 @@ static void print(loger_t *loger, char *str)
     //copy old log to new log
     if (NULL != loger->log)
     {
-        strPrint_unlimited(new_log_mem->addr, loger->log);
+        strAppend_unlimited(new_log_mem->addr, loger->log);
     }
     //add str to log
-    strPrint_unlimited(new_log_mem->addr, str);
+    strAppend_unlimited(new_log_mem->addr, str);
     //free the old log
     DynMemPut(loger->log_mem);
     //update the pointer of log

@@ -21,7 +21,7 @@ int assert_return(test_fun_t test_fun, int isShow, char *test_name)
     if (0 != memory_still_used)
     {
         memory_warnning_num++;
-        std::cout << "The memory still used is: " << (float)memory_still_used * 32 / 1024 << "kB" << std::endl;
+        std::cout << "The memory still used is: " << (float)memory_still_used * 32 / 1024 << " kB" << std::endl;
     }
     if (ret != 0)
     {
