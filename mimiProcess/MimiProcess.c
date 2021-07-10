@@ -207,9 +207,12 @@ static void argBindString(MimiProcess *self, char *name, char **valPtr)
     self->attributeList->bindStr(self->attributeList, name, valPtr);
 }
 
-static int argSet(MimiProcess *self, char *name, char *valStr)
+static int argSet(MimiProcess *self, char *argDir, char *valStr)
 {
-    return self->attributeList->set(self->attributeList, name, valStr);
+	  MimiProcess *processNow = self->goToProcess(self, argDir, 1);
+    char argName[64] = {0};
+    getLastTokenBySign(argDir, argName, '.');
+    return processNow->attributeList->set(processNow->attributeList, argName, valStr);
 }
 
 static void subscribe(MimiProcess *self,
