@@ -1,6 +1,6 @@
 #include "dataMemory.h"
 #include "dataString.h"
-#include "MimiProcess.h"
+#include "MimiObj.h"
 #include "shApp_argSet.h"
 #include "mimiShell.h"
 #include <stdio.h>
@@ -44,7 +44,7 @@ void *app_list(Shell *shell, int argc, char **argv)
     }
     else
     {
-        processNow = root->gotoObj(root, PROCESS_DIR, 0);
+        processNow = root->getObj(root, PROCESS_DIR, 0);
     }
 
     if (NULL == processNow)

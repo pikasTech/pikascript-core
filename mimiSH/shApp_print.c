@@ -1,7 +1,7 @@
 #include "shApp_print.h"
 #include "dataMemory.h"
 #include "dataString.h"
-#include "MimiProcess.h"
+#include "MimiObj.h"
 #include "shApp_argSet.h"
 #include "mimiShell.h"
 #include <stdio.h>
@@ -16,7 +16,7 @@ void *app_print(Shell *shell, int argc, char **argv)
     DMEM *memOut = DynMemGet(sizeof(char) * 256);
     ((char *)(memOut->addr))[0] = 0;
     MimiObj *root = shell->context;
-    MimiObj *processNow = root->gotoObj(root, PROCESS_DIR, 1);
+    MimiObj *processNow = root->getObj(root, PROCESS_DIR, 1);
 
     if (NULL == processNow)
     {
