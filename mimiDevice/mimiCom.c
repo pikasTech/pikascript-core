@@ -17,7 +17,7 @@ static void getChar(MimiCom *self, char inputChar)
 {
     if (inputChar != '\r' && inputChar != '\n')
     {
-        strPrintWithSize(self->RxBuff, &inputChar, 1);
+        strAppendWithSize(self->RxBuff, &inputChar, 1);
     }
     if (inputChar == '\r')
     {

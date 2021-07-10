@@ -12,8 +12,8 @@ void *app_cmdNofound2(Shell *self, int argc, char **argv)
     // {
     // 	return (void *)memOut;
     // }
-    strPrint(strOut, "[error] The cmd <");
-    strPrint(strOut, argv[0]);
-    strPrint(strOut, "> no found!\r\n");
+    strAppend(strOut, "[error] The cmd <");
+    strAppend(strOut, argv[0]);
+    strAppend(strOut, "> no found!\r\n");
     return (void *)memOut;
 }

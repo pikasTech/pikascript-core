@@ -16,9 +16,9 @@ void *app_argv_main2(Shell *shell, int argc, char **argv)
 		arg = argv[i];
 		char buff[256];
 		sprintf(buff, "argv %d: ", i);
-		strPrint(strOut, buff);
-		strPrint(strOut, arg);
-		strPrint(strOut, "\r\n");
+		strAppend(strOut, buff);
+		strAppend(strOut, arg);
+		strAppend(strOut, "\r\n");
 	}
 	return (void *)memOut;
 }

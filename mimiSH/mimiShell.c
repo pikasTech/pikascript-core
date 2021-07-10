@@ -60,10 +60,10 @@ static void *detector_shellLuancher(Shell *self,
 	memOut = (DMEM *)fun_d(self, CMD, fun);
 	if (NULL != memOut)
 	{
-		strPrint(strAdd, "myShell@STM32F405 >");
-		strPrint(strAdd, CMD);
-		strPrint(strAdd, "\r\n");
-		strPrint(strAdd, (char *)(memOut->addr));
+		strAppend(strAdd, "myShell@STM32F405 >");
+		strAppend(strAdd, CMD);
+		strAppend(strAdd, "\r\n");
+		strAppend(strAdd, (char *)(memOut->addr));
 		DynMemPut(memOut);
 	}
 	return memAdd;

@@ -25,8 +25,8 @@ static int listEachProcessArg(Arg *argEach, Args *handleArgs)
         return 1;
     }
     memcpy(strBuff, stringOut, 256);
-    strPrint(strBuff, argEach->nameDynMem->addr);
-    strPrint(strBuff, " ");
+    strAppend(strBuff, argEach->nameDynMem->addr);
+    strAppend(strBuff, " ");
     handleArgs->setStr(handleArgs, "stringOut", strBuff);
     return 0;
 }
@@ -49,7 +49,7 @@ void *app_list(Shell *shell, int argc, char **argv)
 
     if (NULL == processNow)
     {
-        strPrint(memOut->addr, "[error: process no found]\r\n");
+        strAppend(memOut->addr, "[error: process no found]\r\n");
         return (void *)memOut;
     }
 
@@ -59,6 +59,6 @@ void *app_list(Shell *shell, int argc, char **argv)
     processArgs->foreach (processArgs, listEachProcessArg, handleArgs);
     memcpy(memOut->addr, handleArgs->getStr(handleArgs, "stringOut"), 256);
     handleArgs->deinit(handleArgs);
-    strPrint(memOut->addr, "\r\n");
+    strAppend(memOut->addr, "\r\n");
     return (void *)memOut;
 }

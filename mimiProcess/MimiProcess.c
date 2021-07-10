@@ -46,13 +46,12 @@ static void _processRootUpdateHandle(MimiProcess *self)
     // override the handle function here
 }
 
-static void subscribeHandle(MimiProcess *self, char *name)
+static void subscribeHandle(MimiProcess *self, char *argDir)
 {
-    char prefix[] = "[subscribe]";
-    char subscribeName[256] = {0};
-    strPrint(subscribeName, prefix);
-    strPrint(subscribeName, name);
-    void (*subscribeHandler)(MimiProcess * self) = self->getPtr(self, subscribeName);
+    char prefixedArgDir[256] = {0};
+    strAppend(prefixedArgDir, "[subscribe]");
+    strAppend(prefixedArgDir, argDir);
+    void (*subscribeHandler)(MimiProcess * self) = self->getPtr(self, prefixedArgDir);
     if (NULL != subscribeHandler)
     {
         subscribeHandler(self);
@@ -76,7 +75,6 @@ static void setInt64(MimiProcess *self, char *argDir, long long val)
     getLastTokenBySign(argDir, name, '.');
     processNow->attributeList->setInt(processNow->attributeList,
                                       name, val);
-    subscribeHandle(processNow, name);
 }
 
 static void setPointer(MimiProcess *self, char *argDir, void *pointer)
@@ -86,7 +84,6 @@ static void setPointer(MimiProcess *self, char *argDir, void *pointer)
     getLastTokenBySign(argDir, name, '.');
     processNow->attributeList->setPtr(processNow->attributeList,
                                       name, pointer);
-    subscribeHandle(processNow, name);
 }
 
 static void setFloat(MimiProcess *self, char *argDir, float value)
@@ -95,8 +92,7 @@ static void setFloat(MimiProcess *self, char *argDir, float value)
     char name[64] = {0};
     getLastTokenBySign(argDir, name, '.');
     processNow->attributeList->setFloat(processNow->attributeList,
-                                      name, value);
-    subscribeHandle(processNow, name);
+                                        name, value);
 }
 
 static void setStr(MimiProcess *self, char *argDir, char *str)
@@ -106,7 +102,6 @@ static void setStr(MimiProcess *self, char *argDir, char *str)
     getLastTokenBySign(argDir, name, '.');
     processNow->attributeList->setStr(processNow->attributeList,
                                       name, str);
-    subscribeHandle(processNow, name);
 }
 
 static long long getInt64(MimiProcess *self, char *argDir)
@@ -148,7 +143,6 @@ char *getStr(MimiProcess *self, char *argDir)
 static void loadAttributeFromArgs(MimiProcess *self, Args *args, char *name)
 {
     args->copyArg(args, name, self->attributeList);
-    subscribeHandle(self, name);
 }
 
 static void _beforDinit(MimiProcess *self)
@@ -161,8 +155,8 @@ static void addSubProcess(MimiProcess *self, char *subProcessName, void *new_Pro
     /* class means subprocess init */
     char prifix[] = "[cls]";
     char nameBuff[64] = {0};
-    strPrint(nameBuff, prifix);
-    strPrint(nameBuff, subProcessName);
+    strAppend(nameBuff, prifix);
+    strAppend(nameBuff, subProcessName);
     self->setPtr(self, nameBuff, new_ProcessFun);
 }
 
@@ -209,29 +203,29 @@ static void argBindString(MimiProcess *self, char *name, char **valPtr)
 
 static int argSet(MimiProcess *self, char *argDir, char *valStr)
 {
-	  MimiProcess *processNow = self->goToProcess(self, argDir, 1);
+    MimiProcess *processNow = self->goToProcess(self, argDir, 1);
     char argName[64] = {0};
     getLastTokenBySign(argDir, argName, '.');
     return processNow->attributeList->set(processNow->attributeList, argName, valStr);
 }
 
 static void subscribe(MimiProcess *self,
-                      char *subscribeVarName,
+                      char *argDir,
                       void (*handle)(MimiProcess *self))
 {
-    char prefix[] = "[subscribe]";
     char argName[256] = {0};
-    strPrint(argName, prefix);
-    strPrint(argName, subscribeVarName);
-    self->setPtr(self, argName, handle);
+    strAppend(argName, "[subscribe]");
+    strAppend(argName, argDir);
+    self->attributeList->setPtr(self->attributeList,
+                                argName, handle);
 }
 
 static MimiProcess *initSubProcess(MimiProcess *self, char *name)
 {
     char prifix[] = "[cls]";
     char initFunName[64] = {0};
-    strPrint(initFunName, prifix);
-    strPrint(initFunName, name);
+    strAppend(initFunName, prifix);
+    strAppend(initFunName, name);
     if (!self->attributeList->isArgExist(self->attributeList,
                                          initFunName))
     {
@@ -302,6 +296,11 @@ exit:
     return processNow;
 }
 
+static void publish(MimiProcess *self, char *argDir)
+{
+    subscribeHandle(self, argDir);
+}
+
 static void init(MimiProcess *self, Args *args)
 {
     /* List */
@@ -349,6 +348,7 @@ static void init(MimiProcess *self, Args *args)
 
     /* event operation */
     self->subscribe = subscribe;
+    self->publish = publish;
 
     /* args */
     if (NULL != args)

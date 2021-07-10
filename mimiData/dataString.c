@@ -1,4 +1,5 @@
 #include "dataString.h"
+#include <stdio.h>
 
 char *strPrintWithSize_unlimited(char *strOut, char *pData, int Size)
 {
@@ -31,7 +32,7 @@ char *strDeleteEnter(char *str)
 	return str;
 }
 
-char *strPrintWithSize(char *strOut, char *pData, int Size)
+char *strAppendWithSize(char *strOut, char *pData, int Size)
 {
 	unsigned short int strOut_i = strGetSize(strOut);
 	for (int i = 0; i < Size; i++)
@@ -58,6 +59,10 @@ unsigned short int strGetSize_unlimited(char *pData)
 unsigned short int strGetSize(char *pData)
 {
 	unsigned short int Size = 0;
+	if (NULL == pData)
+	{
+		return 0;
+	}
 	for (int i = 0; (i < 256) && (pData[i] != 0); i++)
 	{
 		Size++;
@@ -139,11 +144,11 @@ int devideStringBySign(char *string, char **argv, char sign)
 	return argc;
 }
 
-char *strPrint(char *strOut, char *pData)
+char *strAppend(char *strOut, char *pData)
 {
 	unsigned short int Size = 0;
 	Size = strGetSize(pData);
-	return strPrintWithSize(strOut, pData, Size);
+	return strAppendWithSize(strOut, pData, Size);
 }
 
 int isStartWith(char *str, char *strStart)

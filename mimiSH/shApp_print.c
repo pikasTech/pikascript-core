@@ -20,7 +20,7 @@ void *app_print(Shell *shell, int argc, char **argv)
 
     if (NULL == processNow)
     {
-        strPrint(memOut->addr, "[error: process no found]\r\n");
+        strAppend(memOut->addr, "[error: process no found]\r\n");
         return (void *)memOut;
     }
     char argName[32] = {0};
@@ -29,11 +29,11 @@ void *app_print(Shell *shell, int argc, char **argv)
     char *printStr = NULL;
     printStr = processNow->argPrint(processNow, argName);
     memcpy(memOut->addr, printStr, 256);
-    strPrint(memOut->addr, "\r\n");
+    strAppend(memOut->addr, "\r\n");
 
     char printName[32] = {0};
-    strPrint(printName, "[printBuff]");
-    strPrint(printName, argName);
+    strAppend(printName, "[printBuff]");
+    strAppend(printName, argName);
     processNow->attributeList->removeArg(processNow->attributeList,
                                          printName);
     return (void *)memOut;

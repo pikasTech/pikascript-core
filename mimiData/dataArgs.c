@@ -105,6 +105,10 @@ static int setStrWithName(Args *self, char *name, char *strIn)
 static char *getStrByName(Args *self, char *name)
 {
     Arg *arg = self->getArg(self, name);
+    if (NULL == arg)
+    {
+        return NULL;
+    }
     if (NULL == arg->contantDynMem)
     {
         return NULL;
@@ -260,7 +264,7 @@ static Arg *getArgByName(Args *self, char *name)
 static void bind(Args *self, char *type, char *name, void *pointer)
 {
     char typeWithBind[32] = "_bind-";
-    strPrint(typeWithBind, type);
+    strAppend(typeWithBind, type);
     Arg *argNew = New_arg(NULL);
     argNew->setType(argNew, typeWithBind);
     argNew->setName(argNew, name);
@@ -287,8 +291,8 @@ static void bindStr(Args *self, char *name, char **stringPtr)
 static char *getPrintSring(Args *self, char *name, char *valString)
 {
     char printName[32] = {0};
-    strPrint(printName, "[printBuff]");
-    strPrint(printName, name);
+    strAppend(printName, "[printBuff]");
+    strAppend(printName, name);
     char printString[256] = {0};
     sprintf(printString, "%s", valString);
     self->setStr(self, printName, printString);
@@ -438,7 +442,7 @@ static int set(Args *self, char *name, char *valStr)
 static int setObject(Args *self, char *objectName, char *className, void *objectPtr)
 {
     char typeWithClass[32] = "_class-";
-    strPrint(typeWithClass, className);
+    strAppend(typeWithClass, className);
     Arg *argNew = New_arg(NULL);
     argNew->setName(argNew, objectName);
     argNew->setPtr(argNew, objectPtr);

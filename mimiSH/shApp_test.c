@@ -10,10 +10,10 @@ char *shell_base_test2(char *CMD, unsigned short int StartStrSize, char *strOut)
 	int CMDSize = strGetSize(CMD);
 	char argv[256] = {0};
 
-	strPrint(strOut, "test is running...\r\n");
-	strPrint(strOut, "intput: ");
-	strPrint(strOut, CMD);
-	strPrint(strOut, "\r\n");
+	strAppend(strOut, "test is running...\r\n");
+	strAppend(strOut, "intput: ");
+	strAppend(strOut, CMD);
+	strAppend(strOut, "\r\n");
 	for (int i = StartStrSize; i < CMDSize; i++)
 	{
 		argv[i - StartStrSize] = CMD[i];
@@ -25,14 +25,14 @@ char *shell_base_test2(char *CMD, unsigned short int StartStrSize, char *strOut)
 		{
 			char string[256];
 			sprintf(string, "the i = %d, \r\n", i);
-			strPrint(strOut, string);
+			strAppend(strOut, string);
 		}
 	}
 	if (!strcmp(argv, "open"))
 	{
-		strPrint(strOut, "opend!\r\n");
+		strAppend(strOut, "opend!\r\n");
 	}
-	return strPrint(strOut, "Finished\r\n");
+	return strAppend(strOut, "Finished\r\n");
 }
 
 void *app_test2(Shell *shell, int argc, char **argv)

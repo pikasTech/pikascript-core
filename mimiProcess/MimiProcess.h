@@ -5,7 +5,6 @@
 #include "dataMemory.h"
 typedef struct Class_process MimiProcess;
 
-
 struct Class_process
 {
     /* attribute */
@@ -59,8 +58,9 @@ struct Class_process
     void (*_updateHandle)(MimiProcess *self);
 
     /* event operation */
-
     void (*subscribe)(MimiProcess *self, char *subscribeVarName, void (*handle)(MimiProcess *self));
+    void (*publish)(MimiProcess *self, char *argName);
+    
 
     /* object */
 };
