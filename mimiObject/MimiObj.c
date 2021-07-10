@@ -213,7 +213,7 @@ static void follow(MimiObj *self,
     fansInfo->setStr(fansInfo, "followedArgName", argName);
 }
 
-static MimiObj *initSubProcess(MimiObj *self, char *name)
+static MimiObj *initSubObj(MimiObj *self, char *name)
 {
     char prifix[] = "[cls]";
     char initFunName[64] = {0};
@@ -231,7 +231,9 @@ static MimiObj *initSubProcess(MimiObj *self, char *name)
     initArgs->setPtr(initArgs, "context", self);
     void *(*newProcessFun)(Args * initArgs) = (void *(*)(Args * initArgs)) self->attributeList->getPtr(self->attributeList,
                                                                                                        initFunName);
-    void *subProcess = newProcessFun(initArgs);
+    MimiObj *subProcess = newProcessFun(initArgs);
+    subProcess->name[0] = 0;
+    strAppend(subProcess->name, name);
     attributeList->setObject(attributeList, name, "process", subProcess);
     initArgs->deinit(initArgs);
     return self->getPtr(self,
@@ -245,7 +247,7 @@ static MimiObj *getDirectObj(MimiObj *self, char *name)
                                          name))
     {
         /* no inited subprocess, check subprocess init fun*/
-        return initSubProcess(self, name);
+        return initSubObj(self, name);
     }
 
     /* finded subscribe, check type*/
@@ -319,6 +321,8 @@ static void init(MimiObj *self, Args *args)
 {
     /* List */
     self->attributeList = New_args(NULL);
+    self->name[0] = 0;
+    strAppend(self->name, "Null");
 
     /* operation */
     self->deinit = deinit;

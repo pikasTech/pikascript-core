@@ -15,6 +15,7 @@ extern "C"
 #include "test_dataLog.h"
 #include "test_link.h"
 #include "test_MimiObj.h"
+#include "test_event.h"
 // Device
 #include "test_mimiCom.h"
 }
@@ -31,6 +32,7 @@ void test_mimiCore(int isShow)
     ASSERT_RETURN(TEST_args2, 1);
     ASSERT_RETURN(TEST_MimiObj, isShow);
     ASSERT_RETURN(TEST_mimiCom, isShow);
+    ASSERT_RETURN(TEST_Event, 1);
     std::cout << "Test of mimiCore Finished! " << std::endl
               << std::endl
               << "Memory still used: " << (float)DMEMS.blk_num * 32 / 1024 << "kB" << std::endl
