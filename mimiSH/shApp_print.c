@@ -15,8 +15,8 @@ void *app_print(Shell *shell, int argc, char **argv)
 {
     DMEM *memOut = DynMemGet(sizeof(char) * 256);
     ((char *)(memOut->addr))[0] = 0;
-    MimiProcess *root = shell->context;
-    MimiProcess *processNow = root->goToProcess(root, PROCESS_DIR, 1);
+    MimiObj *root = shell->context;
+    MimiObj *processNow = root->gotoObj(root, PROCESS_DIR, 1);
 
     if (NULL == processNow)
     {
@@ -27,7 +27,7 @@ void *app_print(Shell *shell, int argc, char **argv)
     getLastTokenBySign(PROCESS_DIR, argName, '.');
 
     char *printStr = NULL;
-    printStr = processNow->argPrint(processNow, argName);
+    printStr = processNow->print(processNow, argName);
     memcpy(memOut->addr, printStr, 256);
     strAppend(memOut->addr, "\r\n");
 

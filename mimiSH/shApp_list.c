@@ -35,8 +35,8 @@ void *app_list(Shell *shell, int argc, char **argv)
 {
     DMEM *memOut = DynMemGet(sizeof(char) * 256);
     ((char *)(memOut->addr))[0] = 0;
-    MimiProcess *root = shell->context;
-    MimiProcess *processNow = NULL;
+    MimiObj *root = shell->context;
+    MimiObj *processNow = NULL;
 
     if (argc == 1)
     {
@@ -44,7 +44,7 @@ void *app_list(Shell *shell, int argc, char **argv)
     }
     else
     {
-        processNow = root->goToProcess(root, PROCESS_DIR, 0);
+        processNow = root->gotoObj(root, PROCESS_DIR, 0);
     }
 
     if (NULL == processNow)

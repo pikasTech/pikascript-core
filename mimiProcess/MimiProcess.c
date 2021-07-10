@@ -12,19 +12,19 @@ static int dinitEachSubprocess(Arg *argEach, Args *handleArgs)
     }
     if (mimiStrEqu(argEach->typeDynMem->addr, "_class-process"))
     {
-        MimiProcess *subProcess = argEach->getPtr(argEach);
+        MimiObj *subProcess = argEach->getPtr(argEach);
         subProcess->deinit(subProcess);
     }
     return 0;
 }
 
-static void dinitAllSubProcess(MimiProcess *self)
+static void dinitAllSubProcess(MimiObj *self)
 {
     Args *args = self->attributeList;
     args->foreach (args, dinitEachSubprocess, NULL);
 }
 
-static void deinit(MimiProcess *self)
+static void deinit(MimiObj *self)
 {
     self->_beforDinit(self);
     dinitAllSubProcess(self);
@@ -32,7 +32,7 @@ static void deinit(MimiProcess *self)
     DynMemPut(self->mem);
 }
 
-static void update(MimiProcess *self)
+static void update(MimiObj *self)
 {
     // return if is not enable
     if (0 == self->getInt(self, "isEnable"))
@@ -41,116 +41,116 @@ static void update(MimiProcess *self)
     }
     self->_updateHandle(self);
 }
-static void _processRootUpdateHandle(MimiProcess *self)
+static void _processRootUpdateHandle(MimiObj *self)
 {
     // override the handle function here
 }
 
-static void subscribeHandle(MimiProcess *self, char *argDir)
+static void subscribeHandle(MimiObj *self, char *argDir)
 {
     char prefixedArgDir[256] = {0};
     strAppend(prefixedArgDir, "[subscribe]");
     strAppend(prefixedArgDir, argDir);
-    void (*subscribeHandler)(MimiProcess * self) = self->getPtr(self, prefixedArgDir);
+    void (*subscribeHandler)(MimiObj * self) = self->getPtr(self, prefixedArgDir);
     if (NULL != subscribeHandler)
     {
         subscribeHandler(self);
     }
 }
 
-static void enable(MimiProcess *self)
+static void enable(MimiObj *self)
 {
     self->setInt(self, "isEnable", 1);
 }
 
-static void disable(MimiProcess *self)
+static void disable(MimiObj *self)
 {
     self->setInt(self, "isEnable", 0);
 }
 
-static void setInt64(MimiProcess *self, char *argDir, long long val)
+static void setInt64(MimiObj *self, char *argDir, long long val)
 {
-    MimiProcess *processNow = self->goToProcess(self, argDir, 1);
+    MimiObj *processNow = self->gotoObj(self, argDir, 1);
     char name[64] = {0};
     getLastTokenBySign(argDir, name, '.');
     processNow->attributeList->setInt(processNow->attributeList,
                                       name, val);
 }
 
-static void setPointer(MimiProcess *self, char *argDir, void *pointer)
+static void setPointer(MimiObj *self, char *argDir, void *pointer)
 {
-    MimiProcess *processNow = self->goToProcess(self, argDir, 1);
+    MimiObj *processNow = self->gotoObj(self, argDir, 1);
     char name[64] = {0};
     getLastTokenBySign(argDir, name, '.');
     processNow->attributeList->setPtr(processNow->attributeList,
                                       name, pointer);
 }
 
-static void setFloat(MimiProcess *self, char *argDir, float value)
+static void setFloat(MimiObj *self, char *argDir, float value)
 {
-    MimiProcess *processNow = self->goToProcess(self, argDir, 1);
+    MimiObj *processNow = self->gotoObj(self, argDir, 1);
     char name[64] = {0};
     getLastTokenBySign(argDir, name, '.');
     processNow->attributeList->setFloat(processNow->attributeList,
                                         name, value);
 }
 
-static void setStr(MimiProcess *self, char *argDir, char *str)
+static void setStr(MimiObj *self, char *argDir, char *str)
 {
-    MimiProcess *processNow = self->goToProcess(self, argDir, 1);
+    MimiObj *processNow = self->gotoObj(self, argDir, 1);
     char name[64] = {0};
     getLastTokenBySign(argDir, name, '.');
     processNow->attributeList->setStr(processNow->attributeList,
                                       name, str);
 }
 
-static long long getInt64(MimiProcess *self, char *argDir)
+static long long getInt64(MimiObj *self, char *argDir)
 {
-    MimiProcess *processNow = self->goToProcess(self, argDir, 1);
+    MimiObj *processNow = self->gotoObj(self, argDir, 1);
     char argName[64] = {0};
     getLastTokenBySign(argDir, argName, '.');
     return processNow->attributeList->getInt(processNow->attributeList,
                                              argName);
 }
 
-static void *getPointer(MimiProcess *self, char *argDir)
+static void *getPointer(MimiObj *self, char *argDir)
 {
-    MimiProcess *processNow = self->goToProcess(self, argDir, 1);
+    MimiObj *processNow = self->gotoObj(self, argDir, 1);
     char argName[64] = {0};
     getLastTokenBySign(argDir, argName, '.');
     return processNow->attributeList->getPtr(processNow->attributeList,
                                              argName);
 }
 
-static float getFloat(MimiProcess *self, char *argDir)
+static float getFloat(MimiObj *self, char *argDir)
 {
-    MimiProcess *processNow = self->goToProcess(self, argDir, 1);
+    MimiObj *processNow = self->gotoObj(self, argDir, 1);
     char argName[64] = {0};
     getLastTokenBySign(argDir, argName, '.');
     return processNow->attributeList->getFloat(processNow->attributeList,
                                                argName);
 }
 
-char *getStr(MimiProcess *self, char *argDir)
+char *getStr(MimiObj *self, char *argDir)
 {
-    MimiProcess *processNow = self->goToProcess(self, argDir, 1);
+    MimiObj *processNow = self->gotoObj(self, argDir, 1);
     char argName[64] = {0};
     getLastTokenBySign(argDir, argName, '.');
     return processNow->attributeList->getStr(processNow->attributeList,
                                              argName);
 }
 
-static void loadAttributeFromArgs(MimiProcess *self, Args *args, char *name)
+static void load(MimiObj *self, Args *args, char *name)
 {
     args->copyArg(args, name, self->attributeList);
 }
 
-static void _beforDinit(MimiProcess *self)
+static void _beforDinit(MimiObj *self)
 {
     /* override in user code */
 }
 
-static void addSubProcess(MimiProcess *self, char *subProcessName, void *new_ProcessFun)
+static void setObj(MimiObj *self, char *subProcessName, void *new_ProcessFun)
 {
     /* class means subprocess init */
     char prifix[] = "[cls]";
@@ -160,7 +160,7 @@ static void addSubProcess(MimiProcess *self, char *subProcessName, void *new_Pro
     self->setPtr(self, nameBuff, new_ProcessFun);
 }
 
-static void addSubobject(MimiProcess *self, char *subObjectName, void *new_ObjectFun)
+static void addOther(MimiObj *self, char *subObjectName, void *new_ObjectFun)
 {
     Args *initArgs = New_args(NULL);
     initArgs->setPtr(initArgs, "context", self);
@@ -170,48 +170,48 @@ static void addSubobject(MimiProcess *self, char *subObjectName, void *new_Objec
     initArgs->deinit(initArgs);
 }
 
-static void dinitSubProcessByName(MimiProcess *self, char *subProcessName)
+static void freeObj(MimiObj *self, char *subProcessName)
 {
-    MimiProcess *subProcess = self->getPtr(self, subProcessName);
+    MimiObj *subProcess = self->getPtr(self, subProcessName);
     subProcess->deinit(subProcess);
 }
 
-static void argBind(MimiProcess *self, char *type, char *name, void *pointer)
+static void bind(MimiObj *self, char *type, char *name, void *pointer)
 {
     self->attributeList->bind(self->attributeList, type, name, pointer);
 }
 
-static char *argPinrt(MimiProcess *self, char *name)
+static char *print(MimiObj *self, char *name)
 {
     return self->attributeList->print(self->attributeList, name);
 }
 
-static void argBindInt(MimiProcess *self, char *name, int *valPtr)
+static void bindInt(MimiObj *self, char *name, int *valPtr)
 {
     self->attributeList->bindInt(self->attributeList, name, valPtr);
 }
 
-static void argBindFloat(MimiProcess *self, char *name, float *valPtr)
+static void bindFloat(MimiObj *self, char *name, float *valPtr)
 {
     self->attributeList->bindFloat(self->attributeList, name, valPtr);
 }
 
-static void argBindString(MimiProcess *self, char *name, char **valPtr)
+static void bindString(MimiObj *self, char *name, char **valPtr)
 {
     self->attributeList->bindStr(self->attributeList, name, valPtr);
 }
 
-static int argSet(MimiProcess *self, char *argDir, char *valStr)
+static int set(MimiObj *self, char *argDir, char *valStr)
 {
-    MimiProcess *processNow = self->goToProcess(self, argDir, 1);
+    MimiObj *processNow = self->gotoObj(self, argDir, 1);
     char argName[64] = {0};
     getLastTokenBySign(argDir, argName, '.');
     return processNow->attributeList->set(processNow->attributeList, argName, valStr);
 }
 
-static void subscribe(MimiProcess *self,
+static void subscribe(MimiObj *self,
                       char *argDir,
-                      void (*handle)(MimiProcess *self))
+                      void (*handle)(MimiObj *self))
 {
     char argName[256] = {0};
     strAppend(argName, "[subscribe]");
@@ -220,7 +220,7 @@ static void subscribe(MimiProcess *self,
                                 argName, handle);
 }
 
-static MimiProcess *initSubProcess(MimiProcess *self, char *name)
+static MimiObj *initSubProcess(MimiObj *self, char *name)
 {
     char prifix[] = "[cls]";
     char initFunName[64] = {0};
@@ -245,7 +245,7 @@ static MimiProcess *initSubProcess(MimiProcess *self, char *name)
                         name);
 }
 
-static MimiProcess *getSubProcess(MimiProcess *self, char *name)
+static MimiObj *getObj(MimiObj *self, char *name)
 {
     /* check subprocess */
     if (!self->attributeList->isArgExist(self->attributeList,
@@ -266,9 +266,9 @@ static MimiProcess *getSubProcess(MimiProcess *self, char *name)
     return self->getPtr(self, name);
 }
 
-static MimiProcess *goToProcess(MimiProcess *self, char *processDirectory, int keepToken)
+static MimiObj *gotoObj(MimiObj *self, char *processDirectory, int keepToken)
 {
-    MimiProcess *processNow = self;
+    MimiObj *processNow = self;
     // sign in the argv memory
     char *token[16] = {0};
     DMEM *tokenMem[16] = {0};
@@ -281,7 +281,7 @@ static MimiProcess *goToProcess(MimiProcess *self, char *processDirectory, int k
     int processArgc = devideStringBySign(processDirectory, token, '.');
     for (int i = 0; i < processArgc - keepToken; i++)
     {
-        processNow = processNow->getSubProcess(processNow, token[i]);
+        processNow = processNow->getObj(processNow, token[i]);
         if (processNow == NULL)
         {
             goto exit;
@@ -296,12 +296,12 @@ exit:
     return processNow;
 }
 
-static void publish(MimiProcess *self, char *argDir)
+static void publish(MimiObj *self, char *argDir)
 {
     subscribeHandle(self, argDir);
 }
 
-static void init(MimiProcess *self, Args *args)
+static void init(MimiObj *self, Args *args)
 {
     /* List */
     self->attributeList = New_args(NULL);
@@ -322,22 +322,22 @@ static void init(MimiProcess *self, Args *args)
     self->getFloat = getFloat;
     self->getStr = getStr;
 
-    self->argBindInt = argBindInt;
-    self->argBindFloat = argBindFloat;
-    self->argBindString = argBindString;
+    self->bindInt = bindInt;
+    self->bindFloat = bindFloat;
+    self->bindString = bindString;
 
     // arg general operations
-    self->argBind = argBind;
-    self->argPrint = argPinrt;
-    self->argSet = argSet;
+    self->bind = bind;
+    self->print = print;
+    self->set = set;
 
-    self->loadAttributeFromArgs = loadAttributeFromArgs;
+    self->load = load;
     // subObject
-    self->addSubobject = addSubobject;
-    self->addSubProcess = addSubProcess;
-    self->getSubProcess = getSubProcess;
-    self->goToProcess = goToProcess;
-    self->dinitSubProcessByName = dinitSubProcessByName;
+    self->addOther = addOther;
+    self->setObj = setObj;
+    self->getObj = getObj;
+    self->gotoObj = gotoObj;
+    self->freeObj = freeObj;
 
     /* attrivute */
     self->setPtr(self, "context", self);
@@ -353,14 +353,14 @@ static void init(MimiProcess *self, Args *args)
     /* args */
     if (NULL != args)
     {
-        self->loadAttributeFromArgs(self, args, "context");
+        self->load(self, args, "context");
     }
 }
 
-MimiProcess *New_MimiProcess(Args *args)
+MimiObj *New_MimiProcess(Args *args)
 {
-    DMEM *mem = DynMemGet(sizeof(MimiProcess));
-    MimiProcess *self = mem->addr;
+    DMEM *mem = DynMemGet(sizeof(MimiObj));
+    MimiObj *self = mem->addr;
     self->mem = mem;
     self->init = init;
     self->init(self, args);

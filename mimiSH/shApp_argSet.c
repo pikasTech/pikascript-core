@@ -16,9 +16,9 @@ void *app_argSet(Shell *shell, int argc, char **argv)
 {
     DMEM *memOut = DynMemGet(sizeof(char) * 256);
     ((char *)(memOut->addr))[0] = 0;
-    MimiProcess *root = shell->context;
+    MimiObj *root = shell->context;
 
-    int errCode = root->argSet(root, PROCESS_DIR, SET_VAL);
+    int errCode = root->set(root, PROCESS_DIR, SET_VAL);
     if (0 != errCode)
     {
         if (1 == errCode)

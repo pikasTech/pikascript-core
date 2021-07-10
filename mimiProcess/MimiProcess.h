@@ -3,7 +3,7 @@
 #include "dataArgs.h"
 #include "dataLink.h"
 #include "dataMemory.h"
-typedef struct Class_process MimiProcess;
+typedef struct Class_process MimiObj;
 
 struct Class_process
 {
@@ -14,56 +14,56 @@ struct Class_process
     Args *attributeList;
 
     /* operation */
-    void (*deinit)(MimiProcess *self);
-    void (*init)(MimiProcess *self, Args *args);
-    void (*update)(MimiProcess *self);
-    void (*enable)(MimiProcess *self);
-    void (*disable)(MimiProcess *self);
+    void (*deinit)(MimiObj *self);
+    void (*init)(MimiObj *self, Args *args);
+    void (*update)(MimiObj *self);
+    void (*enable)(MimiObj *self);
+    void (*disable)(MimiObj *self);
 
     // arg type operations
-    void (*setInt)(MimiProcess *self, char *name, long long val);
-    void (*setPtr)(MimiProcess *self, char *name, void *pointer);
-    void (*setFloat)(MimiProcess *self, char *name, float value);
-    void (*setStr)(MimiProcess *self, char *name, char *str);
+    void (*setInt)(MimiObj *self, char *name, long long val);
+    void (*setPtr)(MimiObj *self, char *name, void *pointer);
+    void (*setFloat)(MimiObj *self, char *name, float value);
+    void (*setStr)(MimiObj *self, char *name, char *str);
 
-    void *(*getPtr)(MimiProcess *self, char *name);
-    float (*getFloat)(MimiProcess *self, char *name);
-    char *(*getStr)(MimiProcess *self, char *name);
-    long long (*getInt)(MimiProcess *self, char *name);
+    void *(*getPtr)(MimiObj *self, char *name);
+    float (*getFloat)(MimiObj *self, char *name);
+    char *(*getStr)(MimiObj *self, char *name);
+    long long (*getInt)(MimiObj *self, char *name);
 
     // arg general operations
-    void (*argBind)(MimiProcess *self, char *type, char *name, void *pointer);
-    int (*argSet)(MimiProcess *self, char *name, char *valStr);
+    void (*bind)(MimiObj *self, char *type, char *name, void *pointer);
+    int (*set)(MimiObj *self, char *name, char *valStr);
 
-    void (*argBindInt)(MimiProcess *self, char *name, int *valPtr);
-    void (*argBindFloat)(MimiProcess *self, char *name, float *valPtr);
-    void (*argBindString)(MimiProcess *self, char *name, char **valPtr);
+    void (*bindInt)(MimiObj *self, char *name, int *valPtr);
+    void (*bindFloat)(MimiObj *self, char *name, float *valPtr);
+    void (*bindString)(MimiObj *self, char *name, char **valPtr);
 
-    char *(*argPrint)(MimiProcess *self, char *name);
+    char *(*print)(MimiObj *self, char *name);
 
     // args operations
-    void (*loadAttributeFromArgs)(MimiProcess *self, Args *args, char *name);
+    void (*load)(MimiObj *self, Args *args, char *name);
 
     // subObject
-    void (*addSubobject)(MimiProcess *self, char *subObjectName, void *new_projcetFun);
-    void (*addSubProcess)(MimiProcess *self, char *subObjectName, void *new_projcetFun);
-    MimiProcess *(*getSubProcess)(MimiProcess *self, char *name);
-    MimiProcess *(*goToProcess)(MimiProcess *self, char *processDirectory, int deepth);
+    void (*addOther)(MimiObj *self, char *subObjectName, void *new_projcetFun);
+    void (*setObj)(MimiObj *self, char *subObjectName, void *new_projcetFun);
+    MimiObj *(*getObj)(MimiObj *self, char *name);
+    MimiObj *(*gotoObj)(MimiObj *self, char *processDirectory, int deepth);
 
     // subProcess
-    void (*dinitSubProcessByName)(MimiProcess *self, char *subObjectName);
+    void (*freeObj)(MimiObj *self, char *subObjectName);
 
     /* virtual operation */
-    void (*_beforDinit)(MimiProcess *self);
-    void (*_updateHandle)(MimiProcess *self);
+    void (*_beforDinit)(MimiObj *self);
+    void (*_updateHandle)(MimiObj *self);
 
     /* event operation */
-    void (*subscribe)(MimiProcess *self, char *subscribeVarName, void (*handle)(MimiProcess *self));
-    void (*publish)(MimiProcess *self, char *argName);
+    void (*subscribe)(MimiObj *self, char *subscribeVarName, void (*handle)(MimiObj *self));
+    void (*publish)(MimiObj *self, char *argName);
     
 
     /* object */
 };
 
-MimiProcess *New_MimiProcess(Args *args);
+MimiObj *New_MimiProcess(Args *args);
 #endif
