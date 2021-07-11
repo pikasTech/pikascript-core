@@ -62,7 +62,7 @@ static void setInt64(MimiObj *self, char *argDir, long long val)
 {
     MimiObj *obj = self->getObj(self, argDir, 1);
     char name[64] = {0};
-    getLastToken(argDir, name, '.');
+    getLastToken(name, argDir, '.');
     obj->attributeList->setInt(obj->attributeList,
                                name, val);
 }
@@ -71,7 +71,7 @@ static void setPointer(MimiObj *self, char *argDir, void *pointer)
 {
     MimiObj *obj = self->getObj(self, argDir, 1);
     char name[64] = {0};
-    getLastToken(argDir, name, '.');
+    getLastToken(name, argDir, '.');
     obj->attributeList->setPtr(obj->attributeList,
                                name, pointer);
 }
@@ -80,7 +80,7 @@ static void setFloat(MimiObj *self, char *argDir, float value)
 {
     MimiObj *obj = self->getObj(self, argDir, 1);
     char name[64] = {0};
-    getLastToken(argDir, name, '.');
+    getLastToken(name, argDir, '.');
     obj->attributeList->setFloat(obj->attributeList,
                                  name, value);
 }
@@ -89,7 +89,7 @@ static void setStr(MimiObj *self, char *argDir, char *str)
 {
     MimiObj *obj = self->getObj(self, argDir, 1);
     char name[64] = {0};
-    getLastToken(argDir, name, '.');
+    getLastToken(name, argDir, '.');
     obj->attributeList->setStr(obj->attributeList,
                                name, str);
 }
@@ -98,7 +98,7 @@ static long long getInt64(MimiObj *self, char *argDir)
 {
     MimiObj *obj = self->getObj(self, argDir, 1);
     char argName[64] = {0};
-    getLastToken(argDir, argName, '.');
+    getLastToken(argName, argDir, '.');
     return obj->attributeList->getInt(obj->attributeList,
                                       argName);
 }
@@ -107,7 +107,7 @@ static void *getPointer(MimiObj *self, char *argDir)
 {
     MimiObj *obj = self->getObj(self, argDir, 1);
     char argName[64] = {0};
-    getLastToken(argDir, argName, '.');
+    getLastToken(argName, argDir, '.');
     return obj->attributeList->getPtr(obj->attributeList,
                                       argName);
 }
@@ -116,7 +116,7 @@ static float getFloat(MimiObj *self, char *argDir)
 {
     MimiObj *obj = self->getObj(self, argDir, 1);
     char argName[64] = {0};
-    getLastToken(argDir, argName, '.');
+    getLastToken(argName, argDir, '.');
     return obj->attributeList->getFloat(obj->attributeList,
                                         argName);
 }
@@ -125,7 +125,7 @@ char *getStr(MimiObj *self, char *argDir)
 {
     MimiObj *obj = self->getObj(self, argDir, 1);
     char argName[64] = {0};
-    getLastToken(argDir, argName, '.');
+    getLastToken(argName, argDir, '.');
     return obj->attributeList->getStr(obj->attributeList,
                                       argName);
 }
@@ -195,7 +195,7 @@ static int set(MimiObj *self, char *argDir, char *valStr)
 {
     MimiObj *obj = self->getObj(self, argDir, 1);
     char argName[64] = {0};
-    getLastToken(argDir, argName, '.');
+    getLastToken(argName, argDir, '.');
     return obj->attributeList->set(obj->attributeList, argName, valStr);
 }
 
@@ -206,7 +206,7 @@ static void follow(MimiObj *self,
     MimiObj *publisher = self->getObj(self, argDir, 1);
     MimiObj *fansInfo = publisher->getObj(publisher, "fansList.fansInfo", 0);
     char argName[64];
-    getLastToken(argDir, argName, '.');
+    getLastToken(argName, argDir, '.');
 
     fansInfo->setPtr(fansInfo, "fansPtr", self);
     fansInfo->setPtr(fansInfo, "handle", handle);
@@ -234,7 +234,7 @@ static MimiObj *initSubObj(MimiObj *self, char *name)
     MimiObj *subProcess = newProcessFun(initArgs);
     subProcess->name[0] = 0;
     strAppend(subProcess->name, name);
-    attributeList->setObject(attributeList, name, "process", subProcess);
+    attributeList->setWithType(attributeList, name, "process", subProcess);
     initArgs->deinit(initArgs);
     return self->getPtr(self,
                         name);
@@ -304,28 +304,40 @@ static void publish(MimiObj *self, char *argName)
 }
 
 static void setMethod(MimiObj *self,
-                      char *name,
-                      void (*method)(MimiObj *self, Args *args))
+                      char *declearation,
+                      void (*methodPtr)(MimiObj *self, Args *args))
 {
-    self->attributeList->setObject(self->attributeList,
-                                   name, "method", method);
-}
+    char buff[3][64] = {0};
+    char *cleanDeclearation = strDeleteChar(buff[0], declearation, ' ');
+    char *methodName = getFirstToken(buff[1], cleanDeclearation, '(');
+    char *typeDefine = strCut(buff[2], cleanDeclearation, '(', ')');
+    if (typeDefine == NULL || methodName == NULL)
+    {
+        printf("[error]: method declearation error!\r\n");
+        printf("[info]: declearation: %s\r\n", declearation);
+        while (1)
+        {
+            /* code */
+        }
+    }
 
-static void runMethod(MimiObj *self, char *methodDir, Args *args)
-{
-    void (*method)(MimiObj * self, Args * args) = self->getPtr(self, methodDir);
-    method(self, args);
+    self->setObj(self, methodName, New_MimiObj);
+    MimiObj *methodObj = self->getObj(self, methodName, 0);
+    methodObj->setStr(methodObj, "typeDefine", typeDefine);
+    methodObj->setPtr(methodObj, "methodPtr", methodPtr);
 }
 
 static void run(MimiObj *self, char *cmd)
 {
-    char strBuff[256] = {0};
-    strDeleteChar(strBuff, cmd, ' ');
-    if (NULL == strCut(strBuff, strBuff, '(', ')'))
-    {
-        /* not found '(' or ')', faild */
-        return;
-    }
+    char buff[3][64] = {0};
+
+    char *cleanCmd = strDeleteChar(buff[0], cmd, ' ');
+    char *argsStr = strCut(buff[1], cleanCmd, '(', ')');
+    char *methodName = getFirstToken(buff[2], cleanCmd, '(');
+
+    MimiObj *methodObj = self->getObj(self, methodName, 0);
+    char *typeDefine = methodObj->getStr(methodObj, "typeDefine");
+    void *methodPtr = methodObj->getPtr(methodObj, "methodPtr");
 }
 
 static void init(MimiObj *self, Args *args)
@@ -370,7 +382,6 @@ static void init(MimiObj *self, Args *args)
 
     /* method */
     self->setMethod = setMethod;
-    self->runMethod = runMethod;
     self->run = run;
 
     /* override */

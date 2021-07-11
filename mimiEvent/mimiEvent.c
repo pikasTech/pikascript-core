@@ -12,7 +12,7 @@ static void publish(MimiObj *self, Args *args)
     MimiObj *publisher = self->getObj(self, argDir, 1);
     char *folloedArgName = publisher->getStr(publisher, "fansList.fansInfo.followedArgName");
     char argName[64] = {0};
-    getLastToken(argDir, argName, '.');
+    getLastToken(argName, argDir, '.');
     if (!mimiStrEqu(argName, folloedArgName))
     {
         return;
@@ -30,7 +30,7 @@ static void follow(MimiObj *self, Args *args)
     MimiObj *publisher = self->getObj(self, argDir, 1);
     MimiObj *fansInfo = publisher->getObj(publisher, "fansList.fansInfo", 0);
     char argName[64];
-    getLastToken(argDir, argName, '.');
+    getLastToken(argName, argDir, '.');
 
     fansInfo->setPtr(fansInfo, "fansPtr", self);
     fansInfo->setPtr(fansInfo, "handle", handle);
@@ -44,8 +44,8 @@ static void init_Event(MimiObj *self, Args *args)
     self->setObj(self, "mailBox", New_MimiObj_Mailbox);
 
     /* method */
-    self->setMethod(self, "follow", follow);
-    self->setMethod(self, "publish", publish);
+    self->setMethod(self, "follow()", follow);
+    self->setMethod(self, "publish()", publish);
 }
 
 MimiObj *New_MimiObj_Event(Args *args)

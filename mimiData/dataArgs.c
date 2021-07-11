@@ -439,7 +439,7 @@ static int set(Args *self, char *name, char *valStr)
     return 2;
 }
 
-static int setObject(Args *self, char *objectName, char *className, void *objectPtr)
+static int setWithType(Args *self, char *objectName, char *className, void *objectPtr)
 {
     char typeWithClass[32] = "_class-";
     strAppend(typeWithClass, className);
@@ -532,7 +532,7 @@ static void init(Args *self, Args *args)
     /* general operation */
     self->print = print;
     self->set = set;
-    self->setObject = setObject;
+    self->setWithType = setWithType;
     self->foreach = foreach;
 
     /* arg */

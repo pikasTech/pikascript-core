@@ -110,7 +110,7 @@ static int luanchShellWhenNameMatch(Arg *argNow, Args *argsHandle)
 
 	char *name = argNow->nameDynMem->addr;
 	char arg0[32] = {0};
-	getFirstToken(cmd, arg0, ' ');
+	getFirstToken(arg0, cmd, ' ');
 	if (mimiStrEqu(arg0, name))
 	{
 		argsHandle->setPtr(argsHandle,

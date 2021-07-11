@@ -24,7 +24,7 @@ void *app_print(Shell *shell, int argc, char **argv)
         return (void *)memOut;
     }
     char argName[32] = {0};
-    getLastToken(PROCESS_DIR, argName, '.');
+    getLastToken(argName, PROCESS_DIR, '.');
 
     char *printStr = NULL;
     printStr = processNow->print(processNow, argName);

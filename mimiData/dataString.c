@@ -129,17 +129,17 @@ char *strAppend_unlimited(char *strOut, char *pData)
 	return strPrintWithSize_unlimited(strOut, pData, Size);
 }
 
-char *getLastToken(char *stringIn, char *stringOut, char sign)
+char *getLastToken(char *strOut, char *strIn, char sign)
 {
-	int size = strGetSize(stringIn);
+	int size = strGetSize(strIn);
 	char strOutBuff[256] = {0};
 	for (int i = size - 1; i > -1; i--)
 	{
-		if (stringIn[i] != sign)
+		if (strIn[i] != sign)
 		{
-			strOutBuff[size - i - 1] = stringIn[i];
+			strOutBuff[size - i - 1] = strIn[i];
 		}
-		if (stringIn[i] == sign)
+		if (strIn[i] == sign)
 		{
 			break;
 		}
@@ -147,26 +147,26 @@ char *getLastToken(char *stringIn, char *stringOut, char sign)
 	int buffSize = strGetSize(strOutBuff);
 	for (int i = 0; i < buffSize; i++)
 	{
-		stringOut[i] = strOutBuff[buffSize - i - 1];
+		strOut[i] = strOutBuff[buffSize - i - 1];
 	}
-	return stringOut;
+	return strOut;
 }
 
-char *getFirstToken(char *stringIn, char *stringOut, char sign)
+char *getFirstToken(char *strOut, char *strIn, char sign)
 {
-	int size = strGetSize(stringIn);
+	int size = strGetSize(strIn);
 	for (int i = 0; i < size; i++)
 	{
-		if (stringIn[i] != sign)
+		if (strIn[i] != sign)
 		{
-			stringOut[i] = stringIn[i];
+			strOut[i] = strIn[i];
 		}
-		if (stringIn[i] == sign)
+		if (strIn[i] == sign)
 		{
 			break;
 		}
 	}
-	return stringOut;
+	return strOut;
 }
 
 int getToken(char *string, char **argv, char sign)
@@ -249,4 +249,13 @@ char *mimiStrRemovePrefix(char *inputStr, char *prefix, char *outputStr)
 		outputStr[i - strGetSize(prefix)] = inputStr[i];
 	}
 	return outputStr;
+}
+
+char *strClear(char *str)
+{
+	for (int i = 0; i < sizeof(str); i++)
+	{
+		str[i] = 0;
+	}
+	return str;
 }

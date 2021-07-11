@@ -67,7 +67,6 @@ struct Class_process
                       char *name,
                       void (*method)(MimiObj *self, Args *args));
 
-    void (*runMethod)(MimiObj *self, char *methodName, Args *args);
     void (*run)(MimiObj *self, char *cmd);
 };
 MimiObj *New_MimiObj(Args *args);
