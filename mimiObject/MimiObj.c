@@ -234,7 +234,7 @@ static MimiObj *initSubObj(MimiObj *self, char *name)
     MimiObj *subProcess = newProcessFun(initArgs);
     subProcess->name[0] = 0;
     strAppend(subProcess->name, name);
-    attributeList->setWithType(attributeList, name, "process", subProcess);
+    attributeList->setPtrWithType(attributeList, name, "process", subProcess);
     initArgs->deinit(initArgs);
     return self->getPtr(self,
                         name);
@@ -307,7 +307,7 @@ static void setMethod(MimiObj *self,
                       char *declearation,
                       void (*methodPtr)(MimiObj *self, Args *args))
 {
-    char buff[3][64] = {0};
+    char buff[8][64] = {0};
     char *cleanDeclearation = strDeleteChar(buff[0], declearation, ' ');
     char *methodName = getFirstToken(buff[1], cleanDeclearation, '(');
     char *typeDefine = strCut(buff[2], cleanDeclearation, '(', ')');
@@ -329,7 +329,7 @@ static void setMethod(MimiObj *self,
 
 static void run(MimiObj *self, char *cmd)
 {
-    char buff[3][64] = {0};
+    char buff[8][64] = {0};
 
     char *cleanCmd = strDeleteChar(buff[0], cmd, ' ');
     char *argsStr = strCut(buff[1], cleanCmd, '(', ')');
@@ -337,7 +337,25 @@ static void run(MimiObj *self, char *cmd)
 
     MimiObj *methodObj = self->getObj(self, methodName, 0);
     char *typeDefine = methodObj->getStr(methodObj, "typeDefine");
-    void *methodPtr = methodObj->getPtr(methodObj, "methodPtr");
+    void (*methodFun)(MimiObj * self, Args * args) = methodObj->getPtr(methodObj, "methodPtr");
+
+    char *defineName = getFirstToken(buff[3], typeDefine, ':');
+    char *defineType = getLastToken(buff[4], typeDefine, ':');
+    char *argName = getFirstToken(buff[5], argsStr, '=');
+    char *argContant = getLastToken(buff[6], argsStr, '=');
+    if (!mimiStrEqu(defineName, argName))
+    {
+        /* name not match */
+        return;
+    }
+
+    Args *methodArgs = New_args(NULL);
+    if (mimiStrEqu(defineType, "string"))
+    {
+        methodArgs->setStr(methodArgs, defineName, argContant);
+    }
+    methodFun(self, methodArgs);
+    methodArgs->deinit(methodArgs);
 }
 
 static void init(MimiObj *self, Args *args)

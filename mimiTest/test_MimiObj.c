@@ -36,7 +36,7 @@ int TEST_MimiObj(int isShow)
     }
     {
         MimiObj *obj = New_MimiObj(NULL);
-        obj->setMethod(obj, "hello(name:string)", hello);
+        obj->setMethod(obj, "hello(name: string)", hello);
         obj->run(obj, "hello(name = world)");
 
         obj->deinit(obj);

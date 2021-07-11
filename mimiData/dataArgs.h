@@ -54,7 +54,7 @@ struct Class_Arglist
     char *(*print)(Args *self, char *name);
 
     int (*set)(Args *self, char *name, char *valueStr);
-    int (*setWithType)(Args *self, char *objectName, char *className, void *objectPtr);
+    int (*setPtrWithType)(Args *self, char *objectName, char *className, void *objectPtr);
     int (*foreach)(Args *self, int (*eachHandle)(Arg *argEach, Args *handleArgs), Args *handleArgs);
 
     /* virtual operation */
