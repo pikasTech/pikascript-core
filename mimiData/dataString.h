@@ -20,6 +20,7 @@ char *strDeleteChar(char *strOut, char *strIn, char ch);
 char *mimiStrRemovePrefix(char *inputStr, char *prefix, char *outputStr);
 /* token */
 int getToken(char *string, char **argv, char sign);
+char *popToken(char *strOut, char *strIn, char sign);
 char *getFirstToken(char *strOut, char *strIn, char sign);
 char *getLastToken(char *strOut, char *strIn, char sign);
 char *strClear(char *str);

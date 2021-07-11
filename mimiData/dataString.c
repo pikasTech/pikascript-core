@@ -152,6 +152,36 @@ char *getLastToken(char *strOut, char *strIn, char sign)
 	return strOut;
 }
 
+char *popToken(char *strOut, char *strIn, char sign)
+{
+	int getSign = 0;
+	int iPoped = 0;
+	int iOut = 0;
+	int size = strGetSize(strIn);
+	int i;
+	for (int i = 0; i < size; i++)
+	{
+		if (getSign)
+		{
+			strIn[iPoped++] = strIn[i];
+			continue;
+		}
+		if (strIn[i] != sign)
+		{
+			strOut[iOut++] = strIn[i];
+			continue;
+		}
+		if (strIn[i] == sign)
+		{
+			getSign = 1;
+			continue;
+		}
+	}
+	strOut[iOut] = 0;
+	strIn[iPoped] = 0;
+	return strOut;
+}
+
 char *getFirstToken(char *strOut, char *strIn, char sign)
 {
 	int size = strGetSize(strIn);

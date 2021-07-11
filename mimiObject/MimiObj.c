@@ -327,35 +327,60 @@ static void setMethod(MimiObj *self,
     methodObj->setPtr(methodObj, "methodPtr", methodPtr);
 }
 
+Args *getArgsBySentence(char *typeList, char *argList)
+{
+    Args *args = New_args(NULL);
+    while (1)
+    {
+        char buff[8][64] = {0};
+        char *type = popToken(buff[1], typeList, ',');
+        char *defineName = getFirstToken(buff[2], type, ':');
+        char *defineType = getLastToken(buff[3], type, ':');
+
+        char *arg = popToken(buff[0], argList, ',');
+        char *argName = getFirstToken(buff[4], arg, '=');
+        char *argContant = getLastToken(buff[5], arg, '=');
+
+        if (!mimiStrEqu(defineName, argName))
+        {
+            /* name not match */
+            return NULL;
+        }
+        if (mimiStrEqu(defineType, "string"))
+        {
+            args->setStr(args, defineName, argContant);
+        }
+
+        /* poped all type from typeList */
+        if(0 == typeList[0])
+        {
+            break;
+        }
+    }
+
+    return args;
+}
+
 static void run(MimiObj *self, char *cmd)
 {
     char buff[8][64] = {0};
 
     char *cleanCmd = strDeleteChar(buff[0], cmd, ' ');
-    char *argsStr = strCut(buff[1], cleanCmd, '(', ')');
-    char *methodName = getFirstToken(buff[2], cleanCmd, '(');
+    char *methodName = getFirstToken(buff[1], cleanCmd, '(');
 
     MimiObj *methodObj = self->getObj(self, methodName, 0);
-    char *typeDefine = methodObj->getStr(methodObj, "typeDefine");
-    void (*methodFun)(MimiObj * self, Args * args) = methodObj->getPtr(methodObj, "methodPtr");
-
-    char *defineName = getFirstToken(buff[3], typeDefine, ':');
-    char *defineType = getLastToken(buff[4], typeDefine, ':');
-    char *argName = getFirstToken(buff[5], argsStr, '=');
-    char *argContant = getLastToken(buff[6], argsStr, '=');
-    if (!mimiStrEqu(defineName, argName))
+    if (NULL == methodObj)
     {
-        /* name not match */
+        printf("[error]: method no found.\r\n");
         return;
     }
+    char *argList = strCut(buff[2], cleanCmd, '(', ')');
+    char *typeList = methodObj->getStr(methodObj, "typeDefine");
+    void (*methodFun)(MimiObj * self, Args * args) = methodObj->getPtr(methodObj, "methodPtr");
 
-    Args *methodArgs = New_args(NULL);
-    if (mimiStrEqu(defineType, "string"))
-    {
-        methodArgs->setStr(methodArgs, defineName, argContant);
-    }
-    methodFun(self, methodArgs);
-    methodArgs->deinit(methodArgs);
+    Args *args = getArgsBySentence(typeList, argList);
+    methodFun(self, args);
+    args->deinit(args);
 }
 
 static void init(MimiObj *self, Args *args)
