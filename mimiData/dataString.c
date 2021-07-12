@@ -23,12 +23,12 @@ char *strCut(char *strOut, char *strIn, char startSign, char endSign)
 	int iOut = 0;
 	for (int i = 0; i < Size; i++)
 	{
-		if (strIn[i] == startSign)
+		if (!isStart && (strIn[i] == startSign))
 		{
 			isStart = 1;
 			continue;
 		}
-		if (strIn[i] == endSign)
+		if (isStart && (strIn[i] == endSign))
 		{
 			isEnd = 1;
 			break;

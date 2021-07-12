@@ -8,14 +8,22 @@ void hello2(MimiObj *obj, Args *args)
     char *name2 = args->getStr(args, "name2");
     char *name3 = args->getStr(args, "name3");
     char *myName = obj->name;
-    printf("hello, %s, %s and %s!\r\n", name1, name2, name3);
-    printf("my name is %s.\r\n", myName);
+    int isShow = args->getInt(args, "isShow");
+    if (isShow)
+    {
+        printf("hello, %s, %s and %s!\r\n", name1, name2, name3);
+        printf("my name is %s.\r\n", myName);
+    }
 }
 
 void hello(MimiObj *obj, Args *args)
 {
     char *name = args->getStr(args, "name");
-    printf("hello, %s!\r\n", name);
+    int isShow = args->getInt(args, "isShow");
+    if (isShow)
+    {
+        printf("hello, %s!\r\n", name);
+    }
 }
 
 int TEST_MimiObj(int isShow)
@@ -47,21 +55,38 @@ int TEST_MimiObj(int isShow)
     }
     {
         MimiObj *obj = New_MimiObj(NULL);
-        obj->setMethod(obj, "hello(name: string)", hello);
-        obj->run(obj, "hello(name = world)");
+        obj->setMethod(obj, "hello(name: string, isShow: int)", hello);
+        obj->run(obj, "hello(name = \"world\", isShow = 1)");
         obj->deinit(obj);
     }
     {
         MimiObj *obj = New_MimiObj(NULL);
-        obj->setMethod(obj, "hello2(name1: string, name2: string, name3: string)", hello2);
-        obj->run(obj, "hello2(name2 = tom, name1 = john, name3 = cat)");
+        obj->setMethod(obj, "hello2(name1: string, name2: string, name3: string, isShow: int)", hello2);
+        obj->run(obj, "hello2(name2 = \"tom\", \
+                              name1 = \"john\", \
+                              name3 = \"cat\", \
+                              isShow = 1) ");
         obj->deinit(obj);
     }
     {
         MimiObj *obj = New_MimiObj(NULL);
         obj->setObj(obj, "hello", New_MimiObj);
-        obj->setMethod(obj, "hello.hello2(name1: string, name2: string, name3: string)", hello2);
-        obj->run(obj, "hello.hello2(name2 = tom, name1 = john, name3 = cat)");
+        obj->setMethod(obj, "hello.hello2(name1: string, name2: string, name3: string, isShow: int)", hello2);
+        obj->run(obj, "hello.hello2(name2 = \"tom\", \
+                                    name1 = \"john\", \
+                                    name3 = \"cat\", \
+                                    isShow = 1) ");
+        obj->deinit(obj);
+    }
+    {
+        MimiObj *obj = New_MimiObj(NULL);
+        obj->setObj(obj, "hello", New_MimiObj);
+        obj->setStr(obj, "name1", "john");
+        obj->setMethod(obj, "hello.hello2(name1: string, name2: string, name3: string, isShow: int)", hello2);
+        obj->run(obj, "hello.hello2(name2 = \"tom\", \
+                                    name1 = name1, \
+                                    name3 = \"cat\", \
+                                    isShow = 1) ");
         obj->deinit(obj);
     }
 

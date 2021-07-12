@@ -231,7 +231,7 @@ static MimiObj *initObj(MimiObj *self, char *name)
     initArgs->setPtr(initArgs, "context", self);
     initArgs->setStr(initArgs, "name", name);
     void *(*newObjFun)(Args * initArgs) = (void *(*)(Args * initArgs)) self->attributeList->getPtr(self->attributeList,
-                                                                                                       initFunName);
+                                                                                                   initFunName);
     MimiObj *newObj = newObjFun(initArgs);
     attributeList->setPtrWithType(attributeList, name, "process", newObj);
     initArgs->deinit(initArgs);
@@ -329,7 +329,7 @@ static void setMethod(MimiObj *self,
     methodObj->setPtr(methodObj, "methodPtr", methodPtr);
 }
 
-Args *getArgsBySentence(char *typeList, char *argList)
+Args *getArgsBySentence(MimiObj *self, char *typeList, char *argList)
 {
     Args *args = New_args(NULL);
     char typeListBuff[256] = {0};
@@ -347,9 +347,10 @@ Args *getArgsBySentence(char *typeList, char *argList)
         {
 
             char buff[8][64] = {0};
-            char *arg = popToken(buff[0], argListBuff, ',');
-            char *argName = getFirstToken(buff[4], arg, '=');
-            char *argContant = getLastToken(buff[5], arg, '=');
+            int iBuff = 0;
+            char *arg = popToken(buff[iBuff++], argListBuff, ',');
+            char *argName = getFirstToken(buff[iBuff++], arg, '=');
+            char *argContant = getLastToken(buff[iBuff++], arg, '=');
 
             if (0 == arg[0])
             {
@@ -364,7 +365,19 @@ Args *getArgsBySentence(char *typeList, char *argList)
 
             if (mimiStrEqu(defineType, "string"))
             {
-                args->setStr(args, defineName, argContant);
+                char *directStr = strCut(buff[iBuff++], argContant, '"', '"');
+                if (NULL != directStr)
+                {
+                    args->setStr(args, defineName, directStr);
+                    continue;
+                }
+                args->setStr(args, defineName, self->getStr(self, argContant));
+            }
+            if (mimiStrEqu(defineType, "int"))
+            {
+                args->setInt(args, defineName, 0);
+                args->set(args, defineName, argContant);
+                continue;
             }
         }
 
@@ -396,7 +409,7 @@ static void run(MimiObj *self, char *cmd)
     char *typeList = methodObj->getStr(methodObj, "typeDefine");
     void (*methodFun)(MimiObj * self, Args * args) = methodObj->getPtr(methodObj, "methodPtr");
 
-    Args *args = getArgsBySentence(typeList, argList);
+    Args *args = getArgsBySentence(self, typeList, argList);
     methodFun(methodHost, args);
     args->deinit(args);
 }
