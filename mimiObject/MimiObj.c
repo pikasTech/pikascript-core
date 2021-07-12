@@ -43,7 +43,7 @@ void obj_update(MimiObj *self)
     }
     self->_updateHandle(self);
 }
-void RootUpdateHandle(MimiObj *self)
+void _RootUpdateHandle(MimiObj *self)
 {
     // override the handle function here
 }
@@ -458,7 +458,7 @@ void obj_init(MimiObj *self, Args *args)
 
 
     /* override */
-    self->_updateHandle = RootUpdateHandle;
+    self->_updateHandle = _RootUpdateHandle;
     self->_beforDinit = _beforDinit;
 
     /* attrivute */
