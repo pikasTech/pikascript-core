@@ -286,7 +286,6 @@ void obj_setMethod(MimiObj *self,
 
     MimiObj *methodHost = obj_getObj(self, methodDir, 1);
     char *methodName = getLastToken(buff[i++], methodDir, '.');
-    obj_setStr(methodHost, methodName, cleanDeclearation);
 
     char *methodPtrName = strAppend(strAppend(buff[i++], "[ptr]"), methodName);
     char *methodDeclearationName = strAppend(strAppend(buff[i++], "[dec]"), methodName);

@@ -3,6 +3,7 @@
 void handle1(MimiObj *obj)
 {
     char *message = obj_getStr(obj, "publisher.message");
+    printf("message is: %s\r\n", message);
 }
 
 int TEST_Event(int isShow)
