@@ -12,31 +12,26 @@ struct Class_arg
     DMEM *contantDynMem;
     DMEM *nameDynMem;
     DMEM *typeDynMem;
-
-    /* operation */
-    void (*deinit)(Arg *self);
-    void (*init)(Arg *self, void *voidPointer);
-
-    void (*setName)(Arg *self, char *name);
-    void (*setContant)(Arg *self, char *contant, int size);
-    void (*setType)(Arg *self, char *type);
-
-    void (*setInt)(Arg *self, long long val);
-    void (*setFloat)(Arg *self, float val);
-    void (*setPtr)(Arg *self, void *pointer);
-    void (*setStr)(Arg *self, char *string);
-
-    long long (*getInt)(Arg *self);
-    float (*getFloat)(Arg *self);
-    void *(*getPtr)(Arg *self);
-    char *(*getStr)(Arg *self);
-
-    char *(*getContant)(Arg *self);
-
-    /* virtual operation */
-
-    /* object */
 };
+
+void arg_setName(Arg *self, char *name);
+void arg_setContant(Arg *self, char *contant, int size);
+void arg_setType(Arg *self, char *type);
+
+void arg_setInt(Arg *self, long long val);
+void arg_setFloat(Arg *self, float val);
+void arg_setPtr(Arg *self, void *pointer);
+void arg_setStr(Arg *self, char *string);
+
+long long arg_getInt(Arg *self);
+float arg_getFloat(Arg *self);
+void *arg_getPtr(Arg *self);
+char *arg_getStr(Arg *self);
+
+char *arg_getContant(Arg *self);
+
+void arg_init(Arg *self, void *voidPointer);
+void arg_deinit(Arg *self);
 
 Arg *New_arg(void *voidPointer);
 #endif

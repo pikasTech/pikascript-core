@@ -4,7 +4,7 @@
 #include "dataString.h"
 #include "stdlib.h"
 
-static void deinit(Arg *self)
+void arg_deinit(Arg *self)
 {
     DynMemPut(self->mem);
     if (NULL != self->contantDynMem)
@@ -21,7 +21,7 @@ static void deinit(Arg *self)
     }
 }
 
-static void setContant(Arg *self, char *contant, int size)
+ void arg_setContant(Arg *self, char *contant, int size)
 {
     if (NULL != self->contantDynMem)
     {
@@ -31,7 +31,7 @@ static void setContant(Arg *self, char *contant, int size)
     memcpy(self->contantDynMem->addr, contant, size + 1);
 }
 
-static void setName(Arg *self, char *name)
+ void arg_setName(Arg *self, char *name)
 {
     int size = strGetSize(name);
     if (NULL != self->nameDynMem)
@@ -43,7 +43,7 @@ static void setName(Arg *self, char *name)
     memcpy(self->nameDynMem->addr, name, size + 1);
 }
 
-static void setType(Arg *self, char *type)
+ void arg_setType(Arg *self, char *type)
 {
     int size = strGetSize(type);
     if (NULL != self->typeDynMem)
@@ -54,13 +54,13 @@ static void setType(Arg *self, char *type)
     memcpy(self->typeDynMem->addr, type, size + 1);
 }
 
-static char *getContant(Arg *self)
+ char *arg_getContant(Arg *self)
 {
     // return self->contactConst;
     return self->contantDynMem->addr;
 }
 
-static void setInt64(Arg *self, long long val)
+ void arg_setInt(Arg *self, long long val)
 {
     unsigned long int int64Temp = val;
     unsigned char contantBuff[256];
@@ -70,17 +70,17 @@ static void setInt64(Arg *self, long long val)
         contantBuff[i] = int64Temp;
         int64Temp = int64Temp >> 8;
     }
-    self->setContant(self, (char *)contantBuff, 8);
+    arg_setContant(self, (char *)contantBuff, 8);
 }
 
-static void setFloat(Arg *self, float val)
+ void arg_setFloat(Arg *self, float val)
 {
     char contantBuff[256];
     sprintf((char *)contantBuff, "%f", val);
-    self->setContant(self, (char *)contantBuff, strGetSize(contantBuff));
+    arg_setContant(self, (char *)contantBuff, strGetSize(contantBuff));
 }
 
-static void setPointer(Arg *self, void *pointer)
+ void arg_setPtr(Arg *self, void *pointer)
 {
     unsigned long int pointerTemp = (unsigned long int)pointer;
     unsigned char contantBuff[256];
@@ -90,14 +90,14 @@ static void setPointer(Arg *self, void *pointer)
         contantBuff[i] = pointerTemp;
         pointerTemp = pointerTemp >> 8;
     }
-    self->setContant(self, (char *)contantBuff, 8);
+    arg_setContant(self, (char *)contantBuff, 8);
 }
-static void setString(Arg *self, char *string)
+ void arg_setStr(Arg *self, char *string)
 {
-    self->setContant(self,  string, strGetSize(string));
+    arg_setContant(self,  string, strGetSize(string));
 }
 
-static long long getInt64(Arg *self)
+ long long arg_getInt(Arg *self)
 {
     unsigned long long int64Temp = 0;
     for (int i = 7; i > -1; i--)
@@ -109,7 +109,7 @@ static long long getInt64(Arg *self)
     return int64Temp;
 }
 
-static void *getPointer(Arg *self)
+ void *arg_getPtr(Arg *self)
 {
     void *pointer = NULL;
     unsigned long int pointerTemp = 0;
@@ -122,18 +122,18 @@ static void *getPointer(Arg *self)
     pointer = (void *)pointerTemp;
     return pointer;
 }
-static float getFloat(Arg *self)
+ float arg_getFloat(Arg *self)
 {
     float val = 0;
     val = atof(self->contantDynMem->addr);
     return val;
 }
-static char *getString(Arg *self)
+ char *arg_getStr(Arg *self)
 {
     return self->contantDynMem->addr;
 }
 
-static void init(Arg *self, void *voidPointer)
+void arg_init(Arg *self, void *voidPointer)
 {
     /* attrivute */
     self->context = self;
@@ -142,24 +142,6 @@ static void init(Arg *self, void *voidPointer)
     self->typeDynMem = NULL;
 
     /* operation */
-    self->deinit = deinit;
-
-    // low level operation
-    self->setName = setName;
-    self->setContant = setContant;
-    self->setType = setType;
-    self->getContant = getContant;
-
-    // high level operation
-    self->setInt = setInt64;
-    self->setFloat = setFloat;
-    self->setPtr = setPointer;
-    self->setStr = setString;
-
-    self->getInt = getInt64;
-    self->getFloat = getFloat;
-    self->getPtr = getPointer;
-    self->getStr = getString;
 
     /* object */
 
@@ -171,7 +153,6 @@ Arg *New_arg(void *voidPointer)
     DMEM *mem = DynMemGet(sizeof(Arg));
     Arg *self = mem->addr;
     self->mem = mem;
-    self->init = init;
-    self->init(self, voidPointer);
+    arg_init(self, voidPointer);
     return self;
 }

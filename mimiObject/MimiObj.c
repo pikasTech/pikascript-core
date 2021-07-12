@@ -14,7 +14,7 @@ static int dinitEachSubObj(Arg *argEach, Args *handleArgs)
     }
     if (mimiStrEqu(argEach->typeDynMem->addr, "_class-process"))
     {
-        MimiObj *subObj = argEach->getPtr(argEach);
+        MimiObj *subObj = arg_getPtr(argEach);
         subObj->deinit(subObj);
     }
     return 0;

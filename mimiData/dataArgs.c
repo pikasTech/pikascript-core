@@ -45,9 +45,9 @@ static int setFloatWithDefaultName(Args *self, float argFloat)
 static int setFloatWithName(Args *self, char *name, float argFloat)
 {
     Arg *argNew = New_arg(NULL);
-    argNew->setType(argNew, "float");
-    argNew->setName(argNew, name);
-    argNew->setFloat(argNew, argFloat);
+    arg_setType(argNew, "float");
+    arg_setName(argNew, name);
+    arg_setFloat(argNew, argFloat);
     self->setArg(self, argNew);
     return 0;
 }
@@ -56,7 +56,7 @@ static float getFloatByIndex(Args *self, int index)
 {
     float val = 0;
     Arg *arg = self->getArgByIndex(self, index);
-    val = arg->getFloat(arg);
+    val = arg_getFloat(arg);
     return val;
 }
 
@@ -64,7 +64,7 @@ static void *getPointerByIndex(Args *self, int index)
 {
     void *pointer = NULL;
     Arg *arg = self->getArgByIndex(self, index);
-    pointer = arg->getPtr(arg);
+    pointer = arg_getPtr(arg);
     return pointer;
 }
 
@@ -77,7 +77,7 @@ static void *getPointerByName(Args *self, char *name)
         return NULL;
     }
 
-    pointer = arg->getPtr(arg);
+    pointer = arg_getPtr(arg);
     return pointer;
 }
 
@@ -85,9 +85,9 @@ static int setPointerWithName(Args *self, char *name, void *argPointer)
 {
     int errCode = 0;
     Arg *argNew = New_arg(NULL);
-    argNew->setType(argNew, "pointer");
-    argNew->setName(argNew, name);
-    argNew->setPtr(argNew, argPointer);
+    arg_setType(argNew, "pointer");
+    arg_setName(argNew, name);
+    arg_setPtr(argNew, argPointer);
     self->setArg(self, argNew);
     return errCode;
 }
@@ -96,9 +96,9 @@ static int setStrWithName(Args *self, char *name, char *strIn)
 {
     int errCode = 0;
     Arg *argNew = New_arg(NULL);
-    argNew->setType(argNew, "string");
-    argNew->setStr(argNew, strIn);
-    argNew->setName(argNew, name);
+    arg_setType(argNew, "string");
+    arg_setStr(argNew, strIn);
+    arg_setName(argNew, name);
     self->setArg(self, argNew);
     return errCode;
 }
@@ -120,9 +120,9 @@ static char *getStrByName(Args *self, char *name)
 static int setInt64WithName(Args *self, char *name, long long int64In)
 {
     Arg *argNew = New_arg(NULL);
-    argNew->setName(argNew, name);
-    argNew->setInt(argNew, int64In);
-    argNew->setType(argNew, "int");
+    arg_setName(argNew, name);
+    arg_setInt(argNew, int64In);
+    arg_setType(argNew, "int");
     self->setArg(self, argNew);
     return 0;
 }
@@ -134,7 +134,7 @@ static long long getInt64ByIndex(Args *self, int index)
     {
         return -999999999;
     }
-    return arg->getInt(arg);
+    return arg_getInt(arg);
 }
 
 static long long getInt64ByName(Args *self, char *name)
@@ -144,7 +144,7 @@ static long long getInt64ByName(Args *self, char *name)
     {
         return -999999999;
     }
-    return arg->getInt(arg);
+    return arg_getInt(arg);
 }
 
 static int getSize(Args *self)
@@ -182,7 +182,7 @@ static Arg *getArgByIndex(Args *self, int index)
 static float getFloatByName(Args *self, char *name)
 {
     Arg *arg = self->getArg(self, name);
-    return arg->getFloat(arg);
+    return arg_getFloat(arg);
 }
 
 static int copyArg(Args *self, char *name, Args *directArgs)
@@ -193,9 +193,9 @@ static int copyArg(Args *self, char *name, Args *directArgs)
         return 1;
     }
     Arg *argCopied = New_arg(NULL);
-    argCopied->setContant(argCopied, argToBeCopy->contantDynMem->addr, argToBeCopy->contantDynMem->size);
-    argCopied->setName(argCopied, argToBeCopy->nameDynMem->addr);
-    argCopied->setType(argCopied, argToBeCopy->typeDynMem->addr);
+    arg_setContant(argCopied, argToBeCopy->contantDynMem->addr, argToBeCopy->contantDynMem->size);
+    arg_setName(argCopied, argToBeCopy->nameDynMem->addr);
+    arg_setType(argCopied, argToBeCopy->typeDynMem->addr);
 
     directArgs->setArg(directArgs, argCopied);
 
@@ -221,8 +221,8 @@ static int updateArg(Args *self, Arg *argNew)
         return 1;
         // type do not match
     }
-    argOld->setContant(argOld, argNew->contantDynMem->addr, argNew->contantDynMem->size);
-    argNew->deinit(argNew);
+    arg_setContant(argOld, argNew->contantDynMem->addr, argNew->contantDynMem->size);
+    arg_deinit(argNew);
     return 0;
 }
 
@@ -233,7 +233,7 @@ static int setArg(Args *self, Arg *arg)
     {
         self->argLinkList->addNode(self->argLinkList,
                                    arg,
-                                   (void (*)(void *))arg->deinit);
+                                   (void (*)(void *))arg_deinit);
         return 0;
     }
     updateArg(self, arg);
@@ -267,9 +267,9 @@ static void bind(Args *self, char *type, char *name, void *pointer)
     char typeWithBind[32] = "_bind-";
     strAppend(typeWithBind, type);
     Arg *argNew = New_arg(NULL);
-    argNew->setType(argNew, typeWithBind);
-    argNew->setName(argNew, name);
-    argNew->setPtr(argNew, pointer);
+    arg_setType(argNew, typeWithBind);
+    arg_setName(argNew, name);
+    arg_setPtr(argNew, pointer);
     self->setArg(self, argNew);
     return;
 }
@@ -445,9 +445,9 @@ static int setPtrWithType(Args *self, char *objectName, char *className, void *o
     char typeWithClass[32] = "_class-";
     strAppend(typeWithClass, className);
     Arg *argNew = New_arg(NULL);
-    argNew->setName(argNew, objectName);
-    argNew->setPtr(argNew, objectPtr);
-    argNew->setType(argNew, typeWithClass);
+    arg_setName(argNew, objectName);
+    arg_setPtr(argNew, objectPtr);
+    arg_setType(argNew, typeWithClass);
     self->setArg(self, argNew);
     return 0;
 }

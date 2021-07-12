@@ -118,7 +118,7 @@ static int luanchShellWhenNameMatch(Arg *argNow, Args *argsHandle)
 						   shell->detector(shell,
 										   shellLuancher,
 										   cmd,
-										   argNow->getPtr(argNow)));
+										   arg_getPtr(argNow)));
 		argsHandle->setStr(argsHandle,
 						   "succeed", "succeed");
 	}
