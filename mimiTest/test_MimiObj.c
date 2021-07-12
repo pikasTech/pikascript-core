@@ -12,6 +12,7 @@ void testFloat(MimiObj *obj, Args *args)
         printf("the float val1 is: %f\r\n", val1);
         printf("the float val2 is: %f\r\n", val2);
     }
+    args->setFloat(args, "return", val1 + val2);
 }
 
 void hello2(MimiObj *obj, Args *args)
@@ -105,7 +106,10 @@ int TEST_MimiObj(int isShow)
         obj->setObj(obj, "hello", New_MimiObj);
         obj->setStr(obj, "name1", "john");
         obj->setInt(obj, "isShow", isShow);
-        obj->setMethod(obj, "hello.hello2(name1: string, name2: string, name3: string, isShow: int)", hello2);
+        obj->setMethod(obj, "hello.hello2(name1: string, \
+                                          name2: string, \
+                                          name3: string, \
+                                          isShow: int)", hello2);
         obj->run(obj, "hello.hello2(name2 = \"tom\", \
                                     name1 = name1, \
                                     name3 = \"cat\", \
@@ -114,19 +118,39 @@ int TEST_MimiObj(int isShow)
     }
     {
         MimiObj *obj = New_MimiObj(NULL);
-        obj->setMethod(obj, "testFloat(val1:float, val2:float, isShow:int)", testFloat);
-        obj->setInt(obj, "isShow", 1);
+        obj->setMethod(obj, "testFloat(            \
+                                       val1:float, \
+                                       val2:float, \
+                                       isShow:int) \
+                                       :float", testFloat);
+        obj->setInt(obj, "isShow", isShow);
         obj->setFloat(obj, "val2", 3.11);
-        obj->run(obj, "testFloat(val1 = 3.22, val2 = val2, isShow = isShow)");
+        obj->run(obj, "res = testFloat(val1 = 3.22, \
+                                       val2 = val2, \
+                                       isShow = isShow)");
+        float res = obj->getFloat(obj, "res");
+        if (isShow)
+        {
+            printf("the res is %f \r\n", res);
+        }
+        if (6.33 - res > 0.001)
+        {
+            return 2;
+        }
         obj->deinit(obj);
     }
     {
         MimiObj *obj = New_MimiObj(NULL);
         obj->setMethod(obj, "add(val1:int, val2:int):int", add);
         obj->run(obj, "res = add(val1 = 1, val2 = 2)");
+        int res = obj->getInt(obj, "res");
         if (isShow)
         {
-            printf("the res is %lld.\r\n", obj->getInt(obj, "res"));
+            printf("the res is %d.\r\n", res);
+        }
+        if (3 != res)
+        {
+            return 1;
         }
         obj->deinit(obj);
     }

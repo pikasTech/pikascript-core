@@ -44,8 +44,8 @@ static void init_Event(MimiObj *self, Args *args)
     self->setObj(self, "mailBox", New_MimiObj_Mailbox);
 
     /* method */
-    self->setMethod(self, "follow()", follow);
-    self->setMethod(self, "publish()", publish);
+    self->setMethod(self, "follow(argDir:string, handle:pointer)", follow);
+    self->setMethod(self, "publish(argDir:string)", publish);
 }
 
 MimiObj *New_MimiObj_Event(Args *args)

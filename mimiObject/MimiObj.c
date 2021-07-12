@@ -306,7 +306,7 @@ static void setMethod(MimiObj *self,
                       char *declearation,
                       void (*methodPtr)(MimiObj *self, Args *args))
 {
-    char buff[8][64] = {0};
+    char buff[5][128] = {0};
     int i = 0;
     char *cleanDeclearation = strDeleteChar(buff[i++], declearation, ' ');
     char *methodDir = getFirstToken(buff[i++], cleanDeclearation, '(');
@@ -335,25 +335,26 @@ static void setMethod(MimiObj *self,
 Args *getArgsBySentence(MimiObj *self, char *typeList, char *argList)
 {
     Args *args = New_args(NULL);
-    char typeListBuff[256] = {0};
+    char typeListBuff[128] = {0};
     memcpy(typeListBuff, typeList, strGetSize(typeList));
     while (1)
     {
-        char buff[8][64] = {0};
-        char *type = popToken(buff[1], typeListBuff, ',');
-        char *defineName = getFirstToken(buff[2], type, ':');
-        char *defineType = getLastToken(buff[3], type, ':');
+        char buff[4][128] = {0};
+        int i = 0;
+        char *type = popToken(buff[i++], typeListBuff, ',');
+        char *defineName = getFirstToken(buff[i++], type, ':');
+        char *defineType = getLastToken(buff[i++], type, ':');
 
-        char argListBuff[256] = {0};
+        char *argListBuff = buff[i++];
         memcpy(argListBuff, argList, strGetSize(argList));
         while (1)
         {
 
-            char buff[8][64] = {0};
-            int iBuff = 0;
-            char *arg = popToken(buff[iBuff++], argListBuff, ',');
-            char *argName = getFirstToken(buff[iBuff++], arg, '=');
-            char *argContant = getLastToken(buff[iBuff++], arg, '=');
+            char buff[4][64] = {0};
+            int i = 0;
+            char *arg = popToken(buff[i++], argListBuff, ',');
+            char *argName = getFirstToken(buff[i++], arg, '=');
+            char *argContant = getLastToken(buff[i++], arg, '=');
 
             if (0 == arg[0])
             {
@@ -370,7 +371,7 @@ Args *getArgsBySentence(MimiObj *self, char *typeList, char *argList)
             if (mimiStrEqu(defineType, "string"))
             {
                 /* solve the string type */
-                char *directStr = strCut(buff[iBuff++], argContant, '"', '"');
+                char *directStr = strCut(buff[i++], argContant, '"', '"');
                 if (NULL != directStr)
                 {
                     /* direct value */
@@ -411,9 +412,16 @@ Args *getArgsBySentence(MimiObj *self, char *typeList, char *argList)
                 args->setFloat(args, defineName, referenceVal);
                 continue;
             }
+            if (mimiStrEqu(defineType, "pointer"))
+            {
+                /* only support reference value */
+                void *ptr = self->getPtr(self, argContant);
+                args->setPtr(args, defineName, ptr);
+                continue;
+            }
 
             /* type match faild */
-            printf("[error]: type not match.");
+            printf("[error]: type not match, input type: %s\r\n", defineType);
             while (1)
             {
             }
@@ -431,7 +439,7 @@ Args *getArgsBySentence(MimiObj *self, char *typeList, char *argList)
 
 static void run(MimiObj *self, char *cmd)
 {
-    char buff[8][128] = {0};
+    char buff[5][128] = {0};
     int i = 0;
     char *cleanCmd = strDeleteChar(buff[i++], cmd, ' ');
     char *methodSentence = getFirstToken(buff[i++], cleanCmd, '(');
