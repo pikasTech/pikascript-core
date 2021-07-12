@@ -16,7 +16,7 @@ void *app_print(Shell *shell, int argc, char **argv)
     DMEM *memOut = DynMemGet(sizeof(char) * 256);
     ((char *)(memOut->addr))[0] = 0;
     MimiObj *root = shell->context;
-    MimiObj *processNow = root->getObj(root, PROCESS_DIR, 1);
+    MimiObj *processNow = obj_getObj(root, PROCESS_DIR, 1);
 
     if (NULL == processNow)
     {
@@ -27,7 +27,7 @@ void *app_print(Shell *shell, int argc, char **argv)
     getLastToken(argName, PROCESS_DIR, '.');
 
     char *printStr = NULL;
-    printStr = processNow->print(processNow, argName);
+    printStr = obj_print(processNow, argName);
     memcpy(memOut->addr, printStr, 256);
     strAppend(memOut->addr, "\r\n");
 

@@ -44,7 +44,7 @@ void *app_list(Shell *shell, int argc, char **argv)
     }
     else
     {
-        processNow = root->getObj(root, PROCESS_DIR, 0);
+        processNow = obj_getObj(root, PROCESS_DIR, 0);
     }
 
     if (NULL == processNow)

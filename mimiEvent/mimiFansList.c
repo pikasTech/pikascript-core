@@ -5,7 +5,7 @@
 static void init_FansList(MimiObj *self, Args *args)
 {
     /* attrivute */
-    self->setObj(self, "fansInfo", New_MimiObj_FansInfo);
+    obj_setObj(self, "fansInfo", New_MimiObj_FansInfo);
 
     /* operation */
 
@@ -17,7 +17,6 @@ static void init_FansList(MimiObj *self, Args *args)
 MimiObj *New_MimiObj_FansList(Args *args)
 {
     MimiObj *self = New_MimiObj(args);
-    self->init = init_FansList;
-    self->init(self, args);
+    init_FansList(self, args);
     return self;
 }

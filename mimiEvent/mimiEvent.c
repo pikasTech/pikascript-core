@@ -9,16 +9,16 @@ static void publish(MimiObj *self, Args *args)
 {
     char *argDir = args_getStr(args, "argDir");
 
-    MimiObj *publisher = self->getObj(self, argDir, 1);
-    char *folloedArgName = publisher->getStr(publisher, "fansList.fansInfo.followedArgName");
+    MimiObj *publisher = obj_getObj(self, argDir, 1);
+    char *folloedArgName = obj_getStr(publisher, "fansList.fansInfo.followedArgName");
     char argName[64] = {0};
     getLastToken(argName, argDir, '.');
     if (!mimiStrEqu(argName, folloedArgName))
     {
         return;
     }
-    MimiObj *fans = publisher->getPtr(publisher, "fansList.fansInfo.fansPtr");
-    void (*handle)(MimiObj * obj) = publisher->getPtr(publisher, "fansList.fansInfo.handle");
+    MimiObj *fans = obj_getPtr(publisher, "fansList.fansInfo.fansPtr");
+    void (*handle)(MimiObj * obj) = obj_getPtr(publisher, "fansList.fansInfo.handle");
     handle(fans);
 }
 
@@ -27,31 +27,30 @@ static void follow(MimiObj *self, Args *args)
     char *argDir = args_getStr(args, "argDir");
     void *handle = args_getPtr(args, "handle");
 
-    MimiObj *publisher = self->getObj(self, argDir, 1);
-    MimiObj *fansInfo = publisher->getObj(publisher, "fansList.fansInfo", 0);
+    MimiObj *publisher = obj_getObj(self, argDir, 1);
+    MimiObj *fansInfo = obj_getObj(publisher, "fansList.fansInfo", 0);
     char argName[64];
     getLastToken(argName, argDir, '.');
 
-    fansInfo->setPtr(fansInfo, "fansPtr", self);
-    fansInfo->setPtr(fansInfo, "handle", handle);
-    fansInfo->setStr(fansInfo, "followedArgName", argName);
+    obj_setPtr(fansInfo, "fansPtr", self);
+    obj_setPtr(fansInfo, "handle", handle);
+    obj_setStr(fansInfo, "followedArgName", argName);
 }
 
 static void init_Event(MimiObj *self, Args *args)
 {
     /* attrivute */
-    self->setObj(self, "fansList", New_MimiObj_FansList);
-    self->setObj(self, "mailBox", New_MimiObj_Mailbox);
+    obj_setObj(self, "fansList", New_MimiObj_FansList);
+    obj_setObj(self, "mailBox", New_MimiObj_Mailbox);
 
     /* method */
-    self->setMethod(self, "follow(argDir:string, handle:pointer)", follow);
-    self->setMethod(self, "publish(argDir:string)", publish);
+    obj_setMethod(self, "follow(argDir:string, handle:pointer)", follow);
+    obj_setMethod(self, "publish(argDir:string)", publish);
 }
 
 MimiObj *New_MimiObj_Event(Args *args)
 {
     MimiObj *self = New_MimiObj(args);
-    self->init = init_Event;
-    self->init(self, args);
+    init_Event(self, args);
     return self;
 }

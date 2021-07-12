@@ -15,7 +15,6 @@ static void init_Mailbox(MimiObj *self, Args *args)
 MimiObj *New_MimiObj_Mailbox(Args *args)
 {
     MimiObj *self = New_MimiObj(args);
-    self->init = init_Mailbox;
-    self->init(self, args);
+    init_Mailbox(self, args);
     return self;
 }

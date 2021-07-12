@@ -18,7 +18,7 @@ void *app_argSet(Shell *shell, int argc, char **argv)
     ((char *)(memOut->addr))[0] = 0;
     MimiObj *root = shell->context;
 
-    int errCode = root->set(root, PROCESS_DIR, SET_VAL);
+    int errCode = obj_set(root, PROCESS_DIR, SET_VAL);
     if (0 != errCode)
     {
         if (1 == errCode)
