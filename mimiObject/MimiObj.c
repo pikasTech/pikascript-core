@@ -307,10 +307,12 @@ static void setMethod(MimiObj *self,
                       void (*methodPtr)(MimiObj *self, Args *args))
 {
     char buff[8][64] = {0};
-    char *cleanDeclearation = strDeleteChar(buff[0], declearation, ' ');
-    char *methodDir = getFirstToken(buff[1], cleanDeclearation, '(');
-    char *typeDefine = strCut(buff[2], cleanDeclearation, '(', ')');
-    if (typeDefine == NULL || methodDir == NULL)
+    int i = 0;
+    char *cleanDeclearation = strDeleteChar(buff[i++], declearation, ' ');
+    char *methodDir = getFirstToken(buff[i++], cleanDeclearation, '(');
+    char *returnType = getLastToken(buff[i++], cleanDeclearation, ':');
+    char *typeList = strCut(buff[i++], cleanDeclearation, '(', ')');
+    if (typeList == NULL || methodDir == NULL)
     {
         printf("[error]: method declearation error!\r\n");
         printf("[info]: declearation: %s\r\n", declearation);
@@ -321,11 +323,12 @@ static void setMethod(MimiObj *self,
     }
 
     MimiObj *methodHost = self->getObj(self, methodDir, 1);
-    char *methodName = getLastToken(buff[3], methodDir, '.');
+    char *methodName = getLastToken(buff[i++], methodDir, '.');
     methodHost->setObj(methodHost, methodName, New_MimiObj);
     MimiObj *methodObj = self->getObj(self, methodDir, 0);
 
-    methodObj->setStr(methodObj, "typeDefine", typeDefine);
+    methodObj->setStr(methodObj, "typeList", typeList);
+    methodObj->setStr(methodObj, "returnType", returnType);
     methodObj->setPtr(methodObj, "methodPtr", methodPtr);
 }
 
@@ -429,23 +432,39 @@ Args *getArgsBySentence(MimiObj *self, char *typeList, char *argList)
 static void run(MimiObj *self, char *cmd)
 {
     char buff[8][128] = {0};
-    char *cleanCmd = strDeleteChar(buff[0], cmd, ' ');
-    char *methodDir = getFirstToken(buff[1], cleanCmd, '(');
+    int i = 0;
+    char *cleanCmd = strDeleteChar(buff[i++], cmd, ' ');
+    char *methodSentence = getFirstToken(buff[i++], cleanCmd, '(');
+    char *returnName = getFirstToken(buff[i++], methodSentence, '=');
+    char *methodName = getLastToken(buff[i++], methodSentence, '=');
 
-    MimiObj *methodObj = self->getObj(self, methodDir, 0);
-    MimiObj *methodHost = self->getObj(self, methodDir, 1);
+    MimiObj *methodObj = self->getObj(self, methodName, 0);
+    MimiObj *methodHost = self->getObj(self, methodName, 1);
 
     if (NULL == methodObj)
     {
-        printf("[error]: method no found.\r\n");
+        printf("[error]: method %s no found.\r\n", methodName);
         return;
     }
-    char *argList = strCut(buff[2], cleanCmd, '(', ')');
-    char *typeList = methodObj->getStr(methodObj, "typeDefine");
+    char *argList = strCut(buff[i++], cleanCmd, '(', ')');
+    char *typeList = methodObj->getStr(methodObj, "typeList");
+    char *returnType = methodObj->getStr(methodObj, "returnType");
     void (*methodFun)(MimiObj * self, Args * args) = methodObj->getPtr(methodObj, "methodPtr");
 
     Args *args = getArgsBySentence(self, typeList, argList);
     methodFun(methodHost, args);
+    if (mimiStrEqu("int", returnType))
+    {
+        self->setInt(self, returnName, args->getInt(args, "return"));
+    }
+    if (mimiStrEqu("float", returnType))
+    {
+        self->setFloat(self, returnName, args->getFloat(args, "return"));
+    }
+    if (mimiStrEqu("string", returnType))
+    {
+        self->setStr(self, returnName, args->getStr(args, "return"));
+    }
     args->deinit(args);
 }
 

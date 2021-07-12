@@ -38,6 +38,13 @@ void hello(MimiObj *obj, Args *args)
     }
 }
 
+void add(MimiObj *obj, Args *args)
+{
+    int val1 = args->getInt(args, "val1");
+    int val2 = args->getInt(args, "val2");
+    args->setInt(args, "return", val1 + val2);
+}
+
 int TEST_MimiObj(int isShow)
 {
     {
@@ -111,6 +118,16 @@ int TEST_MimiObj(int isShow)
         obj->setInt(obj, "isShow", 1);
         obj->setFloat(obj, "val2", 3.11);
         obj->run(obj, "testFloat(val1 = 3.22, val2 = val2, isShow = isShow)");
+        obj->deinit(obj);
+    }
+    {
+        MimiObj *obj = New_MimiObj(NULL);
+        obj->setMethod(obj, "add(val1:int, val2:int):int", add);
+        obj->run(obj, "res = add(val1 = 1, val2 = 2)");
+        if (isShow)
+        {
+            printf("the res is %lld.\r\n", obj->getInt(obj, "res"));
+        }
         obj->deinit(obj);
     }
 
