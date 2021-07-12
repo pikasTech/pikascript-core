@@ -1,37 +1,33 @@
 #include "dataLinkNode.h"
 #include "dataMemory.h"
 
-static void deinit(LinkNode *self)
+void linkNode_deinit(LinkNode *self)
 {
     DynMemPut(self->mem);
     self->_contantDinit(self->contant);
 }
 
-static long long getId(LinkNode *self)
+long long linkNode_getId(LinkNode *self)
 {
     return self->id;
 }
 
-static int isId(LinkNode *self, long long id)
+int linkNode_isId(LinkNode *self, long long id)
 {
-    if (id == self->getId(self))
+    if (id == linkNode_getId(self))
     {
         return 1;
     }
     return 0;
 }
 
-static void init(LinkNode *self, void *args)
+void linkNode_init(LinkNode *self, void *args)
 {
     /* attrivute */
     self->priorNode = NULL;
     self->nextNode = NULL;
     self->id = 0;
 
-    /* operation */
-    self->deinit = deinit;
-    self->getId = getId;
-    self->isId = isId;
 
     /* object */
     self->contant = NULL;
@@ -45,7 +41,6 @@ LinkNode *New_linkNode(void *args)
     DMEM *mem = DynMemGet(sizeof(LinkNode));
     LinkNode *self = mem->addr;
     self->mem = mem;
-    self->init = init;
-    self->init(self, args);
+    linkNode_init(self, args);
     return self;
 }

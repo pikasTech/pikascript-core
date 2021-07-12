@@ -8,7 +8,7 @@ static void deinit(Link *self)
     LinkNode *nowNode = self->firstNode;
     while (NULL != nowNode)
     {
-        nowNode->deinit(nowNode);
+        linkNode_deinit(nowNode);
         nowNode = nowNode->nextNode;
     }
 }
@@ -72,7 +72,7 @@ static void removeNode(Link *self, void *contant)
     }
 
     // deinit the node
-    nodeToDelete->deinit(nodeToDelete);
+    linkNode_deinit(nodeToDelete);
     return;
 }
 
