@@ -12,9 +12,10 @@ static void deinit(Args *self)
     self->argLinkList->deinit(self->argLinkList);
 }
 
-static void loadDefaultName(Args *self)
+static char *getDefaultName(Args *self, char *strOut)
 {
-    sprintf((char *)self->nameBuff, "arg%d", (int)self->argLinkList->TopId);
+    sprintf((char *)strOut, "arg%d", (int)self->argLinkList->TopId);
+    return strOut;
 }
 
 static char *getStrByIndex(Args *self, int index)
@@ -29,15 +30,15 @@ static char *getStrByIndex(Args *self, int index)
 
 static int setStrWithDefaultName(Args *self, char *strIn)
 {
-    loadDefaultName(self);
-    self->setStr(self, (char *)self->nameBuff, strIn);
+    char buff[128];
+    self->setStr(self, getDefaultName(self, buff), strIn);
     return 0;
 }
 
 static int setFloatWithDefaultName(Args *self, float argFloat)
 {
-    loadDefaultName(self);
-    self->setFloat(self, (char *)self->nameBuff, argFloat);
+    char buff[128];
+    self->setFloat(self, getDefaultName(self, buff), argFloat);
     return 0;
 }
 
@@ -484,10 +485,6 @@ static void init(Args *self, Args *args)
     /* attrivute */
     self->context = self;
     self->argLinkList = New_link(NULL);
-    for (int i = 0; i < 32; i++)
-    {
-        self->nameBuff[i] = 0;
-    }
 
     /* operation */
     self->deinit = deinit;
