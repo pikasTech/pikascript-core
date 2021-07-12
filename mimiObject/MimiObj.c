@@ -213,7 +213,7 @@ static void follow(MimiObj *self,
     fansInfo->setStr(fansInfo, "followedArgName", argName);
 }
 
-static MimiObj *initSubObj(MimiObj *self, char *name)
+static MimiObj *initObj(MimiObj *self, char *name)
 {
     char prifix[] = "[cls]";
     char initFunName[64] = {0};
@@ -229,12 +229,11 @@ static MimiObj *initSubObj(MimiObj *self, char *name)
     Args *attributeList = self->attributeList;
     Args *initArgs = New_args(NULL);
     initArgs->setPtr(initArgs, "context", self);
-    void *(*newProcessFun)(Args * initArgs) = (void *(*)(Args * initArgs)) self->attributeList->getPtr(self->attributeList,
+    initArgs->setStr(initArgs, "name", name);
+    void *(*newObjFun)(Args * initArgs) = (void *(*)(Args * initArgs)) self->attributeList->getPtr(self->attributeList,
                                                                                                        initFunName);
-    MimiObj *subProcess = newProcessFun(initArgs);
-    subProcess->name[0] = 0;
-    strAppend(subProcess->name, name);
-    attributeList->setPtrWithType(attributeList, name, "process", subProcess);
+    MimiObj *newObj = newObjFun(initArgs);
+    attributeList->setPtrWithType(attributeList, name, "process", newObj);
     initArgs->deinit(initArgs);
     return self->getPtr(self,
                         name);
@@ -247,7 +246,7 @@ static MimiObj *getDirectObj(MimiObj *self, char *name)
                                          name))
     {
         /* no inited subprocess, check subprocess init fun*/
-        return initSubObj(self, name);
+        return initObj(self, name);
     }
 
     /* finded subscribe, check type*/
@@ -309,9 +308,9 @@ static void setMethod(MimiObj *self,
 {
     char buff[8][64] = {0};
     char *cleanDeclearation = strDeleteChar(buff[0], declearation, ' ');
-    char *methodName = getFirstToken(buff[1], cleanDeclearation, '(');
+    char *methodDir = getFirstToken(buff[1], cleanDeclearation, '(');
     char *typeDefine = strCut(buff[2], cleanDeclearation, '(', ')');
-    if (typeDefine == NULL || methodName == NULL)
+    if (typeDefine == NULL || methodDir == NULL)
     {
         printf("[error]: method declearation error!\r\n");
         printf("[info]: declearation: %s\r\n", declearation);
@@ -321,8 +320,11 @@ static void setMethod(MimiObj *self,
         }
     }
 
-    self->setObj(self, methodName, New_MimiObj);
-    MimiObj *methodObj = self->getObj(self, methodName, 0);
+    MimiObj *methodHost = self->getObj(self, methodDir, 1);
+    char *methodName = getLastToken(buff[3], methodDir, '.');
+    methodHost->setObj(methodHost, methodName, New_MimiObj);
+    MimiObj *methodObj = self->getObj(self, methodDir, 0);
+
     methodObj->setStr(methodObj, "typeDefine", typeDefine);
     methodObj->setPtr(methodObj, "methodPtr", methodPtr);
 }
@@ -364,7 +366,6 @@ Args *getArgsBySentence(char *typeList, char *argList)
             {
                 args->setStr(args, defineName, argContant);
             }
-
         }
 
         /* poped all type from typeList */
@@ -379,12 +380,13 @@ Args *getArgsBySentence(char *typeList, char *argList)
 
 static void run(MimiObj *self, char *cmd)
 {
-    char buff[8][64] = {0};
-
+    char buff[8][128] = {0};
     char *cleanCmd = strDeleteChar(buff[0], cmd, ' ');
-    char *methodName = getFirstToken(buff[1], cleanCmd, '(');
+    char *methodDir = getFirstToken(buff[1], cleanCmd, '(');
 
-    MimiObj *methodObj = self->getObj(self, methodName, 0);
+    MimiObj *methodObj = self->getObj(self, methodDir, 0);
+    MimiObj *methodHost = self->getObj(self, methodDir, 1);
+
     if (NULL == methodObj)
     {
         printf("[error]: method no found.\r\n");
@@ -395,7 +397,7 @@ static void run(MimiObj *self, char *cmd)
     void (*methodFun)(MimiObj * self, Args * args) = methodObj->getPtr(methodObj, "methodPtr");
 
     Args *args = getArgsBySentence(typeList, argList);
-    methodFun(self, args);
+    methodFun(methodHost, args);
     args->deinit(args);
 }
 
@@ -403,8 +405,6 @@ static void init(MimiObj *self, Args *args)
 {
     /* List */
     self->attributeList = New_args(NULL);
-    self->name[0] = 0;
-    strAppend(self->name, "Null");
 
     /* operation */
     self->deinit = deinit;
@@ -455,12 +455,15 @@ static void init(MimiObj *self, Args *args)
     self->setPtr(self, "context", self);
     self->setObj(self, "fansList", New_MimiObj_FansList);
     self->setObj(self, "mailbox", New_MimiObj_Mailbox);
+    self->setStr(self, "name", "root");
 
     /* load */
     if (NULL != args)
     {
+        self->load(self, args, "name");
         self->load(self, args, "context");
     }
+    self->name = self->getStr(self, "name");
 }
 
 MimiObj *New_MimiObj(Args *args)

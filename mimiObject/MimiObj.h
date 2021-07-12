@@ -12,7 +12,7 @@ struct Class_process
 
     /* list */
     Args *attributeList;
-    char name[32];
+    char *name;
 
     /* operation */
     void (*deinit)(MimiObj *self);
