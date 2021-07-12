@@ -393,6 +393,27 @@ Args *getArgsBySentence(MimiObj *self, char *typeList, char *argList)
                 args->setInt(args, defineName, referenceVal);
                 continue;
             }
+            if (mimiStrEqu(defineType, "float"))
+            {
+                /* solve the float type */
+                args->setFloat(args, defineName, 0);
+                if ((argContant[0] >= '0') && (argContant[0] <= '9'))
+                {
+                    /* direct value */
+                    args->set(args, defineName, argContant);
+                    continue;
+                }
+                /* reference value */
+                float referenceVal = self->getFloat(self, argContant);
+                args->setFloat(args, defineName, referenceVal);
+                continue;
+            }
+
+            /* type match faild */
+            printf("[error]: type not match.");
+            while (1)
+            {
+            }
         }
 
         /* poped all type from typeList */

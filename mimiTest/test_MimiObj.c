@@ -2,6 +2,18 @@
 #include "mimiCom.h"
 #include "dataString.h"
 
+void testFloat(MimiObj *obj, Args *args)
+{
+    float val1 = args->getFloat(args, "val1");
+    float val2 = args->getFloat(args, "val2");
+    int isShow = args->getInt(args, "isShow");
+    if (isShow)
+    {
+        printf("the float val1 is: %f\r\n", val1);
+        printf("the float val2 is: %f\r\n", val2);
+    }
+}
+
 void hello2(MimiObj *obj, Args *args)
 {
     char *name1 = args->getStr(args, "name1");
@@ -91,6 +103,14 @@ int TEST_MimiObj(int isShow)
                                     name1 = name1, \
                                     name3 = \"cat\", \
                                     isShow = isShow) ");
+        obj->deinit(obj);
+    }
+    {
+        MimiObj *obj = New_MimiObj(NULL);
+        obj->setMethod(obj, "testFloat(val1:float, val2:float, isShow:int)", testFloat);
+        obj->setInt(obj, "isShow", 1);
+        obj->setFloat(obj, "val2", 3.11);
+        obj->run(obj, "testFloat(val1 = 3.22, val2 = val2, isShow = isShow)");
         obj->deinit(obj);
     }
 
