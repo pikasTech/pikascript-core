@@ -34,7 +34,7 @@ void *app_print(Shell *shell, int argc, char **argv)
     char printName[32] = {0};
     strAppend(printName, "[printBuff]");
     strAppend(printName, argName);
-    processNow->attributeList->removeArg(processNow->attributeList,
+    args_removeArg(processNow->attributeList,
                                          printName);
     return (void *)memOut;
 }

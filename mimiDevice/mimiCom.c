@@ -5,7 +5,7 @@
 static void deinit(MimiCom *self)
 {
     DynMemPut(self->mem);
-    self->args->deinit(self->args);
+    args_deinit(self->args);
 }
 
 static void singleLineCallBackDefault(MimiCom *self)
@@ -21,7 +21,7 @@ static void getChar(MimiCom *self, char inputChar)
     }
     if (inputChar == '\r')
     {
-        self->args->setStr(self->args, "RxSingleLine", self->RxBuff);
+        args_setStr(self->args, "RxSingleLine", self->RxBuff);
         self->RxBuff[0] = 0;
         self->_singleLineCallBack(self);
     }
@@ -43,8 +43,8 @@ static void init(MimiCom *self, Args *initArgs)
     self->args = New_args(NULL);
     self->RxBuff[0] = 0;
 
-    self->args->setPtr(self->args, "context", self);
-    self->args->setStr(self->args, "RxSingleLine", "");
+    args_setPtr(self->args, "context", self);
+    args_setStr(self->args, "RxSingleLine", "");
 
     /* operation */
     self->deinit = deinit;
@@ -62,7 +62,7 @@ static void init(MimiCom *self, Args *initArgs)
     {
         return;
     }
-    initArgs->copyArg(initArgs, "context", self->args);
+    args_copyArg(initArgs, "context", self->args);
 }
 
 MimiCom *New_mimiCom(Args *args)

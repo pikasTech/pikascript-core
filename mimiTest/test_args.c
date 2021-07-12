@@ -9,30 +9,30 @@ int TEST_args2(int isShow)
         long long int64Out = 0;
         void *pointer = NULL;
         char *strOut = NULL;
-        args->setFloatWithDefaultName(args, 24.5);
-        args->setInt(args,
+        args_setFloatWithDefaultName(args, 24.5);
+        args_setInt(args,
                      "int64Test",
                      (long long)22221);
-        args->setPtr(args,
+        args_setPtr(args,
                      "pointerTest",
                      (void *)2222322);
-        args->setStr(args, "strTest", "teeeds");
+        args_setStr(args, "strTest", "teeeds");
 
-        floatOut = args->getFloatByIndex(args, 0);
-        int64Out = args->getInt(args, "int64Test");
-        pointer = args->getPtr(args, "pointerTest");
-        strOut = args->getStr(args, "strTest");
+        floatOut = args_getFloatByIndex(args, 0);
+        int64Out = args_getInt(args, "int64Test");
+        pointer = args_getPtr(args, "pointerTest");
+        strOut = args_getStr(args, "strTest");
 
         if (isShow)
         {
             printf("the float output is: %f\r\n", floatOut);
-            printf("the float type is: [%s]\r\n", args->getType(args, "arg0"));
+            printf("the float type is: [%s]\r\n", args_getType(args, "arg0"));
             printf("the int64 output is: %d\r\n", (int)int64Out);
-            printf("the int64 type is: [%s]\r\n", args->getType(args, "int64Test"));
+            printf("the int64 type is: [%s]\r\n", args_getType(args, "int64Test"));
             printf("the pointer output is: %d\r\n", (int)(long long)pointer);
-            printf("the pointer type is: [%s]\r\n", args->getType(args, "pointerTest"));
+            printf("the pointer type is: [%s]\r\n", args_getType(args, "pointerTest"));
             printf("the string output is: %s\r\n", strOut);
-            printf("the string type is: [%s]\r\n", args->getType(args, "strTest"));
+            printf("the string type is: [%s]\r\n", args_getType(args, "strTest"));
         }
 
         if ((float)24.5 != floatOut)
@@ -51,139 +51,139 @@ int TEST_args2(int isShow)
         {
             err = 4;
         }
-        if (0 != strcmp("float", args->getType(args, "arg0")))
+        if (0 != strcmp("float", args_getType(args, "arg0")))
         {
             err = 5;
         }
-        if (0 != strcmp("int", args->getType(args, "int64Test")))
+        if (0 != strcmp("int", args_getType(args, "int64Test")))
         {
             err = 6;
         }
-        if (0 != strcmp("pointer", args->getType(args, "pointerTest")))
+        if (0 != strcmp("pointer", args_getType(args, "pointerTest")))
         {
             err = 7;
         }
-        if (0 != strcmp("string", args->getType(args, "strTest")))
+        if (0 != strcmp("string", args_getType(args, "strTest")))
         {
             err = 8;
         }
-        args->deinit(args);
+        args_deinit(args);
     }
     {
         Args *args1 = New_args(NULL);
         Args *args2 = New_args(NULL);
 
-        args1->setFloat(args1, "argtest1", 2.883);
-        args1->setStr(args1, "strtest1", "teststr");
-        args1->copyArg(args1, "argtest1", args2);
-        args1->copyArg(args1, "strtest1", args2);
+        args_setFloat(args1, "argtest1", 2.883);
+        args_setStr(args1, "strtest1", "teststr");
+        args_copyArg(args1, "argtest1", args2);
+        args_copyArg(args1, "strtest1", args2);
 
         if (isShow)
         {
             printf("the float get from args is:%f\r\n",
-                   args1->getFloat(args1, "argtest1"));
+                   args_getFloat(args1, "argtest1"));
 
             printf("the float copyed from arg1:%f\r\n",
-                   args2->getFloat(args2, "argtest1"));
+                   args_getFloat(args2, "argtest1"));
         }
-        if (2.8830f != args1->getFloat(args1, "argtest1"))
+        if (2.8830f != args_getFloat(args1, "argtest1"))
         {
             err = 9;
         }
 
-        args1->deinit(args1);
-        args2->deinit(args2);
+        args_deinit(args1);
+        args_deinit(args2);
     }
     {
         int testint = 12333;
         Args *args = New_args(NULL);
-        args->setInt(args, "testint", testint);
+        args_setInt(args, "testint", testint);
         if (isShow)
         {
-            printf("args print test int: %s\r\n", args->print(args, "testint"));
+            printf("args print test int: %s\r\n", args_print(args, "testint"));
         }
-        args->deinit(args);
+        args_deinit(args);
     }
     {
         int testInt = 124;
         Args *args = New_args(NULL);
-        args->bind(args, "int", "testInt", &testInt);
-        char *type = args->getType(args, "testInt");
-        args->print(args, "testInt");
+        args_bind(args, "int", "testInt", &testInt);
+        char *type = args_getType(args, "testInt");
+        args_print(args, "testInt");
         if (isShow)
         {
             printf("arg bind type: %s\r\n", type);
-            printf("arg bind print: %s\r\n", args->print(args, "testInt"));
+            printf("arg bind print: %s\r\n", args_print(args, "testInt"));
         }
-        if (!mimiStrEqu("124", args->print(args, "testInt")))
+        if (!mimiStrEqu("124", args_print(args, "testInt")))
         {
             err = 21;
             goto exit;
         }
-        args->deinit(args);
+        args_deinit(args);
     }
     {
         Args *args = New_args(NULL);
-        args->setFloat(args, "testfloat", 1.42);
+        args_setFloat(args, "testfloat", 1.42);
         if (isShow)
         {
-            printf("test arg print for float:%s\r\n", args->print(args, "testfloat"));
+            printf("test arg print for float:%s\r\n", args_print(args, "testfloat"));
         }
-        if (!mimiStrEqu("1.420000", args->print(args, "testfloat")))
+        if (!mimiStrEqu("1.420000", args_print(args, "testfloat")))
         {
             err = 22;
             goto exit;
         }
-        args->deinit(args);
+        args_deinit(args);
     }
     {
         Args *args = New_args(NULL);
         float floatBindTest = 2.314;
-        args->bind(args, "float", "floatBind", &floatBindTest);
+        args_bind(args, "float", "floatBind", &floatBindTest);
         if (isShow)
         {
-            printf("test float bind: %s\r\n", args->print(args, "floatBind"));
+            printf("test float bind: %s\r\n", args_print(args, "floatBind"));
         }
-        if (!mimiStrEqu("2.314000", args->print(args, "floatBind")))
+        if (!mimiStrEqu("2.314000", args_print(args, "floatBind")))
         {
             err = 24;
             goto exit;
         }
-        args->deinit(args);
+        args_deinit(args);
     }
     {
         Args *args = New_args(NULL);
-        args->setStr(args, "testString", "test string print");
+        args_setStr(args, "testString", "test string print");
         if (isShow)
         {
-            printf("test string bind: %s\r\n", args->print(args, "testString"));
+            printf("test string bind: %s\r\n", args_print(args, "testString"));
         }
-        if (!mimiStrEqu("test string print", args->print(args, "testString")))
+        if (!mimiStrEqu("test string print", args_print(args, "testString")))
         {
             err = 25;
             goto exit;
         }
-        args->deinit(args);
+        args_deinit(args);
     }
     {
         Args *args = New_args(NULL);
         char strBindTest[] = "test string bind";
-        args->bindStr(args, "testStringBind", (char **)&strBindTest);
+        args_bindStr(args, "testStringBind", (char **)&strBindTest);
         if (isShow)
         {
-            printf("test string bind: %s\r\n", args->print(args, "testStringBind"));
+            printf("test string bind: %s\r\n", args_print(args, "testStringBind"));
         }
-        if (!mimiStrEqu("test string bind", args->print(args, "testStringBind")))
+        if (!mimiStrEqu("test string bind", args_print(args, "testStringBind")))
         {
             err = 26;
             goto exit;
         }
-        args->deinit(args);
+        args_deinit(args);
     }
     {
         Args *args = New_args(NULL);
-        args->setInt(args, "testInt", 1);
-        char *printOutBefore = args->print(args, "testInt");
+        args_setInt(args, "testInt", 1);
+        char *printOutBefore = args_print(args, "testInt");
         if (isShow)
         {
             printf("test set int before: %s\r\n", printOutBefore);
@@ -192,8 +192,8 @@ int TEST_args2(int isShow)
         {
             return 14;
         }
-        args->set(args, "testInt", "4");
-        char *printOutAfter = args->print(args, "testInt");
+        args_set(args, "testInt", "4");
+        char *printOutAfter = args_print(args, "testInt");
         if (isShow)
         {
             printf("test set int after: %s\r\n", printOutAfter);
@@ -202,13 +202,13 @@ int TEST_args2(int isShow)
         {
             return 55;
         }
-        args->deinit(args);
+        args_deinit(args);
     }
     {
         Args *args = New_args(NULL);
         char testStrBind[256] = "testtest";
-        args->bindStr(args, "testStr", (char **)&testStrBind);
-        char *printOutBefore = args->print(args, "testStr");
+        args_bindStr(args, "testStr", (char **)&testStrBind);
+        char *printOutBefore = args_print(args, "testStr");
         if (isShow)
         {
             printf("test set bind str before: %s\r\n", printOutBefore);
@@ -217,8 +217,8 @@ int TEST_args2(int isShow)
         {
             return 15;
         }
-        args->set(args, "testStr", "ttww");
-        char *printOutAfter = args->print(args, "testStr");
+        args_set(args, "testStr", "ttww");
+        char *printOutAfter = args_print(args, "testStr");
         if (isShow)
         {
             printf("test set bind str after: %s\r\n", printOutAfter);
@@ -227,26 +227,26 @@ int TEST_args2(int isShow)
         {
             return 56;
         }
-        args->deinit(args);
+        args_deinit(args);
     }
     {
         Args *args = New_args(NULL);
-        args->setInt(args, "test", 13);
-        args->setInt(args, "kw", 25);
+        args_setInt(args, "test", 13);
+        args_setInt(args, "kw", 25);
         if (isShow)
         {
             printf("before remove arg\r\n");
-            printf("the size of args is %d\r\n", args->getSize(args));
-            printf("the val of arg test is %d\r\n", (int)args->getInt(args, "test"));
+            printf("the size of args is %d\r\n", args_getSize(args));
+            printf("the val of arg test is %d\r\n", (int)args_getInt(args, "test"));
         }
-        args->removeArg(args, "test");
+        args_removeArg(args, "test");
         if (isShow)
         {
             printf("before remove arg\r\n");
-            printf("the size of args is %d\r\n", args->getSize(args));
-            printf("the val of arg test is %d\r\n", (int)args->getInt(args, "test"));
+            printf("the size of args is %d\r\n", args_getSize(args));
+            printf("the val of arg test is %d\r\n", (int)args_getInt(args, "test"));
         }
-        args->deinit(args);
+        args_deinit(args);
     }
 
     goto exit;

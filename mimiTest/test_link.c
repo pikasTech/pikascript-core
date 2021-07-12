@@ -13,13 +13,13 @@ int TEST_link2(int isShow)
 
         data1->a = 2;
         data1->b = 5;
-        link->addNode(link, data1, (void *)data1->deinit);
+        link_addNode(link, data1, (void *)data1->deinit);
         data2->a = 4;
         data2->b = 21;
-        link->addNode(link, data2, (void *)data2->deinit);
+        link_addNode(link, data2, (void *)data2->deinit);
 
-        dataTest_t *data1InLink = link->getNode(link, 0)->contant;
-        dataTest_t *data2InLink = link->getNode(link, 1)->contant;
+        dataTest_t *data1InLink = link_getNode(link, 0)->contant;
+        dataTest_t *data2InLink = link_getNode(link, 1)->contant;
 
         if (isShow)
         {
@@ -27,7 +27,7 @@ int TEST_link2(int isShow)
             printf("the b of data1 in link is:%d\r\n", data1InLink->b);
             printf("the a of data2 in link is:%d\r\n", data2InLink->a);
             printf("the b of data2 in link is:%d\r\n", data2InLink->b);
-            printf("the size of link is: %d\r\n", link->getSize(link));
+            printf("the size of link is: %d\r\n", link_getSize(link));
         }
 
         if (2 != data1InLink->a)
@@ -54,7 +54,7 @@ int TEST_link2(int isShow)
             goto exit;
         }
 
-        if (2 != link->getSize(link))
+        if (2 != link_getSize(link))
         {
             err = 5;
             goto exit;
@@ -62,15 +62,15 @@ int TEST_link2(int isShow)
 
         if (isShow)
         {
-            printf("the size before remove node:%d\r\n", link->getSize(link));
+            printf("the size before remove node:%d\r\n", link_getSize(link));
         }
-        link->removeNode(link, data1InLink);
+        link_removeNode(link, data1InLink);
         if (isShow)
         {
-            printf("the size after remove node:%d\r\n", link->getSize(link));
+            printf("the size after remove node:%d\r\n", link_getSize(link));
         }
 
-        link->deinit(link);
+        link_deinit(link);
     }
 
 exit:

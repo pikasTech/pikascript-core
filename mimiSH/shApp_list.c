@@ -18,7 +18,7 @@ static int listEachProcessArg(Arg *argEach, Args *handleArgs)
         return 1;
     }
     char strBuff[256] = {0};
-    char *stringOut = handleArgs->getStr(handleArgs, "stringOut");
+    char *stringOut = args_getStr(handleArgs, "stringOut");
     if (NULL == stringOut)
     {
         // stringOut no found
@@ -27,7 +27,7 @@ static int listEachProcessArg(Arg *argEach, Args *handleArgs)
     memcpy(strBuff, stringOut, 256);
     strAppend(strBuff, argEach->nameDynMem->addr);
     strAppend(strBuff, " ");
-    handleArgs->setStr(handleArgs, "stringOut", strBuff);
+    args_setStr(handleArgs, "stringOut", strBuff);
     return 0;
 }
 
@@ -54,11 +54,11 @@ void *app_list(Shell *shell, int argc, char **argv)
     }
 
     Args *handleArgs = New_args(NULL);
-    handleArgs->setStr(handleArgs, "stringOut", "");
+    args_setStr(handleArgs, "stringOut", "");
     Args *processArgs = processNow->attributeList;
-    processArgs->foreach (processArgs, listEachProcessArg, handleArgs);
-    memcpy(memOut->addr, handleArgs->getStr(handleArgs, "stringOut"), 256);
-    handleArgs->deinit(handleArgs);
+    args_foreach (processArgs, listEachProcessArg, handleArgs);
+    memcpy(memOut->addr, args_getStr(handleArgs, "stringOut"), 256);
+    args_deinit(handleArgs);
     strAppend(memOut->addr, "\r\n");
     return (void *)memOut;
 }

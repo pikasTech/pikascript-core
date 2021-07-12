@@ -10,19 +10,18 @@ struct Class_link
     DMEM *mem;
     LinkNode *firstNode;
     long long TopId;
-
-    /* operation */
-    void (*deinit)(Link *self);
-    void (*init)(Link *self, void *args);
-
-    void (*addNode)(Link *self, void *contant, void (*_contantDinit)(void *contant));
-    void (*removeNode)(Link *self, void *contant);
-    LinkNode *(*getNode)(Link *self, long long id);
-    int (*getSize)(Link *self);
+ 
     /* virtual operation */
 
     /* object */
 };
+
+void link_deinit(Link *self);
+void link_init(Link *self, void *args);
+void link_addNode(Link *self, void *contant, void (*_contantDinit)(void *contant));
+void link_removeNode(Link *self, void *contant);
+LinkNode *link_getNode(Link *self, long long id);
+int link_getSize(Link *self);
 
 Link *New_link(void *args);
 #endif

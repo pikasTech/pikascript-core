@@ -23,14 +23,14 @@ static int dinitEachSubObj(Arg *argEach, Args *handleArgs)
 static void dinitAllSubObj(MimiObj *self)
 {
     Args *args = self->attributeList;
-    args->foreach (args, dinitEachSubObj, NULL);
+    args_foreach (args, dinitEachSubObj, NULL);
 }
 
 static void deinit(MimiObj *self)
 {
     self->_beforDinit(self);
     dinitAllSubObj(self);
-    self->attributeList->deinit(self->attributeList);
+    args_deinit(self->attributeList);
     DynMemPut(self->mem);
 }
 
@@ -63,7 +63,7 @@ static void setInt64(MimiObj *self, char *argDir, long long val)
     MimiObj *obj = self->getObj(self, argDir, 1);
     char name[64] = {0};
     getLastToken(name, argDir, '.');
-    obj->attributeList->setInt(obj->attributeList,
+    args_setInt(obj->attributeList,
                                name, val);
 }
 
@@ -72,7 +72,7 @@ static void setPointer(MimiObj *self, char *argDir, void *pointer)
     MimiObj *obj = self->getObj(self, argDir, 1);
     char name[64] = {0};
     getLastToken(name, argDir, '.');
-    obj->attributeList->setPtr(obj->attributeList,
+    args_setPtr(obj->attributeList,
                                name, pointer);
 }
 
@@ -81,7 +81,7 @@ static void setFloat(MimiObj *self, char *argDir, float value)
     MimiObj *obj = self->getObj(self, argDir, 1);
     char name[64] = {0};
     getLastToken(name, argDir, '.');
-    obj->attributeList->setFloat(obj->attributeList,
+    args_setFloat(obj->attributeList,
                                  name, value);
 }
 
@@ -90,7 +90,7 @@ static void setStr(MimiObj *self, char *argDir, char *str)
     MimiObj *obj = self->getObj(self, argDir, 1);
     char name[64] = {0};
     getLastToken(name, argDir, '.');
-    obj->attributeList->setStr(obj->attributeList,
+    args_setStr(obj->attributeList,
                                name, str);
 }
 
@@ -99,7 +99,7 @@ static long long getInt64(MimiObj *self, char *argDir)
     MimiObj *obj = self->getObj(self, argDir, 1);
     char argName[64] = {0};
     getLastToken(argName, argDir, '.');
-    return obj->attributeList->getInt(obj->attributeList,
+    return args_getInt(obj->attributeList,
                                       argName);
 }
 
@@ -108,7 +108,7 @@ static void *getPointer(MimiObj *self, char *argDir)
     MimiObj *obj = self->getObj(self, argDir, 1);
     char argName[64] = {0};
     getLastToken(argName, argDir, '.');
-    return obj->attributeList->getPtr(obj->attributeList,
+    return args_getPtr(obj->attributeList,
                                       argName);
 }
 
@@ -117,7 +117,7 @@ static float getFloat(MimiObj *self, char *argDir)
     MimiObj *obj = self->getObj(self, argDir, 1);
     char argName[64] = {0};
     getLastToken(argName, argDir, '.');
-    return obj->attributeList->getFloat(obj->attributeList,
+    return args_getFloat(obj->attributeList,
                                         argName);
 }
 
@@ -126,13 +126,13 @@ char *getStr(MimiObj *self, char *argDir)
     MimiObj *obj = self->getObj(self, argDir, 1);
     char argName[64] = {0};
     getLastToken(argName, argDir, '.');
-    return obj->attributeList->getStr(obj->attributeList,
+    return args_getStr(obj->attributeList,
                                       argName);
 }
 
 static void load(MimiObj *self, Args *args, char *name)
 {
-    args->copyArg(args, name, self->attributeList);
+    args_copyArg(args, name, self->attributeList);
 }
 
 static void _beforDinit(MimiObj *self)
@@ -153,11 +153,11 @@ static void setObj(MimiObj *self, char *subProcessName, void *newFun)
 static void addOther(MimiObj *self, char *subObjectName, void *new_ObjectFun)
 {
     Args *initArgs = New_args(NULL);
-    initArgs->setPtr(initArgs, "context", self);
+    args_setPtr(initArgs, "context", self);
     void *(*new_Object)(Args * initArgs) = (void *(*)(Args *))new_ObjectFun;
     void *subObject = new_Object(initArgs);
     self->setPtr(self, subObjectName, subObject);
-    initArgs->deinit(initArgs);
+    args_deinit(initArgs);
 }
 
 static void freeObj(MimiObj *self, char *subProcessName)
@@ -168,27 +168,27 @@ static void freeObj(MimiObj *self, char *subProcessName)
 
 static void bind(MimiObj *self, char *type, char *name, void *pointer)
 {
-    self->attributeList->bind(self->attributeList, type, name, pointer);
+    args_bind(self->attributeList, type, name, pointer);
 }
 
 static char *print(MimiObj *self, char *name)
 {
-    return self->attributeList->print(self->attributeList, name);
+    return args_print(self->attributeList, name);
 }
 
 static void bindInt(MimiObj *self, char *name, int *valPtr)
 {
-    self->attributeList->bindInt(self->attributeList, name, valPtr);
+    args_bindInt(self->attributeList, name, valPtr);
 }
 
 static void bindFloat(MimiObj *self, char *name, float *valPtr)
 {
-    self->attributeList->bindFloat(self->attributeList, name, valPtr);
+    args_bindFloat(self->attributeList, name, valPtr);
 }
 
 static void bindString(MimiObj *self, char *name, char **valPtr)
 {
-    self->attributeList->bindStr(self->attributeList, name, valPtr);
+    args_bindStr(self->attributeList, name, valPtr);
 }
 
 static int set(MimiObj *self, char *argDir, char *valStr)
@@ -196,7 +196,7 @@ static int set(MimiObj *self, char *argDir, char *valStr)
     MimiObj *obj = self->getObj(self, argDir, 1);
     char argName[64] = {0};
     getLastToken(argName, argDir, '.');
-    return obj->attributeList->set(obj->attributeList, argName, valStr);
+    return args_set(obj->attributeList, argName, valStr);
 }
 
 static MimiObj *initObj(MimiObj *self, char *name)
@@ -205,7 +205,7 @@ static MimiObj *initObj(MimiObj *self, char *name)
     char initFunName[64] = {0};
     strAppend(initFunName, prifix);
     strAppend(initFunName, name);
-    if (!self->attributeList->isArgExist(self->attributeList,
+    if (!args_isArgExist(self->attributeList,
                                          initFunName))
     {
         /* no init fun, could not found subprocess */
@@ -214,13 +214,13 @@ static MimiObj *initObj(MimiObj *self, char *name)
     /* init the subprocess */
     Args *attributeList = self->attributeList;
     Args *initArgs = New_args(NULL);
-    initArgs->setPtr(initArgs, "context", self);
-    initArgs->setStr(initArgs, "name", name);
-    void *(*newObjFun)(Args * initArgs) = (void *(*)(Args * initArgs)) self->attributeList->getPtr(self->attributeList,
+    args_setPtr(initArgs, "context", self);
+    args_setStr(initArgs, "name", name);
+    void *(*newObjFun)(Args * initArgs) = (void *(*)(Args * initArgs)) args_getPtr(self->attributeList,
                                                                                                    initFunName);
     MimiObj *newObj = newObjFun(initArgs);
-    attributeList->setPtrWithType(attributeList, name, "process", newObj);
-    initArgs->deinit(initArgs);
+    args_setPtrWithType(attributeList, name, "process", newObj);
+    args_deinit(initArgs);
     return self->getPtr(self,
                         name);
 }
@@ -228,7 +228,7 @@ static MimiObj *initObj(MimiObj *self, char *name)
 static MimiObj *getDirectObj(MimiObj *self, char *name)
 {
     /* check subprocess */
-    if (!self->attributeList->isArgExist(self->attributeList,
+    if (!args_isArgExist(self->attributeList,
                                          name))
     {
         /* no inited subprocess, check subprocess init fun*/
@@ -236,7 +236,7 @@ static MimiObj *getDirectObj(MimiObj *self, char *name)
     }
 
     /* finded subscribe, check type*/
-    char *type = self->attributeList->getType(self->attributeList,
+    char *type = args_getType(self->attributeList,
                                               name);
     if (!mimiStrEqu("_class-process", type))
     {
@@ -350,48 +350,48 @@ Args *getArgsBySentence(MimiObj *self, char *typeList, char *argList)
                 if (NULL != directStr)
                 {
                     /* direct value */
-                    args->setStr(args, defineName, directStr);
+                    args_setStr(args, defineName, directStr);
                     continue;
                 }
                 /* reference value */
-                args->setStr(args, defineName, self->getStr(self, argContant));
+                args_setStr(args, defineName, self->getStr(self, argContant));
                 continue;
             }
             if (mimiStrEqu(defineType, "int"))
             {
                 /* solve the int type */
-                args->setInt(args, defineName, 0);
+                args_setInt(args, defineName, 0);
                 if ((argContant[0] >= '0') && (argContant[0] <= '9'))
                 {
                     /* direct value */
-                    args->set(args, defineName, argContant);
+                    args_set(args, defineName, argContant);
                     continue;
                 }
                 /* reference value */
                 int referenceVal = self->getInt(self, argContant);
-                args->setInt(args, defineName, referenceVal);
+                args_setInt(args, defineName, referenceVal);
                 continue;
             }
             if (mimiStrEqu(defineType, "float"))
             {
                 /* solve the float type */
-                args->setFloat(args, defineName, 0);
+                args_setFloat(args, defineName, 0);
                 if ((argContant[0] >= '0') && (argContant[0] <= '9'))
                 {
                     /* direct value */
-                    args->set(args, defineName, argContant);
+                    args_set(args, defineName, argContant);
                     continue;
                 }
                 /* reference value */
                 float referenceVal = self->getFloat(self, argContant);
-                args->setFloat(args, defineName, referenceVal);
+                args_setFloat(args, defineName, referenceVal);
                 continue;
             }
             if (mimiStrEqu(defineType, "pointer"))
             {
                 /* only support reference value */
                 void *ptr = self->getPtr(self, argContant);
-                args->setPtr(args, defineName, ptr);
+                args_setPtr(args, defineName, ptr);
                 continue;
             }
 
@@ -438,17 +438,17 @@ static void run(MimiObj *self, char *cmd)
     methodFun(methodHost, args);
     if (mimiStrEqu("int", returnType))
     {
-        self->setInt(self, returnName, args->getInt(args, "return"));
+        self->setInt(self, returnName, args_getInt(args, "return"));
     }
     if (mimiStrEqu("float", returnType))
     {
-        self->setFloat(self, returnName, args->getFloat(args, "return"));
+        self->setFloat(self, returnName, args_getFloat(args, "return"));
     }
     if (mimiStrEqu("string", returnType))
     {
-        self->setStr(self, returnName, args->getStr(args, "return"));
+        self->setStr(self, returnName, args_getStr(args, "return"));
     }
-    args->deinit(args);
+    args_deinit(args);
 }
 
 static void init(MimiObj *self, Args *args)

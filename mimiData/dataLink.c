@@ -2,7 +2,7 @@
 #include "dataLinkNode.h"
 #include "dataMemory.h"
 
-static void deinit(Link *self)
+void link_deinit(Link *self)
 {
     DynMemPut(self->mem);
     LinkNode *nowNode = self->firstNode;
@@ -13,7 +13,7 @@ static void deinit(Link *self)
     }
 }
 
-static void addNode(Link *self, void *contant, void (*_contantDinit)(void *contant))
+void link_addNode(Link *self, void *contant, void (*_contantDinit)(void *contant))
 {
     LinkNode *NewNode = New_linkNode(NULL);
     NewNode->contant = contant;
@@ -35,7 +35,7 @@ static void addNode(Link *self, void *contant, void (*_contantDinit)(void *conta
     self->firstNode->nextNode = secondNode;
 }
 
-static void removeNode(Link *self, void *contant)
+void link_removeNode(Link *self, void *contant)
 {
     LinkNode *nodeToDelete = NULL;
     LinkNode *nodeNow = self->firstNode;
@@ -76,7 +76,7 @@ static void removeNode(Link *self, void *contant)
     return;
 }
 
-static int getSize(Link *self)
+int link_getSize(Link *self)
 {
     LinkNode *NowNode;
     int size = 0;
@@ -89,7 +89,7 @@ static int getSize(Link *self)
     return size;
 }
 
-static LinkNode *getNode(Link *self, long long id)
+LinkNode *link_getNode(Link *self, long long id)
 {
     LinkNode *nodeNow = self->firstNode;
     while (1)
@@ -106,19 +106,11 @@ static LinkNode *getNode(Link *self, long long id)
     }
 }
 
-static void init(Link *self, void *args)
+void link_init(Link *self, void *args)
 {
     /* attrivute */
     self->firstNode = NULL;
     self->TopId = 0;
-
-    /* operation */
-    self->deinit = deinit;
-    self->getSize = getSize;
-
-    self->addNode = addNode;
-    self->getNode = getNode;
-    self->removeNode = removeNode;
 
     /* object */
 
@@ -130,7 +122,6 @@ Link *New_link(void *args)
     DMEM *mem = DynMemGet(sizeof(Link));
     Link *self = mem->addr;
     self->mem = mem;
-    self->init = init;
-    self->init(self, args);
+    link_init(self, args);
     return self;
 }

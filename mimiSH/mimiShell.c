@@ -103,9 +103,9 @@ static void *shellLuancher(Shell *self,
 
 static int luanchShellWhenNameMatch(Arg *argNow, Args *argsHandle)
 {
-	char *cmd = argsHandle->getStr(argsHandle,
+	char *cmd = args_getStr(argsHandle,
 								   "cmd");
-	Shell *shell = argsHandle->getPtr(argsHandle,
+	Shell *shell = args_getPtr(argsHandle,
 									  "shell");
 
 	char *name = argNow->nameDynMem->addr;
@@ -113,13 +113,13 @@ static int luanchShellWhenNameMatch(Arg *argNow, Args *argsHandle)
 	getFirstToken(arg0, cmd, ' ');
 	if (mimiStrEqu(arg0, name))
 	{
-		argsHandle->setPtr(argsHandle,
+		args_setPtr(argsHandle,
 						   "shellOut",
 						   shell->detector(shell,
 										   shellLuancher,
 										   cmd,
 										   arg_getPtr(argNow)));
-		argsHandle->setStr(argsHandle,
+		args_setStr(argsHandle,
 						   "succeed", "succeed");
 	}
 	return 0;
@@ -128,18 +128,18 @@ static int luanchShellWhenNameMatch(Arg *argNow, Args *argsHandle)
 static void *Shell_cmd(Shell *self, char *cmd)
 {
 	Args *argsHandle = New_args(NULL);
-	argsHandle->setStr(argsHandle,
+	args_setStr(argsHandle,
 					   "cmd", cmd);
-	argsHandle->setPtr(argsHandle,
+	args_setPtr(argsHandle,
 					   "shell", self);
 	void *shellOut = NULL;
-	self->mapList->foreach (self->mapList,
+	args_foreach (self->mapList,
 							luanchShellWhenNameMatch, argsHandle);
-	if (argsHandle->isArgExist(argsHandle,
+	if (args_isArgExist(argsHandle,
 							   "succeed"))
 	{
 		// ok
-		shellOut = argsHandle->getPtr(argsHandle,
+		shellOut = args_getPtr(argsHandle,
 									  "shellOut");
 		goto exit;
 	}
@@ -149,7 +149,7 @@ static void *Shell_cmd(Shell *self, char *cmd)
 	goto exit;
 
 exit:
-	argsHandle->deinit(argsHandle);
+	args_deinit(argsHandle);
 	return shellOut;
 }
 
@@ -159,7 +159,7 @@ static void Shell_addMap(Shell *self,
 									  int argc,
 									  char **argv))
 {
-	self->mapList->setPtr(self->mapList,
+	args_setPtr(self->mapList,
 						  name, fun);
 }
 
@@ -167,7 +167,7 @@ static int Shell_listMap(Shell *self, int isShow)
 {
 	// cmdMap_t *cmdMap;
 	int size;
-	size = self->mapList->getSize(self->mapList);
+	size = args_getSize(self->mapList);
 
 	if (isShow)
 	{
@@ -203,7 +203,7 @@ static int Shell_test(Shell *self, int isShow)
 
 static void deinit(Shell *self)
 {
-	self->mapList->deinit(self->mapList);
+	args_deinit(self->mapList);
 	DynMemPut(self->mem);
 }
 

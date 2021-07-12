@@ -7,7 +7,7 @@
 
 static void publish(MimiObj *self, Args *args)
 {
-    char *argDir = args->getStr(args, "argDir");
+    char *argDir = args_getStr(args, "argDir");
 
     MimiObj *publisher = self->getObj(self, argDir, 1);
     char *folloedArgName = publisher->getStr(publisher, "fansList.fansInfo.followedArgName");
@@ -24,8 +24,8 @@ static void publish(MimiObj *self, Args *args)
 
 static void follow(MimiObj *self, Args *args)
 {
-    char *argDir = args->getStr(args, "argDir");
-    void *handle = args->getPtr(args, "handle");
+    char *argDir = args_getStr(args, "argDir");
+    void *handle = args_getPtr(args, "handle");
 
     MimiObj *publisher = self->getObj(self, argDir, 1);
     MimiObj *fansInfo = publisher->getObj(publisher, "fansList.fansInfo", 0);

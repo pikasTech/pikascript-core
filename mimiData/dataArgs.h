@@ -12,54 +12,54 @@ struct Class_Arglist
     void *context;
     Link *argLinkList;
 
-    /* operation */
-    void (*deinit)(Args *self);
-    void (*init)(Args *self, Args *args);
-    int (*getSize)(Args *self);
-
-    Arg *(*getArgByIndex)(Args *self, int index);
-    Arg *(*getArg)(Args *self, char *name);
-    void (*removeArg)(Args *self, char *name);
-
-    int (*setArg)(Args *self, Arg *arg);
-
-    int (*copyArg)(Args *self, char *name, Args *directList);
-    char *(*getType)(Args *self, char *name);
-    int (*isArgExist)(Args *self, char *name);
-
-    int (*setStr)(Args *self, char *name, char *strIn);
-    int (*setStrWithDefaultName)(Args *self, char *strIn);
-    char *(*getStr)(Args *self, char *name);
-    char *(*getStrByIndex)(Args *self, int index);
-
-    int (*setFloatWithDefaultName)(Args *self, float argFloat);
-    int (*setFloat)(Args *self, char *name, float argFloat);
-    float (*getFloatByIndex)(Args *self, int index);
-    float (*getFloat)(Args *self, char *name);
-
-    int (*setPtr)(Args *self, char *name, void *argPointer);
-    void *(*getPtr)(Args *self, char *name);
-    void *(*getPointerByIndex)(Args *self, int index);
-
-    int (*setInt)(Args *self, char *name, long long int64In);
-    long long (*getInt)(Args *self, char *name);
-    long long (*getIntByIndex)(Args *self, int index);
-
-    void (*bindInt)(Args *self, char *name, int *intPtr);
-    void (*bindFloat)(Args *self, char *name, float *floatPtr);
-    void (*bindStr)(Args *self, char *name, char **stringPtr);
-    /* arg general opeartion */
-    void (*bind)(Args *self, char *type, char *name, void *pointer);
-    char *(*print)(Args *self, char *name);
-
-    int (*set)(Args *self, char *name, char *valueStr);
-    int (*setPtrWithType)(Args *self, char *objectName, char *className, void *objectPtr);
-    int (*foreach)(Args *self, int (*eachHandle)(Arg *argEach, Args *handleArgs), Args *handleArgs);
-
     /* virtual operation */
 
     /* object */
 };
+
+/* operation */
+void args_deinit(Args *self);
+void args_init(Args *self, Args *args);
+int args_getSize(Args *self);
+
+Arg *args_getArgByIndex(Args *self, int index);
+Arg *args_getArg(Args *self, char *name);
+void args_removeArg(Args *self, char *name);
+
+int args_setArg(Args *self, Arg *arg);
+
+int args_copyArg(Args *self, char *name, Args *directList);
+char *args_getType(Args *self, char *name);
+int args_isArgExist(Args *self, char *name);
+
+int args_setStr(Args *self, char *name, char *strIn);
+int args_setStrWithDefaultName(Args *self, char *strIn);
+char *args_getStr(Args *self, char *name);
+char *args_getStrByIndex(Args *self, int index);
+
+int args_setFloatWithDefaultName(Args *self, float argFloat);
+int args_setFloat(Args *self, char *name, float argFloat);
+float args_getFloatByIndex(Args *self, int index);
+float args_getFloat(Args *self, char *name);
+
+int args_setPtr(Args *self, char *name, void *argPointer);
+void *args_getPtr(Args *self, char *name);
+void *args_getPointerByIndex(Args *self, int index);
+
+int args_setInt(Args *self, char *name, long long int64In);
+long long args_getInt(Args *self, char *name);
+long long args_getIntByIndex(Args *self, int index);
+
+void args_bindInt(Args *self, char *name, int *intPtr);
+void args_bindFloat(Args *self, char *name, float *floatPtr);
+void args_bindStr(Args *self, char *name, char **stringPtr);
+/* arg general opeartion */
+void args_bind(Args *self, char *type, char *name, void *pointer);
+char *args_print(Args *self, char *name);
+
+int args_set(Args *self, char *name, char *valueStr);
+int args_setPtrWithType(Args *self, char *objectName, char *className, void *objectPtr);
+int args_foreach (Args *self, int (*eachHandle)(Arg *argEach, Args *handleArgs), Args * handleArgs);
 
 Args *New_args(Args *args);
 #endif

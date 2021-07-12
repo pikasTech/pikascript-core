@@ -11,7 +11,7 @@ int TEST_mimiCom(int isShow)
     com->getChar(com, '\r');
     com->getChar(com, '\n');
 
-    char *RxSingleLine = com->args->getStr(com->args, "RxSingleLine");
+    char *RxSingleLine = args_getStr(com->args, "RxSingleLine");
     if (isShow)
     {
         printf("Single Line is: %s\r\n", RxSingleLine);

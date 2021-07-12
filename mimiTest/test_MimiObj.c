@@ -4,24 +4,24 @@
 
 void testFloat(MimiObj *obj, Args *args)
 {
-    float val1 = args->getFloat(args, "val1");
-    float val2 = args->getFloat(args, "val2");
-    int isShow = args->getInt(args, "isShow");
+    float val1 = args_getFloat(args, "val1");
+    float val2 = args_getFloat(args, "val2");
+    int isShow = args_getInt(args, "isShow");
     if (isShow)
     {
         printf("the float val1 is: %f\r\n", val1);
         printf("the float val2 is: %f\r\n", val2);
     }
-    args->setFloat(args, "return", val1 + val2);
+    args_setFloat(args, "return", val1 + val2);
 }
 
 void hello2(MimiObj *obj, Args *args)
 {
-    char *name1 = args->getStr(args, "name1");
-    char *name2 = args->getStr(args, "name2");
-    char *name3 = args->getStr(args, "name3");
+    char *name1 = args_getStr(args, "name1");
+    char *name2 = args_getStr(args, "name2");
+    char *name3 = args_getStr(args, "name3");
     char *myName = obj->name;
-    int isShow = args->getInt(args, "isShow");
+    int isShow = args_getInt(args, "isShow");
     if (isShow)
     {
         printf("hello, %s, %s and %s!\r\n", name1, name2, name3);
@@ -31,8 +31,8 @@ void hello2(MimiObj *obj, Args *args)
 
 void hello(MimiObj *obj, Args *args)
 {
-    char *name = args->getStr(args, "name");
-    int isShow = args->getInt(args, "isShow");
+    char *name = args_getStr(args, "name");
+    int isShow = args_getInt(args, "isShow");
     if (isShow)
     {
         printf("hello, %s!\r\n", name);
@@ -41,22 +41,22 @@ void hello(MimiObj *obj, Args *args)
 
 void add(MimiObj *obj, Args *args)
 {
-    int val1 = args->getInt(args, "val1");
-    int val2 = args->getInt(args, "val2");
-    args->setInt(args, "return", val1 + val2);
+    int val1 = args_getInt(args, "val1");
+    int val2 = args_getInt(args, "val2");
+    args_setInt(args, "return", val1 + val2);
 }
 
 int TEST_MimiObj(int isShow)
 {
     {
         Args *args = New_args(NULL);
-        args->setInt(args, "isEnable", 0);
+        args_setInt(args, "isEnable", 0);
         MimiObj *process = New_MimiObj(args);
         if (isShow)
         {
-            printf("the isEnable = %d\r\n", (int)process->attributeList->getInt(process->attributeList, "isEnable"));
+            printf("the isEnable = %d\r\n", (int)args_getInt(process->attributeList, "isEnable"));
         }
-        args->deinit(args);
+        args_deinit(args);
         process->deinit(process);
     }
     {
