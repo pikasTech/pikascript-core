@@ -354,6 +354,7 @@ Args *getArgsBySentence(MimiObj *self, char *typeList, char *argList)
 
             if (0 == arg[0])
             {
+                /* arg poped finised */
                 break;
             }
 
@@ -365,18 +366,31 @@ Args *getArgsBySentence(MimiObj *self, char *typeList, char *argList)
 
             if (mimiStrEqu(defineType, "string"))
             {
+                /* solve the string type */
                 char *directStr = strCut(buff[iBuff++], argContant, '"', '"');
                 if (NULL != directStr)
                 {
+                    /* direct value */
                     args->setStr(args, defineName, directStr);
                     continue;
                 }
+                /* reference value */
                 args->setStr(args, defineName, self->getStr(self, argContant));
+                continue;
             }
             if (mimiStrEqu(defineType, "int"))
             {
+                /* solve the int type */
                 args->setInt(args, defineName, 0);
-                args->set(args, defineName, argContant);
+                if ((argContant[0] >= '0') && (argContant[0] <= '9'))
+                {
+                    /* direct value */
+                    args->set(args, defineName, argContant);
+                    continue;
+                }
+                /* reference value */
+                int referenceVal = self->getInt(self, argContant);
+                args->setInt(args, defineName, referenceVal);
                 continue;
             }
         }

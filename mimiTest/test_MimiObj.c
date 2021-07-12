@@ -56,37 +56,41 @@ int TEST_MimiObj(int isShow)
     {
         MimiObj *obj = New_MimiObj(NULL);
         obj->setMethod(obj, "hello(name: string, isShow: int)", hello);
-        obj->run(obj, "hello(name = \"world\", isShow = 1)");
+        obj->setInt(obj, "isShow", isShow);
+        obj->run(obj, "hello(name = \"world\", isShow = isShow)");
         obj->deinit(obj);
     }
     {
         MimiObj *obj = New_MimiObj(NULL);
         obj->setMethod(obj, "hello2(name1: string, name2: string, name3: string, isShow: int)", hello2);
+        obj->setInt(obj, "isShow", isShow);
         obj->run(obj, "hello2(name2 = \"tom\", \
                               name1 = \"john\", \
                               name3 = \"cat\", \
-                              isShow = 1) ");
+                              isShow = isShow) ");
         obj->deinit(obj);
     }
     {
         MimiObj *obj = New_MimiObj(NULL);
         obj->setObj(obj, "hello", New_MimiObj);
         obj->setMethod(obj, "hello.hello2(name1: string, name2: string, name3: string, isShow: int)", hello2);
+        obj->setInt(obj, "isShow", isShow);
         obj->run(obj, "hello.hello2(name2 = \"tom\", \
                                     name1 = \"john\", \
                                     name3 = \"cat\", \
-                                    isShow = 1) ");
+                                    isShow = isShow) ");
         obj->deinit(obj);
     }
     {
         MimiObj *obj = New_MimiObj(NULL);
         obj->setObj(obj, "hello", New_MimiObj);
         obj->setStr(obj, "name1", "john");
+        obj->setInt(obj, "isShow", isShow);
         obj->setMethod(obj, "hello.hello2(name1: string, name2: string, name3: string, isShow: int)", hello2);
         obj->run(obj, "hello.hello2(name2 = \"tom\", \
                                     name1 = name1, \
                                     name3 = \"cat\", \
-                                    isShow = 1) ");
+                                    isShow = isShow) ");
         obj->deinit(obj);
     }
 
