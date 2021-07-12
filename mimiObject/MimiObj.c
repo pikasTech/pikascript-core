@@ -330,29 +330,45 @@ static void setMethod(MimiObj *self,
 Args *getArgsBySentence(char *typeList, char *argList)
 {
     Args *args = New_args(NULL);
+    char typeListBuff[256] = {0};
+    memcpy(typeListBuff, typeList, strGetSize(typeList));
     while (1)
     {
         char buff[8][64] = {0};
-        char *type = popToken(buff[1], typeList, ',');
+        char *type = popToken(buff[1], typeListBuff, ',');
         char *defineName = getFirstToken(buff[2], type, ':');
         char *defineType = getLastToken(buff[3], type, ':');
 
-        char *arg = popToken(buff[0], argList, ',');
-        char *argName = getFirstToken(buff[4], arg, '=');
-        char *argContant = getLastToken(buff[5], arg, '=');
+        char argListBuff[256] = {0};
+        memcpy(argListBuff, argList, strGetSize(argList));
+        while (1)
+        {
 
-        if (!mimiStrEqu(defineName, argName))
-        {
-            /* name not match */
-            return NULL;
-        }
-        if (mimiStrEqu(defineType, "string"))
-        {
-            args->setStr(args, defineName, argContant);
+            char buff[8][64] = {0};
+            char *arg = popToken(buff[0], argListBuff, ',');
+            char *argName = getFirstToken(buff[4], arg, '=');
+            char *argContant = getLastToken(buff[5], arg, '=');
+
+            if (0 == arg[0])
+            {
+                break;
+            }
+
+            if (!mimiStrEqu(defineName, argName))
+            {
+                /* name not match */
+                continue;
+            }
+
+            if (mimiStrEqu(defineType, "string"))
+            {
+                args->setStr(args, defineName, argContant);
+            }
+
         }
 
         /* poped all type from typeList */
-        if(0 == typeList[0])
+        if (0 == typeListBuff[0])
         {
             break;
         }

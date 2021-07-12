@@ -159,7 +159,7 @@ char *popToken(char *strOut, char *strIn, char sign)
 	int iOut = 0;
 	int size = strGetSize(strIn);
 	int i;
-	for (int i = 0; i < size; i++)
+	for (i = 0; i < size; i++)
 	{
 		if (getSign)
 		{
