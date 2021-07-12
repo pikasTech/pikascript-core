@@ -12,8 +12,8 @@ typedef struct dataLog
    int log_size;
    void (*print)(struct dataLog *loger, char *str);
    void (*deinit)(struct dataLog *loger);
-} loger_t;
+} Loger;
 
-loger_t *dataLog_init(void);
+Loger *dataLog_init(void);
 
 #endif

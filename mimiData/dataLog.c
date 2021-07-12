@@ -1,7 +1,7 @@
 #include "dataLog.h"
 #include "dataMemory.h"
 #include "dataString.h"
-static void print(loger_t *loger, char *str)
+static void print(Loger *loger, char *str)
 {
     //get size of log
     loger->log_size += (sizeof(char) * strGetSize_unlimited(str));
@@ -22,16 +22,16 @@ static void print(loger_t *loger, char *str)
     loger->log = new_log_mem->addr;
 }
 
-static void deinit(loger_t *loger)
+static void deinit(Loger *loger)
 {
     DynMemPut(loger->mem);
     DynMemPut(loger->log_mem);
 }
 
-loger_t *dataLog_init(void)
+Loger *dataLog_init(void)
 {
-    DMEM *mem = DynMemGet(sizeof(loger_t));
-    loger_t *loger = (loger_t *)mem->addr;
+    DMEM *mem = DynMemGet(sizeof(Loger));
+    Loger *loger = (Loger *)mem->addr;
     loger->mem = mem;
     loger->log_mem = NULL;
     loger->log = NULL;

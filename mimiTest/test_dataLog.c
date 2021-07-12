@@ -4,7 +4,7 @@
 
 int TEST_datalog(int isShow)
 {
-    loger_t *loger = dataLog_init();
+    Loger *loger = dataLog_init();
     loger->print(loger, "test log \r\n");
     loger->print(loger, "test 2\r\n");
     if (isShow)

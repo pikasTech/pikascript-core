@@ -14,8 +14,6 @@ struct Class_process
     Args *attributeList;
     char *name;
 
-    ;
-
     /* virtual operation */
     void (*_beforDinit)(MimiObj *self);
     void (*_updateHandle)(MimiObj *self);
