@@ -40,8 +40,8 @@ static void follow(MimiObj *self, Args *args)
 static void init_Event(MimiObj *self, Args *args)
 {
     /* attrivute */
-    obj_setObj(self, "fansList", New_MimiObj_FansList);
-    obj_setObj(self, "mailBox", New_MimiObj_Mailbox);
+    obj_newObj(self, "fansList", New_MimiObj_FansList);
+    obj_newObj(self, "mailBox", New_MimiObj_Mailbox);
 
     /* method */
     obj_setMethod(self, "follow(argDir:string, handle:pointer)", follow);

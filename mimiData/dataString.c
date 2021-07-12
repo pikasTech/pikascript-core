@@ -145,10 +145,12 @@ char *getLastToken(char *strOut, char *strIn, char sign)
 		}
 	}
 	int buffSize = strGetSize(strOutBuff);
-	for (int i = 0; i < buffSize; i++)
+	int i = 0;
+	for (i = 0; i < buffSize; i++)
 	{
 		strOut[i] = strOutBuff[buffSize - i - 1];
 	}
+	strOut[i] = 0;
 	return strOut;
 }
 

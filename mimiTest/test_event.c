@@ -3,14 +3,13 @@
 void handle1(MimiObj *obj)
 {
     char *message = obj_getStr(obj, "publisher.message");
-    printf("%s\r\n", message);
 }
 
 int TEST_Event(int isShow)
 {
     {
         MimiObj *root = New_MimiObj_Event(NULL);
-        obj_setObj(root, "publisher", New_MimiObj_Event);
+        obj_newObj(root, "publisher", New_MimiObj_Event);
         obj_setStr(root, "publisher.message", "hello");
         obj_setPtr(root, "handle", handle1);
 

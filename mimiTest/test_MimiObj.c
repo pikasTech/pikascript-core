@@ -92,7 +92,7 @@ int TEST_MimiObj(int isShow)
     }
     {
         MimiObj *obj = New_MimiObj(NULL);
-        obj_setObj(obj, "hello", New_MimiObj);
+        obj_newObj(obj, "hello", New_MimiObj);
         obj_setMethod(obj, "hello.hello2(name1: string, name2: string, name3: string, isShow: int)", hello2);
         obj_setInt(obj, "isShow", isShow);
         obj_run(obj, "hello.hello2(name2 = \"tom\", \
@@ -103,7 +103,7 @@ int TEST_MimiObj(int isShow)
     }
     {
         MimiObj *obj = New_MimiObj(NULL);
-        obj_setObj(obj, "hello", New_MimiObj);
+        obj_newObj(obj, "hello", New_MimiObj);
         obj_setStr(obj, "name1", "john");
         obj_setInt(obj, "isShow", isShow);
         obj_setMethod(obj, "hello.hello2(name1: string, \
