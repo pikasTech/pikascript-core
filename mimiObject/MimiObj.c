@@ -199,20 +199,6 @@ static int set(MimiObj *self, char *argDir, char *valStr)
     return obj->attributeList->set(obj->attributeList, argName, valStr);
 }
 
-static void follow(MimiObj *self,
-                   char *argDir,
-                   void (*handle)(MimiObj *self))
-{
-    MimiObj *publisher = self->getObj(self, argDir, 1);
-    MimiObj *fansInfo = publisher->getObj(publisher, "fansList.fansInfo", 0);
-    char argName[64];
-    getLastToken(argName, argDir, '.');
-
-    fansInfo->setPtr(fansInfo, "fansPtr", self);
-    fansInfo->setPtr(fansInfo, "handle", handle);
-    fansInfo->setStr(fansInfo, "followedArgName", argName);
-}
-
 static MimiObj *initObj(MimiObj *self, char *name)
 {
     char prifix[] = "[cls]";
@@ -290,17 +276,6 @@ exit:
     return obj;
 }
 
-static void publish(MimiObj *self, char *argName)
-{
-    char *folloedArgName = self->getStr(self, "fansList.fansInfo.followedArgName");
-    if (!mimiStrEqu(argName, folloedArgName))
-    {
-        return;
-    }
-    MimiObj *fans = self->getPtr(self, "fansList.fansInfo.fansPtr");
-    void (*handle)(MimiObj * obj) = self->getPtr(self, "fansList.fansInfo.handle");
-    handle(fans);
-}
 
 static void setMethod(MimiObj *self,
                       char *declearation,
@@ -522,14 +497,8 @@ static void init(MimiObj *self, Args *args)
     self->_updateHandle = RootUpdateHandle;
     self->_beforDinit = _beforDinit;
 
-    /* event operation */
-    self->follow = follow;
-    self->publish = publish;
-
     /* attrivute */
     self->setPtr(self, "context", self);
-    self->setObj(self, "fansList", New_MimiObj_FansList);
-    self->setObj(self, "mailbox", New_MimiObj_Mailbox);
     self->setStr(self, "name", "root");
 
     /* load */

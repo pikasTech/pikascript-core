@@ -58,10 +58,6 @@ struct Class_process
     void (*_beforDinit)(MimiObj *self);
     void (*_updateHandle)(MimiObj *self);
 
-    /* event operation */
-    void (*follow)(MimiObj *self, char *subscribeVarName, void (*handle)(MimiObj *self));
-    void (*publish)(MimiObj *self, char *argName);
-
     /* method */
     void (*setMethod)(MimiObj *self,
                       char *name,
