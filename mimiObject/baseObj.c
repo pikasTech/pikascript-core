@@ -1,6 +1,7 @@
 #include "MimiObj.h"
 #include "baseObj.h"
 #include "dataMemory.h"
+#include "dataString.h"
 
 static void print(MimiObj *obj, Args *args)
 {
@@ -50,9 +51,9 @@ static void init_baseObj(MimiObj *self, Args *args)
     /* attrivute */
 
     /* operation */
-    obj_setMethod(self, "print(argName:string)", print);
-    obj_setMethod(self, "ls()", list);
-    obj_setMethod(self, "set(argName:string, argVal:string)", set);
+    obj_defineMethod(self, "print(argName:string)", print);
+    obj_defineMethod(self, "ls()", list);
+    obj_defineMethod(self, "set(argName:string, argVal:string)", set);
 
     /* object */
 

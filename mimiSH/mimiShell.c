@@ -70,82 +70,17 @@ static void *_detector_shellLuancher(Shell *self,
 	return memAdd;
 }
 
-// the luancher of shell
-static void *_runShellCmd(Shell *self,
-						  char *CMD,
-						  void *(fun)(Shell *, int argc, char **argv))
-{
-	char StartStrSize = 0;
-	int argc = 0;
-	DMEM *memOut;
-	// sign in the argv memory
-	char *argv[16] = {0};
-	DMEM *mem[16] = {0};
-	for (int i = 0; i < 16; i++)
-	{
-		mem[i] = DynMemGet(sizeof(char) * 256);
-		argv[i] = (char *)mem[i]->addr;
-		argv[i][0] = 0;
-	}
-	//get argc and argv from CMD, and skip the start string
-	// argc = strGetArgs_With_Start_i(CMD, argv, strGetSize(StartStr));
-	argc = strGetArgs_With_Start_i(CMD, argv, StartStrSize);
-
-	//call the fun
-	memOut = (DMEM *)fun(self, argc, argv);
-	//free the argv memory
-	for (int i = 0; i < 16; i++)
-	{
-		DynMemPut(mem[i]);
-	}
-	//get argc and argv
-	return memOut;
-}
-
 // the luancher of python
 static void *_runPythonCmd(Shell *self,
 						   char *CMD)
 {
 	MimiObj *root = self->context;
-	char buff[8][256] = {0};
-	int i = 0;
 	obj_run(root, CMD);
 
 	DMEM *memOut = DynMemGet(1);
 	char *strOut = memOut->addr;
 	strOut[0] = 0;
 	return memOut;
-}
-
-static int luanchShellWhenNameMatch(Arg *argHandle, Args *argsHandle)
-{
-	char *cmd = args_getStr(argsHandle, "cmd");
-	Shell *shell = args_getPtr(argsHandle, "shell");
-
-	char *name = argHandle->nameDynMem->addr;
-	char arg0[32] = {0};
-	strGetFirstToken(arg0, cmd, ' ');
-	void *_runCmd = NULL;
-	if (strEqu(arg0, name))
-	{
-		_runCmd = _runShellCmd;
-	}
-
-	if (NULL == _runCmd)
-	{
-		/* not match */
-		return 1;
-	}
-
-	args_setPtr(argsHandle,
-				"shellOut",
-				shell->_detector(shell,
-								 _runCmd,
-								 cmd,
-								 arg_getPtr(argHandle)));
-	args_setStr(argsHandle,
-				"succeed", "succeed");
-	return 0;
 }
 
 void *shell_cmd(Shell *self, char *cmd)

@@ -314,7 +314,7 @@ exit:
     return obj;
 }
 
-void obj_setMethod(MimiObj *self,
+void obj_defineMethod(MimiObj *self,
                    char *declearation,
                    void (*methodPtr)(MimiObj *self, Args *args))
 {

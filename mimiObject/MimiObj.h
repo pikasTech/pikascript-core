@@ -62,7 +62,7 @@ MimiObj *obj_getObj(MimiObj *self, char *processDirectory, int deepth);
 void obj_freeObj(MimiObj *self, char *subObjectName);
 
 /* method */
-void obj_setMethod(MimiObj *self,
+void obj_defineMethod(MimiObj *self,
                       char *declearation,
                       void (*methodPtr)(MimiObj *self, Args *args));
 
