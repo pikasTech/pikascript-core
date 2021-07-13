@@ -7,7 +7,7 @@ typedef struct Class_mimiShell2 Shell;
 #define SHELL2_CMD_NAME_LENGTH 32
 #define SHELL2_CMD_LENGTH 256
 
-int mimiShell2_strGetArgs(char *CMD, char **argv);
+int strGetArgs(char *CMD, char **argv);
 
 struct Class_mimiShell2
 {
@@ -17,20 +17,17 @@ struct Class_mimiShell2
 
     void *context;
 
-    /* operation */
-    void *(*cmd)(Shell *self, char *);
-    void (*addMap)(Shell *self, char *, void *(*)(Shell *shell, int argc, char **argv));
-    int (*listMap)(Shell *self, int);
-    int (*test)(Shell *self, int);
-    void (*init)(Shell *self, Args *args);
-    void (*deinit)(Shell *self);
-
     /* override */
-    void (*config)(Shell *self);
-    void *(*detector)(Shell *self, void *(*fun_d)(Shell *self, char *, void *(fun)(Shell *self, int, char **)),
-                      char *CMD,
-                      void *(fun)(Shell *self, int argc, char **argv));
+    void (*_config)(Shell *self);
+    void *(*_detector)(Shell *self, void *(*fun_d)(Shell *self, char *, void *(fun)(Shell *self, int, char **)),
+                       char *CMD,
+                       void *(fun)(Shell *self, int argc, char **argv));
 };
+
+/* operation */
+void *shell_cmd(Shell *self, char *);
+void shell_addMap(Shell *self, char *, void *(*)(Shell *shell, int argc, char **argv));
+void shell_deinit(Shell *self);
 
 Shell *New_shell(Args *initArgs);
 

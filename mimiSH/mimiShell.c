@@ -40,14 +40,14 @@ static int strGetArgs_With_Start_i(char *CMD, char **argv, int start_i)
 	return argc;
 }
 
-int mimiShell2_strGetArgs(char *CMD, char **argv)
+int strGetArgs(char *CMD, char **argv)
 {
 	strGetArgs_With_Start_i(CMD, argv, 0);
 	return 0;
 }
 
 // the detector of shell luancher, which can add info befor the strout
-static void *detector_shellLuancher(Shell *self,
+static void *_detector_shellLuancher(Shell *self,
 									void *(*fun_d)(Shell *, char *, void *(fun)(Shell *, int, char **)),
 									char *CMD,
 									void *(fun)(Shell *, int argc, char **argv))
@@ -115,7 +115,7 @@ static int luanchShellWhenNameMatch(Arg *argNow, Args *argsHandle)
 	{
 		args_setPtr(argsHandle,
 					"shellOut",
-					shell->detector(shell,
+					shell->_detector(shell,
 									shellLuancher,
 									cmd,
 									arg_getPtr(argNow)));
@@ -125,7 +125,7 @@ static int luanchShellWhenNameMatch(Arg *argNow, Args *argsHandle)
 	return 0;
 }
 
-static void *Shell_cmd(Shell *self, char *cmd)
+void *shell_cmd(Shell *self, char *cmd)
 {
 	Args *argsHandle = New_args(NULL);
 	args_setStr(argsHandle,
@@ -133,19 +133,16 @@ static void *Shell_cmd(Shell *self, char *cmd)
 	args_setPtr(argsHandle,
 				"shell", self);
 	void *shellOut = NULL;
-	args_foreach(self->mapList,
-				 luanchShellWhenNameMatch, argsHandle);
-	if (args_isArgExist(argsHandle,
-						"succeed"))
+	args_foreach(self->mapList, luanchShellWhenNameMatch, argsHandle);
+	if (args_isArgExist(argsHandle, "succeed"))
 	{
 		// ok
-		shellOut = args_getPtr(argsHandle,
-							   "shellOut");
+		shellOut = args_getPtr(argsHandle, "shellOut");
 		goto exit;
 	}
 
 	// if the cmd is no found then call the app_cmdNoFoudn function
-	shellOut = self->detector(self, shellLuancher, cmd, app_cmdNofound2);
+	shellOut = self->_detector(self, shellLuancher, cmd, app_cmdNofound2);
 	goto exit;
 
 exit:
@@ -153,7 +150,7 @@ exit:
 	return shellOut;
 }
 
-static void Shell_addMap(Shell *self,
+void shell_addMap(Shell *self,
 						 char *name,
 						 void *(*fun)(Shell *shell,
 									  int argc,
@@ -163,74 +160,29 @@ static void Shell_addMap(Shell *self,
 				name, fun);
 }
 
-static int Shell_listMap(Shell *self, int isShow)
-{
-	// cmdMap_t *cmdMap;
-	int size;
-	size = args_getSize(self->mapList);
 
-	if (isShow)
-	{
-		printf("the size of cmdMap is :%d \r\n", size);
-	}
-	return size;
-}
-
-static int Shell_test(Shell *self, int isShow)
-{
-	char *outstr = 0;
-	int size;
-	if (4 != self->listMap(self, isShow))
-	{
-		return 1;
-	}
-
-	outstr = self->cmd(self, "argv fekfjk fiej kl j");
-	size = strGetSize(outstr);
-	if (isShow)
-	{
-		printf("%s", outstr);
-		printf("the size of outstr is %d\r\n", size);
-	}
-
-	if (95 != size)
-	{
-		return 2;
-	}
-
-	return 0;
-}
-
-static void deinit(Shell *self)
+void shell_deinit(Shell *self)
 {
 	args_deinit(self->mapList);
 	DynMemPut(self->mem);
 }
 
-static void _shConfig(Shell *self)
+static void _shellConfig(Shell *self)
 {
 	/* override in user code */
 	/* you can add maps */
 }
 
-static void init(Shell *self, Args *initArgs)
+void shell_init(Shell *self, Args *initArgs)
 {
 	/* attribute */
-
-	/* operation */
 	self->context = self;
-	self->cmd = Shell_cmd;
 	self->mapList = New_args(NULL);
-	// set how to deinit the data of cmdMap Link
-	self->addMap = Shell_addMap;
-	self->listMap = Shell_listMap;
-	self->test = Shell_test;
-	self->deinit = deinit;
-	self->detector = detector_shellLuancher;
 
 	/* override */
-	self->config = _shConfig;
-	self->config(self);
+	self->_config = _shellConfig;
+	self->_detector = _detector_shellLuancher;
+	self->_config(self);
 }
 
 Shell *New_shell(Args *args)
@@ -238,7 +190,6 @@ Shell *New_shell(Args *args)
 	DMEM *mem = DynMemGet(sizeof(Shell));
 	Shell *self = mem->addr;
 	self->mem = mem;
-	self->init = init;
-	self->init(self, args);
+	shell_init(self, args);
 	return self;
 }
