@@ -24,5 +24,6 @@ char *popToken(char *strOut, char *strIn, char sign);
 char *getFirstToken(char *strOut, char *strIn, char sign);
 char *getLastToken(char *strOut, char *strIn, char sign);
 char *strClear(char *str);
+int strIsContain(char *str, char ch);
 
 #endif

@@ -291,3 +291,15 @@ char *strClear(char *str)
 	}
 	return str;
 }
+
+int strIsContain(char *str, char ch)
+{
+	for (int i = 0; i < strGetSize(str); i++)
+	{
+		if (str[i] == ch)
+		{
+			return 1;
+		}
+	}
+	return 0;
+}

@@ -337,167 +337,176 @@ void obj_setMethod(MimiObj *self,
     obj_setStr(methodHost, methodDeclearationName, cleanDeclearation);
 }
 
-Args *getArgsBySentence(MimiObj *self, char *typeList, char *argList)
+static void loadArgByType(MimiObj *self,
+                          char *typeName,
+                          char *typeVal,
+                          char *argVal,
+                          Args *args)
 {
-    Args *args = New_args(NULL);
-    char typeListBuff[128] = {0};
+    char buff[2][128] = {0};
+    int i = 0;
+    if (mimiStrEqu(typeVal, "string"))
+    {
+        /* solve the string type */
+        char *directStr = strCut(buff[i++], argVal, '"', '"');
+        if (NULL != directStr)
+        {
+            /* direct value */
+            args_setStr(args, typeName, directStr);
+            return;
+        }
+        /* reference value */
+        char *refStr = obj_getStr(self, argVal);
+        if (NULL == refStr)
+        {
+            printf("[error]: can not get string from reference: %s\r\n", argVal);
+            return;
+        }
+        args_setStr(args, typeName, refStr);
+        return;
+    }
+    if (mimiStrEqu(typeVal, "int"))
+    {
+        /* solve the int type */
+        args_setInt(args, typeName, 0);
+        if ((argVal[0] >= '0') && (argVal[0] <= '9'))
+        {
+            /* direct value */
+            args_set(args, typeName, argVal);
+            return;
+        }
+        /* reference value */
+        int referenceVal = obj_getInt(self, argVal);
+        args_setInt(args, typeName, referenceVal);
+        return;
+    }
+    if (mimiStrEqu(typeVal, "float"))
+    {
+        /* solve the float type */
+        args_setFloat(args, typeName, 0);
+        if ((argVal[0] >= '0') && (argVal[0] <= '9'))
+        {
+            /* direct value */
+            args_set(args, typeName, argVal);
+            return;
+        }
+        /* reference value */
+        float referenceVal = obj_getFloat(self, argVal);
+        args_setFloat(args, typeName, referenceVal);
+        return;
+    }
+    if (mimiStrEqu(typeVal, "pointer"))
+    {
+        /* only support reference value */
+        void *ptr = obj_getPtr(self, argVal);
+        args_setPtr(args, typeName, ptr);
+        return;
+    }
+    /* type match faild */
+    printf("[error]: type not match, input type: %s\r\n", typeVal);
+    while (1)
+        ;
+}
+
+static Args *getArgsBySort(MimiObj *self, char *typeList, char *argList)
+{
+    char buff[2][128] = {0};
+    int i = 0;
+    char *typeListBuff = buff[i++];
     memcpy(typeListBuff, typeList, strGetSize(typeList));
+    char *argListBuff = buff[i++];
+    memcpy(argListBuff, argList, strGetSize(argList));
+    Args *args = New_args(NULL);
     while (1)
     {
         char buff[4][128] = {0};
         int i = 0;
-        char *type = popToken(buff[i++], typeListBuff, ',');
-        char *defineName = getFirstToken(buff[i++], type, ':');
-        char *defineType = getLastToken(buff[i++], type, ':');
+        char *typeToken = popToken(buff[i++], typeListBuff, ',');
+        char *argToken = popToken(buff[i++], argListBuff, ',');
+        if ((0 == argToken[0]) || (0 == typeToken[0]))
+        {
+            /* arg or type poped finised */
+            break;
+        }
+
+        char *typeName = getFirstToken(buff[i++], typeToken, ':');
+        char *typeVal = getLastToken(buff[i++], typeToken, ':');
+        char *argVal = argToken;
+
+        loadArgByType(self,
+                      typeName,
+                      typeVal,
+                      argVal,
+                      args);
+    }
+    return args;
+}
+
+static Args *getArgsByNameMatch(MimiObj *self, char *typeList, char *argList)
+{
+    char buff[2][128] = {0};
+    int i = 0;
+    char *typeListBuff = buff[i++];
+    memcpy(typeListBuff, typeList, strGetSize(typeList));
+    Args *args = New_args(NULL);
+    while (1)
+    {
+        char buff[4][128] = {0};
+        int i = 0;
+        char *typeToken = popToken(buff[i++], typeListBuff, ',');
+
+        /* poped all type from typeList */
+        if (0 == typeToken[0])
+        {
+            break;
+        }
+
+        char *typeName = getFirstToken(buff[i++], typeToken, ':');
+        char *typeVal = getLastToken(buff[i++], typeToken, ':');
 
         char *argListBuff = buff[i++];
         memcpy(argListBuff, argList, strGetSize(argList));
         while (1)
         {
-
             char buff[4][64] = {0};
             int i = 0;
-            char *arg = popToken(buff[i++], argListBuff, ',');
-            char *argName = getFirstToken(buff[i++], arg, '=');
-            char *argContant = getLastToken(buff[i++], arg, '=');
+            char *argToken = popToken(buff[i++], argListBuff, ',');
+            char *argName = getFirstToken(buff[i++], argToken, '=');
+            char *argVal = getLastToken(buff[i++], argToken, '=');
 
-            if (0 == arg[0])
+            if (0 == argToken[0])
             {
                 /* arg poped finised */
                 break;
             }
 
-            if (!mimiStrEqu(defineName, argName))
+            if (!mimiStrEqu(typeName, argName))
             {
                 /* name not match */
                 continue;
             }
 
-            if (mimiStrEqu(defineType, "string"))
-            {
-                /* solve the string type */
-                char *directStr = strCut(buff[i++], argContant, '"', '"');
-                if (NULL != directStr)
-                {
-                    /* direct value */
-                    args_setStr(args, defineName, directStr);
-                    continue;
-                }
-                /* reference value */
-                char *refStr = obj_getStr(self, argContant);
-                if (NULL == refStr)
-                {
-                    printf("[error]: can not get string from reference: %s\r\n", argContant);
-                    continue;
-                }
-                args_setStr(args, defineName, refStr);
-                continue;
-            }
-            if (mimiStrEqu(defineType, "int"))
-            {
-                /* solve the int type */
-                args_setInt(args, defineName, 0);
-                if ((argContant[0] >= '0') && (argContant[0] <= '9'))
-                {
-                    /* direct value */
-                    args_set(args, defineName, argContant);
-                    continue;
-                }
-                /* reference value */
-                int referenceVal = obj_getInt(self, argContant);
-                args_setInt(args, defineName, referenceVal);
-                continue;
-            }
-            if (mimiStrEqu(defineType, "float"))
-            {
-                /* solve the float type */
-                args_setFloat(args, defineName, 0);
-                if ((argContant[0] >= '0') && (argContant[0] <= '9'))
-                {
-                    /* direct value */
-                    args_set(args, defineName, argContant);
-                    continue;
-                }
-                /* reference value */
-                float referenceVal = obj_getFloat(self, argContant);
-                args_setFloat(args, defineName, referenceVal);
-                continue;
-            }
-            if (mimiStrEqu(defineType, "pointer"))
-            {
-                /* only support reference value */
-                void *ptr = obj_getPtr(self, argContant);
-                args_setPtr(args, defineName, ptr);
-                continue;
-            }
-
-            /* type match faild */
-            printf("[error]: type not match, input type: %s\r\n", defineType);
-            while (1)
-            {
-            }
-        }
-
-        /* poped all type from typeList */
-        if (0 == typeListBuff[0])
-        {
-            break;
+            loadArgByType(self,
+                          typeName,
+                          typeVal,
+                          argVal,
+                          args);
         }
     }
-
     return args;
 }
 
-void obj_run(MimiObj *self, char *cmd)
+static Args *getArgsBySentence(MimiObj *self, char *typeList, char *argList)
 {
-    char buff[16][128] = {0};
-    int i = 0;
-    char *cleanCmd = strDeleteChar(buff[i++], cmd, ' ');
-    char *methodSentence = getFirstToken(buff[i++], cleanCmd, '(');
-    char *returnName = getFirstToken(buff[i++], methodSentence, '=');
-    char *methodDir = getLastToken(buff[i++], methodSentence, '=');
-
-    MimiObj *methodHost = obj_getObj(self, methodDir, 1);
-    if (NULL == methodHost)
+    if (strIsContain(argList, '='))
     {
-        printf("[error] object direction no found, method declearation: %s\r\n", methodDir);
-        return;
+        return getArgsByNameMatch(self, typeList, argList);
     }
-    char *methodName = getLastToken(buff[i++], methodDir, '.');
+    return getArgsBySort(self, typeList, argList);
+}
 
-    char *methodPtrName = strAppend(strAppend(buff[i++], "[ptr]"), methodName);
-    char *methodDeclearationName = strAppend(strAppend(buff[i++], "[dec]"), methodName);
-    void (*methodPtr)(MimiObj * self, Args * args) = obj_getPtr(methodHost, methodPtrName);
-    char *declearation = obj_getStr(methodHost, methodDeclearationName);
-
-    if ((NULL == declearation) || (NULL == methodPtr))
-    {
-        printf("[error]: method %s no found.\r\n", methodDir);
-        return;
-    }
-
-    char *typeList = strCut(buff[i++], declearation, '(', ')');
-    if (typeList == NULL)
-    {
-        printf("[error]: method declearation error!\r\n");
-        printf("[info]: declearation: %s\r\n", declearation);
-        while (1);
-    }
-
-    char *argList = strCut(buff[i++], cleanCmd, '(', ')');
-    {
-        if (argList == NULL)
-        {
-            printf("[error]: method used error!\r\n");
-            printf("[info]: input: %s\r\n", cleanCmd);
-            while (1);
-        }
-    }
-
-    char *returnType = getLastToken(buff[i++], declearation, ')');
-
-    Args *args = getArgsBySentence(self, typeList, argList);
-    methodPtr(methodHost, args);
+static void transferReturnVal(MimiObj *self, char *returnType, char *returnName, Args *args)
+{
     if (mimiStrEqu("->int", returnType))
     {
         obj_setInt(self, returnName, args_getInt(args, "return"));
@@ -510,6 +519,57 @@ void obj_run(MimiObj *self, char *cmd)
     {
         obj_setStr(self, returnName, args_getStr(args, "return"));
     }
+}
+
+void obj_run(MimiObj *self, char *cmd)
+{
+    char buff[16][128] = {0};
+    int i = 0;
+    char *cleanCmd = strDeleteChar(buff[i++], cmd, ' ');
+    char *methodToken = getFirstToken(buff[i++], cleanCmd, '(');
+    char *returnName = getFirstToken(buff[i++], methodToken, '=');
+    char *methodDir = getLastToken(buff[i++], methodToken, '=');
+
+    MimiObj *methodHost = obj_getObj(self, methodDir, 1);
+    if (NULL == methodHost)
+    {
+        printf("[error] object direction no found, method declearation: %s\r\n", methodDir);
+        return;
+    }
+    char *methodName = getLastToken(buff[i++], methodDir, '.');
+    char *methodPtrName = strAppend(strAppend(buff[i++], "[ptr]"), methodName);
+    char *methodDeclearationName = strAppend(strAppend(buff[i++], "[dec]"), methodName);
+    void (*methodFun)(MimiObj * self, Args * args) = obj_getPtr(methodHost, methodPtrName);
+    char *declearation = obj_getStr(methodHost, methodDeclearationName);
+
+    if ((NULL == declearation) || (NULL == methodFun))
+    {
+        printf("[error]: method %s no found.\r\n", methodDir);
+        return;
+    }
+
+    char *typeList = strCut(buff[i++], declearation, '(', ')');
+    if (typeList == NULL)
+    {
+        printf("[error]: method declearation error!\r\n");
+        printf("[info]: declearation: %s\r\n", declearation);
+        return;
+    }
+
+    char *argList = strCut(buff[i++], cleanCmd, '(', ')');
+    {
+        if (argList == NULL)
+        {
+            printf("[error]: method used error!\r\n");
+            printf("[info]: input: %s\r\n", cleanCmd);
+            return;
+        }
+    }
+
+    char *returnType = getLastToken(buff[i++], declearation, ')');
+    Args *args = getArgsBySentence(self, typeList, argList);
+    methodFun(methodHost, args);
+    transferReturnVal(self, returnType, returnName, args);
     args_deinit(args);
 }
 

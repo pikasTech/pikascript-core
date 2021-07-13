@@ -156,6 +156,21 @@ int TEST_MimiObj(int isShow)
         }
         obj_deinit(obj);
     }
+    {
+        MimiObj *obj = New_MimiObj(NULL);
+        obj_setMethod(obj, "add(val1:int, val2:int)->int", add);
+        obj_run(obj, "res = add(1, 2)");
+        int res = obj_getInt(obj, "res");
+        if (isShow)
+        {
+            printf("the res is %d.\r\n", res);
+        }
+        if (3 != res)
+        {
+            return 3;
+        }
+        obj_deinit(obj);
+    }
 
     return 0;
 }

@@ -122,10 +122,8 @@ static void *_runPythonCmd(Shell *self,
 
 static int luanchShellWhenNameMatch(Arg *argHandle, Args *argsHandle)
 {
-	char *cmd = args_getStr(argsHandle,
-							"cmd");
-	Shell *shell = args_getPtr(argsHandle,
-							   "shell");
+	char *cmd = args_getStr(argsHandle, "cmd");
+	Shell *shell = args_getPtr(argsHandle, "shell");
 
 	char *name = argHandle->nameDynMem->addr;
 	char arg0[32] = {0};
