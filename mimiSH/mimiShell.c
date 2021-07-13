@@ -109,10 +109,7 @@ static void *_runPythonCmd(Shell *self,
 	MimiObj *root = self->context;
 	char buff[8][256] = {0};
 	int i = 0;
-	char *cmdBuff = buff[i++];
-	memcpy(cmdBuff, CMD, strGetSize(CMD));
-	strPopToken(buff[i++], cmdBuff, ' ');
-	obj_run(root, cmdBuff);
+	obj_run(root, CMD);
 
 	DMEM *memOut = DynMemGet(1);
 	char *strOut = memOut->addr;
@@ -153,37 +150,7 @@ static int luanchShellWhenNameMatch(Arg *argHandle, Args *argsHandle)
 
 void *shell_cmd(Shell *self, char *cmd)
 {
-	Args *argsHandle = New_args(NULL);
-	args_setStr(argsHandle,
-				"cmd", cmd);
-	args_setPtr(argsHandle,
-				"shell", self);
-	void *shellOut = NULL;
-	char arg0[32] = {0};
-
-	strGetFirstToken(arg0, cmd, ' ');
-	/* match py cmd */
-	if (strEqu(arg0, "py"))
-	{
-		shellOut = _runPythonCmd(self, cmd);
-		goto exit;
-	}
-
-	args_foreach(self->mapList, luanchShellWhenNameMatch, argsHandle);
-	if (args_isArgExist(argsHandle, "succeed"))
-	{
-		// ok
-		shellOut = args_getPtr(argsHandle, "shellOut");
-		goto exit;
-	}
-
-	// if the cmd is no found then call the app_cmdNoFoudn function
-	shellOut = self->_detector(self, _runShellCmd, cmd, app_cmdNofound);
-	goto exit;
-
-exit:
-	args_deinit(argsHandle);
-	return shellOut;
+	return _runPythonCmd(self, cmd);
 }
 
 void shell_addMap(Shell *self,

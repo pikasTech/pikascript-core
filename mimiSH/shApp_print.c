@@ -20,7 +20,7 @@ void *app_print(Shell *shell, int argc, char **argv)
 
     if (NULL == processNow)
     {
-        strAppend(memOut->addr, "[error: process no found]\r\n");
+        strAppend(memOut->addr, "[error process no found]\r\n");
         return (void *)memOut;
     }
     char argName[32] = {0};

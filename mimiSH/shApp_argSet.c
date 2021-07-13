@@ -23,16 +23,16 @@ void *app_argSet(Shell *shell, int argc, char **argv)
     {
         if (1 == errCode)
         {
-            strAppend(memOut->addr, "[error]: set faild, arg no found!\r\n");
+            strAppend(memOut->addr, "[error] set faild, arg no found!\r\n");
             return (void *)memOut;
         }
         if (2 == errCode)
         {
-            strAppend(memOut->addr, "[error]: set faild, type invalid!\r\n");
+            strAppend(memOut->addr, "[error] set faild, type invalid!\r\n");
             return (void *)memOut;
         }				
         char printbuff[256] = {0};
-        sprintf(printbuff, "[error]: set faild with error code: %d!\r\n", errCode);
+        sprintf(printbuff, "[error] set faild with error code: %d!\r\n", errCode);
         strAppend(memOut->addr, printbuff);
         return (void *)memOut;
     }

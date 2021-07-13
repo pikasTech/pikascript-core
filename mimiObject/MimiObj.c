@@ -359,7 +359,7 @@ static void loadArgByType(MimiObj *self,
         char *refStr = obj_getStr(self, argVal);
         if (NULL == refStr)
         {
-            printf("[error]: can not get string from reference: %s\r\n", argVal);
+            printf("[error] can not get string from reference: %s\r\n", argVal);
             return;
         }
         args_setStr(args, typeName, refStr);
@@ -403,7 +403,7 @@ static void loadArgByType(MimiObj *self,
         return;
     }
     /* type match faild */
-    printf("[error]: type not match, input type: %s\r\n", typeVal);
+    printf("[error] type not match, input type: %s\r\n", typeVal);
     while (1)
         ;
 }
@@ -551,14 +551,14 @@ void obj_run(MimiObj *self, char *cmd)
 
     if ((NULL == methodForm) || (NULL == methodPtr))
     {
-        printf("[error]: method %s no found.\r\n", methodDir);
+        printf("[error] method %s no found.\r\n", methodDir);
         return;
     }
 
     char *typeList = strCut(buff[i++], methodForm, '(', ')');
     if (typeList == NULL)
     {
-        printf("[error]: method declearation error!\r\n");
+        printf("[error] method declearation error!\r\n");
         printf("[info]: declearation: %s\r\n", methodForm);
         return;
     }
@@ -567,8 +567,7 @@ void obj_run(MimiObj *self, char *cmd)
     {
         if (argList == NULL)
         {
-            printf("[error]: method used error!\r\n");
-            printf("[info]: input: %s\r\n", cleanCmd);
+            printf("[error] method used error, method input: %s\r\n", cleanCmd);
             return;
         }
     }
@@ -614,7 +613,7 @@ MimiObj *New_MimiObj(Args *args)
     DMEM *mem = DynMemGet(sizeof(MimiObj));
     if (NULL == mem)
     {
-        printf("[error]: memory is empty!");
+        printf("[error] memory is empty!");
         while (1)
             ;
     }
