@@ -2,6 +2,7 @@
 #include "mimiShell.h"
 #include "dataMemory.h"
 #include "dataString.h"
+#include "MimiObj.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -48,9 +49,9 @@ int strGetArgs(char *CMD, char **argv)
 
 // the detector of shell luancher, which can add info befor the strout
 static void *_detector_shellLuancher(Shell *self,
-									void *(*fun_d)(Shell *, char *, void *(fun)(Shell *, int, char **)),
-									char *CMD,
-									void *(fun)(Shell *, int argc, char **argv))
+									 void *(*fun_d)(Shell *, char *, void *(fun)(Shell *, int, char **)),
+									 char *CMD,
+									 void *(fun)(Shell *, int argc, char **argv))
 {
 	DMEM *memOut;
 	DMEM *memAdd;
@@ -70,9 +71,9 @@ static void *_detector_shellLuancher(Shell *self,
 }
 
 // the luancher of shell
-static void *shellLuancher(Shell *self,
-						   char *CMD,
-						   void *(fun)(Shell *, int argc, char **argv))
+static void *_runShellCmd(Shell *self,
+						  char *CMD,
+						  void *(fun)(Shell *, int argc, char **argv))
 {
 	char StartStrSize = 0;
 	int argc = 0;
@@ -101,27 +102,54 @@ static void *shellLuancher(Shell *self,
 	return memOut;
 }
 
-static int luanchShellWhenNameMatch(Arg *argNow, Args *argsHandle)
+// the luancher of python
+static void *_runPythonCmd(Shell *self,
+						   char *CMD)
+{
+	MimiObj *root = self->context;
+	char buff[8][256] = {0};
+	int i = 0;
+	char *cmdBuff = buff[i++];
+	memcpy(cmdBuff, CMD, strGetSize(CMD));
+	popToken(buff[i++], cmdBuff, ' ');
+	obj_run(root, cmdBuff);
+
+	DMEM *memOut = DynMemGet(1);
+	char *strOut = memOut->addr;
+	strOut[0] = 0;
+	return memOut;
+}
+
+static int luanchShellWhenNameMatch(Arg *argHandle, Args *argsHandle)
 {
 	char *cmd = args_getStr(argsHandle,
 							"cmd");
 	Shell *shell = args_getPtr(argsHandle,
 							   "shell");
 
-	char *name = argNow->nameDynMem->addr;
+	char *name = argHandle->nameDynMem->addr;
 	char arg0[32] = {0};
 	getFirstToken(arg0, cmd, ' ');
+	void *_runCmd = NULL;
 	if (mimiStrEqu(arg0, name))
 	{
-		args_setPtr(argsHandle,
-					"shellOut",
-					shell->_detector(shell,
-									shellLuancher,
-									cmd,
-									arg_getPtr(argNow)));
-		args_setStr(argsHandle,
-					"succeed", "succeed");
+		_runCmd = _runShellCmd;
 	}
+
+	if (NULL == _runCmd)
+	{
+		/* not match */
+		return 1;
+	}
+
+	args_setPtr(argsHandle,
+				"shellOut",
+				shell->_detector(shell,
+								 _runCmd,
+								 cmd,
+								 arg_getPtr(argHandle)));
+	args_setStr(argsHandle,
+				"succeed", "succeed");
 	return 0;
 }
 
@@ -133,6 +161,16 @@ void *shell_cmd(Shell *self, char *cmd)
 	args_setPtr(argsHandle,
 				"shell", self);
 	void *shellOut = NULL;
+	char arg0[32] = {0};
+
+	getFirstToken(arg0, cmd, ' ');
+	/* match py cmd */
+	if (mimiStrEqu(arg0, "py"))
+	{
+		shellOut = _runPythonCmd(self, cmd);
+		goto exit;
+	}
+
 	args_foreach(self->mapList, luanchShellWhenNameMatch, argsHandle);
 	if (args_isArgExist(argsHandle, "succeed"))
 	{
@@ -142,7 +180,7 @@ void *shell_cmd(Shell *self, char *cmd)
 	}
 
 	// if the cmd is no found then call the app_cmdNoFoudn function
-	shellOut = self->_detector(self, shellLuancher, cmd, app_cmdNofound2);
+	shellOut = self->_detector(self, _runShellCmd, cmd, app_cmdNofound);
 	goto exit;
 
 exit:
@@ -151,15 +189,14 @@ exit:
 }
 
 void shell_addMap(Shell *self,
-						 char *name,
-						 void *(*fun)(Shell *shell,
-									  int argc,
-									  char **argv))
+				  char *name,
+				  void *(*fun)(Shell *shell,
+							   int argc,
+							   char **argv))
 {
 	args_setPtr(self->mapList,
 				name, fun);
 }
-
 
 void shell_deinit(Shell *self)
 {
