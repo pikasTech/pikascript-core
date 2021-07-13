@@ -445,15 +445,15 @@ void obj_run(MimiObj *self, char *cmd)
 
     Args *args = getArgsBySentence(self, typeList, argList);
     methodPtr(methodHost, args);
-    if (mimiStrEqu(":int", returnType))
+    if (mimiStrEqu("->int", returnType))
     {
         obj_setInt(self, returnName, args_getInt(args, "return"));
     }
-    if (mimiStrEqu(":float", returnType))
+    if (mimiStrEqu("->float", returnType))
     {
         obj_setFloat(self, returnName, args_getFloat(args, "return"));
     }
-    if (mimiStrEqu(":string", returnType))
+    if (mimiStrEqu("->string", returnType))
     {
         obj_setStr(self, returnName, args_getStr(args, "return"));
     }

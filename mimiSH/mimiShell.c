@@ -104,9 +104,9 @@ static void *shellLuancher(Shell *self,
 static int luanchShellWhenNameMatch(Arg *argNow, Args *argsHandle)
 {
 	char *cmd = args_getStr(argsHandle,
-								   "cmd");
+							"cmd");
 	Shell *shell = args_getPtr(argsHandle,
-									  "shell");
+							   "shell");
 
 	char *name = argNow->nameDynMem->addr;
 	char arg0[32] = {0};
@@ -114,13 +114,13 @@ static int luanchShellWhenNameMatch(Arg *argNow, Args *argsHandle)
 	if (mimiStrEqu(arg0, name))
 	{
 		args_setPtr(argsHandle,
-						   "shellOut",
-						   shell->detector(shell,
-										   shellLuancher,
-										   cmd,
-										   arg_getPtr(argNow)));
+					"shellOut",
+					shell->detector(shell,
+									shellLuancher,
+									cmd,
+									arg_getPtr(argNow)));
 		args_setStr(argsHandle,
-						   "succeed", "succeed");
+					"succeed", "succeed");
 	}
 	return 0;
 }
@@ -129,18 +129,18 @@ static void *Shell_cmd(Shell *self, char *cmd)
 {
 	Args *argsHandle = New_args(NULL);
 	args_setStr(argsHandle,
-					   "cmd", cmd);
+				"cmd", cmd);
 	args_setPtr(argsHandle,
-					   "shell", self);
+				"shell", self);
 	void *shellOut = NULL;
-	args_foreach (self->mapList,
-							luanchShellWhenNameMatch, argsHandle);
+	args_foreach(self->mapList,
+				 luanchShellWhenNameMatch, argsHandle);
 	if (args_isArgExist(argsHandle,
-							   "succeed"))
+						"succeed"))
 	{
 		// ok
 		shellOut = args_getPtr(argsHandle,
-									  "shellOut");
+							   "shellOut");
 		goto exit;
 	}
 
@@ -160,7 +160,7 @@ static void Shell_addMap(Shell *self,
 									  char **argv))
 {
 	args_setPtr(self->mapList,
-						  name, fun);
+				name, fun);
 }
 
 static int Shell_listMap(Shell *self, int isShow)

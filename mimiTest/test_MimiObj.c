@@ -109,7 +109,8 @@ int TEST_MimiObj(int isShow)
         obj_setMethod(obj, "hello.hello2(name1: string, \
                                           name2: string, \
                                           name3: string, \
-                                          isShow: int)", hello2);
+                                          isShow: int)",
+                      hello2);
         obj_run(obj, "hello.hello2(name2 = \"tom\", \
                                     name1 = name1, \
                                     name3 = \"cat\", \
@@ -122,7 +123,8 @@ int TEST_MimiObj(int isShow)
                                        val1:float, \
                                        val2:float, \
                                        isShow:int) \
-                                       :float", testFloat);
+                                       ->float",
+                      testFloat);
         obj_setInt(obj, "isShow", isShow);
         obj_setFloat(obj, "val2", 3.11);
         obj_run(obj, "res = testFloat(val1 = 3.22, \
@@ -141,7 +143,7 @@ int TEST_MimiObj(int isShow)
     }
     {
         MimiObj *obj = New_MimiObj(NULL);
-        obj_setMethod(obj, "add(val1:int, val2:int):int", add);
+        obj_setMethod(obj, "add(val1:int, val2:int)->int", add);
         obj_run(obj, "res = add(val1 = 1, val2 = 2)");
         int res = obj_getInt(obj, "res");
         if (isShow)
