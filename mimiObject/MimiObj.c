@@ -605,8 +605,7 @@ MimiObj *New_MimiObj(Args *args)
     {
         printf("[error]: memory is empty!");
         while (1)
-        {
-        }
+            ;
     }
     MimiObj *self = mem->addr;
     self->mem = mem;
