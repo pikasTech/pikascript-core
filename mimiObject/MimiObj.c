@@ -611,5 +611,4 @@ MimiObj *New_MimiObj(Args *args)
     self->mem = mem;
     obj_init(self, args);
     return self;
-    return self;
 }
