@@ -480,6 +480,26 @@ void args_removeArg(Args *self, char *name)
                     argNow);
 }
 
+void args_returnStr(Args *args, char *val)
+{
+    args_setStr(args, "return", val);
+}
+
+void args_returnInt(Args *args, int val)
+{
+    args_setInt(args, "return", val);
+}
+
+void args_returnFloat(Args *args, float val)
+{
+    args_setFloat(args, "return", val);
+}
+
+void args_returnPtr(Args *args, void *val)
+{
+    args_setPtr(args, "return", val);
+}
+
 void args_init(Args *self, Args *args)
 {
     /* attrivute */

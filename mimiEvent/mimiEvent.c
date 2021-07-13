@@ -1,4 +1,5 @@
 #include "MimiObj.h"
+#include "baseObj.h"
 #include "dataMemory.h"
 #include "mimiFansInfo.h"
 #include "mimiFansList.h"
@@ -50,7 +51,7 @@ static void init_Event(MimiObj *self, Args *args)
 
 MimiObj *New_MimiObj_Event(Args *args)
 {
-    MimiObj *self = New_MimiObj(args);
+    MimiObj *self = New_baseObj(args);
     init_Event(self, args);
     return self;
 }

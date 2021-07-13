@@ -527,8 +527,15 @@ void obj_run(MimiObj *self, char *cmd)
     int i = 0;
     char *cleanCmd = strDeleteChar(buff[i++], cmd, ' ');
     char *methodToken = strGetFirstToken(buff[i++], cleanCmd, '(');
-    char *returnName = strGetFirstToken(buff[i++], methodToken, '=');
-    char *methodDir = strGetLastToken(buff[i++], methodToken, '=');
+    char *methodDir = NULL;
+    if (strIsContain(methodToken, '='))
+    {
+        methodDir = strGetLastToken(buff[i++], methodToken, '=');
+    }
+    else
+    {
+        methodDir = methodToken;
+    }
 
     MimiObj *methodHost = obj_getObj(self, methodDir, 1);
     if (NULL == methodHost)
@@ -572,7 +579,11 @@ void obj_run(MimiObj *self, char *cmd)
     /* run method */
     methodPtr(methodHost, args);
     /* transfer return */
-    transferReturnVal(self, returnType, returnName, args);
+    if (strIsContain(methodToken, '='))
+    {
+        char *returnName = strGetFirstToken(buff[i++], methodToken, '=');
+        transferReturnVal(self, returnType, returnName, args);
+    }
     args_deinit(args);
 }
 
