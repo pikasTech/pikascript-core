@@ -539,20 +539,20 @@ void obj_run(MimiObj *self, char *cmd)
     char *methodName = strGetLastToken(buff[i++], methodDir, '.');
     char *methodPtrName = strAppend(strAppend(buff[i++], "[ptr]"), methodName);
     char *methodDeclearationName = strAppend(strAppend(buff[i++], "[dec]"), methodName);
-    void (*methodFun)(MimiObj * self, Args * args) = obj_getPtr(methodHost, methodPtrName);
-    char *declearation = obj_getStr(methodHost, methodDeclearationName);
+    void (*methodPtr)(MimiObj * self, Args * args) = obj_getPtr(methodHost, methodPtrName);
+    char *methodForm = obj_getStr(methodHost, methodDeclearationName);
 
-    if ((NULL == declearation) || (NULL == methodFun))
+    if ((NULL == methodForm) || (NULL == methodPtr))
     {
         printf("[error]: method %s no found.\r\n", methodDir);
         return;
     }
 
-    char *typeList = strCut(buff[i++], declearation, '(', ')');
+    char *typeList = strCut(buff[i++], methodForm, '(', ')');
     if (typeList == NULL)
     {
         printf("[error]: method declearation error!\r\n");
-        printf("[info]: declearation: %s\r\n", declearation);
+        printf("[info]: declearation: %s\r\n", methodForm);
         return;
     }
 
@@ -566,9 +566,12 @@ void obj_run(MimiObj *self, char *cmd)
         }
     }
 
-    char *returnType = strGetLastToken(buff[i++], declearation, ')');
+    char *returnType = strGetLastToken(buff[i++], methodForm, ')');
+    /* get type */
     Args *args = getArgsBySentence(self, typeList, argList);
-    methodFun(methodHost, args);
+    /* run method */
+    methodPtr(methodHost, args);
+    /* transfer return */
     transferReturnVal(self, returnType, returnName, args);
     args_deinit(args);
 }
