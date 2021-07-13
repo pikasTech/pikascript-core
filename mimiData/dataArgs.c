@@ -326,47 +326,47 @@ char *args_print(Args *self, char *name)
 {
     char *type = args_getType(self, name);
 
-    if (mimiStrEqu(type, "int"))
+    if (strEqu(type, "int"))
     {
         int val = args_getInt(self, name);
         return getPrintStringFromInt(self, name, val);
     }
 
-    if (mimiStrEqu(type, "float"))
+    if (strEqu(type, "float"))
     {
         float val = args_getFloat(self, name);
         return getPrintStringFromFloat(self, name, val);
     }
 
-    if (mimiStrEqu(type, "string"))
+    if (strEqu(type, "string"))
     {
         return args_getStr(self, name);
     }
 
-    if (mimiStrEqu(type, "pointer"))
+    if (strEqu(type, "pointer"))
     {
         void *val = args_getPtr(self, name);
         return getPrintStringFromPtr(self, name, val);
     }
 
     char bindTypePrefix[] = "_bind-";
-    if (isStartWith(type, bindTypePrefix))
+    if (strIsStartWith(type, bindTypePrefix))
     {
         char typeWithoutBind[32] = {0};
-        mimiStrRemovePrefix(type, bindTypePrefix, typeWithoutBind);
-        if (mimiStrEqu(typeWithoutBind, "int"))
+        strRemovePrefix(type, bindTypePrefix, typeWithoutBind);
+        if (strEqu(typeWithoutBind, "int"))
         {
             int *valPtr = args_getPtr(self, name);
             int val = *valPtr;
             return getPrintStringFromInt(self, name, val);
         }
-        if (mimiStrEqu(typeWithoutBind, "float"))
+        if (strEqu(typeWithoutBind, "float"))
         {
             float *valPtr = args_getPtr(self, name);
             float val = *valPtr;
             return getPrintStringFromFloat(self, name, val);
         }
-        if (mimiStrEqu(typeWithoutBind, "string"))
+        if (strEqu(typeWithoutBind, "string"))
         {
             // the value of &string is equal to string it self
             char *string = args_getPtr(self, name);
@@ -380,26 +380,26 @@ int args_set(Args *self, char *name, char *valStr)
 {
     char *type = args_getType(self, name);
 
-    if (mimiStrEqu("[error: arg no found]", type))
+    if (strEqu("[error: arg no found]", type))
     {
         return 1;
     }
 
-    if (mimiStrEqu("int", type))
+    if (strEqu("int", type))
     {
         int val = atoi(valStr);
         args_setInt(self, name, val);
         // operation succeed
         return 0;
     }
-    if (mimiStrEqu("float", type))
+    if (strEqu("float", type))
     {
         float val = atof(valStr);
         args_setFloat(self, name, val);
         // operation succeed
         return 0;
     }
-    if (mimiStrEqu("string", type))
+    if (strEqu("string", type))
     {
         args_setStr(self, name, valStr);
         // operation succeed
@@ -407,11 +407,11 @@ int args_set(Args *self, char *name, char *valStr)
     }
 
     char bindTypePrefix[] = "_bind-";
-    if (isStartWith(type, bindTypePrefix))
+    if (strIsStartWith(type, bindTypePrefix))
     {
         char typeWithoutBind[32] = {0};
-        mimiStrRemovePrefix(type, bindTypePrefix, typeWithoutBind);
-        if (mimiStrEqu(typeWithoutBind, "int"))
+        strRemovePrefix(type, bindTypePrefix, typeWithoutBind);
+        if (strEqu(typeWithoutBind, "int"))
         {
             int *valPtr = args_getPtr(self, name);
             int val = atoi(valStr);
@@ -419,7 +419,7 @@ int args_set(Args *self, char *name, char *valStr)
             // operation succeed
             return 0;
         }
-        if (mimiStrEqu(typeWithoutBind, "float"))
+        if (strEqu(typeWithoutBind, "float"))
         {
             float *valPtr = args_getPtr(self, name);
             float val = atof(valStr);
@@ -427,7 +427,7 @@ int args_set(Args *self, char *name, char *valStr)
             // operation succeed
             return 0;
         }
-        if (mimiStrEqu(typeWithoutBind, "string"))
+        if (strEqu(typeWithoutBind, "string"))
         {
             char *stringBinded = args_getPtr(self, name);
             /* size add 1 to copy the '\0' */

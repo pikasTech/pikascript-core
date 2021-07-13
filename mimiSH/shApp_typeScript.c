@@ -24,7 +24,7 @@ void *app_typeScript(Shell *shell, int argc, char **argv)
         return (void *)memOut;
     }
     char argName[32] = {0};
-    getLastToken(argName, PROCESS_DIR, '.');
+    strGetLastToken(argName, PROCESS_DIR, '.');
 
     char *printStr = NULL;
     printStr = obj_print(processNow, argName);

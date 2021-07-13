@@ -111,7 +111,7 @@ static void *_runPythonCmd(Shell *self,
 	int i = 0;
 	char *cmdBuff = buff[i++];
 	memcpy(cmdBuff, CMD, strGetSize(CMD));
-	popToken(buff[i++], cmdBuff, ' ');
+	strPopToken(buff[i++], cmdBuff, ' ');
 	obj_run(root, cmdBuff);
 
 	DMEM *memOut = DynMemGet(1);
@@ -127,9 +127,9 @@ static int luanchShellWhenNameMatch(Arg *argHandle, Args *argsHandle)
 
 	char *name = argHandle->nameDynMem->addr;
 	char arg0[32] = {0};
-	getFirstToken(arg0, cmd, ' ');
+	strGetFirstToken(arg0, cmd, ' ');
 	void *_runCmd = NULL;
-	if (mimiStrEqu(arg0, name))
+	if (strEqu(arg0, name))
 	{
 		_runCmd = _runShellCmd;
 	}
@@ -161,9 +161,9 @@ void *shell_cmd(Shell *self, char *cmd)
 	void *shellOut = NULL;
 	char arg0[32] = {0};
 
-	getFirstToken(arg0, cmd, ' ');
+	strGetFirstToken(arg0, cmd, ' ');
 	/* match py cmd */
-	if (mimiStrEqu(arg0, "py"))
+	if (strEqu(arg0, "py"))
 	{
 		shellOut = _runPythonCmd(self, cmd);
 		goto exit;

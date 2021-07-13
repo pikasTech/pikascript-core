@@ -67,7 +67,7 @@ int TEST_MimiObj(int isShow)
         {
             printf("the test of float bind: %s\r\n", obj_print(process, "testFloatBind"));
         }
-        if (!mimiStrEqu("12.231000", obj_print(process, "testFloatBind")))
+        if (!strEqu("12.231000", obj_print(process, "testFloatBind")))
         {
             return 1;
         }

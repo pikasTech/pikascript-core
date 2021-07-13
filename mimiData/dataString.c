@@ -129,7 +129,7 @@ char *strAppend_unlimited(char *strOut, char *pData)
 	return strPrintWithSize_unlimited(strOut, pData, Size);
 }
 
-char *getLastToken(char *strOut, char *strIn, char sign)
+char *strGetLastToken(char *strOut, char *strIn, char sign)
 {
 	int size = strGetSize(strIn);
 	char strOutBuff[256] = {0};
@@ -154,7 +154,7 @@ char *getLastToken(char *strOut, char *strIn, char sign)
 	return strOut;
 }
 
-char *popToken(char *strOut, char *strIn, char sign)
+char *strPopToken(char *strOut, char *strIn, char sign)
 {
 	int getSign = 0;
 	int iPoped = 0;
@@ -184,7 +184,7 @@ char *popToken(char *strOut, char *strIn, char sign)
 	return strOut;
 }
 
-char *getFirstToken(char *strOut, char *strIn, char sign)
+char *strGetFirstToken(char *strOut, char *strIn, char sign)
 {
 	int size = strGetSize(strIn);
 	for (int i = 0; i < size; i++)
@@ -201,7 +201,7 @@ char *getFirstToken(char *strOut, char *strIn, char sign)
 	return strOut;
 }
 
-int getToken(char *string, char **argv, char sign)
+int strGetToken(char *string, char **argv, char sign)
 {
 	int argc = 0;
 	int i = 0;
@@ -237,7 +237,7 @@ char *strAppend(char *strOut, char *pData)
 	return strAppendWithSize(strOut, pData, Size);
 }
 
-int isStartWith(char *str, char *strStart)
+int strIsStartWith(char *str, char *strStart)
 {
 	unsigned short int size = strGetSize(strStart);
 	unsigned short int CMDName_get = 1;
@@ -251,7 +251,7 @@ int isStartWith(char *str, char *strStart)
 	return CMDName_get;
 }
 
-int mimiStrEqu(char *str1, char *str2)
+int strEqu(char *str1, char *str2)
 {
 	int size1 = strGetSize(str1);
 	int size2 = strGetSize(str2);
@@ -269,9 +269,9 @@ int mimiStrEqu(char *str1, char *str2)
 	return 1;
 }
 
-char *mimiStrRemovePrefix(char *inputStr, char *prefix, char *outputStr)
+char *strRemovePrefix(char *inputStr, char *prefix, char *outputStr)
 {
-	if (!isStartWith(inputStr, prefix))
+	if (!strIsStartWith(inputStr, prefix))
 	{
 		return NULL;
 	}

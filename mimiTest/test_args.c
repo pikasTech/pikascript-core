@@ -115,7 +115,7 @@ int TEST_args2(int isShow)
             printf("arg bind type: %s\r\n", type);
             printf("arg bind print: %s\r\n", args_print(args, "testInt"));
         }
-        if (!mimiStrEqu("124", args_print(args, "testInt")))
+        if (!strEqu("124", args_print(args, "testInt")))
         {
             err = 21;
             goto exit;
@@ -129,7 +129,7 @@ int TEST_args2(int isShow)
         {
             printf("test arg print for float:%s\r\n", args_print(args, "testfloat"));
         }
-        if (!mimiStrEqu("1.420000", args_print(args, "testfloat")))
+        if (!strEqu("1.420000", args_print(args, "testfloat")))
         {
             err = 22;
             goto exit;
@@ -144,7 +144,7 @@ int TEST_args2(int isShow)
         {
             printf("test float bind: %s\r\n", args_print(args, "floatBind"));
         }
-        if (!mimiStrEqu("2.314000", args_print(args, "floatBind")))
+        if (!strEqu("2.314000", args_print(args, "floatBind")))
         {
             err = 24;
             goto exit;
@@ -158,7 +158,7 @@ int TEST_args2(int isShow)
         {
             printf("test string bind: %s\r\n", args_print(args, "testString"));
         }
-        if (!mimiStrEqu("test string print", args_print(args, "testString")))
+        if (!strEqu("test string print", args_print(args, "testString")))
         {
             err = 25;
             goto exit;
@@ -173,7 +173,7 @@ int TEST_args2(int isShow)
         {
             printf("test string bind: %s\r\n", args_print(args, "testStringBind"));
         }
-        if (!mimiStrEqu("test string bind", args_print(args, "testStringBind")))
+        if (!strEqu("test string bind", args_print(args, "testStringBind")))
         {
             err = 26;
             goto exit;
@@ -188,7 +188,7 @@ int TEST_args2(int isShow)
         {
             printf("test set int before: %s\r\n", printOutBefore);
         }
-        if (!mimiStrEqu(printOutBefore, "1"))
+        if (!strEqu(printOutBefore, "1"))
         {
             return 14;
         }
@@ -198,7 +198,7 @@ int TEST_args2(int isShow)
         {
             printf("test set int after: %s\r\n", printOutAfter);
         }
-        if (!mimiStrEqu(printOutAfter, "4"))
+        if (!strEqu(printOutAfter, "4"))
         {
             return 55;
         }
@@ -213,7 +213,7 @@ int TEST_args2(int isShow)
         {
             printf("test set bind str before: %s\r\n", printOutBefore);
         }
-        if (!mimiStrEqu(printOutBefore, "testtest"))
+        if (!strEqu(printOutBefore, "testtest"))
         {
             return 15;
         }
@@ -223,7 +223,7 @@ int TEST_args2(int isShow)
         {
             printf("test set bind str after: %s\r\n", printOutAfter);
         }
-        if (!mimiStrEqu(printOutAfter, "ttww"))
+        if (!strEqu(printOutAfter, "ttww"))
         {
             return 56;
         }
