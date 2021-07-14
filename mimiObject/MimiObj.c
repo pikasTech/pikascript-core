@@ -314,8 +314,8 @@ void loadMethodInfo(MimiObj *methodHost, char *methodName, char *methodDeclearat
 {
     char buff[2][128] = {0};
     int i = 0;
-    char *methodPtrDir = strAppend(strAppend(buff[i++], "method.[ptr]"), methodName);
-    char *methodDeclearationDir = strAppend(strAppend(buff[i++], "method.[dec]"), methodName);
+    char *methodPtrDir = strAppend(strAppend(buff[i++], "[methodPtr]"), methodName);
+    char *methodDeclearationDir = strAppend(strAppend(buff[i++], "[methodDec]"), methodName);
     obj_setPtr(methodHost, methodPtrDir, methodPtr);
     obj_setStr(methodHost, methodDeclearationDir, methodDeclearation);
 }
@@ -324,7 +324,7 @@ static char *getMethodDeclearation(MimiObj *methodHost, char *methodName)
 {
     char buff[1][128] = {0};
     int i = 0;
-    char *methodDeclearationDir = strAppend(strAppend(buff[i++], "method.[dec]"), methodName);
+    char *methodDeclearationDir = strAppend(strAppend(buff[i++], "[methodDec]"), methodName);
     return obj_getStr(methodHost, methodDeclearationDir);
 }
 
@@ -332,7 +332,7 @@ static void *getMethodPtr(MimiObj *methodHost, char *methodName)
 {
     char buff[1][128] = {0};
     int i = 0;
-    char *methodPtrDir = strAppend(strAppend(buff[i++], "method.[ptr]"), methodName);
+    char *methodPtrDir = strAppend(strAppend(buff[i++], "[methodPtr]"), methodName);
     return obj_getPtr(methodHost, methodPtrDir);
 }
 
@@ -619,7 +619,6 @@ void obj_init(MimiObj *self, Args *args)
     /* attrivute */
     obj_setPtr(self, "context", self);
     obj_setStr(self, "name", "root");
-    obj_newObj(self, "method", New_MimiObj);
 
     /* load */
     if (NULL != args)
