@@ -15,7 +15,10 @@ int dinitEachSubObj(Arg *argEach, Args *handleArgs)
     if (strEqu(argEach->typeDynMem->addr, "_class-process"))
     {
         MimiObj *subObj = arg_getPtr(argEach);
-        obj_deinit(subObj);
+        if (NULL != subObj)
+        {
+            obj_deinit(subObj);
+        }
     }
     return 0;
 }
@@ -174,14 +177,16 @@ void _beforDinit(MimiObj *self)
     /* override in user code */
 }
 
-void obj_newObj(MimiObj *self, char *subProcessName, void *newFun)
+void obj_newObj(MimiObj *self, char *objName, void *newFun)
 {
     /* class means subprocess init */
     char prifix[] = "[cls]";
-    char classDir[64] = {0};
-    strAppend(classDir, prifix);
-    strAppend(classDir, subProcessName);
-    obj_setPtr(self, classDir, newFun);
+    char className[64] = {0};
+    strAppend(className, prifix);
+    strAppend(className, objName);
+    obj_setPtr(self, className, newFun);
+    /* add void process Ptr, no inited */
+    args_setPtrWithType(self->attributeList, objName, "process", NULL);
 }
 
 void obj_addOther(MimiObj *self, char *subObjectName, void *new_ObjectFun)
@@ -237,7 +242,7 @@ int obj_set(MimiObj *self, char *argDir, char *valStr)
     return args_set(obj->attributeList, argName, valStr);
 }
 
-void newObjDirect(MimiObj *self, char *name, void *(*newObjFun)(Args * initArgs))
+void newObjDirect(MimiObj *self, char *name, void *(*newObjFun)(Args *initArgs))
 {
     Args *initArgs = New_args(NULL);
     args_setPtr(initArgs, "context", self);
@@ -255,15 +260,19 @@ MimiObj *initObj(MimiObj *self, char *name)
     strAppend(classDir, name);
     /* init the subprocess */
     void *(*newObjFun)(Args * initArgs) = args_getPtr(self->attributeList, classDir);
+    if (NULL == newObjFun)
+    {
+        printf("[error] no such object: %s\r\n", name);
+        return NULL;
+    }
     newObjDirect(self, name, newObjFun);
     return obj_getPtr(self, name);
 }
 
-MimiObj *obj_getDirectObj(MimiObj *self, char *name)
+MimiObj *obj_getObjDirect(MimiObj *self, char *name)
 {
     /* check subprocess */
-    if (!args_isArgExist(self->attributeList,
-                         name))
+    if (NULL == args_getPtr(self->attributeList, name))
     {
         /* no inited subprocess, check subprocess init fun*/
         return initObj(self, name);
@@ -295,7 +304,7 @@ MimiObj *obj_getObj(MimiObj *self, char *processDirectory, int keepToken)
     int processArgc = strGetToken(processDirectory, token, '.');
     for (int i = 0; i < processArgc - keepToken; i++)
     {
-        obj = obj_getDirectObj(obj, token[i]);
+        obj = obj_getObjDirect(obj, token[i]);
         if (obj == NULL)
         {
             goto exit;
@@ -572,7 +581,7 @@ void obj_run(MimiObj *self, char *cmd)
 
     if ((NULL == methodDeclearation) || (NULL == methodPtr))
     {
-        printf("[error] method %s no found.\r\n", methodDir);
+        printf("[error] object '%s' don't have method '%s'.\r\n", methodHost->name, methodName);
         return;
     }
 
@@ -588,7 +597,7 @@ void obj_run(MimiObj *self, char *cmd)
     {
         if (argList == NULL)
         {
-            printf("[error] method used error, method input: %s\r\n", cleanCmd);
+            printf("[error] method used error, method input: '%s'\r\n", cleanCmd);
             return;
         }
     }

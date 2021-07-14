@@ -7,27 +7,42 @@ static void print(MimiObj *obj, Args *args)
 {
     char *argName = args_getStr(args, "argName");
     char *res = args_print(obj->attributeList, argName);
-    printf("%s\r\n", res);
+    if (0 != res[0])
+    {
+        /* not empty */
+        printf("%s\r\n", res);
+    }
 }
 
 static int listEachArg(Arg *argEach, Args *handleArgs)
 {
+    char strBuff[2][256] = {0};
+    int i = 0;
+
     if (NULL == handleArgs)
     {
         /* error: not handleArgs input */
         return 1;
     }
-    char strBuff[256] = {0};
+
+    char *argName = strBuff[i++];
+    memcpy(argName, arg_getName(argEach), strGetSize(arg_getName(argEach)));
+    if (strIsStartWith(argName, "["))
+    {
+        /* skip */
+        return 0;
+    }
+
     char *stringOut = args_getStr(handleArgs, "stringOut");
     if (NULL == stringOut)
     {
         // stringOut no found
         return 1;
     }
-    memcpy(strBuff, stringOut, 256);
-    strAppend(strBuff, argEach->nameDynMem->addr);
-    strAppend(strBuff, " ");
-    args_setStr(handleArgs, "stringOut", strBuff);
+
+    strAppend(stringOut, argName);
+    strAppend(stringOut, " ");
+    args_setStr(handleArgs, "stringOut", stringOut);
     return 0;
 }
 

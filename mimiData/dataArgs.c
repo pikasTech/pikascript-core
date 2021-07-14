@@ -158,7 +158,7 @@ char *args_getType(Args *self, char *name)
     arg = args_getArg(self, name);
     if (NULL == arg)
     {
-        return "[error] arg no found.\r\n";
+        return "[error] arg no found.";
     }
     return arg->typeDynMem->addr;
 }
@@ -250,7 +250,7 @@ Arg *args_getArg(Args *self, char *name)
     while (1)
     {
         Arg *arg = nodeNow->contant;
-        if (0 == strcmp(name, arg->nameDynMem->addr))
+        if (strEqu(name, arg->nameDynMem->addr))
         {
             return arg;
         }
@@ -373,14 +373,14 @@ char *args_print(Args *self, char *name)
             return string;
         }
     }
-    return "[error] arg no found.\r\n";
+    return "[error] arg no found.";
 }
 
 int args_set(Args *self, char *name, char *valStr)
 {
     char *type = args_getType(self, name);
 
-    if (strEqu("[error] arg no found.\r\n", type))
+    if (strEqu("[error] arg no found.", type))
     {
         return 1;
     }

@@ -148,6 +148,17 @@ void arg_init(Arg *self, void *voidPointer)
     /* override */
 }
 
+
+char *arg_getName(Arg *self)
+{
+    return self->nameDynMem->addr;
+}
+
+char *arg_getType(Arg *self)
+{
+    return self->typeDynMem->addr;
+}
+
 Arg *New_arg(void *voidPointer)
 {
     DMEM *mem = DynMemGet(sizeof(Arg));

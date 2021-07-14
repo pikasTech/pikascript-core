@@ -55,7 +55,7 @@ void obj_load(MimiObj *self, Args *args, char *name);
 // subObject
 void obj_addOther(MimiObj *self, char *subObjectName, void *new_projcetFun);
 void obj_newObj(MimiObj *self, char *subObjectName, void *new_projcetFun);
-MimiObj *obj_getDirectObj(MimiObj *self, char *name);
+MimiObj *obj_getObjDirect(MimiObj *self, char *name);
 MimiObj *obj_getObj(MimiObj *self, char *processDirectory, int deepth);
 
 // subProcess
