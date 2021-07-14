@@ -134,6 +134,29 @@ long long obj_getInt(MimiObj *self, char *argDir)
                        argName);
 }
 
+Arg *obj_getArg(MimiObj *self, char *argDir)
+{
+    MimiObj *obj = obj_getObj(self, argDir, 1);
+    if (NULL == obj)
+    {
+        return NULL;
+    }
+    char argName[64] = {0};
+    strGetLastToken(argName, argDir, '.');
+    return args_getArg(obj->attributeList, argName);
+}
+
+int obj_setArg(MimiObj *self, char *argDir, Arg *arg)
+{
+    MimiObj *obj = obj_getObj(self, argDir, 1);
+    if (NULL == obj)
+    {
+        return 1;
+    }
+    args_copyArg(self->attributeList, arg);
+    return 0;
+}
+
 void *obj_getPtr(MimiObj *self, char *argDir)
 {
     MimiObj *obj = obj_getObj(self, argDir, 1);
@@ -174,7 +197,7 @@ char *obj_getStr(MimiObj *self, char *argDir)
 
 int obj_load(MimiObj *self, Args *args, char *name)
 {
-    args_copyArg(args, name, self->attributeList);
+    args_copyArgByName(args, name, self->attributeList);
     return 0;
 }
 
@@ -380,78 +403,118 @@ int obj_defineMethod(MimiObj *self,
 }
 
 static int loadArgByType(MimiObj *self,
-                         char *typeName,
-                         char *typeVal,
-                         char *argVal,
+                         char *definedName,
+                         char *definedType,
+                         char *argDir,
                          Args *args)
 {
-    char buff[2][128] = {0};
-    int i = 0;
-    if (strEqu(typeVal, "string"))
+    if (strEqu(definedType, ""))
     {
-        /* solve the string type */
-        char *directStr = strCut(buff[i++], argVal, '"', '"');
+        char buff[1][128] = {0};
+        int i = 0;
+        char *directStr = strCut(buff[i++], argDir, '"', '"');
         if (NULL != directStr)
         {
             /* direct value */
-            args_setStr(args, typeName, directStr);
+            args_setStr(args, definedName, directStr);
+            /* ok */
+            return 0;
+        }
+        if ((argDir[0] >= '0') && (argDir[0] <= '9'))
+        {
+            /* direct value */
+            args_setFloat(args, definedName, 0);
+            args_set(args, definedName, argDir);
+            /* succeed */
+            return 0;
+        }
+        Arg *arg = obj_getArg(self, argDir);
+        if (arg == NULL)
+        {
+            /* cand get arg */
+            return 3;
+        }
+        Arg *argCopied = arg_copy(arg);
+        arg_setName(argCopied, definedName);
+        args_setArg(args, argCopied);
+        return 0;
+    }
+    if (strEqu(definedType, "string"))
+    {
+        char buff[2][128] = {0};
+        int i = 0;
+        /* solve the string type */
+        char *directStr = strCut(buff[i++], argDir, '"', '"');
+        if (NULL != directStr)
+        {
+            /* direct value */
+            args_setStr(args, definedName, directStr);
             /* ok */
             return 0;
         }
         /* reference value */
-        char *refStr = obj_getStr(self, argVal);
+        char *refStr = obj_getStr(self, argDir);
         if (NULL == refStr)
         {
             /* faild */
             return 1;
         }
-        args_setStr(args, typeName, refStr);
+        args_setStr(args, definedName, refStr);
         /* succeed */
         return 0;
     }
-    if (strEqu(typeVal, "int"))
+    if (strEqu(definedType, "int"))
     {
         /* solve the int type */
-        args_setInt(args, typeName, 0);
-        if ((argVal[0] >= '0') && (argVal[0] <= '9'))
+        args_setInt(args, definedName, 0);
+        if ((argDir[0] >= '0') && (argDir[0] <= '9'))
         {
             /* direct value */
-            args_set(args, typeName, argVal);
+            args_set(args, definedName, argDir);
             /* succeed */
             return 0;
         }
         /* reference value */
-        int referenceVal = obj_getInt(self, argVal);
-        args_setInt(args, typeName, referenceVal);
+        int referenceVal = obj_getInt(self, argDir);
+        args_setInt(args, definedName, referenceVal);
         /* succeed */
         return 0;
     }
-    if (strEqu(typeVal, "float"))
+    if (strEqu(definedType, "float"))
     {
         /* solve the float type */
-        args_setFloat(args, typeName, 0);
-        if ((argVal[0] >= '0') && (argVal[0] <= '9'))
+        args_setFloat(args, definedName, 0);
+        if ((argDir[0] >= '0') && (argDir[0] <= '9'))
         {
             /* direct value */
-            args_set(args, typeName, argVal);
+            args_set(args, definedName, argDir);
             /* succeed */
             return 0;
         }
         /* reference value */
-        float referenceVal = obj_getFloat(self, argVal);
-        args_setFloat(args, typeName, referenceVal);
+        float referenceVal = obj_getFloat(self, argDir);
+        args_setFloat(args, definedName, referenceVal);
         /* succeed */
         return 0;
     }
-    if (strEqu(typeVal, "pointer"))
+    if (strEqu(definedType, "pointer"))
     {
         /* only support reference value */
-        void *ptr = obj_getPtr(self, argVal);
-        args_setPtr(args, typeName, ptr);
+        void *ptr = obj_getPtr(self, argDir);
+        args_setPtr(args, definedName, ptr);
         return 0;
     }
     /* type match faild */
     return 2;
+}
+
+char *getTypeVal(char *buff, char *typeToken)
+{
+    if (!strIsContain(typeToken, ':'))
+    {
+        return strAppend(buff, "");
+    }
+    return strGetLastToken(buff, typeToken, ':');
 }
 
 static Args *getArgsBySort(MimiObj *self, char *typeList, char *argList)
@@ -476,13 +539,13 @@ static Args *getArgsBySort(MimiObj *self, char *typeList, char *argList)
         }
 
         char *typeName = strGetFirstToken(buff[i++], typeToken, ':');
-        char *typeVal = strGetLastToken(buff[i++], typeToken, ':');
-        char *argVal = argToken;
+        char *typeVal = getTypeVal(buff[i++], typeToken);
+        char *argDir = argToken;
 
         if (0 != loadArgByType(self,
                                typeName,
                                typeVal,
-                               argVal,
+                               argDir,
                                args))
         {
             args_deinit(args);
@@ -512,7 +575,7 @@ static Args *getArgsByNameMatch(MimiObj *self, char *typeList, char *argList)
         }
 
         char *typeName = strGetFirstToken(buff[i++], typeToken, ':');
-        char *typeVal = strGetLastToken(buff[i++], typeToken, ':');
+        char *typeVal = getTypeVal(buff[i++], typeToken);
 
         char *argListBuff = buff[i++];
         memcpy(argListBuff, argList, strGetSize(argList));
@@ -676,7 +739,7 @@ MimiObj *New_MimiObj(Args *args)
         while (1)
             ;
     }
-    MimiObj *self = mem->addr;
+    MimiObj *self = (void *)(mem->addr);
     self->mem = mem;
     obj_init(self, args);
     return self;

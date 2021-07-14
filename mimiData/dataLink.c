@@ -120,7 +120,7 @@ void link_init(Link *self, void *args)
 Link *New_link(void *args)
 {
     DMEM *mem = DynMemGet(sizeof(Link));
-    Link *self = mem->addr;
+    Link *self = (void *)(mem->addr);
     self->mem = mem;
     link_init(self, args);
     return self;

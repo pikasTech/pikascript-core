@@ -5,13 +5,17 @@
 
 static void print(MimiObj *obj, Args *args)
 {
-    char *argName = args_getStr(args, "argName");
-    char *res = args_print(obj->attributeList, argName);
-    if (0 != res[0])
+    char *res = args_print(args, "arg");
+    if (NULL == res)
     {
-        /* not empty */
-        printf("%s\r\n", res);
+        return;
     }
+    if (0 == res[0])
+    {
+        return;
+    }
+    /* not empty */
+    printf("%s\r\n", res);
 }
 
 static int listEachArg(Arg *argEach, Args *handleArgs)
@@ -66,7 +70,7 @@ static void init_baseObj(MimiObj *self, Args *args)
     /* attrivute */
 
     /* operation */
-    obj_defineMethod(self, "print(argName:string)", print);
+    obj_defineMethod(self, "print(arg)", print);
     obj_defineMethod(self, "ls()", list);
     obj_defineMethod(self, "set(argName:string, argVal:string)", set);
 

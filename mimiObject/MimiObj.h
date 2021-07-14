@@ -29,15 +29,17 @@ int obj_enable(MimiObj *self);
 int obj_disable(MimiObj *self);
 
 // arg type operations
-int obj_setInt(MimiObj *self, char *name, long long val);
-int obj_setPtr(MimiObj *self, char *name, void *pointer);
-int obj_setFloat(MimiObj *self, char *name, float value);
-int obj_setStr(MimiObj *self, char *name, char *str);
+int obj_setInt(MimiObj *self, char *argDir, long long val);
+int obj_setPtr(MimiObj *self, char *argDir, void *pointer);
+int obj_setFloat(MimiObj *self, char *argDir, float value);
+int obj_setStr(MimiObj *self, char *argDir, char *str);
+int obj_setArg(MimiObj *self, char *argDir, Arg *arg);
 
-void *obj_getPtr(MimiObj *self, char *name);
-float obj_getFloat(MimiObj *self, char *name);
-char *obj_getStr(MimiObj *self, char *name);
-long long obj_getInt(MimiObj *self, char *name);
+void *obj_getPtr(MimiObj *self, char *argDir);
+float obj_getFloat(MimiObj *self, char *argDir);
+char *obj_getStr(MimiObj *self, char *argDir);
+long long obj_getInt(MimiObj *self, char *argDir);
+Arg *obj_getArg(MimiObj *self, char *argDir);
 
 // arg general operations
 int obj_bind(MimiObj *self, char *type, char *name, void *pointer);
@@ -63,7 +65,7 @@ int obj_freeObj(MimiObj *self, char *subObjectName);
 
 /* method */
 int obj_defineMethod(MimiObj *self,
-                      char *declearation,
-                      void (*methodPtr)(MimiObj *self, Args *args));
+                     char *declearation,
+                     void (*methodPtr)(MimiObj *self, Args *args));
 
 int obj_run(MimiObj *self, char *cmd);

@@ -21,7 +21,7 @@ void arg_deinit(Arg *self)
     }
 }
 
- void arg_setContant(Arg *self, char *contant, int size)
+void arg_setContant(Arg *self, char *contant, int size)
 {
     if (NULL != self->contantDynMem)
     {
@@ -31,7 +31,7 @@ void arg_deinit(Arg *self)
     memcpy(self->contantDynMem->addr, contant, size + 1);
 }
 
- void arg_setName(Arg *self, char *name)
+void arg_setName(Arg *self, char *name)
 {
     int size = strGetSize(name);
     if (NULL != self->nameDynMem)
@@ -43,7 +43,7 @@ void arg_deinit(Arg *self)
     memcpy(self->nameDynMem->addr, name, size + 1);
 }
 
- void arg_setType(Arg *self, char *type)
+void arg_setType(Arg *self, char *type)
 {
     int size = strGetSize(type);
     if (NULL != self->typeDynMem)
@@ -54,13 +54,13 @@ void arg_deinit(Arg *self)
     memcpy(self->typeDynMem->addr, type, size + 1);
 }
 
- char *arg_getContant(Arg *self)
+char *arg_getContant(Arg *self)
 {
     // return self->contactConst;
     return self->contantDynMem->addr;
 }
 
- void arg_setInt(Arg *self, long long val)
+void arg_setInt(Arg *self, long long val)
 {
     unsigned long int int64Temp = val;
     unsigned char contantBuff[256];
@@ -73,14 +73,14 @@ void arg_deinit(Arg *self)
     arg_setContant(self, (char *)contantBuff, 8);
 }
 
- void arg_setFloat(Arg *self, float val)
+void arg_setFloat(Arg *self, float val)
 {
     char contantBuff[256];
     sprintf((char *)contantBuff, "%f", val);
     arg_setContant(self, (char *)contantBuff, strGetSize(contantBuff));
 }
 
- void arg_setPtr(Arg *self, void *pointer)
+void arg_setPtr(Arg *self, void *pointer)
 {
     unsigned long int pointerTemp = (unsigned long int)pointer;
     unsigned char contantBuff[256];
@@ -92,12 +92,12 @@ void arg_deinit(Arg *self)
     }
     arg_setContant(self, (char *)contantBuff, 8);
 }
- void arg_setStr(Arg *self, char *string)
+void arg_setStr(Arg *self, char *string)
 {
-    arg_setContant(self,  string, strGetSize(string));
+    arg_setContant(self, string, strGetSize(string));
 }
 
- long long arg_getInt(Arg *self)
+long long arg_getInt(Arg *self)
 {
     unsigned long long int64Temp = 0;
     for (int i = 7; i > -1; i--)
@@ -109,7 +109,7 @@ void arg_deinit(Arg *self)
     return int64Temp;
 }
 
- void *arg_getPtr(Arg *self)
+void *arg_getPtr(Arg *self)
 {
     void *pointer = NULL;
     unsigned long int pointerTemp = 0;
@@ -122,13 +122,13 @@ void arg_deinit(Arg *self)
     pointer = (void *)pointerTemp;
     return pointer;
 }
- float arg_getFloat(Arg *self)
+float arg_getFloat(Arg *self)
 {
     float val = 0;
     val = atof(self->contantDynMem->addr);
     return val;
 }
- char *arg_getStr(Arg *self)
+char *arg_getStr(Arg *self)
 {
     return self->contantDynMem->addr;
 }
@@ -148,7 +148,6 @@ void arg_init(Arg *self, void *voidPointer)
     /* override */
 }
 
-
 char *arg_getName(Arg *self)
 {
     return self->nameDynMem->addr;
@@ -159,11 +158,21 @@ char *arg_getType(Arg *self)
     return self->typeDynMem->addr;
 }
 
+
 Arg *New_arg(void *voidPointer)
 {
     DMEM *mem = DynMemGet(sizeof(Arg));
-    Arg *self = mem->addr;
+    Arg *self = (void *)(mem->addr);
     self->mem = mem;
     arg_init(self, voidPointer);
     return self;
+}
+
+Arg *arg_copy(Arg *argToBeCopy)
+{
+    Arg *argCopied = New_arg(NULL);
+    arg_setContant(argCopied, argToBeCopy->contantDynMem->addr, argToBeCopy->contantDynMem->size);
+    arg_setName(argCopied, argToBeCopy->nameDynMem->addr);
+    arg_setType(argCopied, argToBeCopy->typeDynMem->addr);
+    return argCopied;
 }

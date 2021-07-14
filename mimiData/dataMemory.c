@@ -68,10 +68,10 @@ DMEM *DynMemGet(uint32_t size)
                 }
             }
             if (find >= blk_num_want)
-            {                                                  //寻找到的空闲内存块数目已经够用
-                user->addr = DMEMORY + loop * DMEM_BLOCK_SIZE; //计算申请到的内存的地址
-                apply->blk_s = loop;                           //记录申请到的内存块首序号
-                apply->blk_num = blk_num_want;                 //记录申请到的内存块数目
+            {                                                          //寻找到的空闲内存块数目已经够用
+                user->addr = (char *)DMEMORY + loop * DMEM_BLOCK_SIZE; //计算申请到的内存的地址
+                apply->blk_s = loop;                                   //记录申请到的内存块首序号
+                apply->blk_num = blk_num_want;                         //记录申请到的内存块数目
                 for (find = 0; find < apply->blk_num; find++)
                 {
                     DMEMS.tb_blk[loop + find] = DMEM_USED;

@@ -155,8 +155,6 @@ int args_getSize(Args *self)
 char *args_getType(Args *self, char *name)
 {
     Arg *arg = NULL;
-    char buff[2][64] = {0};
-    int i = 0;
     arg = args_getArg(self, name);
     if (NULL == arg)
     {
@@ -187,20 +185,23 @@ float args_getFloat(Args *self, char *name)
     return arg_getFloat(arg);
 }
 
-int args_copyArg(Args *self, char *name, Args *directArgs)
+
+int args_copyArg(Args *self, Arg *argToBeCopy)
 {
-    Arg *argToBeCopy = args_getArg(self, name);
     if (NULL == argToBeCopy)
     {
         return 1;
     }
-    Arg *argCopied = New_arg(NULL);
-    arg_setContant(argCopied, argToBeCopy->contantDynMem->addr, argToBeCopy->contantDynMem->size);
-    arg_setName(argCopied, argToBeCopy->nameDynMem->addr);
-    arg_setType(argCopied, argToBeCopy->typeDynMem->addr);
+    Arg *argCopied = arg_copy(argToBeCopy);
+    args_setArg(self, argCopied);
 
-    args_setArg(directArgs, argCopied);
+    return 0;
+}
 
+int args_copyArgByName(Args *self, char *name, Args *directArgs)
+{
+    Arg *argToBeCopy = args_getArg(self, name);
+    args_copyArg(directArgs, argToBeCopy);
     return 0;
 }
 
@@ -230,7 +231,6 @@ int updateArg(Args *self, Arg *argNew)
 
 int args_setArg(Args *self, Arg *arg)
 {
-
     if (!args_isArgExist(self, arg->nameDynMem->addr))
     {
         link_addNode(self->argLinkList,
@@ -327,6 +327,10 @@ char *getPrintStringFromPtr(Args *self, char *name, void *val)
 char *args_print(Args *self, char *name)
 {
     char *type = args_getType(self, name);
+    if(NULL == type)
+    {
+        return NULL;
+    }
 
     if (strEqu(type, "int"))
     {
@@ -375,8 +379,6 @@ char *args_print(Args *self, char *name)
             return string;
         }
     }
-    char buff[1][128] = {0};
-    int i = 0;
     return NULL;
 }
 
@@ -520,7 +522,7 @@ void args_init(Args *self, Args *args)
 Args *New_args(Args *args)
 {
     DMEM *mem = DynMemGet(sizeof(Args));
-    Args *self = mem->addr;
+    Args *self = (void *)(mem->addr);
     self->mem = mem;
     args_init(self, args);
     return self;

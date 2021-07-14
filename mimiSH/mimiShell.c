@@ -125,7 +125,7 @@ void shell_init(Shell *self, Args *initArgs)
 Shell *New_shell(Args *args)
 {
 	DMEM *mem = DynMemGet(sizeof(Shell));
-	Shell *self = mem->addr;
+	Shell *self = (void *)(mem->addr);
 	self->mem = mem;
 	shell_init(self, args);
 	return self;

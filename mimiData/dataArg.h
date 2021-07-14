@@ -19,6 +19,7 @@ void arg_setContant(Arg *self, char *contant, int size);
 void arg_setType(Arg *self, char *type);
 char *arg_getName(Arg *self);
 char *arg_getType(Arg *self);
+char *arg_getContant(Arg *self);
 
 void arg_setInt(Arg *self, long long val);
 void arg_setFloat(Arg *self, float val);
@@ -29,8 +30,8 @@ long long arg_getInt(Arg *self);
 float arg_getFloat(Arg *self);
 void *arg_getPtr(Arg *self);
 char *arg_getStr(Arg *self);
+Arg *arg_copy(Arg *argToBeCopy);
 
-char *arg_getContant(Arg *self);
 
 void arg_init(Arg *self, void *voidPointer);
 void arg_deinit(Arg *self);

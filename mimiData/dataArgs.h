@@ -28,7 +28,9 @@ void args_removeArg(Args *self, char *name);
 
 int args_setArg(Args *self, Arg *arg);
 
-int args_copyArg(Args *self, char *name, Args *directList);
+int args_copyArgByName(Args *self, char *name, Args *directList);
+int args_copyArg(Args *self, Arg *argToBeCopy);
+
 char *args_getType(Args *self, char *name);
 int args_isArgExist(Args *self, char *name);
 

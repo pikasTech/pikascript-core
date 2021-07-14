@@ -75,8 +75,8 @@ int TEST_args2(int isShow)
 
         args_setFloat(args1, "argtest1", 2.883);
         args_setStr(args1, "strtest1", "teststr");
-        args_copyArg(args1, "argtest1", args2);
-        args_copyArg(args1, "strtest1", args2);
+        args_copyArgByName(args1, "argtest1", args2);
+        args_copyArgByName(args1, "strtest1", args2);
 
         if (isShow)
         {

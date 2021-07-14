@@ -25,7 +25,7 @@ static void init(dataTest_t *self, Args *args)
 dataTest_t *New_dataTest(Args *args)
 {
     DMEM *mem = DynMemGet(sizeof(dataTest_t));
-    dataTest_t *self = mem->addr;
+    dataTest_t *self = (void *)(mem->addr);
     self->mem = mem;
     self->init = init;
     self->init(self, args);

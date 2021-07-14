@@ -135,6 +135,7 @@ char *strGetLastToken(char *strOut, char *strIn, char sign)
 {
 	int size = strGetSize(strIn);
 	char strOutBuff[256] = {0};
+	int isGetSign = 0;
 	for (int i = size - 1; i > -1; i--)
 	{
 		if (strIn[i] != sign)
@@ -143,6 +144,7 @@ char *strGetLastToken(char *strOut, char *strIn, char sign)
 		}
 		if (strIn[i] == sign)
 		{
+			isGetSign = 1;
 			break;
 		}
 	}
@@ -311,4 +313,3 @@ char *strCopy(char *strBuff, char *strIn)
 	memcpy(strBuff, strIn, strGetSize(strIn));
 	return strBuff;
 }
-

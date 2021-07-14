@@ -62,13 +62,13 @@ static void init(MimiCom *self, Args *initArgs)
     {
         return;
     }
-    args_copyArg(initArgs, "context", self->args);
+    args_copyArgByName(initArgs, "context", self->args);
 }
 
 MimiCom *New_mimiCom(Args *args)
 {
     DMEM *mem = DynMemGet(sizeof(MimiCom));
-    MimiCom *self = mem->addr;
+    MimiCom *self = (void *)(mem->addr);
     self->mem = mem;
     self->init = init;
     self->init(self, args);

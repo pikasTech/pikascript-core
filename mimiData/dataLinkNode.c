@@ -39,7 +39,7 @@ void linkNode_init(LinkNode *self, void *args)
 LinkNode *New_linkNode(void *args)
 {
     DMEM *mem = DynMemGet(sizeof(LinkNode));
-    LinkNode *self = mem->addr;
+    LinkNode *self = (void *)(mem->addr);
     self->mem = mem;
     linkNode_init(self, args);
     return self;
