@@ -3,21 +3,6 @@
 #include "dataMemory.h"
 #include "dataString.h"
 
-static void print(MimiObj *obj, Args *args)
-{
-    char *res = args_print(args, "arg");
-    if (NULL == res)
-    {
-        return;
-    }
-    if (0 == res[0])
-    {
-        return;
-    }
-    /* not empty */
-    printf("%s\r\n", res);
-}
-
 static int listEachArg(Arg *argEach, Args *handleArgs)
 {
     char strBuff[2][256] = {0};
@@ -58,21 +43,12 @@ static void list(MimiObj *obj, Args *args)
     return;
 }
 
-static void set(MimiObj *obj, Args *args)
-{
-    char *argName = args_getStr(args, "argName");
-    char *argVal = args_getStr(args, "argVal");
-    args_set(obj->attributeList, argName, argVal);
-}
-
 static void init_baseObj(MimiObj *self, Args *args)
 {
     /* attrivute */
 
     /* operation */
-    obj_defineMethod(self, "print(arg)", print);
     obj_defineMethod(self, "ls()", list);
-    obj_defineMethod(self, "set(argName:string, argVal:string)", set);
 
     /* object */
 
