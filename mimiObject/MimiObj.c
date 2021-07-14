@@ -29,91 +29,96 @@ void dinitAllSubObj(MimiObj *self)
     args_foreach(args, dinitEachSubObj, NULL);
 }
 
-void obj_deinit(MimiObj *self)
+int obj_deinit(MimiObj *self)
 {
     self->_beforDinit(self);
     dinitAllSubObj(self);
     args_deinit(self->attributeList);
     DynMemPut(self->mem);
+    return 0;
 }
 
-void obj_update(MimiObj *self)
+int obj_update(MimiObj *self)
 {
     // return if is not enable
     if (0 == obj_getInt(self, "isEnable"))
     {
-        return;
+        return 1;
     }
     self->_updateHandle(self);
+    return 0;
 }
 void _UpdateHandle(MimiObj *self)
 {
     // override the handle function here
 }
 
-void obj_enable(MimiObj *self)
+int obj_enable(MimiObj *self)
 {
     obj_setInt(self, "isEnable", 1);
+    return 0;
 }
 
-void obj_disable(MimiObj *self)
+int obj_disable(MimiObj *self)
 {
     obj_setInt(self, "isEnable", 0);
+    return 0;
 }
 
-void obj_setInt(MimiObj *self, char *argDir, long long val)
+int obj_setInt(MimiObj *self, char *argDir, long long val)
 {
     MimiObj *obj = obj_getObj(self, argDir, 1);
     if (NULL == obj)
     {
-        printf("[error] object no found: %s\r\n, argDir", argDir);
-        return;
+        /* [error] object no found */
+        return 1;
     }
     char name[64] = {0};
     strGetLastToken(name, argDir, '.');
     args_setInt(obj->attributeList, name, val);
+    return 0;
 }
 
-void obj_setPtr(MimiObj *self, char *argDir, void *pointer)
+int obj_setPtr(MimiObj *self, char *argDir, void *pointer)
 {
     MimiObj *obj = obj_getObj(self, argDir, 1);
     if (NULL == obj)
     {
-        printf("[error] object no found: %s\r\n", argDir);
-        return;
+        return 1;
     }
     char name[64] = {0};
     strGetLastToken(name, argDir, '.');
     args_setPtr(obj->attributeList,
                 name, pointer);
+    return 0;
 }
 
-void obj_setFloat(MimiObj *self, char *argDir, float value)
+int obj_setFloat(MimiObj *self, char *argDir, float value)
 {
     MimiObj *obj = obj_getObj(self, argDir, 1);
     if (NULL == obj)
     {
-        printf("[error] object no found: %s\r\n", argDir);
-        return;
+        return 1;
     }
     char name[64] = {0};
     strGetLastToken(name, argDir, '.');
     args_setFloat(obj->attributeList,
                   name, value);
+    return 0;
 }
 
-void obj_setStr(MimiObj *self, char *argDir, char *str)
+int obj_setStr(MimiObj *self, char *argDir, char *str)
 {
     MimiObj *obj = obj_getObj(self, argDir, 1);
     if (NULL == obj)
     {
-        printf("[error] object no found: %s\r\n", argDir);
-        return;
+        return 1;
     }
     char name[64] = {0};
     strGetLastToken(name, argDir, '.');
     args_setStr(obj->attributeList,
                 name, str);
+    return 0;
 }
 
 long long obj_getInt(MimiObj *self, char *argDir)
@@ -167,9 +172,10 @@ char *obj_getStr(MimiObj *self, char *argDir)
                        argName);
 }
 
-void obj_load(MimiObj *self, Args *args, char *name)
+int obj_load(MimiObj *self, Args *args, char *name)
 {
     args_copyArg(args, name, self->attributeList);
+    return 0;
 }
 
 void _beforDinit(MimiObj *self)
@@ -177,7 +183,7 @@ void _beforDinit(MimiObj *self)
     /* override in user code */
 }
 
-void obj_newObj(MimiObj *self, char *objName, void *newFun)
+int obj_newObj(MimiObj *self, char *objName, void *newFun)
 {
     /* class means subprocess init */
     char prifix[] = "[cls]";
@@ -187,9 +193,10 @@ void obj_newObj(MimiObj *self, char *objName, void *newFun)
     obj_setPtr(self, className, newFun);
     /* add void process Ptr, no inited */
     args_setPtrWithType(self->attributeList, objName, "process", NULL);
+    return 0;
 }
 
-void obj_addOther(MimiObj *self, char *subObjectName, void *new_ObjectFun)
+int obj_addOther(MimiObj *self, char *subObjectName, void *new_ObjectFun)
 {
     Args *initArgs = New_args(NULL);
     args_setPtr(initArgs, "context", self);
@@ -197,17 +204,20 @@ void obj_addOther(MimiObj *self, char *subObjectName, void *new_ObjectFun)
     void *subObject = new_Object(initArgs);
     obj_setPtr(self, subObjectName, subObject);
     args_deinit(initArgs);
+    return 0;
 }
 
-void obj_freeObj(MimiObj *self, char *subProcessName)
+int obj_freeObj(MimiObj *self, char *subProcessName)
 {
     MimiObj *subProcess = obj_getPtr(self, subProcessName);
     obj_deinit(subProcess);
+    return 0;
 }
 
-void obj_bind(MimiObj *self, char *type, char *name, void *pointer)
+int obj_bind(MimiObj *self, char *type, char *name, void *pointer)
 {
     args_bind(self->attributeList, type, name, pointer);
+    return 0;
 }
 
 char *obj_print(MimiObj *self, char *name)
@@ -215,19 +225,22 @@ char *obj_print(MimiObj *self, char *name)
     return args_print(self->attributeList, name);
 }
 
-void obj_bindInt(MimiObj *self, char *name, int *valPtr)
+int obj_bindInt(MimiObj *self, char *name, int *valPtr)
 {
     args_bindInt(self->attributeList, name, valPtr);
+    return 0;
 }
 
-void obj_bindFloat(MimiObj *self, char *name, float *valPtr)
+int obj_bindFloat(MimiObj *self, char *name, float *valPtr)
 {
     args_bindFloat(self->attributeList, name, valPtr);
+    return 0;
 }
 
-void obj_bindString(MimiObj *self, char *name, char **valPtr)
+int obj_bindString(MimiObj *self, char *name, char **valPtr)
 {
     args_bindStr(self->attributeList, name, valPtr);
+    return 0;
 }
 
 int obj_set(MimiObj *self, char *argDir, char *valStr)
@@ -262,7 +275,7 @@ MimiObj *initObj(MimiObj *self, char *name)
     void *(*newObjFun)(Args * initArgs) = args_getPtr(self->attributeList, classDir);
     if (NULL == newObjFun)
     {
-        printf("[error] no such object: '%s'\r\n", name);
+        /* no such object */
         return NULL;
     }
     newObjDirect(self, name, newObjFun);
@@ -345,9 +358,9 @@ static void *getMethodPtr(MimiObj *methodHost, char *methodName)
     return obj_getPtr(methodHost, methodPtrDir);
 }
 
-void obj_defineMethod(MimiObj *self,
-                      char *declearation,
-                      void (*methodPtr)(MimiObj *self, Args *args))
+int obj_defineMethod(MimiObj *self,
+                     char *declearation,
+                     void (*methodPtr)(MimiObj *self, Args *args))
 {
     char buff[3][128] = {0};
     int i = 0;
@@ -357,12 +370,13 @@ void obj_defineMethod(MimiObj *self,
     MimiObj *methodHost = obj_getObj(self, methodDir, 1);
     if (NULL == methodHost)
     {
-        printf("[error] object direction no found, method declearation: '%s'\r\n", methodDir);
-        return;
+        /* no found method object */
+        return 1;
     }
     char *methodName = strGetLastToken(buff[i++], methodDir, '.');
 
     loadMethodInfo(methodHost, methodName, cleanDeclearation, methodPtr);
+    return 0;
 }
 
 static int loadArgByType(MimiObj *self,
@@ -388,7 +402,6 @@ static int loadArgByType(MimiObj *self,
         char *refStr = obj_getStr(self, argVal);
         if (NULL == refStr)
         {
-            printf("[error] can not get string from reference: '%s'\r\n", argVal);
             /* faild */
             return 1;
         }
@@ -438,7 +451,6 @@ static int loadArgByType(MimiObj *self,
         return 0;
     }
     /* type match faild */
-    printf("[error] type not match, input type: %s\r\n", typeVal);
     return 2;
 }
 
@@ -575,7 +587,7 @@ char *getMethodDir(char *buff, char *methodToken)
     }
 }
 
-void obj_run(MimiObj *self, char *cmd)
+int obj_run(MimiObj *self, char *cmd)
 {
     char buff[8][128] = {0};
     int i = 0;
@@ -586,8 +598,7 @@ void obj_run(MimiObj *self, char *cmd)
     MimiObj *methodHost = obj_getObj(self, methodDir, 1);
     if (NULL == methodHost)
     {
-        printf("[error] object direction no found, method declearation: '%s'\r\n", methodDir);
-        return;
+        return 1;
     }
     char *methodName = strGetLastToken(buff[i++], methodDir, '.');
     void (*methodPtr)(MimiObj * self, Args * args) = getMethodPtr(methodHost, methodName);
@@ -595,24 +606,20 @@ void obj_run(MimiObj *self, char *cmd)
 
     if ((NULL == methodDeclearation) || (NULL == methodPtr))
     {
-        printf("[error] object '%s' don't have method '%s'.\r\n", methodHost->name, methodName);
-        return;
+        return 2;
     }
 
     char *typeList = strCut(buff[i++], methodDeclearation, '(', ')');
     if (typeList == NULL)
     {
-        printf("[error] method declearation error!\r\n");
-        printf("[info]: declearation: '%s'\r\n", methodDeclearation);
-        return;
+        return 3;
     }
 
     char *argList = strCut(buff[i++], cleanCmd, '(', ')');
     {
         if (argList == NULL)
         {
-            printf("[error] method used error, method input: '%s'\r\n", cleanCmd);
-            return;
+            return 4;
         }
     }
 
@@ -622,7 +629,7 @@ void obj_run(MimiObj *self, char *cmd)
     if (NULL == args)
     {
         /* get args faild */
-        return;
+        return 5;
     }
     /* run method */
     methodPtr(methodHost, args);
@@ -633,9 +640,11 @@ void obj_run(MimiObj *self, char *cmd)
         transferReturnVal(self, returnType, returnName, args);
     }
     args_deinit(args);
+    /* succeed */
+    return 0;
 }
 
-void obj_init(MimiObj *self, Args *args)
+int obj_init(MimiObj *self, Args *args)
 {
     /* List */
     self->attributeList = New_args(NULL);
@@ -655,6 +664,7 @@ void obj_init(MimiObj *self, Args *args)
         obj_load(self, args, "context");
     }
     self->name = obj_getStr(self, "name");
+    return 0;
 }
 
 MimiObj *New_MimiObj(Args *args)
