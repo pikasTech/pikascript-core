@@ -25,5 +25,6 @@ char *strGetFirstToken(char *strOut, char *strIn, char sign);
 char *strGetLastToken(char *strOut, char *strIn, char sign);
 char *strClear(char *str);
 int strIsContain(char *str, char ch);
+char *strCopy(char *strBuff, char *strIn);
 
 #endif

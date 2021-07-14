@@ -262,7 +262,7 @@ MimiObj *initObj(MimiObj *self, char *name)
     void *(*newObjFun)(Args * initArgs) = args_getPtr(self->attributeList, classDir);
     if (NULL == newObjFun)
     {
-        printf("[error] no such object: %s\r\n", name);
+        printf("[error] no such object: '%s'\r\n", name);
         return NULL;
     }
     newObjDirect(self, name, newObjFun);
@@ -357,7 +357,7 @@ void obj_defineMethod(MimiObj *self,
     MimiObj *methodHost = obj_getObj(self, methodDir, 1);
     if (NULL == methodHost)
     {
-        printf("[error] object direction no found, method declearation: %s\r\n", methodDir);
+        printf("[error] object direction no found, method declearation: '%s'\r\n", methodDir);
         return;
     }
     char *methodName = strGetLastToken(buff[i++], methodDir, '.');
@@ -365,11 +365,11 @@ void obj_defineMethod(MimiObj *self,
     loadMethodInfo(methodHost, methodName, cleanDeclearation, methodPtr);
 }
 
-static void loadArgByType(MimiObj *self,
-                          char *typeName,
-                          char *typeVal,
-                          char *argVal,
-                          Args *args)
+static int loadArgByType(MimiObj *self,
+                         char *typeName,
+                         char *typeVal,
+                         char *argVal,
+                         Args *args)
 {
     char buff[2][128] = {0};
     int i = 0;
@@ -381,17 +381,20 @@ static void loadArgByType(MimiObj *self,
         {
             /* direct value */
             args_setStr(args, typeName, directStr);
-            return;
+            /* ok */
+            return 0;
         }
         /* reference value */
         char *refStr = obj_getStr(self, argVal);
         if (NULL == refStr)
         {
-            printf("[error] can not get string from reference: %s\r\n", argVal);
-            return;
+            printf("[error] can not get string from reference: '%s'\r\n", argVal);
+            /* faild */
+            return 1;
         }
         args_setStr(args, typeName, refStr);
-        return;
+        /* succeed */
+        return 0;
     }
     if (strEqu(typeVal, "int"))
     {
@@ -401,12 +404,14 @@ static void loadArgByType(MimiObj *self,
         {
             /* direct value */
             args_set(args, typeName, argVal);
-            return;
+            /* succeed */
+            return 0;
         }
         /* reference value */
         int referenceVal = obj_getInt(self, argVal);
         args_setInt(args, typeName, referenceVal);
-        return;
+        /* succeed */
+        return 0;
     }
     if (strEqu(typeVal, "float"))
     {
@@ -416,24 +421,25 @@ static void loadArgByType(MimiObj *self,
         {
             /* direct value */
             args_set(args, typeName, argVal);
-            return;
+            /* succeed */
+            return 0;
         }
         /* reference value */
         float referenceVal = obj_getFloat(self, argVal);
         args_setFloat(args, typeName, referenceVal);
-        return;
+        /* succeed */
+        return 0;
     }
     if (strEqu(typeVal, "pointer"))
     {
         /* only support reference value */
         void *ptr = obj_getPtr(self, argVal);
         args_setPtr(args, typeName, ptr);
-        return;
+        return 0;
     }
     /* type match faild */
     printf("[error] type not match, input type: %s\r\n", typeVal);
-    while (1)
-        ;
+    return 2;
 }
 
 static Args *getArgsBySort(MimiObj *self, char *typeList, char *argList)
@@ -461,11 +467,15 @@ static Args *getArgsBySort(MimiObj *self, char *typeList, char *argList)
         char *typeVal = strGetLastToken(buff[i++], typeToken, ':');
         char *argVal = argToken;
 
-        loadArgByType(self,
-                      typeName,
-                      typeVal,
-                      argVal,
-                      args);
+        if (0 != loadArgByType(self,
+                               typeName,
+                               typeVal,
+                               argVal,
+                               args))
+        {
+            args_deinit(args);
+            return NULL;
+        }
     }
     return args;
 }
@@ -514,11 +524,15 @@ static Args *getArgsByNameMatch(MimiObj *self, char *typeList, char *argList)
                 continue;
             }
 
-            loadArgByType(self,
-                          typeName,
-                          typeVal,
-                          argVal,
-                          args);
+            if (0 != loadArgByType(self,
+                                   typeName,
+                                   typeVal,
+                                   argVal,
+                                   args))
+            {
+                args_deinit(args);
+                return NULL;
+            }
         }
     }
     return args;
@@ -572,7 +586,7 @@ void obj_run(MimiObj *self, char *cmd)
     MimiObj *methodHost = obj_getObj(self, methodDir, 1);
     if (NULL == methodHost)
     {
-        printf("[error] object direction no found, method declearation: %s\r\n", methodDir);
+        printf("[error] object direction no found, method declearation: '%s'\r\n", methodDir);
         return;
     }
     char *methodName = strGetLastToken(buff[i++], methodDir, '.');
@@ -589,7 +603,7 @@ void obj_run(MimiObj *self, char *cmd)
     if (typeList == NULL)
     {
         printf("[error] method declearation error!\r\n");
-        printf("[info]: declearation: %s\r\n", methodDeclearation);
+        printf("[info]: declearation: '%s'\r\n", methodDeclearation);
         return;
     }
 
@@ -605,6 +619,11 @@ void obj_run(MimiObj *self, char *cmd)
     char *returnType = strGetLastToken(buff[i++], methodDeclearation, ')');
     /* get type */
     Args *args = getArgsBySentence(self, typeList, argList);
+    if (NULL == args)
+    {
+        /* get args faild */
+        return;
+    }
     /* run method */
     methodPtr(methodHost, args);
     /* transfer return */

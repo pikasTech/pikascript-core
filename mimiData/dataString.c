@@ -1,7 +1,9 @@
 #include "dataString.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-char *strPrintWithSize_unlimited(char *strOut, char *pData, int Size)
+char *strAppendWithSize_unlimited(char *strOut, char *pData, int Size)
 {
 	int strOut_i = strGetSize_unlimited(strOut);
 	for (int i = 0; i < Size; i++)
@@ -126,7 +128,7 @@ char *strAppend_unlimited(char *strOut, char *pData)
 {
 	unsigned short int Size = 0;
 	Size = strGetSize_unlimited(pData);
-	return strPrintWithSize_unlimited(strOut, pData, Size);
+	return strAppendWithSize_unlimited(strOut, pData, Size);
 }
 
 char *strGetLastToken(char *strOut, char *strIn, char sign)
@@ -160,7 +162,7 @@ char *strPopToken(char *strOut, char *strIn, char sign)
 	int iPoped = 0;
 	int iOut = 0;
 	int size = strGetSize(strIn);
-	int i;
+	int i = 0;
 	for (i = 0; i < size; i++)
 	{
 		if (getSign)
@@ -303,3 +305,10 @@ int strIsContain(char *str, char ch)
 	}
 	return 0;
 }
+
+char *strCopy(char *strBuff, char *strIn)
+{
+	memcpy(strBuff, strIn, strGetSize(strIn));
+	return strBuff;
+}
+

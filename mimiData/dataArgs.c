@@ -155,10 +155,12 @@ int args_getSize(Args *self)
 char *args_getType(Args *self, char *name)
 {
     Arg *arg = NULL;
+    char buff[2][64] = {0};
+    int i = 0;
     arg = args_getArg(self, name);
     if (NULL == arg)
     {
-        return "[error] arg no found.";
+        return strAppend(strAppend(strAppend(buff[i++], "[error] arg no found: '"), name), ".");
     }
     return arg->typeDynMem->addr;
 }
@@ -373,14 +375,16 @@ char *args_print(Args *self, char *name)
             return string;
         }
     }
-    return "[error] arg no found.";
+    char buff[1][128] = {0};
+    int i = 0;
+    return strAppend(strAppend(strAppend(buff[i++], "[error] arg no found: '"), name), ".");
 }
 
 int args_set(Args *self, char *name, char *valStr)
 {
     char *type = args_getType(self, name);
 
-    if (strEqu("[error] arg no found.", type))
+    if (strIsStartWith("[error]", type))
     {
         return 1;
     }
