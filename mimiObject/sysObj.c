@@ -23,7 +23,7 @@ static void del(MimiObj *obj, Args *args)
 static void set(MimiObj *obj, Args *args)
 {
     char *argPath = args_getStr(args, "argPath");
-    if (args_isArgExist(obj->attributeList, argPath))
+    if (obj_isArgExist(obj, argPath))
     {
         /* update arg */
         char *valStr = args_print(args, "val");

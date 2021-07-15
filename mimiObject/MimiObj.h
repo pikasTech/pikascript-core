@@ -70,3 +70,4 @@ int obj_defineMethod(MimiObj *self,
 
 int obj_run(MimiObj *self, char *cmd);
 int obj_removeArg(MimiObj *self, char *argPath);
+int obj_isArgExist(MimiObj *self, char *argPath);

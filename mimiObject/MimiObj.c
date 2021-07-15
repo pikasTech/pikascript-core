@@ -748,6 +748,26 @@ int obj_removeArg(MimiObj *self, char *argPath)
     return 0;
 }
 
+int obj_isArgExist(MimiObj *self, char *argPath)
+{
+    MimiObj *obj = obj_getObj(self, argPath, 1);
+    if (NULL == obj)
+    {
+        /* [error] object no found */
+        return 1;
+    }
+    char buff[64] = {0};
+    char *argName = strGetLastToken(buff, argPath, '.');
+    Arg *arg = args_getArg(obj->attributeList, argName);
+    if(NULL == arg)
+    {
+        /* no found arg */
+        return 0;
+    }
+    /* found arg */
+    return 1;
+}
+
 int obj_init(MimiObj *self, Args *args)
 {
     /* List */
