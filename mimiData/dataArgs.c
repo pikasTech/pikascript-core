@@ -388,6 +388,7 @@ int args_set(Args *self, char *name, char *valStr)
 
     if (NULL == type)
     {
+        /* do not get arg */
         return 1;
     }
 

@@ -5,7 +5,7 @@
 #include "mimiFansList.h"
 #include "mimiMailbox.h"
 
-int dinitEachSubObj(Arg *argEach, Args *handleArgs)
+int deinitEachSubObj(Arg *argEach, Args *handleArgs)
 {
     if (NULL != handleArgs)
     {
@@ -26,7 +26,7 @@ int dinitEachSubObj(Arg *argEach, Args *handleArgs)
 void dinitAllSubObj(MimiObj *self)
 {
     Args *args = self->attributeList;
-    args_foreach(args, dinitEachSubObj, NULL);
+    args_foreach(args, deinitEachSubObj, NULL);
 }
 
 int obj_deinit(MimiObj *self)
@@ -271,10 +271,11 @@ int obj_set(MimiObj *self, char *argDir, char *valStr)
     MimiObj *obj = obj_getObj(self, argDir, 1);
     if (NULL == obj)
     {
-        return -99999999;
+        /* cant get object */
+        return 3;
     }
-    char argName[64] = {0};
-    strGetLastToken(argName, argDir, '.');
+    char buff[64] = {0};
+    char *argName = strGetLastToken(buff, argDir, '.');
     return args_set(obj->attributeList, argName, valStr);
 }
 
@@ -423,7 +424,15 @@ static int loadArgByType(MimiObj *self,
         if ((argDir[0] >= '0') && (argDir[0] <= '9'))
         {
             /* direct value */
-            args_setFloat(args, definedName, 0);
+            char *argName = argDir;
+            if (strIsContain(argName, '.'))
+            {
+                args_setFloat(args, definedName, 0);
+                args_set(args, definedName, argDir);
+                /* succeed */
+                return 0;
+            }
+            args_setInt(args, definedName, 0);
             args_set(args, definedName, argDir);
             /* succeed */
             return 0;
