@@ -207,7 +207,7 @@ void _beforDinit(MimiObj *self)
     /* override in user code */
 }
 
-int obj_newObj(MimiObj *self, char *objName, void *newFun)
+int obj_setObj(MimiObj *self, char *objName, void *newFun)
 {
     /* class means subprocess init */
     char prifix[] = "[cls]";

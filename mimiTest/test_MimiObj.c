@@ -93,7 +93,7 @@ int TEST_MimiObj(int isShow)
     }
     {
         MimiObj *obj = New_MimiObj(NULL);
-        obj_newObj(obj, "hello", New_MimiObj);
+        obj_setObj(obj, "hello", New_MimiObj);
         obj_defineMethod(obj, "hello.hello2(name1: string, name2: string, name3: string, isShow: int)", hello2);
         obj_setInt(obj, "isShow", isShow);
         obj_run(obj, "hello.hello2(name2 = \"tom\", \
@@ -104,7 +104,7 @@ int TEST_MimiObj(int isShow)
     }
     {
         MimiObj *obj = New_MimiObj(NULL);
-        obj_newObj(obj, "hello", New_MimiObj);
+        obj_setObj(obj, "hello", New_MimiObj);
         obj_setStr(obj, "name1", "john");
         obj_setInt(obj, "isShow", isShow);
         obj_defineMethod(obj, "hello.hello2(name1: string, \
@@ -181,6 +181,21 @@ int TEST_MimiObj(int isShow)
         if (isShow)
         {
             printf("the 'a' after set is: %d\r\n", a);
+        }
+        if (1 != a)
+        {
+            return 4;
+        }
+    }
+    {
+        MimiObj *sys = New_MimiObj_sys(NULL);
+        obj_setObj(sys, "b", New_MimiObj);
+        obj_run(sys, "set('b.a', 1)");
+        int a = obj_getInt(sys, "b.a");
+        obj_deinit(sys);
+        if (isShow)
+        {
+            printf("the 'b.a' after set is: %d\r\n", a);
         }
         if (1 != a)
         {

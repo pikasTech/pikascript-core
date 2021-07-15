@@ -10,7 +10,7 @@ int TEST_Event(int isShow)
 {
     {
         MimiObj *root = New_MimiObj_Event(NULL);
-        obj_newObj(root, "publisher", New_MimiObj_Event);
+        obj_setObj(root, "publisher", New_MimiObj_Event);
         obj_setStr(root, "publisher.message", "hello");
         obj_setPtr(root, "handle", handle1);
 
