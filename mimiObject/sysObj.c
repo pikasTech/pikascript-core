@@ -2,6 +2,18 @@
 #include "dataMemory.h"
 #include "dataString.h"
 
+static void type(MimiObj *obj, Args *args)
+{
+    char *argPath = args_getStr(args, "argPath");
+    Arg *arg = obj_getArg(obj, argPath);
+    if (NULL == arg)
+    {
+        printf("[error] arg '%s' no found.\r\n", argPath);
+        return;
+    }
+    printf("<%s>\r\n", arg_getType(arg));
+}
+
 static void free(MimiObj *obj, Args *args)
 {
     char *objPath = args_getStr(args, "objPath");
@@ -82,7 +94,7 @@ static void list(MimiObj *self, Args *args)
     if (NULL == obj)
     {
         /* do not find obj */
-        printf("[error] list: obj '%s' no found.\r\n", objPath);
+        printf("[error] list: object '%s' no found.\r\n", objPath);
         return;
     }
     /* list args */
@@ -115,6 +127,7 @@ static void init_sys(MimiObj *self, Args *args)
     obj_defineMethod(self, "set(argPath:string, val)", set);
     obj_defineMethod(self, "ls(objPath:string)", list);
     obj_defineMethod(self, "del(argPath:string)", del);
+    obj_defineMethod(self, "type(argPath:string)", type);
     // obj_defineMethod(self, "free(objPath:string)", free);
 
     /* object */
