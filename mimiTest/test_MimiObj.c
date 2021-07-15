@@ -202,6 +202,12 @@ int TEST_MimiObj(int isShow)
             return 4;
         }
     }
+    {
+        MimiObj *sys = New_MimiObj_sys(NULL);
+        obj_run(sys, "set('a', 1)");
+        obj_run(sys, "del('a')");
+        obj_deinit(sys);
+    }
 
     return 0;
 }

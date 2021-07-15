@@ -185,7 +185,6 @@ float args_getFloat(Args *self, char *name)
     return arg_getFloat(arg);
 }
 
-
 int args_copyArg(Args *self, Arg *argToBeCopy)
 {
     if (NULL == argToBeCopy)
@@ -327,7 +326,7 @@ char *getPrintStringFromPtr(Args *self, char *name, void *val)
 char *args_print(Args *self, char *name)
 {
     char *type = args_getType(self, name);
-    if(NULL == type)
+    if (NULL == type)
     {
         return NULL;
     }
@@ -483,8 +482,7 @@ int args_foreach(Args *self, int (*eachHandle)(Arg *argEach, Args *handleArgs), 
 void args_removeArg(Args *self, char *name)
 {
     Arg *argNow = args_getArg(self, name);
-    link_removeNode(self->argLinkList,
-                    argNow);
+    link_removeNode(self->argLinkList, argNow);
 }
 
 void args_returnStr(Args *args, char *val)

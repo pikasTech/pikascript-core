@@ -23,7 +23,7 @@ int deinitEachSubObj(Arg *argEach, Args *handleArgs)
     return 0;
 }
 
-void dinitAllSubObj(MimiObj *self)
+void deinitAllSubObj(MimiObj *self)
 {
     Args *args = self->attributeList;
     args_foreach(args, deinitEachSubObj, NULL);
@@ -32,9 +32,10 @@ void dinitAllSubObj(MimiObj *self)
 int obj_deinit(MimiObj *self)
 {
     self->_beforDinit(self);
-    dinitAllSubObj(self);
+    deinitAllSubObj(self);
     args_deinit(self->attributeList);
     DynMemPut(self->mem);
+    self = NULL;
     return 0;
 }
 
@@ -231,10 +232,10 @@ int obj_addOther(MimiObj *self, char *subObjectName, void *new_ObjectFun)
     return 0;
 }
 
-int obj_freeObj(MimiObj *self, char *subProcessName)
+int obj_freeObj(MimiObj *self, char *objPath)
 {
-    MimiObj *subProcess = obj_getPtr(self, subProcessName);
-    obj_deinit(subProcess);
+    MimiObj *obj = obj_getPtr(self, objPath);
+    obj_deinit(obj);
     return 0;
 }
 
