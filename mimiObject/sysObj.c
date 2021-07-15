@@ -19,10 +19,12 @@ static void set(MimiObj *obj, Args *args)
     char *argPath = args_getStr(args, "argPath");
     if (args_isArgExist(obj->attributeList, argPath))
     {
+        /* update arg */
         char *valStr = args_print(args, "val");
         obj_set(obj, argPath, valStr);
         return;
     }
+    /* new arg */
     Arg *val = args_getArg(args, "val");
     Arg *newArg = arg_copy(val);
     char buff[64] = {0};
@@ -71,6 +73,7 @@ static void list(MimiObj *self, Args *args)
     char *objPath = args_getStr(args, "objPath");
     if (NULL == objPath)
     {
+        /* no input obj path, use current obj */
         args_foreach(self->attributeList, listEachArg, args);
         printf("%s\r\n", args_getStr(args, "stringOut"));
         return;
@@ -78,9 +81,11 @@ static void list(MimiObj *self, Args *args)
     MimiObj *obj = obj_getObj(self, objPath, 0);
     if (NULL == obj)
     {
+        /* do not find obj */
         printf("[error] list: obj '%s' no found.\r\n", objPath);
         return;
     }
+    /* list args */
     args_foreach(obj->attributeList, listEachArg, args);
     printf("%s\r\n", args_getStr(args, "stringOut"));
     return;
