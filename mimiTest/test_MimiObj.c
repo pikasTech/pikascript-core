@@ -177,11 +177,15 @@ int TEST_MimiObj(int isShow)
         int a = 0;
         obj_bind(sys, "int", "a", &a);
         obj_run(sys, "set('a', 1)");
+        obj_deinit(sys);
         if (isShow)
         {
             printf("the 'a' after set is: %d\r\n", a);
         }
-        obj_deinit(sys);
+        if (1 != a)
+        {
+            return 4;
+        }
     }
 
     return 0;

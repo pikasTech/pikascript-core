@@ -148,6 +148,7 @@ Arg *obj_getArg(MimiObj *self, char *argPath)
 
 int obj_setArg(MimiObj *self, char *argPath, Arg *arg)
 {
+    /* setArg would copy arg */
     MimiObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
     {

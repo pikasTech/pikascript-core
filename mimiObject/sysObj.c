@@ -5,8 +5,20 @@
 static void set(MimiObj *obj, Args *args)
 {
     char *argPath = args_getStr(args, "argPath");
-    char *valStr = args_print(args, "val");
-    obj_set(obj, argPath, valStr);
+    if (args_isArgExist(obj->attributeList, argPath))
+    {
+        char *valStr = args_print(args, "val");
+        obj_set(obj, argPath, valStr);
+        return;
+    }
+    Arg *val = args_getArg(args, "val");
+    Arg *newArg = arg_copy(val);
+    char buff[64] = {0};
+    char *argName = strGetLastToken(buff, argPath, '.');
+    arg_setName(newArg, argName);
+    int res = obj_setArg(obj, argPath, newArg);
+    arg_deinit(newArg);
+    return;
 }
 
 static int listEachArg(Arg *argEach, Args *handleArgs)
