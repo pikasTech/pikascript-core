@@ -8,12 +8,12 @@
 
 static void publish(MimiObj *self, Args *args)
 {
-    char *argDir = args_getStr(args, "argDir");
+    char *argPath = args_getStr(args, "argPath");
 
-    MimiObj *publisher = obj_getObj(self, argDir, 1);
+    MimiObj *publisher = obj_getObj(self, argPath, 1);
     char *folloedArgName = obj_getStr(publisher, "fansList.fansInfo.followedArgName");
     char argName[64] = {0};
-    strGetLastToken(argName, argDir, '.');
+    strGetLastToken(argName, argPath, '.');
     if (!strEqu(argName, folloedArgName))
     {
         return;
@@ -25,13 +25,13 @@ static void publish(MimiObj *self, Args *args)
 
 static void follow(MimiObj *self, Args *args)
 {
-    char *argDir = args_getStr(args, "argDir");
+    char *argPath = args_getStr(args, "argPath");
     void *handle = args_getPtr(args, "handle");
 
-    MimiObj *publisher = obj_getObj(self, argDir, 1);
+    MimiObj *publisher = obj_getObj(self, argPath, 1);
     MimiObj *fansInfo = obj_getObj(publisher, "fansList.fansInfo", 0);
     char argName[64];
-    strGetLastToken(argName, argDir, '.');
+    strGetLastToken(argName, argPath, '.');
 
     obj_setPtr(fansInfo, "fansPtr", self);
     obj_setPtr(fansInfo, "handle", handle);
@@ -45,8 +45,8 @@ static void init_Event(MimiObj *self, Args *args)
     obj_newObj(self, "mailBox", New_MimiObj_Mailbox);
 
     /* method */
-    obj_defineMethod(self, "follow(argDir:string, handle:pointer)", follow);
-    obj_defineMethod(self, "publish(argDir:string)", publish);
+    obj_defineMethod(self, "follow(argPath:string, handle:pointer)", follow);
+    obj_defineMethod(self, "publish(argPath:string)", publish);
 }
 
 MimiObj *New_MimiObj_Event(Args *args)

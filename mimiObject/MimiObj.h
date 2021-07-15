@@ -29,17 +29,17 @@ int obj_enable(MimiObj *self);
 int obj_disable(MimiObj *self);
 
 // arg type operations
-int obj_setInt(MimiObj *self, char *argDir, long long val);
-int obj_setPtr(MimiObj *self, char *argDir, void *pointer);
-int obj_setFloat(MimiObj *self, char *argDir, float value);
-int obj_setStr(MimiObj *self, char *argDir, char *str);
-int obj_setArg(MimiObj *self, char *argDir, Arg *arg);
+int obj_setInt(MimiObj *self, char *argPath, long long val);
+int obj_setPtr(MimiObj *self, char *argPath, void *pointer);
+int obj_setFloat(MimiObj *self, char *argPath, float value);
+int obj_setStr(MimiObj *self, char *argPath, char *str);
+int obj_setArg(MimiObj *self, char *argPath, Arg *arg);
 
-void *obj_getPtr(MimiObj *self, char *argDir);
-float obj_getFloat(MimiObj *self, char *argDir);
-char *obj_getStr(MimiObj *self, char *argDir);
-long long obj_getInt(MimiObj *self, char *argDir);
-Arg *obj_getArg(MimiObj *self, char *argDir);
+void *obj_getPtr(MimiObj *self, char *argPath);
+float obj_getFloat(MimiObj *self, char *argPath);
+char *obj_getStr(MimiObj *self, char *argPath);
+long long obj_getInt(MimiObj *self, char *argPath);
+Arg *obj_getArg(MimiObj *self, char *argPath);
 
 // arg general operations
 int obj_bind(MimiObj *self, char *type, char *name, void *pointer);
@@ -57,8 +57,8 @@ int obj_load(MimiObj *self, Args *args, char *name);
 // subObject
 int obj_addOther(MimiObj *self, char *subObjectName, void *new_projcetFun);
 int obj_newObj(MimiObj *self, char *subObjectName, void *new_projcetFun);
-MimiObj *obj_getObjDirect(MimiObj *self, char *name);
-MimiObj *obj_getObj(MimiObj *self, char *processDirectory, int deepth);
+MimiObj *obj_getObjPathect(MimiObj *self, char *name);
+MimiObj *obj_getObj(MimiObj *self, char *processPathectory, int deepth);
 
 // subProcess
 int obj_freeObj(MimiObj *self, char *subObjectName);

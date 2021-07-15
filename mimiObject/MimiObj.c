@@ -65,90 +65,90 @@ int obj_disable(MimiObj *self)
     return 0;
 }
 
-int obj_setInt(MimiObj *self, char *argDir, long long val)
+int obj_setInt(MimiObj *self, char *argPath, long long val)
 {
-    MimiObj *obj = obj_getObj(self, argDir, 1);
+    MimiObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
     {
         /* [error] object no found */
         return 1;
     }
     char name[64] = {0};
-    strGetLastToken(name, argDir, '.');
+    strGetLastToken(name, argPath, '.');
     args_setInt(obj->attributeList, name, val);
     return 0;
 }
 
-int obj_setPtr(MimiObj *self, char *argDir, void *pointer)
+int obj_setPtr(MimiObj *self, char *argPath, void *pointer)
 {
-    MimiObj *obj = obj_getObj(self, argDir, 1);
+    MimiObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
     {
         return 1;
     }
     char name[64] = {0};
-    strGetLastToken(name, argDir, '.');
+    strGetLastToken(name, argPath, '.');
     args_setPtr(obj->attributeList,
                 name, pointer);
     return 0;
 }
 
-int obj_setFloat(MimiObj *self, char *argDir, float value)
+int obj_setFloat(MimiObj *self, char *argPath, float value)
 {
-    MimiObj *obj = obj_getObj(self, argDir, 1);
+    MimiObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
     {
         return 1;
     }
     char name[64] = {0};
-    strGetLastToken(name, argDir, '.');
+    strGetLastToken(name, argPath, '.');
     args_setFloat(obj->attributeList,
                   name, value);
     return 0;
 }
 
-int obj_setStr(MimiObj *self, char *argDir, char *str)
+int obj_setStr(MimiObj *self, char *argPath, char *str)
 {
-    MimiObj *obj = obj_getObj(self, argDir, 1);
+    MimiObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
     {
         return 1;
     }
     char name[64] = {0};
-    strGetLastToken(name, argDir, '.');
+    strGetLastToken(name, argPath, '.');
     args_setStr(obj->attributeList,
                 name, str);
     return 0;
 }
 
-long long obj_getInt(MimiObj *self, char *argDir)
+long long obj_getInt(MimiObj *self, char *argPath)
 {
-    MimiObj *obj = obj_getObj(self, argDir, 1);
+    MimiObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
     {
         return -999999999;
     }
     char argName[64] = {0};
-    strGetLastToken(argName, argDir, '.');
+    strGetLastToken(argName, argPath, '.');
     return args_getInt(obj->attributeList,
                        argName);
 }
 
-Arg *obj_getArg(MimiObj *self, char *argDir)
+Arg *obj_getArg(MimiObj *self, char *argPath)
 {
-    MimiObj *obj = obj_getObj(self, argDir, 1);
+    MimiObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
     {
         return NULL;
     }
     char argName[64] = {0};
-    strGetLastToken(argName, argDir, '.');
+    strGetLastToken(argName, argPath, '.');
     return args_getArg(obj->attributeList, argName);
 }
 
-int obj_setArg(MimiObj *self, char *argDir, Arg *arg)
+int obj_setArg(MimiObj *self, char *argPath, Arg *arg)
 {
-    MimiObj *obj = obj_getObj(self, argDir, 1);
+    MimiObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
     {
         return 1;
@@ -157,40 +157,40 @@ int obj_setArg(MimiObj *self, char *argDir, Arg *arg)
     return 0;
 }
 
-void *obj_getPtr(MimiObj *self, char *argDir)
+void *obj_getPtr(MimiObj *self, char *argPath)
 {
-    MimiObj *obj = obj_getObj(self, argDir, 1);
+    MimiObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
     {
         return NULL;
     }
     char argName[64] = {0};
-    strGetLastToken(argName, argDir, '.');
+    strGetLastToken(argName, argPath, '.');
     return args_getPtr(obj->attributeList, argName);
 }
 
-float obj_getFloat(MimiObj *self, char *argDir)
+float obj_getFloat(MimiObj *self, char *argPath)
 {
-    MimiObj *obj = obj_getObj(self, argDir, 1);
+    MimiObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
     {
         return -999.999;
     }
     char argName[64] = {0};
-    strGetLastToken(argName, argDir, '.');
+    strGetLastToken(argName, argPath, '.');
     return args_getFloat(obj->attributeList,
                          argName);
 }
 
-char *obj_getStr(MimiObj *self, char *argDir)
+char *obj_getStr(MimiObj *self, char *argPath)
 {
-    MimiObj *obj = obj_getObj(self, argDir, 1);
+    MimiObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
     {
         return NULL;
     }
     char argName[64] = {0};
-    strGetLastToken(argName, argDir, '.');
+    strGetLastToken(argName, argPath, '.');
     return args_getStr(obj->attributeList,
                        argName);
 }
@@ -266,20 +266,20 @@ int obj_bindString(MimiObj *self, char *name, char **valPtr)
     return 0;
 }
 
-int obj_set(MimiObj *self, char *argDir, char *valStr)
+int obj_set(MimiObj *self, char *argPath, char *valStr)
 {
-    MimiObj *obj = obj_getObj(self, argDir, 1);
+    MimiObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
     {
         /* cant get object */
         return 3;
     }
     char buff[64] = {0};
-    char *argName = strGetLastToken(buff, argDir, '.');
+    char *argName = strGetLastToken(buff, argPath, '.');
     return args_set(obj->attributeList, argName, valStr);
 }
 
-void newObjDirect(MimiObj *self, char *name, void *(*newObjFun)(Args *initArgs))
+void newObjPathect(MimiObj *self, char *name, void *(*newObjFun)(Args *initArgs))
 {
     Args *initArgs = New_args(NULL);
     args_setPtr(initArgs, "context", self);
@@ -292,21 +292,21 @@ void newObjDirect(MimiObj *self, char *name, void *(*newObjFun)(Args *initArgs))
 MimiObj *initObj(MimiObj *self, char *name)
 {
     char prifix[] = "[cls]";
-    char classDir[64] = {0};
-    strAppend(classDir, prifix);
-    strAppend(classDir, name);
+    char classPath[64] = {0};
+    strAppend(classPath, prifix);
+    strAppend(classPath, name);
     /* init the subprocess */
-    void *(*newObjFun)(Args * initArgs) = args_getPtr(self->attributeList, classDir);
+    void *(*newObjFun)(Args * initArgs) = args_getPtr(self->attributeList, classPath);
     if (NULL == newObjFun)
     {
         /* no such object */
         return NULL;
     }
-    newObjDirect(self, name, newObjFun);
+    newObjPathect(self, name, newObjFun);
     return obj_getPtr(self, name);
 }
 
-MimiObj *obj_getObjDirect(MimiObj *self, char *name)
+MimiObj *obj_getObjPathect(MimiObj *self, char *name)
 {
     /* check subprocess */
     if (NULL == args_getPtr(self->attributeList, name))
@@ -326,7 +326,7 @@ MimiObj *obj_getObjDirect(MimiObj *self, char *name)
     return obj_getPtr(self, name);
 }
 
-MimiObj *obj_getObj(MimiObj *self, char *processDirectory, int keepToken)
+MimiObj *obj_getObj(MimiObj *self, char *processPathectory, int keepToken)
 {
     MimiObj *obj = self;
     // sign in the argv memory
@@ -338,10 +338,10 @@ MimiObj *obj_getObj(MimiObj *self, char *processDirectory, int keepToken)
         token[i] = (char *)tokenMem[i]->addr;
         token[i][0] = 0;
     }
-    int processArgc = strGetToken(processDirectory, token, '.');
+    int processArgc = strGetToken(processPathectory, token, '.');
     for (int i = 0; i < processArgc - keepToken; i++)
     {
-        obj = obj_getObjDirect(obj, token[i]);
+        obj = obj_getObjPathect(obj, token[i]);
         if (obj == NULL)
         {
             goto exit;
@@ -360,26 +360,26 @@ void loadMethodInfo(MimiObj *methodHost, char *methodName, char *methodDeclearat
 {
     char buff[2][128] = {0};
     int i = 0;
-    char *methodPtrDir = strAppend(strAppend(buff[i++], "[methodPtr]"), methodName);
-    char *methodDeclearationDir = strAppend(strAppend(buff[i++], "[methodDec]"), methodName);
-    obj_setPtr(methodHost, methodPtrDir, methodPtr);
-    obj_setStr(methodHost, methodDeclearationDir, methodDeclearation);
+    char *methodPtrPath = strAppend(strAppend(buff[i++], "[methodPtr]"), methodName);
+    char *methodDeclearationPath = strAppend(strAppend(buff[i++], "[methodDec]"), methodName);
+    obj_setPtr(methodHost, methodPtrPath, methodPtr);
+    obj_setStr(methodHost, methodDeclearationPath, methodDeclearation);
 }
 
 static char *getMethodDeclearation(MimiObj *methodHost, char *methodName)
 {
     char buff[1][128] = {0};
     int i = 0;
-    char *methodDeclearationDir = strAppend(strAppend(buff[i++], "[methodDec]"), methodName);
-    return obj_getStr(methodHost, methodDeclearationDir);
+    char *methodDeclearationPath = strAppend(strAppend(buff[i++], "[methodDec]"), methodName);
+    return obj_getStr(methodHost, methodDeclearationPath);
 }
 
 static void *getMethodPtr(MimiObj *methodHost, char *methodName)
 {
     char buff[1][128] = {0};
     int i = 0;
-    char *methodPtrDir = strAppend(strAppend(buff[i++], "[methodPtr]"), methodName);
-    return obj_getPtr(methodHost, methodPtrDir);
+    char *methodPtrPath = strAppend(strAppend(buff[i++], "[methodPtr]"), methodName);
+    return obj_getPtr(methodHost, methodPtrPath);
 }
 
 int obj_defineMethod(MimiObj *self,
@@ -389,29 +389,29 @@ int obj_defineMethod(MimiObj *self,
     char buff[3][128] = {0};
     int i = 0;
     char *cleanDeclearation = strDeleteChar(buff[i++], declearation, ' ');
-    char *methodDir = strGetFirstToken(buff[i++], cleanDeclearation, '(');
+    char *methodPath = strGetFirstToken(buff[i++], cleanDeclearation, '(');
 
-    MimiObj *methodHost = obj_getObj(self, methodDir, 1);
+    MimiObj *methodHost = obj_getObj(self, methodPath, 1);
     if (NULL == methodHost)
     {
         /* no found method object */
         return 1;
     }
-    char *methodName = strGetLastToken(buff[i++], methodDir, '.');
+    char *methodName = strGetLastToken(buff[i++], methodPath, '.');
 
     loadMethodInfo(methodHost, methodName, cleanDeclearation, methodPtr);
     return 0;
 }
 
-char *getDirectStr(char *buff, char *argDir)
+char *getPathectStr(char *buff, char *argPath)
 {
     char *directStr = NULL;
-    directStr = strCut(buff, argDir, '"', '"');
+    directStr = strCut(buff, argPath, '"', '"');
     if (NULL != directStr)
     {
         return directStr;
     }
-    directStr = strCut(buff, argDir, '\'', '\'');
+    directStr = strCut(buff, argPath, '\'', '\'');
     if (NULL != directStr)
     {
         return directStr;
@@ -422,14 +422,14 @@ char *getDirectStr(char *buff, char *argDir)
 static int loadArgByType(MimiObj *self,
                          char *definedName,
                          char *definedType,
-                         char *argDir,
+                         char *argPath,
                          Args *args)
 {
     if (strEqu(definedType, ""))
     {
         char buff[1][128] = {0};
         int i = 0;
-        char *directStr = getDirectStr(buff[i++], argDir);
+        char *directStr = getPathectStr(buff[i++], argPath);
         if (NULL != directStr)
         {
             /* direct value */
@@ -437,23 +437,23 @@ static int loadArgByType(MimiObj *self,
             /* ok */
             return 0;
         }
-        if ((argDir[0] >= '0') && (argDir[0] <= '9'))
+        if ((argPath[0] >= '0') && (argPath[0] <= '9'))
         {
             /* direct value */
-            char *argName = argDir;
+            char *argName = argPath;
             if (strIsContain(argName, '.'))
             {
                 args_setFloat(args, definedName, 0);
-                args_set(args, definedName, argDir);
+                args_set(args, definedName, argPath);
                 /* succeed */
                 return 0;
             }
             args_setInt(args, definedName, 0);
-            args_set(args, definedName, argDir);
+            args_set(args, definedName, argPath);
             /* succeed */
             return 0;
         }
-        Arg *arg = obj_getArg(self, argDir);
+        Arg *arg = obj_getArg(self, argPath);
         if (arg == NULL)
         {
             /* cand get arg */
@@ -469,7 +469,7 @@ static int loadArgByType(MimiObj *self,
         char buff[1][128] = {0};
         int i = 0;
         /* solve the string type */
-        char *directStr = getDirectStr(buff[i++], argDir);
+        char *directStr = getPathectStr(buff[i++], argPath);
         if (NULL != directStr)
         {
             /* direct value */
@@ -478,7 +478,7 @@ static int loadArgByType(MimiObj *self,
             return 0;
         }
         /* reference value */
-        char *refStr = obj_getStr(self, argDir);
+        char *refStr = obj_getStr(self, argPath);
         if (NULL == refStr)
         {
             /* faild */
@@ -492,15 +492,15 @@ static int loadArgByType(MimiObj *self,
     {
         /* solve the int type */
         args_setInt(args, definedName, 0);
-        if ((argDir[0] >= '0') && (argDir[0] <= '9'))
+        if ((argPath[0] >= '0') && (argPath[0] <= '9'))
         {
             /* direct value */
-            args_set(args, definedName, argDir);
+            args_set(args, definedName, argPath);
             /* succeed */
             return 0;
         }
         /* reference value */
-        int referenceVal = obj_getInt(self, argDir);
+        int referenceVal = obj_getInt(self, argPath);
         args_setInt(args, definedName, referenceVal);
         /* succeed */
         return 0;
@@ -509,15 +509,15 @@ static int loadArgByType(MimiObj *self,
     {
         /* solve the float type */
         args_setFloat(args, definedName, 0);
-        if ((argDir[0] >= '0') && (argDir[0] <= '9'))
+        if ((argPath[0] >= '0') && (argPath[0] <= '9'))
         {
             /* direct value */
-            args_set(args, definedName, argDir);
+            args_set(args, definedName, argPath);
             /* succeed */
             return 0;
         }
         /* reference value */
-        float referenceVal = obj_getFloat(self, argDir);
+        float referenceVal = obj_getFloat(self, argPath);
         args_setFloat(args, definedName, referenceVal);
         /* succeed */
         return 0;
@@ -525,7 +525,7 @@ static int loadArgByType(MimiObj *self,
     if (strEqu(definedType, "pointer"))
     {
         /* only support reference value */
-        void *ptr = obj_getPtr(self, argDir);
+        void *ptr = obj_getPtr(self, argPath);
         args_setPtr(args, definedName, ptr);
         return 0;
     }
@@ -565,12 +565,12 @@ static Args *getArgsBySort(MimiObj *self, char *typeList, char *argList)
 
         char *typeName = strGetFirstToken(buff[i++], typeToken, ':');
         char *typeVal = getTypeVal(buff[i++], typeToken);
-        char *argDir = argToken;
+        char *argPath = argToken;
 
         if (0 != loadArgByType(self,
                                typeName,
                                typeVal,
-                               argDir,
+                               argPath,
                                args))
         {
             args_deinit(args);
@@ -663,7 +663,7 @@ static void transferReturnVal(MimiObj *self, char *returnType, char *returnName,
     }
 }
 
-char *getMethodDir(char *buff, char *methodToken)
+char *getMethodPath(char *buff, char *methodToken)
 {
     if (strIsContain(methodToken, '='))
     {
@@ -681,14 +681,14 @@ int obj_run(MimiObj *self, char *cmd)
     int i = 0;
     char *cleanCmd = strDeleteChar(buff[i++], cmd, ' ');
     char *methodToken = strGetFirstToken(buff[i++], cleanCmd, '(');
-    char *methodDir = getMethodDir(buff[i++], methodToken);
+    char *methodPath = getMethodPath(buff[i++], methodToken);
 
-    MimiObj *methodHost = obj_getObj(self, methodDir, 1);
+    MimiObj *methodHost = obj_getObj(self, methodPath, 1);
     if (NULL == methodHost)
     {
         return 1;
     }
-    char *methodName = strGetLastToken(buff[i++], methodDir, '.');
+    char *methodName = strGetLastToken(buff[i++], methodPath, '.');
     void (*methodPtr)(MimiObj * self, Args * args) = getMethodPtr(methodHost, methodName);
     char *methodDeclearation = getMethodDeclearation(methodHost, methodName);
 

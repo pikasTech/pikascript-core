@@ -4,21 +4,21 @@
 
 static void set(MimiObj *obj, Args *args)
 {
-    // char buff[64] = {0};
-    // char *argDir = args_getStr(args, "argDir");
-    // char *argName = strGetLastToken(buff, argDir, '.');
-    // Arg *valCopied = arg_copy(args_getArg(args, "val"));
-    // arg_setName(valCopied, argName);
-    // int err = args_setArg(obj->attributeList, valCopied);
-    // if (err == 0)
-    // {
-    //     return;
-    // }
-    // if (err == 1)
-    // {
-    //     printf("[error] not get arg.\r\n");
-    //     return;
-    // }
+    char buff[64] = {0};
+    char *argPath = args_getStr(args, "argPath");
+    char *argName = strGetLastToken(buff, argPath, '.');
+    Arg *valCopied = arg_copy(args_getArg(args, "val"));
+    arg_setName(valCopied, argName);
+    int err = args_setArg(obj->attributeList, valCopied);
+    if (err == 0)
+    {
+        return;
+    }
+    if (err == 1)
+    {
+        printf("[error] not get arg.\r\n");
+        return;
+    }
 }
 
 static int listEachArg(Arg *argEach, Args *handleArgs)
@@ -56,17 +56,17 @@ static int listEachArg(Arg *argEach, Args *handleArgs)
 static void list(MimiObj *self, Args *args)
 {
     args_setStr(args, "stringOut", "");
-    char *objDir = args_getStr(args, "objDir");
-    if (NULL == objDir)
+    char *objPath = args_getStr(args, "objPath");
+    if (NULL == objPath)
     {
         args_foreach(self->attributeList, listEachArg, args);
         printf("%s\r\n", args_getStr(args, "stringOut"));
         return;
     }
-    MimiObj *obj = obj_getObj(self, objDir, 0);
+    MimiObj *obj = obj_getObj(self, objPath, 0);
     if (NULL == obj)
     {
-        printf("[error] list: obj '%s' no found.\r\n", objDir);
+        printf("[error] list: obj '%s' no found.\r\n", objPath);
         return;
     }
     args_foreach(obj->attributeList, listEachArg, args);
@@ -95,8 +95,8 @@ static void init_sys(MimiObj *self, Args *args)
 
     /* operation */
     obj_defineMethod(self, "print(arg)", print);
-    obj_defineMethod(self, "set(argDir:string, val)", set);
-    obj_defineMethod(self, "ls(objDir:string)", list);
+    obj_defineMethod(self, "set(argPath:string, val)", set);
+    obj_defineMethod(self, "ls(objPath:string)", list);
 
     /* object */
 
