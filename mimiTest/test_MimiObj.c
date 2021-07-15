@@ -78,16 +78,16 @@ int TEST_MimiObj(int isShow)
         MimiObj *obj = New_MimiObj(NULL);
         obj_defineMethod(obj, "hello(name: string, isShow: int)", hello);
         obj_setInt(obj, "isShow", isShow);
-        obj_run(obj, "hello(name = \"world\", isShow = isShow)");
+        obj_run(obj, "hello(name = 'world', isShow = isShow)");
         obj_deinit(obj);
     }
     {
         MimiObj *obj = New_MimiObj(NULL);
         obj_defineMethod(obj, "hello2(name1: string, name2: string, name3: string, isShow: int)", hello2);
         obj_setInt(obj, "isShow", isShow);
-        obj_run(obj, "hello2(name2 = \"tom\", \
-                              name1 = \"john\", \
-                              name3 = \"cat\", \
+        obj_run(obj, "hello2(name2 = 'tom', \
+                              name1 = 'john', \
+                              name3 = 'cat', \
                               isShow = isShow) ");
         obj_deinit(obj);
     }
@@ -96,9 +96,9 @@ int TEST_MimiObj(int isShow)
         obj_setObj(obj, "hello", New_MimiObj);
         obj_defineMethod(obj, "hello.hello2(name1: string, name2: string, name3: string, isShow: int)", hello2);
         obj_setInt(obj, "isShow", isShow);
-        obj_run(obj, "hello.hello2(name2 = \"tom\", \
-                                    name1 = \"john\", \
-                                    name3 = \"cat\", \
+        obj_run(obj, "hello.hello2(name2 = 'tom', \
+                                    name1 = 'john', \
+                                    name3 = 'cat', \
                                     isShow = isShow) ");
         obj_deinit(obj);
     }
@@ -112,9 +112,9 @@ int TEST_MimiObj(int isShow)
                                           name3: string, \
                                           isShow: int)",
                          hello2);
-        obj_run(obj, "hello.hello2(name2 = \"tom\", \
+        obj_run(obj, "hello.hello2(name2 = 'tom', \
                                     name1 = name1, \
-                                    name3 = \"cat\", \
+                                    name3 = 'cat', \
                                     isShow = isShow) ");
         obj_deinit(obj);
     }

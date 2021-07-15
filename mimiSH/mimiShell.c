@@ -71,8 +71,7 @@ static void *_detector_shellLuancher(Shell *self,
 }
 
 // the luancher of python
-static void *_runPythonCmd(Shell *self,
-						   char *CMD)
+static void *_runPythonCmd(Shell *self, char *CMD)
 {
 	MimiObj *root = self->context;
 	obj_run(root, CMD);
