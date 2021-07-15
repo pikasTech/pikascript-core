@@ -2,23 +2,11 @@
 #include "dataMemory.h"
 #include "dataString.h"
 
-static void set(MimiObj *obj, Args *args)
+static void setBind(MimiObj *obj, Args *args)
 {
-    char buff[64] = {0};
     char *argPath = args_getStr(args, "argPath");
-    char *argName = strGetLastToken(buff, argPath, '.');
-    Arg *valCopied = arg_copy(args_getArg(args, "val"));
-    arg_setName(valCopied, argName);
-    int err = args_setArg(obj->attributeList, valCopied);
-    if (err == 0)
-    {
-        return;
-    }
-    if (err == 1)
-    {
-        printf("[error] not get arg.\r\n");
-        return;
-    }
+    char *valStr = args_print(args, "val");
+    obj_set(obj, argPath, valStr);
 }
 
 static int listEachArg(Arg *argEach, Args *handleArgs)
@@ -95,7 +83,7 @@ static void init_sys(MimiObj *self, Args *args)
 
     /* operation */
     obj_defineMethod(self, "print(arg)", print);
-    obj_defineMethod(self, "set(argPath:string, val)", set);
+    obj_defineMethod(self, "set(argPath:string, val)", setBind);
     obj_defineMethod(self, "ls(objPath:string)", list);
 
     /* object */
