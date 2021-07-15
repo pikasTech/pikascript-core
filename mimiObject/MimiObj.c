@@ -154,7 +154,7 @@ int obj_setArg(MimiObj *self, char *argPath, Arg *arg)
     {
         return 1;
     }
-    args_copyArg(self->attributeList, arg);
+    args_copyArg(obj->attributeList, arg);
     return 0;
 }
 
