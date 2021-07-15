@@ -76,14 +76,14 @@ int TEST_MimiObj(int isShow)
     }
     {
         MimiObj *obj = New_MimiObj(NULL);
-        obj_defineMethod(obj, "hello(name: string, isShow: int)", hello);
+        obj_defineMethod(obj, "hello(name:string, isShow:int)", hello);
         obj_setInt(obj, "isShow", isShow);
         obj_run(obj, "hello(name = 'world', isShow = isShow)");
         obj_deinit(obj);
     }
     {
         MimiObj *obj = New_MimiObj(NULL);
-        obj_defineMethod(obj, "hello2(name1: string, name2: string, name3: string, isShow: int)", hello2);
+        obj_defineMethod(obj, "hello2(name1:string, name2:string, name3:string, isShow:int)", hello2);
         obj_setInt(obj, "isShow", isShow);
         obj_run(obj, "hello2(name2 = 'tom', \
                               name1 = 'john', \
@@ -94,7 +94,7 @@ int TEST_MimiObj(int isShow)
     {
         MimiObj *obj = New_MimiObj(NULL);
         obj_setObj(obj, "hello", New_MimiObj);
-        obj_defineMethod(obj, "hello.hello2(name1: string, name2: string, name3: string, isShow: int)", hello2);
+        obj_defineMethod(obj, "hello.hello2(name1:string, name2:string, name3:string, isShow:int)", hello2);
         obj_setInt(obj, "isShow", isShow);
         obj_run(obj, "hello.hello2(name2 = 'tom', \
                                     name1 = 'john', \
@@ -107,10 +107,10 @@ int TEST_MimiObj(int isShow)
         obj_setObj(obj, "hello", New_MimiObj);
         obj_setStr(obj, "name1", "john");
         obj_setInt(obj, "isShow", isShow);
-        obj_defineMethod(obj, "hello.hello2(name1: string, \
-                                          name2: string, \
-                                          name3: string, \
-                                          isShow: int)",
+        obj_defineMethod(obj, "hello.hello2(name1:string, \
+                                          name2:string, \
+                                          name3:string, \
+                                          isShow:int)",
                          hello2);
         obj_run(obj, "hello.hello2(name2 = 'tom', \
                                     name1 = name1, \
@@ -216,11 +216,11 @@ int TEST_MimiObj(int isShow)
         obj_run(sys, "set('b.a',1.2)");
         float a = obj_getFloat(sys, "b.a");
         obj_deinit(sys);
-        if(isShow)
+        if (isShow)
         {
             printf("the a after del and reset is: %f\r\n", a);
         }
-        if((1.2-a)*(1.2-a)>0.0000001)
+        if ((1.2 - a) * (1.2 - a) > 0.0000001)
         {
             return 5;
         }
