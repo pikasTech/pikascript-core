@@ -734,6 +734,20 @@ int obj_run(MimiObj *self, char *cmd)
     return 0;
 }
 
+int obj_removeArg(MimiObj *self, char *argPath)
+{
+    MimiObj *obj = obj_getObj(self, argPath, 1);
+    if (NULL == obj)
+    {
+        /* [error] object no found */
+        return 1;
+    }
+    char buff[64] = {0};
+    char *argName = strGetLastToken(buff, argPath, '.');
+    args_removeArg(obj->attributeList, argName);
+    return 0;
+}
+
 int obj_init(MimiObj *self, Args *args)
 {
     /* List */

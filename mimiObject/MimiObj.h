@@ -69,3 +69,4 @@ int obj_defineMethod(MimiObj *self,
                      void (*methodPtr)(MimiObj *self, Args *args));
 
 int obj_run(MimiObj *self, char *cmd);
+int obj_removeArg(MimiObj *self, char *argPath);

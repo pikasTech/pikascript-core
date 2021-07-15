@@ -11,7 +11,7 @@ static void free(MimiObj *obj, Args *args)
 static void del(MimiObj *obj, Args *args)
 {
     char *argPath = args_getStr(args, "argPath");
-    args_removeArg(obj->attributeList, argPath);
+    obj_removeArg(obj, argPath);
 }
 
 static void set(MimiObj *obj, Args *args)
@@ -105,7 +105,7 @@ static void init_sys(MimiObj *self, Args *args)
 {
     /* attrivute */
 
-    /* operation */
+    /* method */
     obj_defineMethod(self, "print(arg)", print);
     obj_defineMethod(self, "set(argPath:string, val)", set);
     obj_defineMethod(self, "ls(objPath:string)", list);

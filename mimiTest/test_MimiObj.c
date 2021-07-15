@@ -208,6 +208,23 @@ int TEST_MimiObj(int isShow)
         obj_run(sys, "del('a')");
         obj_deinit(sys);
     }
+    {
+        MimiObj *sys = New_MimiObj_sys(NULL);
+        obj_setObj(sys, "b", New_MimiObj);
+        obj_run(sys, "set('b.a', 1)");
+        obj_run(sys, "del('b.a')");
+        obj_run(sys, "set('b.a',1.2)");
+        float a = obj_getFloat(sys, "b.a");
+        obj_deinit(sys);
+        if(isShow)
+        {
+            printf("the a after del and reset is: %f\r\n", a);
+        }
+        if((1.2-a)*(1.2-a)>0.0000001)
+        {
+            return 5;
+        }
+    }
 
     return 0;
 }
