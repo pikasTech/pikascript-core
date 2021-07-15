@@ -4,21 +4,21 @@
 
 static void set(MimiObj *obj, Args *args)
 {
-    char buff[64] = {0};
-    char *argDir = args_getStr(args, "argDir");
-    char *argName = strGetLastToken(buff, argDir, '.');
-    Arg *valCopied = arg_copy(args_getArg(args, "val"));
-    arg_setName(valCopied, argName);
-    int err = args_setArg(obj->attributeList, valCopied);
-    if (err == 0)
-    {
-        return;
-    }
-    if (err == 1)
-    {
-        printf("[error] not get arg.\r\n");
-        return;
-    }
+    // char buff[64] = {0};
+    // char *argDir = args_getStr(args, "argDir");
+    // char *argName = strGetLastToken(buff, argDir, '.');
+    // Arg *valCopied = arg_copy(args_getArg(args, "val"));
+    // arg_setName(valCopied, argName);
+    // int err = args_setArg(obj->attributeList, valCopied);
+    // if (err == 0)
+    // {
+    //     return;
+    // }
+    // if (err == 1)
+    // {
+    //     printf("[error] not get arg.\r\n");
+    //     return;
+    // }
 }
 
 static int listEachArg(Arg *argEach, Args *handleArgs)

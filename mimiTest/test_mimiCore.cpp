@@ -32,7 +32,7 @@ void test_mimiCore(int isShow)
     ASSERT_RETURN(TEST_args2, isShow);
     ASSERT_RETURN(TEST_mimiCom, isShow);
     ASSERT_RETURN(TEST_Event, isShow);
-    ASSERT_RETURN(TEST_MimiObj, isShow);
+    ASSERT_RETURN(TEST_MimiObj, 1);
     std::cout << "Test of mimiCore Finished! " << std::endl
               << std::endl
               << "Memory still used: " << (float)DMEMS.blk_num * 32 / 1024 << " kB" << std::endl

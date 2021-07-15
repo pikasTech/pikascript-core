@@ -403,6 +403,22 @@ int obj_defineMethod(MimiObj *self,
     return 0;
 }
 
+char *getDirectStr(char *buff, char *argDir)
+{
+    char *directStr = NULL;
+    directStr = strCut(buff, argDir, '"', '"');
+    if (NULL != directStr)
+    {
+        return directStr;
+    }
+    directStr = strCut(buff, argDir, '\'', '\'');
+    if (NULL != directStr)
+    {
+        return directStr;
+    }
+    return NULL;
+}
+
 static int loadArgByType(MimiObj *self,
                          char *definedName,
                          char *definedType,
@@ -413,7 +429,7 @@ static int loadArgByType(MimiObj *self,
     {
         char buff[1][128] = {0};
         int i = 0;
-        char *directStr = strCut(buff[i++], argDir, '"', '"');
+        char *directStr = getDirectStr(buff[i++], argDir);
         if (NULL != directStr)
         {
             /* direct value */
@@ -450,10 +466,10 @@ static int loadArgByType(MimiObj *self,
     }
     if (strEqu(definedType, "string"))
     {
-        char buff[2][128] = {0};
+        char buff[1][128] = {0};
         int i = 0;
         /* solve the string type */
-        char *directStr = strCut(buff[i++], argDir, '"', '"');
+        char *directStr = getDirectStr(buff[i++], argDir);
         if (NULL != directStr)
         {
             /* direct value */

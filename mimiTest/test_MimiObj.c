@@ -1,4 +1,5 @@
 #include "MimiObj.h"
+#include "sysObj.h"
 #include "mimiCom.h"
 #include "dataString.h"
 
@@ -110,7 +111,7 @@ int TEST_MimiObj(int isShow)
                                           name2: string, \
                                           name3: string, \
                                           isShow: int)",
-                      hello2);
+                         hello2);
         obj_run(obj, "hello.hello2(name2 = \"tom\", \
                                     name1 = name1, \
                                     name3 = \"cat\", \
@@ -124,7 +125,7 @@ int TEST_MimiObj(int isShow)
                                        val2:float, \
                                        isShow:int) \
                                        ->float",
-                      testFloat);
+                         testFloat);
         obj_setInt(obj, "isShow", isShow);
         obj_setFloat(obj, "val2", 3.11);
         obj_run(obj, "res = testFloat(val1 = 3.22, \
@@ -170,6 +171,17 @@ int TEST_MimiObj(int isShow)
             return 3;
         }
         obj_deinit(obj);
+    }
+    {
+        MimiObj *sys = New_MimiObj_sys(NULL);
+        int a = 0;
+        obj_bind(sys, "int", "a", &a);
+        obj_run(sys, "set('a', 1)");
+        if (isShow)
+        {
+            printf("the 'a' after set is: %d\r\n", a);
+        }
+        obj_deinit(sys);
     }
 
     return 0;
