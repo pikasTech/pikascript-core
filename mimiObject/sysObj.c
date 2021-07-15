@@ -2,7 +2,7 @@
 #include "dataMemory.h"
 #include "dataString.h"
 
-static void setBind(MimiObj *obj, Args *args)
+static void set(MimiObj *obj, Args *args)
 {
     char *argPath = args_getStr(args, "argPath");
     char *valStr = args_print(args, "val");
@@ -83,7 +83,7 @@ static void init_sys(MimiObj *self, Args *args)
 
     /* operation */
     obj_defineMethod(self, "print(arg)", print);
-    obj_defineMethod(self, "set(argPath:string, val)", setBind);
+    obj_defineMethod(self, "set(argPath:string, val)", set);
     obj_defineMethod(self, "ls(objPath:string)", list);
 
     /* object */
