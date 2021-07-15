@@ -117,8 +117,8 @@ static void init_sys(MimiObj *self, Args *args)
     /* attrivute */
 
     /* method */
-    obj_defineMethod(self, "print(val)", print);
-    obj_defineMethod(self, "set(argPath:string, val)", set);
+    obj_defineMethod(self, "print(val:any)", print);
+    obj_defineMethod(self, "set(argPath:string, val:any)", set);
     obj_defineMethod(self, "ls(objPath:string)", list);
     obj_defineMethod(self, "del(argPath:string)", del);
     obj_defineMethod(self, "type(argPath:string)", type);

@@ -427,7 +427,7 @@ static int loadArgByType(MimiObj *self,
                          char *argPath,
                          Args *args)
 {
-    if (strEqu(definedType, ""))
+    if (strEqu(definedType, "any"))
     {
         char buff[1][128] = {0};
         int i = 0;
@@ -651,15 +651,15 @@ static Args *getArgsBySentence(MimiObj *self, char *typeList, char *argList)
 
 static void transferReturnVal(MimiObj *self, char *returnType, char *returnName, Args *args)
 {
-    if (strEqu("->int", returnType))
+    if (strEqu(":int", returnType))
     {
         obj_setInt(self, returnName, args_getInt(args, "return"));
     }
-    if (strEqu("->float", returnType))
+    if (strEqu(":float", returnType))
     {
         obj_setFloat(self, returnName, args_getFloat(args, "return"));
     }
-    if (strEqu("->string", returnType))
+    if (strEqu(":string", returnType))
     {
         obj_setStr(self, returnName, args_getStr(args, "return"));
     }
