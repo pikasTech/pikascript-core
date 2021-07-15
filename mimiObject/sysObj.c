@@ -14,12 +14,6 @@ static void type(MimiObj *obj, Args *args)
     printf("<%s>\r\n", arg_getType(arg));
 }
 
-static void free(MimiObj *obj, Args *args)
-{
-    char *objPath = args_getStr(args, "objPath");
-    obj_freeObj(obj, objPath);
-}
-
 static void del(MimiObj *obj, Args *args)
 {
     char *argPath = args_getStr(args, "argPath");
@@ -105,7 +99,7 @@ static void list(MimiObj *self, Args *args)
 
 static void print(MimiObj *obj, Args *args)
 {
-    char *res = args_print(args, "arg");
+    char *res = args_print(args, "val");
     if (NULL == res)
     {
         return;
@@ -123,12 +117,11 @@ static void init_sys(MimiObj *self, Args *args)
     /* attrivute */
 
     /* method */
-    obj_defineMethod(self, "print(arg)", print);
+    obj_defineMethod(self, "print(val)", print);
     obj_defineMethod(self, "set(argPath:string, val)", set);
     obj_defineMethod(self, "ls(objPath:string)", list);
     obj_defineMethod(self, "del(argPath:string)", del);
     obj_defineMethod(self, "type(argPath:string)", type);
-    // obj_defineMethod(self, "free(objPath:string)", free);
 
     /* object */
 
