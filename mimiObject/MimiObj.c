@@ -294,7 +294,7 @@ int obj_set(MimiObj *self, char *argPath, char *valStr)
     return 0;
 }
 
-void newObjPathect(MimiObj *self, char *name, void *(*newObjFun)(Args *initArgs))
+void newObjDirect(MimiObj *self, char *name, void *(*newObjFun)(Args *initArgs))
 {
     Args *initArgs = New_args(NULL);
     args_setPtr(initArgs, "context", self);
@@ -317,11 +317,11 @@ MimiObj *initObj(MimiObj *self, char *name)
         /* no such object */
         return NULL;
     }
-    newObjPathect(self, name, newObjFun);
+    newObjDirect(self, name, newObjFun);
     return obj_getPtr(self, name);
 }
 
-MimiObj *obj_getObjPathect(MimiObj *self, char *name)
+MimiObj *obj_getObjDirect(MimiObj *self, char *name)
 {
     /* check subprocess */
     if (NULL == args_getPtr(self->attributeList, name))
@@ -356,7 +356,7 @@ MimiObj *obj_getObj(MimiObj *self, char *processPathectory, int keepToken)
     int processArgc = strGetToken(processPathectory, token, '.');
     for (int i = 0; i < processArgc - keepToken; i++)
     {
-        obj = obj_getObjPathect(obj, token[i]);
+        obj = obj_getObjDirect(obj, token[i]);
         if (obj == NULL)
         {
             goto exit;
@@ -418,7 +418,7 @@ int obj_defineMethod(MimiObj *self,
     return 0;
 }
 
-char *getPathectStr(char *buff, char *argPath)
+char *getDirectStr(char *buff, char *argPath)
 {
     char *directStr = NULL;
     directStr = strCut(buff, argPath, '"', '"');
@@ -444,7 +444,7 @@ static int loadArgByType(MimiObj *self,
     {
         char buff[1][128] = {0};
         int i = 0;
-        char *directStr = getPathectStr(buff[i++], argPath);
+        char *directStr = getDirectStr(buff[i++], argPath);
         if (NULL != directStr)
         {
             /* direct value */
@@ -484,7 +484,7 @@ static int loadArgByType(MimiObj *self,
         char buff[1][128] = {0};
         int i = 0;
         /* solve the string type */
-        char *directStr = getPathectStr(buff[i++], argPath);
+        char *directStr = getDirectStr(buff[i++], argPath);
         if (NULL != directStr)
         {
             /* direct value */
