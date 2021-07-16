@@ -8,10 +8,10 @@ static void type(MimiObj *obj, Args *args)
     Arg *arg = obj_getArg(obj, argPath);
     if (NULL == arg)
     {
-        printf("[error] arg '%s' no found.\r\n", argPath);
+        args_setStr(args, "sysOut", "[error] arg no found.");
         return;
     }
-    printf("<%s>\r\n", arg_getType(arg));
+    args_setStr(args, "sysOut", arg_getType(arg));
 }
 
 static void del(MimiObj *obj, Args *args)
@@ -81,19 +81,19 @@ static void list(MimiObj *self, Args *args)
     {
         /* no input obj path, use current obj */
         args_foreach(self->attributeList, listEachArg, args);
-        printf("%s\r\n", args_getStr(args, "stringOut"));
+        args_setStr(args, "sysOut", args_getStr(args, "stringOut"));
         return;
     }
     MimiObj *obj = obj_getObj(self, objPath, 0);
     if (NULL == obj)
     {
         /* do not find obj */
-        printf("[error] list: object '%s' no found.\r\n", objPath);
+        args_setStr(args, "sysOut", "[error] list: object no found.");
         return;
     }
     /* list args */
     args_foreach(obj->attributeList, listEachArg, args);
-    printf("%s\r\n", args_getStr(args, "stringOut"));
+    args_setStr(args, "sysOut", args_getStr(args, "stringOut"));
     return;
 }
 
@@ -102,14 +102,11 @@ static void print(MimiObj *obj, Args *args)
     char *res = args_print(args, "val");
     if (NULL == res)
     {
-        return;
-    }
-    if (0 == res[0])
-    {
+        args_setStr(args, "sysOut", "[error] print: can not print val");
         return;
     }
     /* not empty */
-    printf("%s\r\n", res);
+    args_setStr(args, "sysOut", res);
 }
 
 static void init_sys(MimiObj *self, Args *args)

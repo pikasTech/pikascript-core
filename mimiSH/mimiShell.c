@@ -75,39 +75,47 @@ static Arg *_runPythonCmd(Shell *self, char *CMD)
 {
 	MimiObj *root = self->context;
 	Arg *str = New_arg(NULL);
-	Args *res = obj_run(root, CMD);
-	int errCode = args_getInt(res, "errCode");
-	args_deinit(res);
+	Args *runRes = obj_run(root, CMD);
+	int errCode = args_getInt(runRes, "errCode");
 	if (0 == errCode)
 	{
-		arg_setStr(str, "[ok]\r\n");
-		return str;
+		char *sysOut = args_getStr(runRes, "sysOut");
+		if (NULL == sysOut)
+		{
+			arg_setStr(str, "");
+			goto exit;
+		}
+		arg_setStr(str, sysOut);
+		goto exit;
 	}
 	if (1 == errCode)
 	{
-		arg_setStr(str, "[error] object no found.\r\n");
-		return str;
+		arg_setStr(str, "[error] object no found.");
+		goto exit;
 	}
 	if (2 == errCode)
 	{
-		arg_setStr(str, "[error] method no found.\r\n");
-		return str;
+		arg_setStr(str, "[error] method no found.");
+		goto exit;
 	}
 	if (3 == errCode)
 	{
-		arg_setStr(str, "[error] type list no found.\r\n");
-		return str;
+		arg_setStr(str, "[error] type list no found.");
+		goto exit;
 	}
 	if (4 == errCode)
 	{
-		arg_setStr(str, "[error] arg list no found.\r\n");
-		return str;
+		arg_setStr(str, "[error] arg list no found.");
+		goto exit;
 	}
 	if (5 == errCode)
 	{
-		arg_setStr(str, "[error] load arg faild.\r\n");
-		return str;
+		arg_setStr(str, "[error] load arg faild.");
+		goto exit;
 	}
+exit:
+	args_deinit(runRes);
+	return str;
 }
 
 Arg *shell_cmd(Shell *self, char *cmd)

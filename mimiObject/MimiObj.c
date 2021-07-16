@@ -739,6 +739,11 @@ Args *obj_run(MimiObj *self, char *cmd)
         char *returnName = strGetFirstToken(buff[i++], methodToken, '=');
         transferReturnVal(self, returnType, returnName, args);
     }
+    char *sysOut = args_getStr(args, "sysOut");
+    if (NULL != sysOut)
+    {
+        args_setStr(res, "sysOut", args_getStr(args, "sysOut"));
+    }
     args_deinit(args);
     /* succeed */
     args_setInt(res, "errCode", 0);
