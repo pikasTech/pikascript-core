@@ -677,8 +677,9 @@ char *getMethodPath(char *buff, char *methodToken)
     }
 }
 
-int obj_run(MimiObj *self, char *cmd)
+Args *obj_run(MimiObj *self, char *cmd)
 {
+    Args *res = New_args(NULL);
     char buff[8][128] = {0};
     int i = 0;
     char *cleanCmd = strDeleteChar(buff[i++], cmd, ' ');
@@ -688,7 +689,9 @@ int obj_run(MimiObj *self, char *cmd)
     MimiObj *methodHost = obj_getObj(self, methodPath, 1);
     if (NULL == methodHost)
     {
-        return 1;
+        /* error, not found object */
+        args_setInt(res, "errCode", 1);
+        return res;
     }
     char *methodName = strGetLastToken(buff[i++], methodPath, '.');
     void (*methodPtr)(MimiObj * self, Args * args) = getMethodPtr(methodHost, methodName);
@@ -696,20 +699,26 @@ int obj_run(MimiObj *self, char *cmd)
 
     if ((NULL == methodDeclearation) || (NULL == methodPtr))
     {
-        return 2;
+        /* error, method no found */
+        args_setInt(res, "errCode", 2);
+        return res;
     }
 
     char *typeList = strCut(buff[i++], methodDeclearation, '(', ')');
     if (typeList == NULL)
     {
-        return 3;
+        /* typeList no found */
+        args_setInt(res, "errCode", 3);
+        return res;
     }
 
     char *argList = strCut(buff[i++], cleanCmd, '(', ')');
     {
         if (argList == NULL)
         {
-            return 4;
+            /* argL List no found */
+            args_setInt(res, "errCode", 4);
+            return res;
         }
     }
 
@@ -719,7 +728,8 @@ int obj_run(MimiObj *self, char *cmd)
     if (NULL == args)
     {
         /* get args faild */
-        return 5;
+        args_setInt(res, "errCode", 5);
+        return res;
     }
     /* run method */
     methodPtr(methodHost, args);
@@ -731,7 +741,8 @@ int obj_run(MimiObj *self, char *cmd)
     }
     args_deinit(args);
     /* succeed */
-    return 0;
+    args_setInt(res, "errCode", 0);
+    return res;
 }
 
 int obj_removeArg(MimiObj *self, char *argPath)
@@ -759,7 +770,7 @@ int obj_isArgExist(MimiObj *self, char *argPath)
     char buff[64] = {0};
     char *argName = strGetLastToken(buff, argPath, '.');
     Arg *arg = args_getArg(obj->attributeList, argName);
-    if(NULL == arg)
+    if (NULL == arg)
     {
         /* no found arg */
         return 0;
@@ -789,6 +800,11 @@ int obj_init(MimiObj *self, Args *args)
     }
     self->name = obj_getStr(self, "name");
     return 0;
+}
+
+void obj_runNoRes(MimiObj *slef, char *cmd)
+{
+    args_deinit(obj_run(slef, cmd));
 }
 
 MimiObj *New_MimiObj(Args *args)

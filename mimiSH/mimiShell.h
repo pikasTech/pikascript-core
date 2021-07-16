@@ -26,7 +26,7 @@ struct Class_mimiShell2
 };
 
 /* operation */
-void *shell_cmd(Shell *self, char *);
+Arg *shell_cmd(Shell *self, char *cmd);
 void shell_addMap(Shell *self, char *, void *(*)(Shell *shell, int argc, char **argv));
 void shell_deinit(Shell *self);
 

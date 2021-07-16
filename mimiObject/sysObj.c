@@ -36,7 +36,7 @@ static void set(MimiObj *obj, Args *args)
     char buff[64] = {0};
     char *argName = strGetLastToken(buff, argPath, '.');
     arg_setName(newArg, argName);
-    int res = obj_setArg(obj, argPath, newArg);
+    obj_setArg(obj, argPath, newArg);
     arg_deinit(newArg);
     return;
 }
