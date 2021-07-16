@@ -25,7 +25,7 @@ typedef struct
 {
     DMEM_USED_ITEM used; //使用状态
     uint16_t blk_s;      //起始块序号
-    uint16_t blk_num;    //块个数
+    int blk_num;    //块个数
 } DMEM_APPLY;
 //用户使用
 typedef struct
@@ -41,7 +41,7 @@ typedef struct
     DMEM tb_user[DMEM_BLOCK_NUM];        //用户申请内存信息
     DMEM_APPLY tb_apply[DMEM_BLOCK_NUM]; //系统分配内存信息
     uint16_t apply_num;                  //内存申请表占用数目
-    uint16_t blk_num;                    //内存块占用数目
+    int blk_num;                    //内存块占用数目
 } DMEM_STATE;
 
 //若返回空，则申请失败
