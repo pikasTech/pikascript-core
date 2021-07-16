@@ -24,7 +24,7 @@ int args_getSize(Args *self);
 
 Arg *args_getArgByIndex(Args *self, int index);
 Arg *args_getArg(Args *self, char *name);
-void args_removeArg(Args *self, char *name);
+int args_removeArg(Args *self, char *name);
 
 int args_setArg(Args *self, Arg *arg);
 
@@ -66,6 +66,7 @@ void args_returnStr(Args *args, char *val);
 void args_returnInt(Args *args, int val);
 void args_returnFloat(Args *args, float val);
 void args_returnPtr(Args *args, void *val);
+void args_sysOut(Args *args, char *str);
 
 Args *New_args(Args *args);
 #endif

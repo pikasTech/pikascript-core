@@ -57,6 +57,10 @@ void arg_setType(Arg *self, char *type)
 char *arg_getContant(Arg *self)
 {
     // return self->contactConst;
+    if(self->contantDynMem == NULL)
+    {
+        return NULL;
+    }
     return self->contantDynMem->addr;
 }
 
@@ -99,6 +103,10 @@ void arg_setStr(Arg *self, char *string)
 
 long long arg_getInt(Arg *self)
 {
+    if (NULL == self->contantDynMem)
+    {
+        return -999999;
+    }
     unsigned long long int64Temp = 0;
     for (int i = 7; i > -1; i--)
     {
@@ -113,6 +121,10 @@ void *arg_getPtr(Arg *self)
 {
     void *pointer = NULL;
     unsigned long int pointerTemp = 0;
+    if (NULL == self->contantDynMem)
+    {
+        return NULL;
+    }
     for (int i = 7; i > -1; i--)
     {
         // avoid \0
@@ -125,14 +137,17 @@ void *arg_getPtr(Arg *self)
 float arg_getFloat(Arg *self)
 {
     float val = 0;
+    if (NULL == self->contantDynMem)
+    {
+        return -999.999;
+    }
     val = atof(self->contantDynMem->addr);
     return val;
 }
 char *arg_getStr(Arg *self)
 {
-    return self->contantDynMem->addr;
+    return arg_getContant(self);
 }
-
 void arg_init(Arg *self, void *voidPointer)
 {
     /* attrivute */
@@ -157,7 +172,6 @@ char *arg_getType(Arg *self)
 {
     return self->typeDynMem->addr;
 }
-
 
 Arg *New_arg(void *voidPointer)
 {

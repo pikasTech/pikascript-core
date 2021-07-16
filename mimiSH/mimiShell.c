@@ -82,7 +82,6 @@ static Arg *_runPythonCmd(Shell *self, char *CMD)
 		char *sysOut = args_getStr(runRes, "sysOut");
 		if (NULL == sysOut)
 		{
-			arg_setStr(str, "");
 			goto exit;
 		}
 		arg_setStr(str, sysOut);

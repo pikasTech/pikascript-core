@@ -153,6 +153,7 @@ int obj_setArg(MimiObj *self, char *argPath, Arg *arg)
     MimiObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
     {
+        /* object no found */
         return 1;
     }
     args_copyArg(obj->attributeList, arg);
@@ -278,7 +279,19 @@ int obj_set(MimiObj *self, char *argPath, char *valStr)
     }
     char buff[64] = {0};
     char *argName = strGetLastToken(buff, argPath, '.');
-    return args_set(obj->attributeList, argName, valStr);
+    int res = args_set(obj->attributeList, argName, valStr);
+    if (res == 1)
+    {
+        /* do not get arg */
+        return 1;
+    }
+    if (res == 2)
+    {
+        /* type not match */
+        return 2;
+    }
+    /* succeed */
+    return 0;
 }
 
 void newObjPathect(MimiObj *self, char *name, void *(*newObjFun)(Args *initArgs))
@@ -760,7 +773,12 @@ int obj_removeArg(MimiObj *self, char *argPath)
     }
     char buff[64] = {0};
     char *argName = strGetLastToken(buff, argPath, '.');
-    args_removeArg(obj->attributeList, argName);
+    int res = args_removeArg(obj->attributeList, argName);
+    if(1 == res)
+    {
+        /*[error] not found arg*/
+        return 2;
+    }
     return 0;
 }
 

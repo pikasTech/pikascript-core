@@ -328,6 +328,7 @@ char *args_print(Args *self, char *name)
     char *type = args_getType(self, name);
     if (NULL == type)
     {
+        /* can not get arg */
         return NULL;
     }
 
@@ -378,6 +379,7 @@ char *args_print(Args *self, char *name)
             return string;
         }
     }
+    /* can not match type */
     return NULL;
 }
 
@@ -442,7 +444,7 @@ int args_set(Args *self, char *name, char *valStr)
             return 0;
         }
     }
-    // unknown error
+    /* type not match */
     return 2;
 }
 
@@ -479,10 +481,16 @@ int args_foreach(Args *self, int (*eachHandle)(Arg *argEach, Args *handleArgs), 
     return 0;
 }
 
-void args_removeArg(Args *self, char *name)
+int args_removeArg(Args *self, char *name)
 {
     Arg *argNow = args_getArg(self, name);
+    if (NULL == argNow)
+    {
+        /* can not found arg */
+        return 1;
+    }
     link_removeNode(self->argLinkList, argNow);
+    return 0;
 }
 
 void args_returnStr(Args *args, char *val)
@@ -503,6 +511,11 @@ void args_returnFloat(Args *args, float val)
 void args_returnPtr(Args *args, void *val)
 {
     args_setPtr(args, "return", val);
+}
+
+void args_sysOut(Args *args, char *str)
+{
+    args_setStr(args, "sysOut", str);
 }
 
 void args_init(Args *self, Args *args)
