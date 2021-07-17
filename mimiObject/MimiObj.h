@@ -3,6 +3,7 @@
 #include "dataArgs.h"
 #include "dataLink.h"
 #include "dataMemory.h"
+#include "method.h"
 typedef struct Class_process MimiObj;
 
 struct Class_process

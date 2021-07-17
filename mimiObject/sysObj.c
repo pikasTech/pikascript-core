@@ -8,10 +8,10 @@ static void type(MimiObj *obj, Args *args)
     Arg *arg = obj_getArg(obj, argPath);
     if (NULL == arg)
     {
-        args_sysOut(args, "[error] arg no found.");
+        method_sysOut(args, "[error] arg no found.");
         return;
     }
-    args_sysOut(args, arg_getType(arg));
+    method_sysOut(args, arg_getType(arg));
 }
 
 static void del(MimiObj *obj, Args *args)
@@ -20,12 +20,12 @@ static void del(MimiObj *obj, Args *args)
     int res = obj_removeArg(obj, argPath);
     if (1 == res)
     {
-        args_sysOut(args, "[error] del: object no found.");
+        method_sysOut(args, "[error] del: object no found.");
         return;
     }
     if (2 == res)
     {
-        args_sysOut(args, "[error] del: arg not match.");
+        method_sysOut(args, "[error] del: arg not match.");
         return;
     }
 }
@@ -40,17 +40,17 @@ static void set(MimiObj *obj, Args *args)
         int res = obj_set(obj, argPath, valStr);
         if (1 == res)
         {
-            args_sysOut(args, "[error] set: arg no found.");
+            method_sysOut(args, "[error] set: arg no found.");
             return;
         }
         if (2 == res)
         {
-            args_sysOut(args, "[error] set: type not match.");
+            method_sysOut(args, "[error] set: type not match.");
             return;
         }
         if (3 == res)
         {
-            args_sysOut(args, "[error] set: object not found.");
+            method_sysOut(args, "[error] set: object not found.");
             return;
         }
         return;
@@ -64,7 +64,7 @@ static void set(MimiObj *obj, Args *args)
     int res = obj_setArg(obj, argPath, newArg);
     if (res == 1)
     {
-        args_sysOut(args, "[error] set: object not found.");
+        method_sysOut(args, "[error] set: object not found.");
     }
     arg_deinit(newArg);
     return;
@@ -110,19 +110,19 @@ static void list(MimiObj *self, Args *args)
     {
         /* no input obj path, use current obj */
         args_foreach(self->attributeList, listEachArg, args);
-        args_sysOut(args, args_getStr(args, "stringOut"));
+        method_sysOut(args, args_getStr(args, "stringOut"));
         return;
     }
     MimiObj *obj = obj_getObj(self, objPath, 0);
     if (NULL == obj)
     {
         /* do not find obj */
-        args_sysOut(args, "[error] list: object no found.");
+        method_sysOut(args, "[error] list: object no found.");
         return;
     }
     /* list args */
     args_foreach(obj->attributeList, listEachArg, args);
-    args_sysOut(args, args_getStr(args, "stringOut"));
+    method_sysOut(args, args_getStr(args, "stringOut"));
     return;
 }
 
@@ -131,11 +131,11 @@ static void print(MimiObj *obj, Args *args)
     char *res = args_print(args, "val");
     if (NULL == res)
     {
-        args_sysOut(args, "[error] print: can not print val");
+        method_sysOut(args, "[error] print: can not print val");
         return;
     }
     /* not empty */
-    args_sysOut(args, res);
+    method_sysOut(args, res);
 }
 
 static void init_sys(MimiObj *self, Args *args)
