@@ -13,7 +13,7 @@ void testFloat(MimiObj *obj, Args *args)
         printf("the float val1 is: %f\r\n", val1);
         printf("the float val2 is: %f\r\n", val2);
     }
-    args_setFloat(args, "return", val1 + val2);
+    method_returnFloat(args, val1 + val2);
 }
 
 void hello2(MimiObj *obj, Args *args)
@@ -44,7 +44,7 @@ void add(MimiObj *obj, Args *args)
 {
     int val1 = args_getInt(args, "val1");
     int val2 = args_getInt(args, "val2");
-    args_setInt(args, "return", val1 + val2);
+    method_returnInt(args, val1 + val2);
 }
 
 int TEST_MimiObj(int isShow)
