@@ -103,6 +103,21 @@ int args_setStr(Args *self, char *name, char *strIn)
     return errCode;
 }
 
+void setArgDirect(Args *self, Arg *arg)
+{
+    link_addNode(self->argLinkList,
+                 arg,
+                 (void (*)(void *))arg_deinit);
+}
+
+char *args_getBuff(Args *self, int size)
+{
+    Arg *argNew = New_arg(NULL);
+    arg_newContant(argNew, size);
+    setArgDirect(self, argNew);
+    return argNew->contantDynMem->addr;
+}
+
 char *args_getStr(Args *self, char *name)
 {
     Arg *arg = args_getArg(self, name);
@@ -228,13 +243,12 @@ int updateArg(Args *self, Arg *argNew)
     return 0;
 }
 
+
 int args_setArg(Args *self, Arg *arg)
 {
     if (!args_isArgExist(self, arg->nameDynMem->addr))
     {
-        link_addNode(self->argLinkList,
-                     arg,
-                     (void (*)(void *))arg_deinit);
+        setArgDirect(self, arg);
         return 0;
     }
     updateArg(self, arg);
@@ -492,7 +506,6 @@ int args_removeArg(Args *self, char *name)
     link_removeNode(self->argLinkList, argNow);
     return 0;
 }
-
 
 void args_init(Args *self, Args *args)
 {

@@ -2,6 +2,7 @@
 #include "dataArgs.h"
 #include "dataMemory.h"
 #include "dataString.h"
+#include "strArgs.h"
 #include "mimiFansList.h"
 #include "mimiMailbox.h"
 
@@ -74,9 +75,10 @@ int obj_setInt(MimiObj *self, char *argPath, long long val)
         /* [error] object no found */
         return 1;
     }
-    char name[64] = {0};
-    strGetLastToken(name, argPath, '.');
+    Args *buffs = New_strBuff();
+    char *name = strsGetLastToken(buffs, argPath, '.');
     args_setInt(obj->attributeList, name, val);
+    args_deinit(buffs);
     return 0;
 }
 
@@ -129,8 +131,9 @@ long long obj_getInt(MimiObj *self, char *argPath)
     {
         return -999999999;
     }
-    char argName[64] = {0};
-    strGetLastToken(argName, argPath, '.');
+    Args *buffs = New_strBuff();
+    char *argName = strsGetLastToken(buffs, argPath, '.');
+    args_deinit(buffs);
     return args_getInt(obj->attributeList,
                        argName);
 }
@@ -774,7 +777,7 @@ int obj_removeArg(MimiObj *self, char *argPath)
     char buff[64] = {0};
     char *argName = strGetLastToken(buff, argPath, '.');
     int res = args_removeArg(obj->attributeList, argName);
-    if(1 == res)
+    if (1 == res)
     {
         /*[error] not found arg*/
         return 2;

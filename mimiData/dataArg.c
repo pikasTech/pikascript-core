@@ -21,6 +21,11 @@ void arg_deinit(Arg *self)
     }
 }
 
+void arg_newContant(Arg *self, int size)
+{
+    self->contantDynMem = DynMemGet((size + 1) * sizeof(char));
+}
+
 void arg_setContant(Arg *self, char *contant, int size)
 {
     if (NULL != self->contantDynMem)

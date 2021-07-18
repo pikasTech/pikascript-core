@@ -1,6 +1,7 @@
 #include "MimiObj.h"
 #include "dataMemory.h"
 #include "dataString.h"
+#include "strArgs.h"
 
 static void type(MimiObj *obj, Args *args)
 {
@@ -59,6 +60,7 @@ static void set(MimiObj *obj, Args *args)
     Arg *val = args_getArg(args, "val");
     Arg *newArg = arg_copy(val);
     char buff[64] = {0};
+    Args *buf = New_strBuff();
     char *argName = strGetLastToken(buff, argPath, '.');
     arg_setName(newArg, argName);
     int res = obj_setArg(obj, argPath, newArg);
@@ -67,6 +69,7 @@ static void set(MimiObj *obj, Args *args)
         method_sysOut(args, "[error] set: object not found.");
     }
     arg_deinit(newArg);
+    args_deinit(buf);
     return;
 }
 

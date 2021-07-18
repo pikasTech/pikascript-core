@@ -63,5 +63,7 @@ int args_set(Args *self, char *name, char *valueStr);
 int args_setPtrWithType(Args *self, char *objectName, char *className, void *objectPtr);
 int args_foreach (Args *self, int (*eachHandle)(Arg *argEach, Args *handleArgs), Args * handleArgs);
 
+char *args_getBuff(Args *self, int size);
+
 Args *New_args(Args *args);
 #endif

@@ -16,6 +16,7 @@ struct Class_arg
 
 void arg_setName(Arg *self, char *name);
 void arg_setContant(Arg *self, char *contant, int size);
+void arg_newContant(Arg *self, int size);
 void arg_setType(Arg *self, char *type);
 char *arg_getName(Arg *self);
 char *arg_getType(Arg *self);
