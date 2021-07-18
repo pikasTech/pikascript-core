@@ -21,6 +21,8 @@ char *strRemovePrefix(char *inputStr, char *prefix, char *outputStr);
 /* token */
 int strGetToken(char *string, char **argv, char sign);
 char *strPopToken(char *strOut, char *strIn, char sign);
+int strCountSign(char *strIn, char sign);
+int strGetTokenNum(char *strIn, char sign);
 char *strGetFirstToken(char *strOut, char *strIn, char sign);
 char *strGetLastToken(char *strOut, char *strIn, char sign);
 char *strClear(char *str);

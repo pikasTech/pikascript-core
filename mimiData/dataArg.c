@@ -62,7 +62,7 @@ void arg_setType(Arg *self, char *type)
 char *arg_getContant(Arg *self)
 {
     // return self->contactConst;
-    if(self->contantDynMem == NULL)
+    if (self->contantDynMem == NULL)
     {
         return NULL;
     }
@@ -72,7 +72,7 @@ char *arg_getContant(Arg *self)
 void arg_setInt(Arg *self, long long val)
 {
     unsigned long int int64Temp = val;
-    unsigned char contantBuff[256];
+    unsigned char contantBuff[8];
     for (int i = 0; i < 8; i++)
     {
         // add 0x30 to void \0
@@ -84,15 +84,36 @@ void arg_setInt(Arg *self, long long val)
 
 void arg_setFloat(Arg *self, float val)
 {
-    char contantBuff[256];
-    sprintf((char *)contantBuff, "%f", val);
-    arg_setContant(self, (char *)contantBuff, strGetSize(contantBuff));
+    char contantBuff[4];
+    char *valPtr = (char *)&val;
+    for (int i = 0; i < 4; i++)
+    {
+        // add 0x30 to void \0
+        contantBuff[i] = valPtr[i];
+    }
+    arg_setContant(self, (char *)contantBuff, 4);
+}
+
+float arg_getFloat(Arg *self)
+{
+    if (NULL == self->contantDynMem)
+    {
+        return -999.999;
+    }
+    float valOut = 0;
+    char *valOutPtr = (char *)(&valOut);
+    char *valPtr = self->contantDynMem->addr;
+    for (int i = 0; i < 4; i++)
+    {
+        valOutPtr[i] = valPtr[i];
+    }
+    return valOut;
 }
 
 void arg_setPtr(Arg *self, void *pointer)
 {
     unsigned long int pointerTemp = (unsigned long int)pointer;
-    unsigned char contantBuff[256];
+    unsigned char contantBuff[8];
     for (int i = 0; i < 8; i++)
     {
         // aboid \0
@@ -101,6 +122,7 @@ void arg_setPtr(Arg *self, void *pointer)
     }
     arg_setContant(self, (char *)contantBuff, 8);
 }
+
 void arg_setStr(Arg *self, char *string)
 {
     arg_setContant(self, string, strGetSize(string));
@@ -138,16 +160,6 @@ void *arg_getPtr(Arg *self)
     }
     pointer = (void *)pointerTemp;
     return pointer;
-}
-float arg_getFloat(Arg *self)
-{
-    float val = 0;
-    if (NULL == self->contantDynMem)
-    {
-        return -999.999;
-    }
-    val = atof(self->contantDynMem->addr);
-    return val;
 }
 char *arg_getStr(Arg *self)
 {

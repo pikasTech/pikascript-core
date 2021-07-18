@@ -100,6 +100,24 @@ char *strAppendWithSize(char *strOut, char *pData, int Size)
 	return strOut;
 }
 
+int strCountSign(char *strIn, char sign)
+{
+	int count = 0;
+	for (int i = 0; i < strGetSize(strIn); i++)
+	{
+		if (sign == strIn[i])
+		{
+			count++;
+		}
+	}
+	return count;
+}
+
+int strGetTokenNum(char *strIn, char sign)
+{
+	return strCountSign(strIn, sign) + 1;
+}
+
 unsigned short int strGetSize_unlimited(char *pData)
 {
 	unsigned short int Size = 0;

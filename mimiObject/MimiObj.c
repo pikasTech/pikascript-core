@@ -344,22 +344,16 @@ MimiObj *obj_getObjDirect(MimiObj *self, char *name)
     return obj_getPtr(self, name);
 }
 
-MimiObj *obj_getObj(MimiObj *self, char *processPathectory, int keepToken)
+MimiObj *obj_getObj(MimiObj *self, char *objPath, int keepToken)
 {
+    Args *buffs = New_strBuff();
+    char *objPathBuff = strsCopy(buffs, objPath);
+    int tokenNum = strGetTokenNum(objPath, '.');
     MimiObj *obj = self;
-    // sign in the argv memory
-    char *token[16] = {0};
-    DMEM *tokenMem[16] = {0};
-    for (int i = 0; i < 16; i++)
+    for (int i = 0; i < tokenNum - keepToken; i++)
     {
-        tokenMem[i] = DynMemGet(sizeof(char) * 256);
-        token[i] = (char *)tokenMem[i]->addr;
-        token[i][0] = 0;
-    }
-    int processArgc = strGetToken(processPathectory, token, '.');
-    for (int i = 0; i < processArgc - keepToken; i++)
-    {
-        obj = obj_getObjDirect(obj, token[i]);
+        char *token = strsPopToken(buffs, objPathBuff, '.');
+        obj = obj_getObjDirect(obj, token);
         if (obj == NULL)
         {
             goto exit;
@@ -367,10 +361,7 @@ MimiObj *obj_getObj(MimiObj *self, char *processPathectory, int keepToken)
     }
     goto exit;
 exit:
-    for (int i = 0; i < 16; i++)
-    {
-        DynMemPut(tokenMem[i]);
-    }
+    args_deinit(buffs);
     return obj;
 }
 
