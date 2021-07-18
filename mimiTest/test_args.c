@@ -18,7 +18,7 @@ int TEST_args2(int isShow)
                      (void *)2222322);
         args_setStr(args, "strTest", "teeeds");
 
-        floatOut = args_getFloatByIndex(args, 1);
+        floatOut = args_getFloatByIndex(args, 0);
         int64Out = args_getInt(args, "int64Test");
         pointer = args_getPtr(args, "pointerTest");
         strOut = args_getStr(args, "strTest");
@@ -50,10 +50,6 @@ int TEST_args2(int isShow)
         if (0 != strcmp("teeeds", strOut))
         {
             err = 4;
-        }
-        if (0 != strcmp("float", args_getType(args, "arg1")))
-        {
-            err = 5;
         }
         if (0 != strcmp("int", args_getType(args, "int64Test")))
         {

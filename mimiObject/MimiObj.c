@@ -13,7 +13,7 @@ int deinitEachSubObj(Arg *argEach, Args *handleArgs)
         /* error: tOhis handle not need handle args */
         return 1;
     }
-    if (strEqu(argEach->typeDynMem->addr, "_class-process"))
+    if (strEqu(arg_getType(argEach), "_class-process"))
     {
         MimiObj *subObj = arg_getPtr(argEach);
         if (NULL != subObj)

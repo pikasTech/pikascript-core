@@ -1,4 +1,5 @@
 #include "dataArgs.h"
+#include "strArgs.h"
 #include "dataLink.h"
 #include "dataMemory.h"
 #include "dataString.h"
@@ -30,15 +31,19 @@ char *args_getStrByIndex(Args *self, int index)
 
 int args_setStrWithDefaultName(Args *self, char *strIn)
 {
-    char *name = getDefaultName(self, args_getBuff(self, 128));
+    Args *buffs = New_strBuff();
+    char *name = getDefaultName(self, args_getBuff(buffs, 128));
     args_setStr(self, name, strIn);
+    args_deinit(buffs);
     return 0;
 }
 
 int args_setFloatWithDefaultName(Args *self, float argFloat)
 {
-    char *name = getDefaultName(self, args_getBuff(self, 128));
+    Args *buffs = New_strBuff();
+    char *name = getDefaultName(self, args_getBuff(buffs, 128));
     args_setFloat(self, name, argFloat);
+    args_deinit(buffs);
     return 0;
 }
 
@@ -283,13 +288,15 @@ Arg *args_getArg(Args *self, char *name)
 
 void args_bind(Args *self, char *type, char *name, void *pointer)
 {
-    char typeWithBind[32] = "_bind-";
+    Args *buffs = New_strBuff();
+    char *typeWithBind = strCopy(args_getBuff(buffs, 32), "_bind-");
     strAppend(typeWithBind, type);
     Arg *argNew = New_arg(NULL);
     arg_setType(argNew, typeWithBind);
     arg_setName(argNew, name);
     arg_setPtr(argNew, pointer);
     args_setArg(self, argNew);
+    args_deinit(buffs);
     return;
 }
 
@@ -310,105 +317,137 @@ void args_bindStr(Args *self, char *name, char **stringPtr)
 
 char *getPrintSring(Args *self, char *name, char *valString)
 {
-    char printName[32] = {0};
+    Args *buffs = New_strBuff();
+    char *printName = args_getBuff(buffs, 32);
     strAppend(printName, "[printBuff]");
     strAppend(printName, name);
-    char printString[256] = {0};
+    char *printString = args_getBuff(buffs, 256);
     sprintf(printString, "%s", valString);
     args_setStr(self, printName, printString);
+    args_deinit(buffs);
     return args_getStr(self, printName);
 }
 
 char *getPrintStringFromInt(Args *self, char *name, int val)
 {
-    char valString[256] = {0};
+    Args *buffs = New_strBuff();
+    char *res = NULL;
+    char *valString = args_getBuff(buffs, 256);
     sprintf(valString, "%d", val);
-    return getPrintSring(self, name, valString);
+    res = getPrintSring(self, name, valString);
+    args_deinit(buffs);
+    return res;
 }
 
 char *getPrintStringFromFloat(Args *self, char *name, float val)
 {
-    char valString[256] = {0};
+    Args *buffs = New_strBuff();
+    char *res = NULL;
+    char *valString = args_getBuff(buffs, 256);
     sprintf(valString, "%f", val);
-    return getPrintSring(self, name, valString);
+    res = getPrintSring(self, name, valString);
+    args_deinit(buffs);
+    return res;
 }
 
 char *getPrintStringFromPtr(Args *self, char *name, void *val)
 {
-    char valString[256] = {0};
+    Args *buffs = New_strBuff();
+    char *res = NULL;
+    char *valString = args_getBuff(buffs, 256);
     unsigned int intVal = (unsigned int)val;
     sprintf(valString, "0x%x", intVal);
-    return getPrintSring(self, name, valString);
+    res = getPrintSring(self, name, valString);
+    args_deinit(buffs);
+    return res;
 }
 
 char *args_print(Args *self, char *name)
 {
+    char *res = NULL;
     char *type = args_getType(self, name);
+    Args *buffs = New_strBuff();
     if (NULL == type)
     {
         /* can not get arg */
-        return NULL;
+        res = NULL;
+        goto exit;
     }
 
     if (strEqu(type, "int"))
     {
         int val = args_getInt(self, name);
-        return getPrintStringFromInt(self, name, val);
+        res = getPrintStringFromInt(self, name, val);
+        goto exit;
     }
 
     if (strEqu(type, "float"))
     {
         float val = args_getFloat(self, name);
-        return getPrintStringFromFloat(self, name, val);
+        res = getPrintStringFromFloat(self, name, val);
+        goto exit;
     }
 
     if (strEqu(type, "string"))
     {
-        return args_getStr(self, name);
+        res = args_getStr(self, name);
+        goto exit;
     }
 
     if (strEqu(type, "pointer"))
     {
         void *val = args_getPtr(self, name);
-        return getPrintStringFromPtr(self, name, val);
+        res = getPrintStringFromPtr(self, name, val);
+        goto exit;
     }
 
-    char bindTypePrefix[] = "_bind-";
+    char *bindTypePrefix = strsCopy(self, "_bind-");
     if (strIsStartWith(type, bindTypePrefix))
     {
-        char typeWithoutBind[32] = {0};
+        char *typeWithoutBind = args_getBuff(buffs, 32);
         strRemovePrefix(type, bindTypePrefix, typeWithoutBind);
         if (strEqu(typeWithoutBind, "int"))
         {
             int *valPtr = args_getPtr(self, name);
             int val = *valPtr;
-            return getPrintStringFromInt(self, name, val);
+            res = getPrintStringFromInt(self, name, val);
+            goto exit;
         }
         if (strEqu(typeWithoutBind, "float"))
         {
             float *valPtr = args_getPtr(self, name);
             float val = *valPtr;
-            return getPrintStringFromFloat(self, name, val);
+            res = getPrintStringFromFloat(self, name, val);
+            goto exit;
         }
         if (strEqu(typeWithoutBind, "string"))
         {
             // the value of &string is equal to string it self
             char *string = args_getPtr(self, name);
-            return string;
+            res = string;
+            goto exit;
         }
     }
     /* can not match type */
-    return NULL;
+    res = NULL;
+    goto exit;
+
+exit:
+    args_deinit(buffs);
+    return res;
 }
 
 int args_set(Args *self, char *name, char *valStr)
 {
     char *type = args_getType(self, name);
+    Args *buffs = New_strBuff();
+    int err = 0;
 
     if (NULL == type)
     {
         /* do not get arg */
-        return 1;
+        err = 1;
+        goto exit;
     }
 
     if (strEqu("int", type))
@@ -416,26 +455,29 @@ int args_set(Args *self, char *name, char *valStr)
         int val = atoi(valStr);
         args_setInt(self, name, val);
         // operation succeed
-        return 0;
+        err = 0;
+        goto exit;
     }
     if (strEqu("float", type))
     {
         float val = atof(valStr);
         args_setFloat(self, name, val);
         // operation succeed
-        return 0;
+        err = 0;
+        goto exit;
     }
     if (strEqu("string", type))
     {
         args_setStr(self, name, valStr);
         // operation succeed
-        return 0;
+        err = 0;
+        goto exit;
     }
 
-    char bindTypePrefix[] = "_bind-";
+    char *bindTypePrefix = strsCopy(self, "_bind-");
     if (strIsStartWith(type, bindTypePrefix))
     {
-        char typeWithoutBind[32] = {0};
+        char *typeWithoutBind = args_getBuff(buffs, 32);
         strRemovePrefix(type, bindTypePrefix, typeWithoutBind);
         if (strEqu(typeWithoutBind, "int"))
         {
@@ -443,7 +485,8 @@ int args_set(Args *self, char *name, char *valStr)
             int val = atoi(valStr);
             *valPtr = val;
             // operation succeed
-            return 0;
+            err = 0;
+            goto exit;
         }
         if (strEqu(typeWithoutBind, "float"))
         {
@@ -451,7 +494,8 @@ int args_set(Args *self, char *name, char *valStr)
             float val = atof(valStr);
             *valPtr = val;
             // operation succeed
-            return 0;
+            err = 0;
+            goto exit;
         }
         if (strEqu(typeWithoutBind, "string"))
         {
@@ -459,22 +503,29 @@ int args_set(Args *self, char *name, char *valStr)
             /* size add 1 to copy the '\0' */
             memcpy(stringBinded, valStr, strGetSize(valStr) + 1);
             // operation succeed
-            return 0;
+            err = 0;
+            goto exit;
         }
     }
     /* type not match */
-    return 2;
+    err = 2;
+    goto exit;
+exit:
+    args_deinit(buffs);
+    return err;
 }
 
 int args_setPtrWithType(Args *self, char *objectName, char *className, void *objectPtr)
 {
-    char typeWithClass[32] = "_class-";
+    Args *buffs = New_strBuff();
+    char *typeWithClass = strCopy(args_getBuff(buffs, 32), "_class-");
     strAppend(typeWithClass, className);
     Arg *argNew = New_arg(NULL);
     arg_setName(argNew, objectName);
     arg_setPtr(argNew, objectPtr);
     arg_setType(argNew, typeWithClass);
     args_setArg(self, argNew);
+    args_deinit(buffs);
     return 0;
 }
 

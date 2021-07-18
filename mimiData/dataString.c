@@ -152,13 +152,14 @@ char *strAppend_unlimited(char *strOut, char *pData)
 char *strGetLastToken(char *strOut, char *strIn, char sign)
 {
 	int size = strGetSize(strIn);
-	char strOutBuff[256] = {0};
 	int isGetSign = 0;
+	int buffSize = 0;
 	for (int i = size - 1; i > -1; i--)
 	{
 		if (strIn[i] != sign)
 		{
-			strOutBuff[size - i - 1] = strIn[i];
+			strOut[size - i - 1] = strIn[i];
+			buffSize++;
 		}
 		if (strIn[i] == sign)
 		{
@@ -166,13 +167,14 @@ char *strGetLastToken(char *strOut, char *strIn, char sign)
 			break;
 		}
 	}
-	int buffSize = strGetSize(strOutBuff);
 	int i = 0;
-	for (i = 0; i < buffSize; i++)
+	for (i = 0; i < buffSize/2; i++)
 	{
-		strOut[i] = strOutBuff[buffSize - i - 1];
+		char buff = strOut[i];
+		strOut[i] = strOut[buffSize - i - 1];
+		strOut[buffSize - i - 1] = buff;
 	}
-	strOut[i] = 0;
+	strOut[buffSize] = 0;
 	return strOut;
 }
 
