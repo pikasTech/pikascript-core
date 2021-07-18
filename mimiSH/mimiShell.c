@@ -8,9 +8,6 @@
 #include <string.h>
 // used to config the cmdMap of sh
 
-// the only application the core need to load
-#include "shApp_cmdNoFound.h"
-
 // start_i is used to skip severl chars in the frount of CMD
 static int strGetArgs_With_Start_i(char *CMD, char **argv, int start_i)
 {
