@@ -24,6 +24,10 @@ void arg_deinit(Arg *self)
 void arg_newContant(Arg *self, int size)
 {
     self->contantDynMem = DynMemGet((size + 1) * sizeof(char));
+    for(int i =0; i<size +1;i ++)
+    {
+        self->contantDynMem->addr[i] = 0;
+    }
 }
 
 void arg_setContant(Arg *self, char *contant, int size)
@@ -182,11 +186,19 @@ void arg_init(Arg *self, void *voidPointer)
 
 char *arg_getName(Arg *self)
 {
+    if(self->nameDynMem == NULL)
+    {
+        return NULL;
+    }
     return self->nameDynMem->addr;
 }
 
 char *arg_getType(Arg *self)
 {
+    if(self->typeDynMem== NULL)
+    {
+        return NULL;
+    }
     return self->typeDynMem->addr;
 }
 

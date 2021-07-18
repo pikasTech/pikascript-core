@@ -310,17 +310,18 @@ void newObjDirect(MimiObj *self, char *name, void *(*newObjFun)(Args *initArgs))
 MimiObj *initObj(MimiObj *self, char *name)
 {
     char prifix[] = "[cls]";
-    char classPath[64] = {0};
-    strAppend(classPath, prifix);
-    strAppend(classPath, name);
+    Args *buffs = New_strBuff();
+    char *classPath = strAppend(strAppend(args_getBuff(buffs, 64), prifix),name);
     /* init the subprocess */
     void *(*newObjFun)(Args * initArgs) = args_getPtr(self->attributeList, classPath);
     if (NULL == newObjFun)
     {
         /* no such object */
+        args_deinit(buffs);
         return NULL;
     }
     newObjDirect(self, name, newObjFun);
+    args_deinit(buffs);
     return obj_getPtr(self, name);
 }
 

@@ -18,7 +18,7 @@ int TEST_args2(int isShow)
                      (void *)2222322);
         args_setStr(args, "strTest", "teeeds");
 
-        floatOut = args_getFloatByIndex(args, 0);
+        floatOut = args_getFloatByIndex(args, 1);
         int64Out = args_getInt(args, "int64Test");
         pointer = args_getPtr(args, "pointerTest");
         strOut = args_getStr(args, "strTest");
@@ -26,7 +26,7 @@ int TEST_args2(int isShow)
         if (isShow)
         {
             printf("the float output is: %f\r\n", floatOut);
-            printf("the float type is: [%s]\r\n", args_getType(args, "arg0"));
+            printf("the float type is: [%s]\r\n", args_getType(args, "arg1"));
             printf("the int64 output is: %d\r\n", (int)int64Out);
             printf("the int64 type is: [%s]\r\n", args_getType(args, "int64Test"));
             printf("the pointer output is: %d\r\n", (int)(long long)pointer);
@@ -51,7 +51,7 @@ int TEST_args2(int isShow)
         {
             err = 4;
         }
-        if (0 != strcmp("float", args_getType(args, "arg0")))
+        if (0 != strcmp("float", args_getType(args, "arg1")))
         {
             err = 5;
         }

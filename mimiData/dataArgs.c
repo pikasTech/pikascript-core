@@ -30,15 +30,15 @@ char *args_getStrByIndex(Args *self, int index)
 
 int args_setStrWithDefaultName(Args *self, char *strIn)
 {
-    char buff[128];
-    args_setStr(self, getDefaultName(self, buff), strIn);
+    char *name = getDefaultName(self, args_getBuff(self, 128));
+    args_setStr(self, name, strIn);
     return 0;
 }
 
 int args_setFloatWithDefaultName(Args *self, float argFloat)
 {
-    char buff[128];
-    args_setFloat(self, getDefaultName(self, buff), argFloat);
+    char *name = getDefaultName(self, args_getBuff(self, 128));
+    args_setFloat(self, name, argFloat);
     return 0;
 }
 
@@ -221,6 +221,10 @@ int args_copyArgByName(Args *self, char *name, Args *directArgs)
 
 int args_isArgExist(Args *self, char *name)
 {
+    if (NULL == name)
+    {
+        return 0;
+    }
     if (NULL != args_getArg(self, name))
     {
         return 1;
@@ -243,10 +247,10 @@ int updateArg(Args *self, Arg *argNew)
     return 0;
 }
 
-
 int args_setArg(Args *self, Arg *arg)
 {
-    if (!args_isArgExist(self, arg->nameDynMem->addr))
+    char *name = arg_getName(arg);
+    if (!args_isArgExist(self, name))
     {
         setArgDirect(self, arg);
         return 0;
@@ -265,7 +269,7 @@ Arg *args_getArg(Args *self, char *name)
     while (1)
     {
         Arg *arg = nodeNow->contant;
-        if (strEqu(name, arg->nameDynMem->addr))
+        if (strEqu(name, arg_getName(arg)))
         {
             return arg;
         }
