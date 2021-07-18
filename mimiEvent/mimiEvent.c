@@ -1,5 +1,6 @@
 #include "MimiObj.h"
 #include "baseObj.h"
+#include "strArgs.h"
 #include "dataMemory.h"
 #include "mimiFansInfo.h"
 #include "mimiFansList.h"
@@ -12,15 +13,17 @@ static void publish(MimiObj *self, Args *args)
 
     MimiObj *publisher = obj_getObj(self, argPath, 1);
     char *folloedArgName = obj_getStr(publisher, "fansList.fansInfo.followedArgName");
-    char argName[64] = {0};
+    char *argName = args_getBuff(args, 64);
     strGetLastToken(argName, argPath, '.');
     if (!strEqu(argName, folloedArgName))
     {
         return;
     }
     MimiObj *fans = obj_getPtr(publisher, "fansList.fansInfo.fansPtr");
-    void (*handle)(MimiObj * obj) = obj_getPtr(publisher, "fansList.fansInfo.handle");
-    handle(fans);
+    void (*handle)(MimiObj * obj, Args *args) = obj_getPtr(publisher, "fansList.fansInfo.handle");
+    Args *argsHandle = New_args(NULL);
+    handle(fans, argsHandle);
+    args_deinit(argsHandle);
 }
 
 static void follow(MimiObj *self, Args *args)
@@ -30,7 +33,7 @@ static void follow(MimiObj *self, Args *args)
 
     MimiObj *publisher = obj_getObj(self, argPath, 1);
     MimiObj *fansInfo = obj_getObj(publisher, "fansList.fansInfo", 0);
-    char argName[64];
+    char *argName = args_getBuff(args, 64);
     strGetLastToken(argName, argPath, '.');
 
     obj_setPtr(fansInfo, "fansPtr", self);

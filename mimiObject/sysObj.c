@@ -59,9 +59,7 @@ static void set(MimiObj *obj, Args *args)
     /* new arg */
     Arg *val = args_getArg(args, "val");
     Arg *newArg = arg_copy(val);
-    char buff[64] = {0};
-    Args *buf = New_strBuff();
-    char *argName = strGetLastToken(buff, argPath, '.');
+    char *argName = strGetLastToken(args_getBuff(args, 64), argPath, '.');
     arg_setName(newArg, argName);
     int res = obj_setArg(obj, argPath, newArg);
     if (res == 1)
@@ -69,22 +67,18 @@ static void set(MimiObj *obj, Args *args)
         method_sysOut(args, "[error] set: object not found.");
     }
     arg_deinit(newArg);
-    args_deinit(buf);
     return;
 }
 
 static int listEachArg(Arg *argEach, Args *handleArgs)
 {
-    char strBuff[2][256] = {0};
-    int i = 0;
-
     if (NULL == handleArgs)
     {
         /* error: not handleArgs input */
         return 1;
     }
 
-    char *argName = strBuff[i++];
+    char *argName = args_getBuff(handleArgs, 256);
     memcpy(argName, arg_getName(argEach), strGetSize(arg_getName(argEach)));
     if (strIsStartWith(argName, "["))
     {

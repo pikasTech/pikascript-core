@@ -42,6 +42,7 @@ typedef struct
     DMEM_APPLY tb_apply[DMEM_BLOCK_NUM]; //系统分配内存信息
     uint16_t apply_num;                  //内存申请表占用数目
     int blk_num;                         //内存块占用数目
+    int reqTimes;                        //memory request times
 } DMEM_STATE;
 
 //若返回空，则申请失败
