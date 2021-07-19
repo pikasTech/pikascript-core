@@ -1,4 +1,5 @@
 #include "MimiObj.h"
+#include "method.h"
 #include "dataMemory.h"
 #include "dataString.h"
 #include "strArgs.h"
@@ -33,7 +34,7 @@ static void del(MimiObj *obj, Args *args)
 
 static void set(MimiObj *obj, Args *args)
 {
-    char *argPath = args_getStr(args, "argPath");
+    char *argPath = method_getStr(args, "argPath");
     if (obj_isArgExist(obj, argPath))
     {
         /* update arg */
