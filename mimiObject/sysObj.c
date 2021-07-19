@@ -138,7 +138,7 @@ static void print(MimiObj *obj, Args *args)
 
 static void init_sys(MimiObj *self, Args *args)
 {
-    /* attrivute */
+    /* attribute */
 
     /* method */
     obj_defineMethod(self, "print(val:any)", print);

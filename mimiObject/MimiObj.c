@@ -841,7 +841,7 @@ int obj_init(MimiObj *self, Args *args)
     self->_updateHandle = _UpdateHandle;
     self->_beforDinit = _beforDinit;
 
-    /* attrivute */
+    /* attribute */
     obj_setPtr(self, "context", self);
     obj_setStr(self, "name", "root");
 

@@ -9,7 +9,7 @@ static void deinit(dataTest_t *self)
 
 static void init(dataTest_t *self, Args *args)
 {
-    /* attrivute */
+    /* attribute */
     self->context = self;
     self->a = 0;
     self->b = 0;

@@ -5,7 +5,7 @@
 
 static void init_FansList(MimiObj *self, Args *args)
 {
-    /* attrivute */
+    /* attribute */
     obj_setObj(self, "fansInfo", New_MimiObj_FansInfo);
 
     /* operation */

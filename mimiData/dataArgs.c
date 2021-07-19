@@ -117,7 +117,7 @@ void setArgDirect(Args *self, Arg *arg)
 
 char *args_getBuff(Args *self, int size)
 {
-    Arg *argNew = New_arg(NULL);
+
     arg_newContant(argNew, size);
     setArgDirect(self, argNew);
     return argNew->contantDynMem->addr;
@@ -564,7 +564,7 @@ int args_removeArg(Args *self, char *name)
 
 void args_init(Args *self, Args *args)
 {
-    /* attrivute */
+    /* attribute */
     self->context = self;
     self->argLinkList = New_link(NULL);
 

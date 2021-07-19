@@ -43,7 +43,7 @@ static void follow(MimiObj *self, Args *args)
 
 static void init_Event(MimiObj *self, Args *args)
 {
-    /* attrivute */
+    /* attribute */
     obj_setObj(self, "fansList", New_MimiObj_FansList);
     obj_setObj(self, "mailBox", New_MimiObj_Mailbox);
 

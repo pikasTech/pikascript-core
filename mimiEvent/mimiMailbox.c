@@ -4,7 +4,7 @@
 
 static void init_Mailbox(MimiObj *self, Args *args)
 {
-    /* attrivute */
+    /* attribute */
 
     /* operation */
 

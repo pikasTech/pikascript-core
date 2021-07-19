@@ -171,7 +171,7 @@ char *arg_getStr(Arg *self)
 }
 void arg_init(Arg *self, void *voidPointer)
 {
-    /* attrivute */
+    /* attribute */
     self->context = self;
     self->contantDynMem = NULL;
     self->nameDynMem = NULL;

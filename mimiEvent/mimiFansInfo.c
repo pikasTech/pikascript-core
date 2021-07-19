@@ -4,7 +4,7 @@
 
 static void init_FansInfo(MimiObj *self, Args *args)
 {
-    /* attrivute */
+    /* attribute */
 
     /* operation */
 

@@ -108,7 +108,7 @@ LinkNode *link_getNode(Link *self, long long id)
 
 void link_init(Link *self, void *args)
 {
-    /* attrivute */
+    /* attribute */
     self->firstNode = NULL;
     self->TopId = 0;
 

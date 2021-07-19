@@ -1,4 +1,5 @@
 #include "MimiObj.h"
+#include "MimiClass.h"
 #include "sysObj.h"
 #include "mimiCom.h"
 #include "dataString.h"
@@ -211,6 +212,13 @@ int TEST_MimiObj(int isShow)
         {
             return 5;
         }
+    }
+    {
+        MimiObj *sys= New_MimiObj_sys(NULL);
+        obj_setObj(sys, "class", New_MimiObj_class);
+        obj_setPtr(sys, "classPtr", New_MimiObj_class);
+        obj_runNoRes(sys, "class.import('class',classPtr)");
+        obj_deinit(sys);
     }
 
     return 0;

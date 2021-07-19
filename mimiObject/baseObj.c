@@ -5,7 +5,7 @@
 
 static void init_baseObj(MimiObj *self, Args *args)
 {
-    /* attrivute */
+    /* attribute */
 
     /* operation */
 

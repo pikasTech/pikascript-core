@@ -23,7 +23,7 @@ int linkNode_isId(LinkNode *self, long long id)
 
 void linkNode_init(LinkNode *self, void *args)
 {
-    /* attrivute */
+    /* attribute */
     self->priorNode = NULL;
     self->nextNode = NULL;
     self->id = 0;

@@ -39,7 +39,7 @@ static void sendSting(MimiCom *self, char *stingToSend)
 
 static void init(MimiCom *self, Args *initArgs)
 {
-    /* attrivute */
+    /* attribute */
     self->args = New_args(NULL);
     self->RxBuff[0] = 0;
 
