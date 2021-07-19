@@ -8,9 +8,13 @@ mimiLib是一个跨平台的面向对象c语言库，提供动态对象，对象
 
 ## 1.数据结构 mimidata
 datamemory：内存管理
+
 datalink：非侵入式双向链表
+
 dataArg：数据容器，支持int、float、string、object类型和自定义类型
+
 dataArgs：基于双向链表的数据列表，常用作动态参数列表，并用来存储对象的属性和方法
+
 dataSting，字符串处理
 
 ## 2.对象支持 (mimiObject) 
