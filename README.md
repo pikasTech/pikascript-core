@@ -31,4 +31,25 @@ mimiShell：用于调用python接口
 
 ## 使用方法：
 
-将本仓库作为子模块添加到新仓库中，参考mimiproject
+测试例：
+``` c
+/* 被绑定的方法 */
+void add(MimiObj *obj, Args *args)
+{
+    int val1 = args_getInt(args, "val1");
+    int val2 = args_getInt(args, "val2");
+    method_returnInt(args, val1 + val2);
+}
+```
+``` c
+    /* 新建对象 */
+    MimiObj *obj = New_MimiObj(NULL);
+    /* 绑定方法 */
+    obj_defineMethod(obj, "add(val1:int, val2:int):int", add);
+    /* 调用方法 */
+    obj_runNoRes(obj, "res = add(val1 = 1, val2 = 2)");
+    /* 取出返回值 */
+    int res = obj_getInt(obj, "res");
+    /* 析构 */
+    obj_deinit(obj);
+```
