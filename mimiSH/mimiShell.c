@@ -72,7 +72,7 @@ static Arg *_runPythonCmd(Shell *self, char *CMD)
 {
 	MimiObj *root = self->context;
 	Arg *str = New_arg(NULL);
-	Args *runRes = obj_run(root, CMD);
+	Args *runRes = obj_runDirect(root, CMD);
 	int errCode = args_getInt(runRes, "errCode");
 	if (0 == errCode)
 	{

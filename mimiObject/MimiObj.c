@@ -726,7 +726,7 @@ char *getMethodPath(char *buff, char *methodToken)
     }
 }
 
-Args *obj_run(MimiObj *self, char *cmd)
+Args *obj_runDirect(MimiObj *self, char *cmd)
 {
     /* the Args returned need to be deinit */
     Args *res = New_args(NULL);
@@ -898,13 +898,13 @@ int obj_init(MimiObj *self, Args *args)
 void obj_runNoRes(MimiObj *slef, char *cmd)
 {
     /* unsafe, nothing would happend when error occord */
-    args_deinit(obj_run(slef, cmd));
+    args_deinit(obj_runDirect(slef, cmd));
 }
 
-void obj_runWithCheck(MimiObj *self, char *cmd)
+void obj_run(MimiObj *self, char *cmd)
 {
     /* safe, stop when error occord and error info would be print */
-    Args *res = obj_run(self, cmd);
+    Args *res = obj_runDirect(self, cmd);
     char *sysOut = args_getStr(res, "sysOut");
     if (NULL != sysOut)
     {

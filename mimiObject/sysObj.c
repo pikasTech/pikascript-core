@@ -216,6 +216,23 @@ static void init_sys(MimiObj *self, Args *args)
     /* override */
 }
 
+void obj_import(MimiObj *self, char *className, void *classPtr)
+{
+    Args *buffs = New_strBuff();
+    {
+        char *cmd = args_getBuff(buffs, 256);
+        obj_setPtr(self, className, classPtr);
+        sprintf(cmd, "import('%s',%s)", className, className);
+        obj_run(self, cmd);
+    }
+    {
+        char *cmd = args_getBuff(buffs, 256);
+        sprintf(cmd, "del('%s')", className);
+        obj_run(self, cmd);
+        args_deinit(buffs);
+    }
+}
+
 MimiObj *New_MimiObj_sys(Args *args)
 {
     MimiObj *self = New_MimiObj(args);
