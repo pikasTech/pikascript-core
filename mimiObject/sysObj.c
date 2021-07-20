@@ -47,6 +47,7 @@ static void import(MimiObj *self, Args *args)
     int res = storeClassInfo(classObj, args, classPath, classPtr);
     if (1 == res)
     {
+        args_setInt(args, "errCode", 1);
         method_sysOut(args, "[error] class host not found.");
     }
 }

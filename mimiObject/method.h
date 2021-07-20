@@ -9,4 +9,5 @@ void method_sysOut(Args *args, char *str);
 int method_getInt(Args *args, char *argName);
 float method_getFloat(Args *args, char *argName);
 char *method_getStr(Args *args, char *argName);
+void method_setErrorCode(Args *args, int errCode);
 #endif

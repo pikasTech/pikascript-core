@@ -33,3 +33,8 @@ char *method_getStr(Args *args, char *argName)
 {
     return args_getStr(args, argName);
 }
+
+void method_setErrorCode(Args *args, int errCode)
+{
+    args_setInt(args, "errCode", 1);
+}
