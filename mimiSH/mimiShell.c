@@ -68,49 +68,23 @@ static void *_detector_shellLuancher(Shell *self,
 }
 
 // the luancher of python
-static Arg *_runPythonCmd(Shell *self, char *CMD)
+static Arg *_runPythonCmd(Shell *self, char *cmd)
 {
 	MimiObj *root = self->context;
 	Arg *str = New_arg(NULL);
-	Args *runRes = obj_runDirect(root, CMD);
-	int errCode = args_getInt(runRes, "errCode");
-	if (0 == errCode)
+	Args *res = obj_runDirect(root, cmd);
+
+	char *sysOut = args_getStr(res, "sysOut");
+	if (NULL != sysOut)
 	{
-		char *sysOut = args_getStr(runRes, "sysOut");
-		if (NULL == sysOut)
-		{
-			goto exit;
-		}
 		arg_setStr(str, sysOut);
 		goto exit;
 	}
-	if (1 == errCode)
-	{
-		arg_setStr(str, "[error] object no found.");
-		goto exit;
-	}
-	if (2 == errCode)
-	{
-		arg_setStr(str, "[error] method no found.");
-		goto exit;
-	}
-	if (3 == errCode)
-	{
-		arg_setStr(str, "[error] type list no found.");
-		goto exit;
-	}
-	if (4 == errCode)
-	{
-		arg_setStr(str, "[error] arg list no found.");
-		goto exit;
-	}
-	if (5 == errCode)
-	{
-		arg_setStr(str, "[error] load arg faild.");
-		goto exit;
-	}
 exit:
-	args_deinit(runRes);
+	if (NULL != res)
+	{
+		args_deinit(res);
+	}
 	return str;
 }
 

@@ -175,7 +175,7 @@ static void list(MimiObj *self, Args *args)
     {
         /* do not find obj */
         method_sysOut(args, "[error] list: object no found.");
-        args_setInt(args, "errCode", 1);
+        method_setErrorCode(args, 1);
         return;
     }
     /* list args */
