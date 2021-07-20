@@ -5,7 +5,7 @@
 
 char *strAppendWithSize_unlimited(char *strOut, char *pData, int Size)
 {
-	int strOut_i = strGetSize_unlimited(strOut);
+	int strOut_i = strGetSize(strOut);
 	for (int i = 0; i < Size; i++)
 	{
 		strOut[strOut_i + i] = pData[i];
@@ -52,23 +52,6 @@ char *strCut(char *strOut, char *strIn, char startSign, char endSign)
 	return NULL;
 }
 
-char *strDeleteEnter(char *str)
-{
-	for (int i = 0; i < 256; i++)
-	{
-		if (0 == str[i])
-		{
-			return str;
-		}
-		if ('\n' == str[i])
-		{
-			str[i] = 0;
-			return str;
-		}
-	}
-	return str;
-}
-
 char *strDeleteChar(char *strOut, char *strIn, char ch)
 {
 	int iOut = 0;
@@ -84,6 +67,11 @@ char *strDeleteChar(char *strOut, char *strIn, char ch)
 	/* add \0 */
 	strOut[iOut] = 0;
 	return strOut;
+}
+
+char *strDeleteEnter(char *str)
+{
+	return strDeleteChar(str, str, '\n');
 }
 
 char *strAppendWithSize(char *strOut, char *pData, int Size)
@@ -118,16 +106,6 @@ int strGetTokenNum(char *strIn, char sign)
 	return strCountSign(strIn, sign) + 1;
 }
 
-unsigned short int strGetSize_unlimited(char *pData)
-{
-	unsigned short int Size = 0;
-	for (int i = 0; pData[i] != 0; i++)
-	{
-		Size++;
-	}
-	return Size;
-}
-
 unsigned short int strGetSize(char *pData)
 {
 	unsigned short int Size = 0;
@@ -135,7 +113,7 @@ unsigned short int strGetSize(char *pData)
 	{
 		return 0;
 	}
-	for (int i = 0; (i < 256) && (pData[i] != 0); i++)
+	for (int i = 0; pData[i] != 0; i++)
 	{
 		Size++;
 	}
@@ -145,7 +123,7 @@ unsigned short int strGetSize(char *pData)
 char *strAppend_unlimited(char *strOut, char *pData)
 {
 	unsigned short int Size = 0;
-	Size = strGetSize_unlimited(pData);
+	Size = strGetSize(pData);
 	return strAppendWithSize_unlimited(strOut, pData, Size);
 }
 
@@ -168,7 +146,7 @@ char *strGetLastToken(char *strOut, char *strIn, char sign)
 		}
 	}
 	int i = 0;
-	for (i = 0; i < buffSize/2; i++)
+	for (i = 0; i < buffSize / 2; i++)
 	{
 		char buff = strOut[i];
 		strOut[i] = strOut[buffSize - i - 1];

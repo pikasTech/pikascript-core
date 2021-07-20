@@ -14,8 +14,8 @@ int TEST_Event(int isShow)
         obj_setStr(root, "publisher.message", "hello");
         obj_setPtr(root, "handle", handle1);
 
-        obj_runNoRes(root, "follow(argPath = 'publisher.message', handle = handle)");
-        obj_runNoRes(root, "publisher.publish(argPath = 'message')");
+        obj_runWithCheck(root, "follow(argPath = 'publisher.message', handle = handle)");
+        obj_runWithCheck(root, "publisher.publish(argPath = 'message')");
 
         obj_deinit(root);
     }

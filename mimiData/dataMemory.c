@@ -112,4 +112,5 @@ void DynMemPut(DMEM *user)
     //释放申请表
     DMEMS.tb_apply[user->tb].used = DMEM_FREE;
     DMEMS.apply_num -= 1;
+    user = NULL;
 }

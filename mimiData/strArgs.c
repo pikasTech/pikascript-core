@@ -8,21 +8,21 @@ Args *New_strBuff(void)
 
 char *strsGetLastToken(Args *buffs, char *arg_Path, char sign)
 {
-    int size = strGetSize(arg_Path);
+    int size = 256;
     char *buff = args_getBuff(buffs, size);
     return strGetLastToken(buff, arg_Path, sign);
 }
 
 char *strsPopToken(Args *buffs, char *tokens, char sign)
 {
-    int size = strGetSize(tokens);
+    int size = 256;
     char *buff = args_getBuff(buffs, size);
     return strPopToken(buff, tokens, sign);
 }
 
 char *strsCopy(Args *buffs, char *source)
 {
-    int size = strGetSize(source);
+    int size = 256;
     char *buff = args_getBuff(buffs, size);
     return strCopy(buff, source);
 }

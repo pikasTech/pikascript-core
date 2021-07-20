@@ -10,10 +10,11 @@
 static void publish(MimiObj *self, Args *args)
 {
     char *argPath = args_getStr(args, "argPath");
+    args_setInt(args, "errCode", 0);
 
     MimiObj *publisher = obj_getObj(self, argPath, 1);
     char *folloedArgName = obj_getStr(publisher, "fansList.fansInfo.followedArgName");
-    char *argName = args_getBuff(args, 64);
+    char *argName = args_getBuff(args, 256);
     strGetLastToken(argName, argPath, '.');
     if (!strEqu(argName, folloedArgName))
     {
@@ -30,10 +31,11 @@ static void follow(MimiObj *self, Args *args)
 {
     char *argPath = args_getStr(args, "argPath");
     void *handle = args_getPtr(args, "handle");
+    args_setInt(args, "errCode", 0);
 
     MimiObj *publisher = obj_getObj(self, argPath, 1);
     MimiObj *fansInfo = obj_getObj(publisher, "fansList.fansInfo", 0);
-    char *argName = args_getBuff(args, 64);
+    char *argName = args_getBuff(args, 256);
     strGetLastToken(argName, argPath, '.');
 
     obj_setPtr(fansInfo, "fansPtr", self);

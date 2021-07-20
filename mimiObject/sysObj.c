@@ -4,13 +4,58 @@
 #include "dataString.h"
 #include "strArgs.h"
 
+static int storeClassInfo(MimiObj *self, Args *args, char *classPath, void *classPtr)
+{
+    int res = 0;
+    MimiObj *classHost = obj_getObj(self, classPath, 1);
+    if (NULL == classHost)
+    {
+        res = 1;
+        goto exit;
+    }
+    char *className = strsGetLastToken(args, classPath, '.');
+    char *classStoreName = strAppend(strAppend(args_getBuff(args, 256), "_class-"), className);
+    obj_setPtr(classHost, classStoreName, classPtr);
+    res = 0;
+    goto exit;
+exit:
+    return res;
+}
+
+static void *getNewObjPtr(MimiObj *self, Args *args, char *classPath)
+{
+    char *ptrPath = strAppend(strAppend(args_getBuff(args, 256), "_class-"), classPath);
+    return obj_getPtr(self, ptrPath);
+}
+
+static void newObj(MimiObj *self, Args *args)
+{
+    char *objPath = args_getStr(args, "objPath");
+    char *classPath = args_getStr(args, "classPath");
+    void *NewObjPtr = getNewObjPtr(self, args, classPath);
+    obj_setObj(self, objPath, NewObjPtr);
+}
+
+static void import(MimiObj *obj, Args *args)
+{
+    char *classPath = args_getStr(args, "classPath");
+    void *classPtr = args_getPtr(args, "classPtr");
+    int res = storeClassInfo(obj, args, classPath, classPtr);
+    if (1 == res)
+    {
+        method_sysOut(args, "[error] class host not found.");
+    }
+}
+
 static void type(MimiObj *obj, Args *args)
 {
+    args_setInt(args, "errCode", 0);
     char *argPath = args_getStr(args, "argPath");
     Arg *arg = obj_getArg(obj, argPath);
     if (NULL == arg)
     {
         method_sysOut(args, "[error] arg no found.");
+        args_setInt(args, "errCode", 1);
         return;
     }
     method_sysOut(args, arg_getType(arg));
@@ -18,22 +63,26 @@ static void type(MimiObj *obj, Args *args)
 
 static void del(MimiObj *obj, Args *args)
 {
+    args_setInt(args, "errCode", 0);
     char *argPath = args_getStr(args, "argPath");
     int res = obj_removeArg(obj, argPath);
     if (1 == res)
     {
         method_sysOut(args, "[error] del: object no found.");
+        args_setInt(args, "errCode", 1);
         return;
     }
     if (2 == res)
     {
         method_sysOut(args, "[error] del: arg not match.");
+        args_setInt(args, "errCode", 2);
         return;
     }
 }
 
 static void set(MimiObj *obj, Args *args)
 {
+    args_setInt(args, "errCode", 0);
     char *argPath = method_getStr(args, "argPath");
     if (obj_isArgExist(obj, argPath))
     {
@@ -43,16 +92,19 @@ static void set(MimiObj *obj, Args *args)
         if (1 == res)
         {
             method_sysOut(args, "[error] set: arg no found.");
+            args_setInt(args, "errCode", 1);
             return;
         }
         if (2 == res)
         {
             method_sysOut(args, "[error] set: type not match.");
+            args_setInt(args, "errCode", 1);
             return;
         }
         if (3 == res)
         {
             method_sysOut(args, "[error] set: object not found.");
+            args_setInt(args, "errCode", 1);
             return;
         }
         return;
@@ -60,12 +112,13 @@ static void set(MimiObj *obj, Args *args)
     /* new arg */
     Arg *val = args_getArg(args, "val");
     Arg *newArg = arg_copy(val);
-    char *argName = strGetLastToken(args_getBuff(args, 64), argPath, '.');
+    char *argName = strGetLastToken(args_getBuff(args, 256), argPath, '.');
     arg_setName(newArg, argName);
     int res = obj_setArg(obj, argPath, newArg);
     if (res == 1)
     {
         method_sysOut(args, "[error] set: object not found.");
+        args_setInt(args, "errCode", 1);
     }
     arg_deinit(newArg);
     return;
@@ -102,6 +155,7 @@ static int listEachArg(Arg *argEach, Args *handleArgs)
 
 static void list(MimiObj *self, Args *args)
 {
+    args_setInt(args, "errCode", 0);
     args_setStr(args, "stringOut", "");
     char *objPath = args_getStr(args, "objPath");
     if (NULL == objPath)
@@ -116,6 +170,7 @@ static void list(MimiObj *self, Args *args)
     {
         /* do not find obj */
         method_sysOut(args, "[error] list: object no found.");
+        args_setInt(args, "errCode", 1);
         return;
     }
     /* list args */
@@ -126,10 +181,12 @@ static void list(MimiObj *self, Args *args)
 
 static void print(MimiObj *obj, Args *args)
 {
+    args_setInt(args, "errCode", 0);
     char *res = args_print(args, "val");
     if (NULL == res)
     {
         method_sysOut(args, "[error] print: can not print val");
+        args_setInt(args, "errCode", 1);
         return;
     }
     /* not empty */
@@ -146,6 +203,8 @@ static void init_sys(MimiObj *self, Args *args)
     obj_defineMethod(self, "ls(objPath:string)", list);
     obj_defineMethod(self, "del(argPath:string)", del);
     obj_defineMethod(self, "type(argPath:string)", type);
+    obj_defineMethod(self, "import(classPath:string,classPtr:string)", import);
+    obj_defineMethod(self, "new(objPath:string,classPath:string)", newObj);
 
     /* object */
 

@@ -32,7 +32,7 @@ char *args_getStrByIndex(Args *self, int index)
 int args_setStrWithDefaultName(Args *self, char *strIn)
 {
     Args *buffs = New_strBuff();
-    char *name = getDefaultName(self, args_getBuff(buffs, 128));
+    char *name = getDefaultName(self, args_getBuff(buffs, 256));
     args_setStr(self, name, strIn);
     args_deinit(buffs);
     return 0;
@@ -41,7 +41,7 @@ int args_setStrWithDefaultName(Args *self, char *strIn)
 int args_setFloatWithDefaultName(Args *self, float argFloat)
 {
     Args *buffs = New_strBuff();
-    char *name = getDefaultName(self, args_getBuff(buffs, 128));
+    char *name = getDefaultName(self, args_getBuff(buffs, 256));
     args_setFloat(self, name, argFloat);
     args_deinit(buffs);
     return 0;
@@ -117,7 +117,7 @@ void setArgDirect(Args *self, Arg *arg)
 
 char *args_getBuff(Args *self, int size)
 {
-
+    Arg *argNew = New_arg(NULL);
     arg_newContant(argNew, size);
     setArgDirect(self, argNew);
     return argNew->contantDynMem->addr;
@@ -289,7 +289,7 @@ Arg *args_getArg(Args *self, char *name)
 void args_bind(Args *self, char *type, char *name, void *pointer)
 {
     Args *buffs = New_strBuff();
-    char *typeWithBind = strCopy(args_getBuff(buffs, 32), "_bind-");
+    char *typeWithBind = strCopy(args_getBuff(buffs, 256), "_bind-");
     strAppend(typeWithBind, type);
     Arg *argNew = New_arg(NULL);
     arg_setType(argNew, typeWithBind);
@@ -318,7 +318,7 @@ void args_bindStr(Args *self, char *name, char **stringPtr)
 char *getPrintSring(Args *self, char *name, char *valString)
 {
     Args *buffs = New_strBuff();
-    char *printName = args_getBuff(buffs, 32);
+    char *printName = args_getBuff(buffs, 256);
     strAppend(printName, "[printBuff]");
     strAppend(printName, name);
     char *printString = args_getBuff(buffs, 256);
@@ -404,7 +404,7 @@ char *args_print(Args *self, char *name)
     char *bindTypePrefix = strsCopy(self, "_bind-");
     if (strIsStartWith(type, bindTypePrefix))
     {
-        char *typeWithoutBind = args_getBuff(buffs, 32);
+        char *typeWithoutBind = args_getBuff(buffs, 256);
         strRemovePrefix(type, bindTypePrefix, typeWithoutBind);
         if (strEqu(typeWithoutBind, "int"))
         {
@@ -477,7 +477,7 @@ int args_set(Args *self, char *name, char *valStr)
     char *bindTypePrefix = strsCopy(self, "_bind-");
     if (strIsStartWith(type, bindTypePrefix))
     {
-        char *typeWithoutBind = args_getBuff(buffs, 32);
+        char *typeWithoutBind = args_getBuff(buffs, 256);
         strRemovePrefix(type, bindTypePrefix, typeWithoutBind);
         if (strEqu(typeWithoutBind, "int"))
         {
@@ -518,7 +518,7 @@ exit:
 int args_setPtrWithType(Args *self, char *objectName, char *className, void *objectPtr)
 {
     Args *buffs = New_strBuff();
-    char *typeWithClass = strCopy(args_getBuff(buffs, 32), "_class-");
+    char *typeWithClass = strCopy(args_getBuff(buffs, 256), "_class-");
     strAppend(typeWithClass, className);
     Arg *argNew = New_arg(NULL);
     arg_setName(argNew, objectName);

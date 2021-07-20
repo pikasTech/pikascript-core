@@ -6,13 +6,13 @@
 #include "string.h"
 
 #if LINUX
-#define uint32_t unsigned int
-#define uint16_t unsigned short int
+#define uint32_t int
+#define uint16_t int
 #define uint8_t unsigned char
 #endif
 
 #define DMEM_BLOCK_SIZE 32                                 //内存块大小为32字节
-#define DMEM_BLOCK_NUM 2000                                //内存块个数为2048个
+#define DMEM_BLOCK_NUM 2000*100                                //内存块个数为2048个
 #define DMEM_TOTAL_SIZE (DMEM_BLOCK_SIZE * DMEM_BLOCK_NUM) //内存总大小
 
 typedef enum

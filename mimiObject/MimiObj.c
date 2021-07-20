@@ -90,7 +90,7 @@ int obj_setPtr(MimiObj *self, char *argPath, void *pointer)
         return 1;
     }
     Args *buffs = New_strBuff();
-    char *name = args_getBuff(buffs, 64);
+    char *name = args_getBuff(buffs, 256);
     strGetLastToken(name, argPath, '.');
     args_setPtr(obj->attributeList,
                 name, pointer);
@@ -106,7 +106,7 @@ int obj_setFloat(MimiObj *self, char *argPath, float value)
         return 1;
     }
     Args *buffs = New_strBuff();
-    char *name = args_getBuff(buffs, 64);
+    char *name = args_getBuff(buffs, 256);
     strGetLastToken(name, argPath, '.');
     args_setFloat(obj->attributeList,
                   name, value);
@@ -122,7 +122,7 @@ int obj_setStr(MimiObj *self, char *argPath, char *str)
         return 1;
     }
     Args *buffs = New_strBuff();
-    char *name = args_getBuff(buffs, 64);
+    char *name = args_getBuff(buffs, 256);
     strGetLastToken(name, argPath, '.');
     args_setStr(obj->attributeList,
                 name, str);
@@ -231,7 +231,7 @@ int obj_setObj(MimiObj *self, char *objName, void *newFun)
     /* class means subprocess init */
     char prifix[] = "[cls]";
     Args *buffs = New_strBuff();
-    char *className = args_getBuff(buffs, 64);
+    char *className = args_getBuff(buffs, 256);
     strAppend(className, prifix);
     strAppend(className, objName);
     obj_setPtr(self, className, newFun);
@@ -267,6 +267,10 @@ int obj_bind(MimiObj *self, char *type, char *name, void *pointer)
 
 char *obj_print(MimiObj *self, char *name)
 {
+    if (NULL == self)
+    {
+        return NULL;
+    }
     return args_print(self->attributeList, name);
 }
 
@@ -328,7 +332,7 @@ MimiObj *initObj(MimiObj *self, char *name)
 {
     char prifix[] = "[cls]";
     Args *buffs = New_strBuff();
-    char *classPath = strAppend(strAppend(args_getBuff(buffs, 64), prifix), name);
+    char *classPath = strAppend(strAppend(args_getBuff(buffs, 256), prifix), name);
     /* init the subprocess */
     void *(*newObjFun)(Args * initArgs) = args_getPtr(self->attributeList, classPath);
     if (NULL == newObjFun)
@@ -344,6 +348,11 @@ MimiObj *initObj(MimiObj *self, char *name)
 
 MimiObj *obj_getObjDirect(MimiObj *self, char *name)
 {
+    if (NULL == self)
+    {
+        return NULL;
+    }
+
     /* check subprocess */
     if (NULL == args_getPtr(self->attributeList, name))
     {
@@ -386,8 +395,8 @@ exit:
 void loadMethodInfo(MimiObj *methodHost, char *methodName, char *methodDeclearation, void *methodPtr)
 {
     Args *buffs = New_strBuff();
-    char *methodPtrPath = strAppend(strAppend(args_getBuff(buffs, 128), "[methodPtr]"), methodName);
-    char *methodDeclearationPath = strAppend(strAppend(args_getBuff(buffs, 128), "[methodDec]"), methodName);
+    char *methodPtrPath = strAppend(strAppend(args_getBuff(buffs, 256), "[methodPtr]"), methodName);
+    char *methodDeclearationPath = strAppend(strAppend(args_getBuff(buffs, 256), "[methodDec]"), methodName);
     obj_setPtr(methodHost, methodPtrPath, methodPtr);
     obj_setStr(methodHost, methodDeclearationPath, methodDeclearation);
     args_deinit(buffs);
@@ -396,7 +405,7 @@ void loadMethodInfo(MimiObj *methodHost, char *methodName, char *methodDeclearat
 static char *getMethodDeclearation(MimiObj *methodHost, char *methodName)
 {
     Args *buffs = New_strBuff();
-    char *methodDeclearationPath = strAppend(strAppend(args_getBuff(buffs, 128), "[methodDec]"), methodName);
+    char *methodDeclearationPath = strAppend(strAppend(args_getBuff(buffs, 256), "[methodDec]"), methodName);
     char *res = obj_getStr(methodHost, methodDeclearationPath);
     args_deinit(buffs);
     return res;
@@ -405,7 +414,7 @@ static char *getMethodDeclearation(MimiObj *methodHost, char *methodName)
 static void *getMethodPtr(MimiObj *methodHost, char *methodName)
 {
     Args *buffs = New_strBuff();
-    char *methodPtrPath = strAppend(strAppend(args_getBuff(buffs, 128), "[methodPtr]"), methodName);
+    char *methodPtrPath = strAppend(strAppend(args_getBuff(buffs, 256), "[methodPtr]"), methodName);
     void *res = obj_getPtr(methodHost, methodPtrPath);
     args_deinit(buffs);
     return res;
@@ -462,17 +471,17 @@ static int loadArgByType(MimiObj *self,
 {
     if (strEqu(definedType, "any"))
     {
-        char *directStr = getDirectStr(args_getBuff(args, 128), argPath);
+        char *directStr = getDirectStr(args_getBuff(args, 256), argPath);
         if (NULL != directStr)
         {
-            /* direct value */
+            /* direct string value */
             args_setStr(args, definedName, directStr);
             /* ok */
             return 0;
         }
         if ((argPath[0] >= '0') && (argPath[0] <= '9'))
         {
-            /* direct value */
+            /* direct number value */
             char *argName = argPath;
             if (strIsContain(argName, '.'))
             {
@@ -486,10 +495,11 @@ static int loadArgByType(MimiObj *self,
             /* succeed */
             return 0;
         }
+        /* get reference arg */
         Arg *arg = obj_getArg(self, argPath);
         if (arg == NULL)
         {
-            /* cand get arg */
+            /* can not get arg */
             return 3;
         }
         Arg *argCopied = arg_copy(arg);
@@ -500,7 +510,7 @@ static int loadArgByType(MimiObj *self,
     if (strEqu(definedType, "string"))
     {
         /* solve the string type */
-        char *directStr = getDirectStr(args_getBuff(args, 128), argPath);
+        char *directStr = getDirectStr(args_getBuff(args, 256), argPath);
         if (NULL != directStr)
         {
             /* direct value */
@@ -531,6 +541,11 @@ static int loadArgByType(MimiObj *self,
             return 0;
         }
         /* reference value */
+        if (!obj_isArgExist(self, argPath))
+        {
+            /* can not get reference */
+            return 3;
+        }
         int referenceVal = obj_getInt(self, argPath);
         args_setInt(args, definedName, referenceVal);
         /* succeed */
@@ -548,6 +563,11 @@ static int loadArgByType(MimiObj *self,
             return 0;
         }
         /* reference value */
+        if (!obj_isArgExist(self, argPath))
+        {
+            /* can not get reference */
+            return 3;
+        }
         float referenceVal = obj_getFloat(self, argPath);
         args_setFloat(args, definedName, referenceVal);
         /* succeed */
@@ -556,6 +576,11 @@ static int loadArgByType(MimiObj *self,
     if (strEqu(definedType, "pointer"))
     {
         /* only support reference value */
+        if (!obj_isArgExist(self, argPath))
+        {
+            /* can not get reference */
+            return 3;
+        }
         void *ptr = obj_getPtr(self, argPath);
         args_setPtr(args, definedName, ptr);
         return 0;
@@ -576,23 +601,23 @@ char *getTypeVal(char *buff, char *typeToken)
 static Args *getArgsBySort(MimiObj *self, char *typeList, char *argList)
 {
     Args *buffs = New_strBuff();
-    char *typeListBuff = args_getBuff(buffs, 128);
+    char *typeListBuff = args_getBuff(buffs, 256);
     memcpy(typeListBuff, typeList, strGetSize(typeList));
-    char *argListBuff = args_getBuff(buffs, 128);
+    char *argListBuff = args_getBuff(buffs, 256);
     memcpy(argListBuff, argList, strGetSize(argList));
     Args *args = New_args(NULL);
     while (1)
     {
-        char *typeToken = strPopToken(args_getBuff(buffs, 128), typeListBuff, ',');
-        char *argToken = strPopToken(args_getBuff(buffs, 128), argListBuff, ',');
+        char *typeToken = strPopToken(args_getBuff(buffs, 256), typeListBuff, ',');
+        char *argToken = strPopToken(args_getBuff(buffs, 256), argListBuff, ',');
         if ((0 == argToken[0]) || (0 == typeToken[0]))
         {
             /* arg or type poped finised */
             break;
         }
 
-        char *typeName = strGetFirstToken(args_getBuff(buffs, 128), typeToken, ':');
-        char *typeVal = getTypeVal(args_getBuff(buffs, 128), typeToken);
+        char *typeName = strGetFirstToken(args_getBuff(buffs, 256), typeToken, ':');
+        char *typeVal = getTypeVal(args_getBuff(buffs, 256), typeToken);
         char *argPath = argToken;
 
         if (0 != loadArgByType(self,
@@ -613,28 +638,28 @@ static Args *getArgsBySort(MimiObj *self, char *typeList, char *argList)
 static Args *getArgsByNameMatch(MimiObj *self, char *typeList, char *argList)
 {
     Args *buffs = New_strBuff();
-    char *typeListBuff = args_getBuff(buffs, 128);
+    char *typeListBuff = args_getBuff(buffs, 256);
     memcpy(typeListBuff, typeList, strGetSize(typeList));
     Args *args = New_args(NULL);
     while (1)
     {
-        char *typeToken = strPopToken(args_getBuff(buffs, 128), typeListBuff, ',');
+        char *typeToken = strPopToken(args_getBuff(buffs, 256), typeListBuff, ',');
         /* poped all type from typeList */
         if (0 == typeToken[0])
         {
             break;
         }
 
-        char *typeName = strGetFirstToken(args_getBuff(buffs, 128), typeToken, ':');
-        char *typeVal = getTypeVal(args_getBuff(buffs, 128), typeToken);
+        char *typeName = strGetFirstToken(args_getBuff(buffs, 256), typeToken, ':');
+        char *typeVal = getTypeVal(args_getBuff(buffs, 256), typeToken);
 
-        char *argListBuff = args_getBuff(buffs, 128);
+        char *argListBuff = args_getBuff(buffs, 256);
         memcpy(argListBuff, argList, strGetSize(argList));
         while (1)
         {
-            char *argToken = strPopToken(args_getBuff(buffs, 128), argListBuff, ',');
-            char *argName = strGetFirstToken(args_getBuff(buffs, 128), argToken, '=');
-            char *argVal = strGetLastToken(args_getBuff(buffs, 128), argToken, '=');
+            char *argToken = strPopToken(args_getBuff(buffs, 256), argListBuff, ',');
+            char *argName = strGetFirstToken(args_getBuff(buffs, 256), argToken, '=');
+            char *argVal = strGetLastToken(args_getBuff(buffs, 256), argToken, '=');
 
             if (0 == argToken[0])
             {
@@ -703,21 +728,23 @@ char *getMethodPath(char *buff, char *methodToken)
 
 Args *obj_run(MimiObj *self, char *cmd)
 {
+    /* the Args returned need to be deinit */
     Args *res = New_args(NULL);
+    args_setInt(res, "errCode", 0);
     Args *buffs = New_strBuff();
-    int size = strGetSize(cmd);
-    char *cleanCmd = strDeleteChar(args_getBuff(buffs, size), cmd, ' ');
-    char *methodToken = strGetFirstToken(args_getBuff(buffs, size), cleanCmd, '(');
-    char *methodPath = getMethodPath(args_getBuff(buffs, size), methodToken);
+    char *cleanCmd = strDeleteChar(args_getBuff(buffs, 256), cmd, ' ');
+    char *methodToken = strGetFirstToken(args_getBuff(buffs, 256), cleanCmd, '(');
+    char *methodPath = getMethodPath(args_getBuff(buffs, 256), methodToken);
 
     MimiObj *methodHost = obj_getObj(self, methodPath, 1);
     if (NULL == methodHost)
     {
         /* error, not found object */
         args_setInt(res, "errCode", 1);
+        method_sysOut(res, "[error] runner: object no found.");
         goto exit;
     }
-    char *methodName = strGetLastToken(args_getBuff(buffs, size), methodPath, '.');
+    char *methodName = strGetLastToken(args_getBuff(buffs, 256), methodPath, '.');
     void (*methodPtr)(MimiObj * self, Args * args) = getMethodPtr(methodHost, methodName);
     char *methodDeclearation = getMethodDeclearation(methodHost, methodName);
 
@@ -725,34 +752,38 @@ Args *obj_run(MimiObj *self, char *cmd)
     {
         /* error, method no found */
         args_setInt(res, "errCode", 2);
+        method_sysOut(res, "[error] runner: method no found.");
         goto exit;
     }
 
-    char *typeList = strCut(args_getBuff(buffs, size), methodDeclearation, '(', ')');
+    char *typeList = strCut(args_getBuff(buffs, 256), methodDeclearation, '(', ')');
     if (typeList == NULL)
     {
         /* typeList no found */
         args_setInt(res, "errCode", 3);
+        method_sysOut(res, "[error] runner: type list no found.");
         goto exit;
     }
 
-    char *argList = strCut(args_getBuff(buffs, size), cleanCmd, '(', ')');
+    char *argList = strCut(args_getBuff(buffs, 256), cleanCmd, '(', ')');
     {
         if (argList == NULL)
         {
             /* argL List no found */
             args_setInt(res, "errCode", 4);
+            method_sysOut(res, "[error] runner: arg list no found.");
             goto exit;
         }
     }
 
-    char *returnType = strGetLastToken(args_getBuff(buffs, size), methodDeclearation, ')');
+    char *returnType = strGetLastToken(args_getBuff(buffs, 256), methodDeclearation, ')');
     /* get type */
     Args *args = getArgsBySentence(self, typeList, argList);
     if (NULL == args)
     {
         /* get args faild */
         args_setInt(res, "errCode", 5);
+        method_sysOut(res, "[error] runner: solve arg faild.");
         goto exit;
     }
     /* run method */
@@ -760,7 +791,7 @@ Args *obj_run(MimiObj *self, char *cmd)
     /* transfer return */
     if (strIsContain(methodToken, '='))
     {
-        char *returnName = strGetFirstToken(args_getBuff(buffs, size), methodToken, '=');
+        char *returnName = strGetFirstToken(args_getBuff(buffs, 256), methodToken, '=');
         transferReturnVal(self, returnType, returnName, args);
     }
     char *sysOut = args_getStr(args, "sysOut");
@@ -769,8 +800,17 @@ Args *obj_run(MimiObj *self, char *cmd)
         args_setStr(res, "sysOut", args_getStr(args, "sysOut"));
     }
     args_deinit(args);
-    /* succeed */
-    args_setInt(res, "errCode", 0);
+    /* run method succeed */
+    if (!args_isArgExist(args, "errCode"))
+    {
+        goto exit;
+    }
+    int errCode = args_getInt(args, "errCode");
+    if (0 != errCode)
+    {
+        /* method error */
+        args_setInt(res, "errCode", 6);
+    }
     goto exit;
 exit:
     args_deinit(buffs);
@@ -789,7 +829,7 @@ int obj_removeArg(MimiObj *self, char *argPath)
         err = 1;
         goto exit;
     }
-    char *argName = strGetLastToken(args_getBuff(buffs, 64), argPath, '.');
+    char *argName = strGetLastToken(args_getBuff(buffs, 256), argPath, '.');
     int res = args_removeArg(obj->attributeList, argName);
     if (1 == res)
     {
@@ -815,7 +855,7 @@ int obj_isArgExist(MimiObj *self, char *argPath)
         res = 1;
         goto exit;
     }
-    char *argName = strGetLastToken(args_getBuff(buffs, 64), argPath, '.');
+    char *argName = strGetLastToken(args_getBuff(buffs, 256), argPath, '.');
     Arg *arg = args_getArg(obj->attributeList, argName);
     if (NULL == arg)
     {
@@ -857,7 +897,29 @@ int obj_init(MimiObj *self, Args *args)
 
 void obj_runNoRes(MimiObj *slef, char *cmd)
 {
+    /* unsafe, nothing would happend when error occord */
     args_deinit(obj_run(slef, cmd));
+}
+
+void obj_runWithCheck(MimiObj *self, char *cmd)
+{
+    /* safe, stop when error occord and error info would be print */
+    Args *res = obj_run(self, cmd);
+    char *sysOut = args_getStr(res, "sysOut");
+    if (NULL != sysOut)
+    {
+        printf("%s\r\n", sysOut);
+    }
+    if (0 != args_getInt(res, "errCode"))
+    {
+        printf("[info] input commond: %s\r\n", cmd);
+        while (1)
+            ;
+    }
+    if (NULL != res)
+    {
+        args_deinit(res);
+    }
 }
 
 MimiObj *New_MimiObj(Args *args)

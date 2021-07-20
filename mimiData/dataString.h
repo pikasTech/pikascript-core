@@ -3,7 +3,6 @@
 
 /* size */
 unsigned short int strGetSize(char *pData);
-unsigned short int strGetSize_unlimited(char *pData);
 /* append */
 char *strAppend(char *strOut, char *pData);
 char *strAppend_unlimited(char *strOut, char *pData);

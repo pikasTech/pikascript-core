@@ -4,7 +4,7 @@
 static void print(Loger *loger, char *str)
 {
     //get size of log
-    loger->log_size += (sizeof(char) * strGetSize_unlimited(str));
+    loger->log_size += (sizeof(char) * strGetSize(str));
     //get the memory of log
     DMEM *new_log_mem = DynMemGet(loger->log_size);
     ((char *)(new_log_mem->addr))[0] = 0;

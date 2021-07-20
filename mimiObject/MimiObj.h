@@ -70,6 +70,7 @@ int obj_defineMethod(MimiObj *self,
                      void (*methodPtr)(MimiObj *self, Args *args));
 
 void obj_runNoRes(MimiObj *slef, char *cmd);
+void obj_runWithCheck(MimiObj *self, char *cmd);
 Args *obj_run(MimiObj *self, char *cmd);
 int obj_removeArg(MimiObj *self, char *argPath);
 int obj_isArgExist(MimiObj *self, char *argPath);
