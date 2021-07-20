@@ -216,8 +216,10 @@ int TEST_MimiObj(int isShow)
     {
         MimiObj *sys = New_MimiObj_sys(NULL);
         obj_runWithCheck(sys, "ls()");
-        obj_runWithCheck(sys, "import('base','basetest')");
+        obj_setPtr(sys, "baseClass", New_MimiObj);
+        obj_runWithCheck(sys, "import('baseClass', baseClass)");
         obj_runWithCheck(sys, "ls()");
+        obj_runWithCheck(sys, "new('base','baseClass')");
         obj_deinit(sys);
     }
 

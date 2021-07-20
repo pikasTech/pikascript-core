@@ -22,25 +22,29 @@ exit:
     return res;
 }
 
-static void *getNewObjPtr(MimiObj *self, Args *args, char *classPath)
+static void *getClassPtr(MimiObj *classObj, Args *args, char *classPath)
 {
     char *ptrPath = strAppend(strAppend(args_getBuff(args, 256), "_class-"), classPath);
-    return obj_getPtr(self, ptrPath);
+    return obj_getPtr(classObj, ptrPath);
 }
 
 static void newObj(MimiObj *self, Args *args)
 {
+    /* get arg */
     char *objPath = args_getStr(args, "objPath");
     char *classPath = args_getStr(args, "classPath");
-    void *NewObjPtr = getNewObjPtr(self, args, classPath);
+    /* operation */
+    MimiObj *classObj = obj_getObj(self, "class", 0);
+    void *NewObjPtr = getClassPtr(classObj, args, classPath);
     obj_setObj(self, objPath, NewObjPtr);
 }
 
-static void import(MimiObj *obj, Args *args)
+static void import(MimiObj *self, Args *args)
 {
     char *classPath = args_getStr(args, "classPath");
     void *classPtr = args_getPtr(args, "classPtr");
-    int res = storeClassInfo(obj, args, classPath, classPtr);
+    MimiObj *classObj = obj_getObj(self, "class", 0);
+    int res = storeClassInfo(classObj, args, classPath, classPtr);
     if (1 == res)
     {
         method_sysOut(args, "[error] class host not found.");
@@ -203,10 +207,11 @@ static void init_sys(MimiObj *self, Args *args)
     obj_defineMethod(self, "ls(objPath:string)", list);
     obj_defineMethod(self, "del(argPath:string)", del);
     obj_defineMethod(self, "type(argPath:string)", type);
-    obj_defineMethod(self, "import(classPath:string,classPtr:string)", import);
+    obj_defineMethod(self, "import(classPath:string,classPtr:pointer)", import);
     obj_defineMethod(self, "new(objPath:string,classPath:string)", newObj);
 
     /* object */
+    obj_setObj(self, "class", New_MimiObj);
 
     /* override */
 }
