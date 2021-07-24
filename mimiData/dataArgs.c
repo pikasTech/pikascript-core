@@ -242,7 +242,8 @@ int updateArg(Args *self, Arg *argNew)
     // arg New must be a new arg
     Arg *argOld = args_getArg(self, argNew->nameDynMem->addr);
 
-    if (0 != strcmp(argOld->typeDynMem->addr, argNew->typeDynMem->addr))
+    // check type
+    if (!strEqu(arg_getType(argOld), arg_getType(argNew)))
     {
         return 1;
         // type do not match
@@ -515,16 +516,21 @@ exit:
     return err;
 }
 
-int args_setPtrWithType(Args *self, char *objectName, char *className, void *objectPtr)
+int args_setPtrWithType(Args *self, char *objName, char *type, void *objPtr)
+{
+    Arg *argNew = New_arg(NULL);
+    arg_setName(argNew, objName);
+    arg_setPtr(argNew, objPtr);
+    arg_setType(argNew, type);
+    args_setArg(self, argNew);
+    return 0;
+}
+
+int args_setObjectWithClass(Args *self, char *objName, char *className, void *objPtr)
 {
     Args *buffs = New_strBuff();
-    char *typeWithClass = strCopy(args_getBuff(buffs, 256), "_class-");
-    strAppend(typeWithClass, className);
-    Arg *argNew = New_arg(NULL);
-    arg_setName(argNew, objectName);
-    arg_setPtr(argNew, objectPtr);
-    arg_setType(argNew, typeWithClass);
-    args_setArg(self, argNew);
+    char *typeWithClass = strAppend(strAppend(args_getBuff(buffs, 256), "_class-"), className);
+    args_setPtrWithType(self, objName, typeWithClass, objPtr);
     args_deinit(buffs);
     return 0;
 }

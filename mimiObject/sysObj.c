@@ -4,6 +4,34 @@
 #include "dataString.h"
 #include "strArgs.h"
 
+static void *getClassPtr(MimiObj *classObj, Args *args, char *classPath)
+{
+    char *ptrPath = strAppend(strAppend(args_getBuff(args, 256), "Class-"), classPath);
+    return obj_getPtr(classObj, ptrPath);
+}
+
+int obj_setObjbyClass(MimiObj *sys, char *objName, char *classPath)
+{
+    /* class means subprocess init */
+    Args *buffs = New_strBuff();
+    MimiObj *classHost = obj_getObj(sys, "class", 0);
+    char *mateObjName = strAppend(strAppend(args_getBuff(buffs, 256), "[cls]"), objName);
+    char *className = strsGetLastToken(buffs, classPath, '.');
+    void *newFunPtr = getClassPtr(classHost, buffs, classPath);
+
+    /* class means subprocess init */
+    char prifix[] = "[cls]";
+    char *mataObjName = args_getBuff(buffs, 256);
+    strAppend(mataObjName, prifix);
+    strAppend(mataObjName, objName);
+    obj_setPtr(sys, mataObjName, newFunPtr);
+    /* add void process Ptr, no inited */
+    args_setObjectWithClass(sys->attributeList, objName, classPath, NULL);
+
+    args_deinit(buffs);
+    return 0;
+}
+
 static int storeClassInfo(MimiObj *self, Args *args, char *classPath, void *classPtr)
 {
     int res = 0;
@@ -14,18 +42,12 @@ static int storeClassInfo(MimiObj *self, Args *args, char *classPath, void *clas
         goto exit;
     }
     char *className = strsGetLastToken(args, classPath, '.');
-    char *classStoreName = strAppend(strAppend(args_getBuff(args, 256), "_class-"), className);
+    char *classStoreName = strAppend(strAppend(args_getBuff(args, 256), "Class-"), className);
     obj_setPtr(classHost, classStoreName, classPtr);
     res = 0;
     goto exit;
 exit:
     return res;
-}
-
-static void *getClassPtr(MimiObj *classObj, Args *args, char *classPath)
-{
-    char *ptrPath = strAppend(strAppend(args_getBuff(args, 256), "_class-"), classPath);
-    return obj_getPtr(classObj, ptrPath);
 }
 
 static void newObj(MimiObj *self, Args *args)

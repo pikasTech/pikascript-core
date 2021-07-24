@@ -13,8 +13,9 @@ int deinitEachSubObj(Arg *argEach, Args *handleArgs)
         /* error: tOhis handle not need handle args */
         return 1;
     }
-    if (strEqu(arg_getType(argEach), "_class-process"))
-    {
+    char * type = arg_getType(argEach);
+    if (strIsStartWith(type, "_class"))
+   {
         MimiObj *subObj = arg_getPtr(argEach);
         if (NULL != subObj)
         {
@@ -231,12 +232,12 @@ int obj_setObj(MimiObj *self, char *objName, void *newFun)
     /* class means subprocess init */
     char prifix[] = "[cls]";
     Args *buffs = New_strBuff();
-    char *className = args_getBuff(buffs, 256);
-    strAppend(className, prifix);
-    strAppend(className, objName);
-    obj_setPtr(self, className, newFun);
-    /* add void process Ptr, no inited */
-    args_setPtrWithType(self->attributeList, objName, "process", NULL);
+    char *mataObjName = args_getBuff(buffs, 256);
+    strAppend(mataObjName, prifix);
+    strAppend(mataObjName, objName);
+    obj_setPtr(self, mataObjName, newFun);
+    /* add void object Ptr, no inited */
+    args_setObjectWithClass(self->attributeList, objName, "process", NULL);
     args_deinit(buffs);
     return 0;
 }
@@ -324,7 +325,8 @@ void newObjDirect(MimiObj *self, char *name, void *(*newObjFun)(Args *initArgs))
     args_setPtr(initArgs, "context", self);
     args_setStr(initArgs, "name", name);
     MimiObj *newObj = newObjFun(initArgs);
-    args_setPtrWithType(self->attributeList, name, "process", newObj);
+    char * type = args_getType(self->attributeList, name);
+    args_setPtrWithType(self->attributeList, name, type, newObj);
     args_deinit(initArgs);
 }
 
@@ -363,7 +365,7 @@ MimiObj *obj_getObjDirect(MimiObj *self, char *name)
     /* finded subscribe, check type*/
     char *type = args_getType(self->attributeList,
                               name);
-    if (!strEqu("_class-process", type))
+    if (!strIsStartWith(type, "_class"))
     {
         /* type error, could not found subprocess */
         return NULL;

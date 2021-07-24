@@ -60,7 +60,8 @@ void args_bind(Args *self, char *type, char *name, void *pointer);
 char *args_print(Args *self, char *name);
 
 int args_set(Args *self, char *name, char *valueStr);
-int args_setPtrWithType(Args *self, char *objectName, char *className, void *objectPtr);
+int args_setObjectWithClass(Args *self, char *objectName, char *className, void *objectPtr);
+int args_setPtrWithType(Args *self, char *objName, char *type, void *objPtr);
 int args_foreach (Args *self, int (*eachHandle)(Arg *argEach, Args *handleArgs), Args * handleArgs);
 
 char *args_getBuff(Args *self, int size);

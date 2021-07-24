@@ -241,6 +241,11 @@ char *strAppend(char *strOut, char *pData)
 
 int strIsStartWith(char *str, char *strStart)
 {
+	if (NULL == str || NULL == strStart)
+	{
+		/* input is null */
+		return 0;
+	}
 	unsigned short int size = strGetSize(strStart);
 	unsigned short int CMDName_get = 1;
 	for (int i = 0; i < size; i++)
