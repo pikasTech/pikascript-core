@@ -319,12 +319,34 @@ int obj_set(MimiObj *self, char *argPath, char *valStr)
     return 0;
 }
 
-void newObjDirect(MimiObj *self, char *name, void *(*newObjFun)(Args *initArgs))
+int removeEachMethodInfo(Arg *argNow, Args *argList)
+{
+    if (strIsStartWith(arg_getName(argNow), "[methodDec]"))
+    {
+        args_removeArg(argList, arg_getName(argNow));
+        return 0;
+    }
+    if (strIsStartWith(arg_getName(argNow), "[methodPtr]"))
+    {
+        args_removeArg(argList, arg_getName(argNow));
+        return 0;
+    }
+    return 0;
+}
+
+MimiObj *removeMethodInfo(MimiObj *thisClass)
+{
+    args_foreach(thisClass->attributeList, removeEachMethodInfo, thisClass->attributeList);
+    return thisClass;
+}
+
+void newObjDirect(MimiObj *self, char *name, void *(*newClassFun)(Args *initArgs))
 {
     Args *initArgs = New_args(NULL);
     args_setPtr(initArgs, "context", self);
     args_setStr(initArgs, "name", name);
-    MimiObj *newObj = newObjFun(initArgs);
+    MimiObj *thisClass = newClassFun(initArgs);
+    MimiObj *newObj = removeMethodInfo(thisClass);
     char *type = args_getType(self->attributeList, name);
     args_setPtrWithType(self->attributeList, name, type, newObj);
     args_deinit(initArgs);
@@ -760,7 +782,6 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
         method_sysOut(res, "[error] runner: method no found.");
         goto exit;
     }
-
 
     /* get type list */
     char *typeList = strCut(args_getBuff(buffs, 256), methodDeclearation, '(', ')');
