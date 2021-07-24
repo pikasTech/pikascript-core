@@ -5,6 +5,7 @@
 #include "strArgs.h"
 #include "mimiFansList.h"
 #include "mimiMailbox.h"
+#include "sysObj.h"
 
 int deinitEachSubObj(Arg *argEach, Args *handleArgs)
 {
@@ -319,14 +320,18 @@ int obj_set(MimiObj *self, char *argPath, char *valStr)
     return 0;
 }
 
-void newObjDirect(MimiObj *self, char *name, void *(*newObjFun)(Args *initArgs))
+
+void newObjDirect(MimiObj *self, char *objName, void *(*newClassFun)(Args *initArgs))
 {
     Args *initArgs = New_args(NULL);
     args_setPtr(initArgs, "context", self);
-    args_setStr(initArgs, "name", name);
-    MimiObj *newObj = newObjFun(initArgs);
-    char *type = args_getType(self->attributeList, name);
-    args_setPtrWithType(self->attributeList, name, type, newObj);
+    args_setStr(initArgs, "name", objName);
+    MimiObj *thisClass = newClassFun(initArgs);
+    char *type = args_getType(self->attributeList, objName);
+    MimiObj *newObj = obj_loadWithoutMethod(thisClass);
+    args_setPtrWithType(self->attributeList, objName, type, newObj);
+    /* !!!![error] load is not a currect way, obj can not be copied */
+    obj_deinit(thisClass);
     args_deinit(initArgs);
 }
 

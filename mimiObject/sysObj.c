@@ -219,7 +219,6 @@ static void print(MimiObj *obj, Args *args)
     method_sysOut(args, res);
 }
 
-
 void obj_import(MimiObj *self, char *className, void *classPtr)
 {
     Args *buffs = New_strBuff();
@@ -237,10 +236,36 @@ void obj_import(MimiObj *self, char *className, void *classPtr)
     }
 }
 
-void obj_importAndSetObj(MimiObj *sys, char *objName, void * NewObjFun)
+void obj_importAndSetObj(MimiObj *sys, char *objName, void *NewObjFun)
 {
     obj_import(sys, objName, NewObjFun);
     obj_setObjbyClass(sys, objName, objName);
+}
+
+int loadExceptMethod(Arg *argEach, Args *handleArgs)
+{
+    char *argName = arg_getName(argEach);
+    if (strIsStartWith(argName, "[methodDec]"))
+    {
+        /* skip method declearation */
+        // return 0;
+    }
+    if (strIsStartWith(argName, "[methodPtr]"))
+    {
+        /* skip method pointer */
+        // return 0;
+    }
+    args_copyArg(handleArgs, argEach);
+    return 0;
+}
+
+MimiObj *obj_loadWithoutMethod(MimiObj *thisClass)
+{
+    MimiObj *newObj = New_MimiObj(NULL);
+    Args *thisClassArgs = thisClass->attributeList;
+    Args *newObjArgs = newObj->attributeList;
+    args_foreach(thisClassArgs, loadExceptMethod, newObjArgs);
+    return newObj;
 }
 
 static void init_sys(MimiObj *self, Args *args)
