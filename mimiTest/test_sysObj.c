@@ -8,14 +8,9 @@ int TEST_sysObj(int isShow)
 {
     {
         MimiObj *sys = New_MimiObj_sys(NULL);
-        obj_import(sys, "Base", New_MimiObj);
-        obj_setObjbyClass(sys, "base", "Base");
-        obj_run(sys, "ls()");
-        obj_run(sys, "ls('class')");
-        obj_run(sys, "print('print Class-Base:')");
-        obj_run(sys, "print(class.Class-Base)");
-        obj_run(sys, "type('base')");
-        obj_run(sys, "ls('base')");
+        obj_import(sys, "Sys", New_MimiObj_sys);
+        obj_setObjbyClass(sys, "sys", "Sys");
+        obj_run(sys, "sys.ls()");
         obj_deinit(sys);
     }
     return 0;

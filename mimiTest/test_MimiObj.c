@@ -1,4 +1,4 @@
-#include "MimiObj.h"
+#include "sysObj.h"
 #include "MimiClass.h"
 #include "sysObj.h"
 #include "mimiCom.h"
@@ -53,7 +53,7 @@ int TEST_MimiObj(int isShow)
     {
         Args *args = New_args(NULL);
         args_setInt(args, "isEnable", 0);
-        MimiObj *process = New_MimiObj(args);
+        MimiObj *process = New_MimiObj_sys(args);
         if (isShow)
         {
             printf("the isEnable = %d\r\n", (int)args_getInt(process->attributeList, "isEnable"));
@@ -62,7 +62,7 @@ int TEST_MimiObj(int isShow)
         obj_deinit(process);
     }
     {
-        MimiObj *process = New_MimiObj(NULL);
+        MimiObj *process = New_MimiObj_sys(NULL);
         float floatTest = 12.231;
         obj_bindFloat(process, "testFloatBind", &floatTest);
         if (isShow)
@@ -76,14 +76,14 @@ int TEST_MimiObj(int isShow)
         obj_deinit(process);
     }
     {
-        MimiObj *obj = New_MimiObj(NULL);
+        MimiObj *obj = New_MimiObj_sys(NULL);
         obj_defineMethod(obj, "hello(name:string, isShow:int)", hello);
         obj_setInt(obj, "isShow", isShow);
         obj_run(obj, "hello(name = 'world', isShow = isShow)");
         obj_deinit(obj);
     }
     {
-        MimiObj *obj = New_MimiObj(NULL);
+        MimiObj *obj = New_MimiObj_sys(NULL);
         obj_defineMethod(obj, "hello2(name1:string, name2:string, name3:string, isShow:int)", hello2);
         obj_setInt(obj, "isShow", isShow);
         obj_run(obj, "hello2(name2 = 'tom', \
@@ -93,8 +93,8 @@ int TEST_MimiObj(int isShow)
         obj_deinit(obj);
     }
     {
-        MimiObj *obj = New_MimiObj(NULL);
-        obj_setObj(obj, "hello", New_MimiObj);
+        MimiObj *obj = New_MimiObj_sys(NULL);
+        obj_importAndSetObj(obj, "hello", New_MimiObj);
         obj_defineMethod(obj, "hello.hello2(name1:string, name2:string, name3:string, isShow:int)", hello2);
         obj_setInt(obj, "isShow", isShow);
         obj_run(obj, "hello.hello2(name2 = 'tom', \
@@ -104,8 +104,8 @@ int TEST_MimiObj(int isShow)
         obj_deinit(obj);
     }
     {
-        MimiObj *obj = New_MimiObj(NULL);
-        obj_setObj(obj, "hello", New_MimiObj);
+        MimiObj *obj = New_MimiObj_sys(NULL);
+        obj_importAndSetObj(obj, "hello", New_MimiObj);
         obj_setStr(obj, "name1", "john");
         obj_setInt(obj, "isShow", isShow);
         obj_defineMethod(obj, "hello.hello2(name1:string, name2:string, name3:string, isShow:int)",
@@ -114,7 +114,7 @@ int TEST_MimiObj(int isShow)
         obj_deinit(obj);
     }
     {
-        MimiObj *obj = New_MimiObj(NULL);
+        MimiObj *obj = New_MimiObj_sys(NULL);
         obj_defineMethod(obj, "testFloat(val1:float, val2:float, isShow:int):float", testFloat);
         obj_setInt(obj, "isShow", isShow);
         obj_setFloat(obj, "val2", 3.11);
@@ -131,7 +131,7 @@ int TEST_MimiObj(int isShow)
         obj_deinit(obj);
     }
     {
-        MimiObj *obj = New_MimiObj(NULL);
+        MimiObj *obj = New_MimiObj_sys(NULL);
         obj_defineMethod(obj, "add(val1:int, val2:int):int", add);
         obj_run(obj, "res = add(val1 = 1, val2 = 2)");
         int res = obj_getInt(obj, "res");
@@ -146,7 +146,7 @@ int TEST_MimiObj(int isShow)
         obj_deinit(obj);
     }
     {
-        MimiObj *obj = New_MimiObj(NULL);
+        MimiObj *obj = New_MimiObj_sys(NULL);
         obj_defineMethod(obj, "add(val1:int, val2:int):int", add);
         obj_run(obj, "res = add(1, 2)");
         int res = obj_getInt(obj, "res");
@@ -177,7 +177,7 @@ int TEST_MimiObj(int isShow)
     }
     {
         MimiObj *sys = New_MimiObj_sys(NULL);
-        obj_setObj(sys, "b", New_MimiObj);
+        obj_importAndSetObj(sys, "b", New_MimiObj);
         obj_run(sys, "set('b.a', 1)");
         int a = obj_getInt(sys, "b.a");
         obj_deinit(sys);
@@ -198,7 +198,7 @@ int TEST_MimiObj(int isShow)
     }
     {
         MimiObj *sys = New_MimiObj_sys(NULL);
-        obj_setObj(sys, "b", New_MimiObj);
+        obj_importAndSetObj(sys, "b", New_MimiObj);
         obj_run(sys, "set('b.a', 1)");
         obj_run(sys, "del('b.a')");
         obj_run(sys, "set('b.a',1.2)");

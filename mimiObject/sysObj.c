@@ -1,5 +1,6 @@
 #include "MimiObj.h"
 #include "method.h"
+#include "sysObj.h"
 #include "dataMemory.h"
 #include "dataString.h"
 #include "strArgs.h"
@@ -56,7 +57,7 @@ static void newObj(MimiObj *self, Args *args)
     /* operation */
     MimiObj *classObj = obj_getObj(self, "class", 0);
     void *NewObjPtr = getClassPtr(classObj, args, classPath);
-    obj_setObj(self, objPath, NewObjPtr);
+    obj_importAndSetObj(self, objPath, NewObjPtr);
 }
 
 static void import(MimiObj *self, Args *args)
@@ -218,6 +219,30 @@ static void print(MimiObj *obj, Args *args)
     method_sysOut(args, res);
 }
 
+
+void obj_import(MimiObj *self, char *className, void *classPtr)
+{
+    Args *buffs = New_strBuff();
+    {
+        char *cmd = args_getBuff(buffs, 256);
+        obj_setPtr(self, className, classPtr);
+        sprintf(cmd, "import('%s',%s)", className, className);
+        obj_run(self, cmd);
+    }
+    {
+        char *cmd = args_getBuff(buffs, 256);
+        sprintf(cmd, "del('%s')", className);
+        obj_run(self, cmd);
+        args_deinit(buffs);
+    }
+}
+
+void obj_importAndSetObj(MimiObj *sys, char *objName, void * NewObjFun)
+{
+    obj_import(sys, objName, NewObjFun);
+    obj_setObjbyClass(sys, objName, objName);
+}
+
 static void init_sys(MimiObj *self, Args *args)
 {
     /* attribute */
@@ -235,23 +260,6 @@ static void init_sys(MimiObj *self, Args *args)
     obj_setObj(self, "class", New_MimiObj);
 
     /* override */
-}
-
-void obj_import(MimiObj *self, char *className, void *classPtr)
-{
-    Args *buffs = New_strBuff();
-    {
-        char *cmd = args_getBuff(buffs, 256);
-        obj_setPtr(self, className, classPtr);
-        sprintf(cmd, "import('%s',%s)", className, className);
-        obj_run(self, cmd);
-    }
-    {
-        char *cmd = args_getBuff(buffs, 256);
-        sprintf(cmd, "del('%s')", className);
-        obj_run(self, cmd);
-        args_deinit(buffs);
-    }
 }
 
 MimiObj *New_MimiObj_sys(Args *args)

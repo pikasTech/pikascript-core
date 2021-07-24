@@ -1,4 +1,4 @@
-#include "MimiObj.h"
+#include "sysObj.h"
 #include "baseObj.h"
 #include "dataMemory.h"
 #include "mimiFansInfo.h"
@@ -6,7 +6,7 @@
 static void init_FansList(MimiObj *self, Args *args)
 {
     /* attribute */
-    obj_setObj(self, "fansInfo", New_MimiObj_FansInfo);
+    obj_importAndSetObj(self, "fansInfo", New_MimiObj_FansInfo);
 
     /* operation */
 
@@ -17,7 +17,7 @@ static void init_FansList(MimiObj *self, Args *args)
 
 MimiObj *New_MimiObj_FansList(Args *args)
 {
-    MimiObj *self = New_baseObj(args);
+    MimiObj *self = New_MimiObj_sys(args);
     init_FansList(self, args);
     return self;
 }

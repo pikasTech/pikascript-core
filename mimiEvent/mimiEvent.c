@@ -1,4 +1,4 @@
-#include "MimiObj.h"
+#include "sysObj.h"
 #include "baseObj.h"
 #include "strArgs.h"
 #include "dataMemory.h"
@@ -46,8 +46,8 @@ static void follow(MimiObj *self, Args *args)
 static void init_Event(MimiObj *self, Args *args)
 {
     /* attribute */
-    obj_setObj(self, "fansList", New_MimiObj_FansList);
-    obj_setObj(self, "mailBox", New_MimiObj_Mailbox);
+    obj_importAndSetObj(self, "fansList", New_MimiObj_FansList);
+    obj_importAndSetObj(self, "mailBox", New_MimiObj_Mailbox);
 
     /* method */
     obj_defineMethod(self, "follow(argPath:string, handle:pointer)", follow);
@@ -56,7 +56,7 @@ static void init_Event(MimiObj *self, Args *args)
 
 MimiObj *New_MimiObj_Event(Args *args)
 {
-    MimiObj *self = New_baseObj(args);
+    MimiObj *self = New_MimiObj_sys(args);
     init_Event(self, args);
     return self;
 }

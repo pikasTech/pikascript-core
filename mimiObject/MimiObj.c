@@ -13,9 +13,9 @@ int deinitEachSubObj(Arg *argEach, Args *handleArgs)
         /* error: tOhis handle not need handle args */
         return 1;
     }
-    char * type = arg_getType(argEach);
+    char *type = arg_getType(argEach);
     if (strIsStartWith(type, "_class"))
-   {
+    {
         MimiObj *subObj = arg_getPtr(argEach);
         if (NULL != subObj)
         {
@@ -237,7 +237,7 @@ int obj_setObj(MimiObj *self, char *objName, void *newFun)
     strAppend(mataObjName, objName);
     obj_setPtr(self, mataObjName, newFun);
     /* add void object Ptr, no inited */
-    args_setObjectWithClass(self->attributeList, objName, "process", NULL);
+    args_setObjectWithClass(self->attributeList, objName, "obj", NULL);
     args_deinit(buffs);
     return 0;
 }
@@ -325,7 +325,7 @@ void newObjDirect(MimiObj *self, char *name, void *(*newObjFun)(Args *initArgs))
     args_setPtr(initArgs, "context", self);
     args_setStr(initArgs, "name", name);
     MimiObj *newObj = newObjFun(initArgs);
-    char * type = args_getType(self->attributeList, name);
+    char *type = args_getType(self->attributeList, name);
     args_setPtrWithType(self->attributeList, name, type, newObj);
     args_deinit(initArgs);
 }
@@ -747,9 +747,12 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
         goto exit;
     }
     char *methodName = strGetLastToken(args_getBuff(buffs, 256), methodPath, '.');
+
+    /* get method Ptr */
     void (*methodPtr)(MimiObj * self, Args * args) = getMethodPtr(methodHost, methodName);
     char *methodDeclearation = getMethodDeclearation(methodHost, methodName);
 
+    /* assert */
     if ((NULL == methodDeclearation) || (NULL == methodPtr))
     {
         /* error, method no found */
@@ -758,6 +761,8 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
         goto exit;
     }
 
+
+    /* get type list */
     char *typeList = strCut(args_getBuff(buffs, 256), methodDeclearation, '(', ')');
     if (typeList == NULL)
     {
@@ -767,6 +772,7 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
         goto exit;
     }
 
+    /* get arg list */
     char *argList = strCut(args_getBuff(buffs, 256), cleanCmd, '(', ')');
     {
         if (argList == NULL)
@@ -778,8 +784,9 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
         }
     }
 
+    /* get return type */
     char *returnType = strGetLastToken(args_getBuff(buffs, 256), methodDeclearation, ')');
-    /* get type */
+    /* get args */
     Args *args = getArgsBySentence(self, typeList, argList);
     if (NULL == args)
     {
@@ -796,13 +803,14 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
         char *returnName = strGetFirstToken(args_getBuff(buffs, 256), methodToken, '=');
         transferReturnVal(self, returnType, returnName, args);
     }
+    /* transfer sysOut */
     char *sysOut = args_getStr(args, "sysOut");
     if (NULL != sysOut)
     {
         args_setStr(res, "sysOut", args_getStr(args, "sysOut"));
     }
     args_deinit(args);
-    /* run method succeed */
+    /* solve errCode */
     if (!args_isArgExist(args, "errCode"))
     {
         goto exit;
