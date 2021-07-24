@@ -15,8 +15,6 @@ int obj_setObjbyClass(MimiObj *sys, char *objName, char *classPath)
     /* class means subprocess init */
     Args *buffs = New_strBuff();
     MimiObj *classHost = obj_getObj(sys, "class", 0);
-    char *mateObjName = strAppend(strAppend(args_getBuff(buffs, 256), "[cls]"), objName);
-    char *className = strsGetLastToken(buffs, classPath, '.');
     void *newFunPtr = getClassPtr(classHost, buffs, classPath);
 
     /* class means subprocess init */
