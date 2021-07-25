@@ -7,7 +7,7 @@
 
 static void *getClassPtr(MimiObj *classObj, Args *args, char *classPath)
 {
-    char *ptrPath = strAppend(strAppend(args_getBuff(args, 256), "Class-"), classPath);
+    char *ptrPath = classPath;
     return obj_getPtr(classObj, ptrPath);
 }
 
@@ -41,7 +41,7 @@ static int storeClassInfo(MimiObj *self, Args *args, char *classPath, void *clas
         goto exit;
     }
     char *className = strsGetLastToken(args, classPath, '.');
-    char *classStoreName = strAppend(strAppend(args_getBuff(args, 256), "Class-"), className);
+    char *classStoreName = className;
     obj_setPtr(classHost, classStoreName, classPtr);
     res = 0;
     goto exit;

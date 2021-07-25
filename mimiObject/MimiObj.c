@@ -358,9 +358,25 @@ MimiObj *getClassObj(MimiObj *self, char *name, void *(*newClassFun)(Args *initA
     return thisClass;
 }
 
+char *obj_getClassPath(MimiObj *objHost, Args *buffs, char *objName)
+{
+    Arg *objArg = obj_getArg(objHost, objName);
+    char *objType = arg_getType(objArg);
+    char *classPath = strRemovePrefix(objType, "_class-", args_getBuff(buffs, 256));
+    return classPath;
+}
+
+void *getNewObjFunByClass(MimiObj *obj, char *name, char *classPath)
+{
+    MimiObj *classHost = obj_getObj(obj, "class", 0);
+    void *(*newObjFun)(Args * initArgs) = args_getPtr(classHost->attributeList, classPath);
+    return newObjFun;
+}
+
 void *getNewObjFunByName(MimiObj *obj, char *name)
 {
     Args *buffs = New_strBuff();
+    char *NewClassPath = obj_getClassPath(obj, buffs, name);
     char *emptyBuff = args_getBuff(buffs, 256);
     char *classPath = strAppend(strAppend(emptyBuff, "[cls]"), name);
     /* init the subprocess */
@@ -413,13 +429,13 @@ MimiObj *obj_getObjDirect(MimiObj *self, char *name)
     return obj_getPtr(self, name);
 }
 
-MimiObj *obj_getObj(MimiObj *self, char *objPath, int keepToken)
+MimiObj *obj_getObj(MimiObj *self, char *objPath, int keepDeepth)
 {
     Args *buffs = New_strBuff();
     char *objPathBuff = strsCopy(buffs, objPath);
     int tokenNum = strGetTokenNum(objPath, '.');
     MimiObj *obj = self;
-    for (int i = 0; i < tokenNum - keepToken; i++)
+    for (int i = 0; i < tokenNum - keepDeepth; i++)
     {
         char *token = strsPopToken(buffs, objPathBuff, '.');
         obj = obj_getObjDirect(obj, token);
