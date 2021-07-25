@@ -15,7 +15,7 @@ int obj_setObjbyClass(MimiObj *self, char *objName, char *classPath)
 {
     /* class means subprocess init */
     Args *buffs = New_strBuff();
-    MimiObj *classHost = obj_getObj(self, "class", 0);
+    MimiObj *classHost = obj_getObj(self, "classLoader", 0);
     void *newFunPtr = getClassPtr(classHost, classPath);
 
     /* class means subprocess init */
@@ -51,7 +51,7 @@ exit:
 
 int obj_newObj(MimiObj *self, char *objPath, char *classPath)
 {
-    MimiObj *classObj = obj_getObj(self, "class", 0);
+    MimiObj *classObj = obj_getObj(self, "classLoader", 0);
     void *NewObjPtr = getClassPtr(classObj, classPath);
     if (NULL == NewObjPtr)
     {
@@ -79,7 +79,7 @@ static void import(MimiObj *self, Args *args)
 {
     char *classPath = args_getStr(args, "classPath");
     void *classPtr = args_getPtr(args, "classPtr");
-    MimiObj *classObj = obj_getObj(self, "class", 0);
+    MimiObj *classObj = obj_getObj(self, "classLoader", 0);
     int res = storeClassInfo(classObj, args, classPath, classPtr);
     if (1 == res)
     {
@@ -196,9 +196,9 @@ static int listEachArg(Arg *argEach, Args *handleArgs)
 
 static void list(MimiObj *self, Args *args)
 {
+    char *objPath = args_getStr(args, "objPath");
     args_setInt(args, "errCode", 0);
     args_setStr(args, "stringOut", "");
-    char *objPath = args_getStr(args, "objPath");
     if (NULL == objPath)
     {
         /* no input obj path, use current obj */
@@ -236,7 +236,7 @@ static void print(MimiObj *obj, Args *args)
 
 int obj_import(MimiObj *self, char *className, void *classPtr)
 {
-    MimiObj *classObj = obj_getObj(self, "class", 0);
+    MimiObj *classObj = obj_getObj(self, "classLoader", 0);
     Args *buffs = New_args(NULL);
     int res =storeClassInfo(classObj, buffs, className, classPtr);
     args_deinit(buffs);
@@ -281,7 +281,7 @@ static void init_sys(MimiObj *self, Args *args)
     obj_defineMethod(self, "new(objPath:string,classPath:string)", newObjMethod);
 
     /* object */
-    obj_setObjWithoutClass(self, "class", New_MimiObj);
+    obj_setObjWithoutClass(self, "classLoader", New_MimiObj);
 
     /* override */
 }

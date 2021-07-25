@@ -361,7 +361,7 @@ char *obj_getClassPath(MimiObj *objHost, Args *buffs, char *objName)
 
 void *getNewObjFunByClass(MimiObj *obj, char *classPath)
 {
-    MimiObj *classHost = args_getPtr(obj->attributeList, "class");
+    MimiObj *classHost = args_getPtr(obj->attributeList, "classLoader");
     if (NULL == classHost)
     {
         return NULL;
@@ -377,8 +377,6 @@ void *getNewClassObjFunByName(MimiObj *obj, char *name)
     char *classPath = strAppend(strAppend(emptyBuff, "[mate]"), name);
     /* init the subprocess */
     void *(*newClassObjFun)(Args * initArgs) = args_getPtr(obj->attributeList, classPath);
-    /* delete [mate]<objName> */
-    obj_removeArg(obj, classPath);
     args_deinit(buffs);
     return newClassObjFun;
 }
@@ -392,25 +390,35 @@ MimiObj *obj_newObjByFun(char *name, void *newObjFun)
 
 MimiObj *initObj(MimiObj *obj, char *name)
 {
+    MimiObj *res = NULL;
     void *(*newObjFun)(Args * initArgs) = getNewClassObjFunByName(obj, name);
+    Args *buffs = New_args(NULL);
     if (NULL == newObjFun)
     {
         /* no such object */
-        return NULL;
+        res = NULL;
+        goto exit;
     }
     MimiObj *thisClass = obj_getClassObjByNewFun(obj, name, newObjFun);
     MimiObj *newObj = removeMethodInfo(thisClass);
-    /* delete "class" object */
-    MimiObj *classObj = args_getPtr(newObj->attributeList, "class");
+    /* delete [mate]<objName> */
+    char *classPath = strAppend(strAppend(args_getBuff(buffs, 256), "[mate]"), name);
+    obj_removeArg(obj, classPath);
+    /* delete "classLoader" object */
+    MimiObj *classObj = args_getPtr(newObj->attributeList, "classLoader");
     if (NULL != classObj)
     {
         obj_deinit(classObj);
-        args_removeArg(newObj->attributeList, "class");
+        args_removeArg(newObj->attributeList, "classLoader");
     }
 
     char *type = args_getType(obj->attributeList, name);
     args_setPtrWithType(obj->attributeList, name, type, newObj);
-    return obj_getPtr(obj, name);
+    res = obj_getPtr(obj, name);
+    goto exit;
+exit:
+    args_deinit(buffs);
+    return res;
 }
 
 MimiObj *obj_getObjDirect(MimiObj *self, char *name)
