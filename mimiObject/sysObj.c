@@ -59,8 +59,9 @@ static void newObj(MimiObj *self, Args *args)
     void *NewObjPtr = getClassPtr(classObj, args, classPath);
     if(NULL == NewObjPtr)
     {
-        method_sysOut(args, "[error] new: can not found class.");
+        method_sysOut(args, "[error] new: class not found .");
         method_setErrorCode(args, 1);
+        return;
     }
     obj_setObjbyClass(self, objPath, classPath);
 }

@@ -862,22 +862,25 @@ exit:
 
 int obj_removeArg(MimiObj *self, char *argPath)
 {
-    MimiObj *obj = obj_getObj(self, argPath, 1);
+    MimiObj *objHost = obj_getObj(self, argPath, 1);
+    MimiObj *obj = obj_getObj(self, argPath, 0);
+    if (NULL != obj)
+    {
+        obj_deinit(obj);
+    }
     Args *buffs = New_strBuff();
     int err = 0;
-    if (NULL == obj)
+    if (NULL == objHost)
     {
         /* [error] object no found */
-        args_deinit(buffs);
         err = 1;
         goto exit;
     }
     char *argName = strGetLastToken(args_getBuff(buffs, 256), argPath, '.');
-    int res = args_removeArg(obj->attributeList, argName);
+    int res = args_removeArg(objHost->attributeList, argName);
     if (1 == res)
     {
         /*[error] not found arg*/
-        args_deinit(buffs);
         err = 2;
         goto exit;
     }
