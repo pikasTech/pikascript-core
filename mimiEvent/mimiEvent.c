@@ -21,7 +21,7 @@ static void publish(MimiObj *self, Args *args)
         return;
     }
     MimiObj *fans = obj_getPtr(publisher, "fansList.fansInfo.fansPtr");
-    void (*handle)(MimiObj * obj, Args *args) = obj_getPtr(publisher, "fansList.fansInfo.handle");
+    void (*handle)(MimiObj * obj, Args * args) = obj_getPtr(publisher, "fansList.fansInfo.handle");
     Args *argsHandle = New_args(NULL);
     handle(fans, argsHandle);
     args_deinit(argsHandle);
@@ -48,8 +48,8 @@ static void init_Event(MimiObj *self, Args *args)
     /* attribute */
     obj_import(self, "FansList", New_MimiObj_FansList);
     obj_import(self, "MailBox", New_MimiObj_Mailbox);
-    obj_run(self, "new('fansList','FansList')");
-    obj_run(self, "new('mailBox','MailBox')");
+    obj_newObj(self, "fansList", "FansList");
+    obj_newObj(self, "mailBox", "MailBox");
 
     /* method */
     obj_defineMethod(self, "follow(argPath:string, handle:pointer)", follow);

@@ -5,27 +5,27 @@
 #include "dataString.h"
 #include "strArgs.h"
 
-static void *getClassPtr(MimiObj *classObj, Args *args, char *classPath)
+static void *getClassPtr(MimiObj *classObj, char *classPath)
 {
     char *ptrPath = classPath;
     return obj_getPtr(classObj, ptrPath);
 }
 
-int obj_setObjbyClass(MimiObj *sys, char *objName, char *classPath)
+int obj_setObjbyClass(MimiObj *self, char *objName, char *classPath)
 {
     /* class means subprocess init */
     Args *buffs = New_strBuff();
-    MimiObj *classHost = obj_getObj(sys, "class", 0);
-    void *newFunPtr = getClassPtr(classHost, buffs, classPath);
+    MimiObj *classHost = obj_getObj(self, "class", 0);
+    void *newFunPtr = getClassPtr(classHost, classPath);
 
     /* class means subprocess init */
     char prifix[] = "[cls]";
     char *mataObjName = args_getBuff(buffs, 256);
     strAppend(mataObjName, prifix);
     strAppend(mataObjName, objName);
-    obj_setPtr(sys, mataObjName, newFunPtr);
+    obj_setPtr(self, mataObjName, newFunPtr);
     /* add void process Ptr, no inited */
-    args_setObjectWithClass(sys->attributeList, objName, classPath, NULL);
+    args_setObjectWithClass(self->attributeList, objName, classPath, NULL);
 
     args_deinit(buffs);
     return 0;
@@ -49,21 +49,30 @@ exit:
     return res;
 }
 
-static void newObj(MimiObj *self, Args *args)
+int obj_newObj(MimiObj *self, char *objPath, char *classPath)
+{
+    MimiObj *classObj = obj_getObj(self, "class", 0);
+    void *NewObjPtr = getClassPtr(classObj, classPath);
+    if (NULL == NewObjPtr)
+    {
+        return 1;
+    }
+    obj_setObjbyClass(self, objPath, classPath);
+    return 0;
+}
+
+static void newObjMethod(MimiObj *self, Args *args)
 {
     /* get arg */
     char *objPath = args_getStr(args, "objPath");
     char *classPath = args_getStr(args, "classPath");
-    /* operation */
-    MimiObj *classObj = obj_getObj(self, "class", 0);
-    void *NewObjPtr = getClassPtr(classObj, args, classPath);
-    if(NULL == NewObjPtr)
+    int res = obj_newObj(self, objPath, classPath);
+    if (1 == res)
     {
         method_sysOut(args, "[error] new: class not found .");
         method_setErrorCode(args, 1);
         return;
     }
-    obj_setObjbyClass(self, objPath, classPath);
 }
 
 static void import(MimiObj *self, Args *args)
@@ -259,7 +268,7 @@ static void init_sys(MimiObj *self, Args *args)
     obj_defineMethod(self, "del(argPath:string)", del);
     obj_defineMethod(self, "type(argPath:string)", type);
     obj_defineMethod(self, "import(classPath:string,classPtr:pointer)", import);
-    obj_defineMethod(self, "new(objPath:string,classPath:string)", newObj);
+    obj_defineMethod(self, "new(objPath:string,classPath:string)", newObjMethod);
 
     /* object */
     obj_setObjWithoutClass(self, "class", New_MimiObj);
@@ -270,6 +279,7 @@ static void init_sys(MimiObj *self, Args *args)
 MimiObj *New_MimiObj_sys(Args *args)
 {
     MimiObj *self = New_MimiObj(args);
+    obj_setPtr(self, "classPtr", New_MimiObj_sys);
     init_sys(self, args);
     return self;
 }

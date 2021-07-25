@@ -346,6 +346,7 @@ MimiObj *obj_getClassObjByNewFun(MimiObj *self, char *name, void *(*newClassFun)
     args_setPtr(initArgs, "context", self);
     args_setStr(initArgs, "name", name);
     MimiObj *thisClass = newClassFun(initArgs);
+    obj_setPtr(self, "classPtr", newClassFun);
     args_deinit(initArgs);
     return thisClass;
 }
