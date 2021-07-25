@@ -31,7 +31,7 @@ int obj_setObjbyClass(MimiObj *self, char *objName, char *classPath)
     return 0;
 }
 
-static int storeClassInfo(MimiObj *self, Args *args, char *classPath, void *classPtr)
+static int storeClassInfo(MimiObj *self, Args *buffs, char *classPath, void *classPtr)
 {
     int res = 0;
     MimiObj *classHost = obj_getObj(self, classPath, 1);
@@ -40,7 +40,7 @@ static int storeClassInfo(MimiObj *self, Args *args, char *classPath, void *clas
         res = 1;
         goto exit;
     }
-    char *className = strsGetLastToken(args, classPath, '.');
+    char *className = strsGetLastToken(buffs, classPath, '.');
     char *classStoreName = className;
     obj_setPtr(classHost, classStoreName, classPtr);
     res = 0;
@@ -234,7 +234,17 @@ static void print(MimiObj *obj, Args *args)
     method_sysOut(args, res);
 }
 
-void obj_import(MimiObj *self, char *className, void *classPtr)
+int obj_import(MimiObj *self, char *className, void *classPtr)
+{
+    MimiObj *classObj = obj_getObj(self, "class", 0);
+    Args *buffs = New_args(NULL);
+    int res =storeClassInfo(classObj, buffs, className, classPtr);
+    args_deinit(buffs);
+    return res;
+}
+
+
+void obj_importByCmd(MimiObj *self, char *className, void *classPtr)
 {
     Args *buffs = New_strBuff();
     {
@@ -254,7 +264,7 @@ void obj_import(MimiObj *self, char *className, void *classPtr)
 void obj_importAndSetObj(MimiObj *sys, char *objName, void *NewObjFun)
 {
     obj_import(sys, objName, NewObjFun);
-    obj_setObjbyClass(sys, objName, objName);
+    obj_newObj(sys, objName, objName);
 }
 
 static void init_sys(MimiObj *self, Args *args)

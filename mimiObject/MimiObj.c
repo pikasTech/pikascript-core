@@ -346,7 +346,7 @@ MimiObj *obj_getClassObjByNewFun(MimiObj *self, char *name, void *(*newClassFun)
     args_setPtr(initArgs, "context", self);
     args_setStr(initArgs, "name", name);
     MimiObj *thisClass = newClassFun(initArgs);
-    obj_setPtr(self, "classPtr", newClassFun);
+    obj_setPtr(thisClass, "classPtr", newClassFun);
     args_deinit(initArgs);
     return thisClass;
 }
@@ -390,8 +390,8 @@ MimiObj *initObj(MimiObj *obj, char *name)
         return NULL;
     }
     MimiObj *thisClass = obj_getClassObjByNewFun(obj, name, newObjFun);
-    MimiObj *newObj = thisClass;
-    // MimiObj *newObj = removeMethodInfo(thisClass);
+    // MimiObj *newObj = thisClass;
+    MimiObj *newObj = removeMethodInfo(thisClass);
     char *type = args_getType(obj->attributeList, name);
     args_setPtrWithType(obj->attributeList, name, type, newObj);
     return obj_getPtr(obj, name);
@@ -789,8 +789,7 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
     char *methodPath = getMethodPath(args_getBuff(buffs, 256), methodToken);
 
     MimiObj *methodHostObj = obj_getObj(self, methodPath, 1);
-    // MimiObj *methodHostClass = obj_getClassObjByNewFun(methodHostObj, "classObj", classPtr);
-    // obj_deinit(methodHostClass);
+    MimiObj *methodHostClass = NULL;
     if (NULL == methodHostObj)
     {
         /* error, not found object */
@@ -800,9 +799,11 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
     }
     char *methodName = strGetLastToken(args_getBuff(buffs, 256), methodPath, '.');
 
+    void *classPtr = obj_getPtr(methodHostObj, "classPtr");
+    methodHostClass = obj_getClassObjByNewFun(methodHostObj, "classObj", classPtr);
     /* get method Ptr */
-    void (*methodPtr)(MimiObj * self, Args * args) = getMethodPtr(methodHostObj, methodName);
-    char *methodDeclearation = getMethodDeclearation(methodHostObj, methodName);
+    void (*methodPtr)(MimiObj * self, Args * args) = getMethodPtr(methodHostClass, methodName);
+    char *methodDeclearation = getMethodDeclearation(methodHostClass, methodName);
 
     /* assert */
     if ((NULL == methodDeclearation) || (NULL == methodPtr))
@@ -875,6 +876,10 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
     goto exit;
 exit:
     args_deinit(buffs);
+    if (NULL != methodHostClass)
+    {
+        obj_deinit(methodHostClass);
+    }
     return res;
 }
 
@@ -998,5 +1003,6 @@ MimiObj *New_MimiObj(Args *args)
     MimiObj *self = (void *)(mem->addr);
     self->mem = mem;
     obj_init(self, args);
+    obj_setPtr(self, "classPtr", New_MimiObj);
     return self;
 }

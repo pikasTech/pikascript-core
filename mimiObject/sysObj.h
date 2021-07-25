@@ -4,8 +4,9 @@
 #include "MimiObj.h"
 
 MimiObj *New_MimiObj_sys(Args *args);
-void obj_import(MimiObj *self, char *className, void *classPtr);
+void obj_importByCmd(MimiObj *self, char *className, void *classPtr);
 void obj_importAndSetObj(MimiObj *self, char *objName, void * NewObjFun);
 int obj_setObjbyClass(MimiObj *self, char *objName, char *classPath);
 int obj_newObj(MimiObj *self, char *objPath, char *classPath);
+int obj_import(MimiObj *self, char *className, void *classPtr);
 #endif
