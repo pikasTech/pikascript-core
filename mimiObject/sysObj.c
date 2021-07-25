@@ -270,7 +270,6 @@ static void init_sys(MimiObj *self, Args *args)
 MimiObj *New_MimiObj_sys(Args *args)
 {
     MimiObj *self = New_MimiObj(args);
-    obj_setPtr(self, "classPtr", New_MimiObj_sys);
     init_sys(self, args);
     return self;
 }

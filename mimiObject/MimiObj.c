@@ -390,7 +390,6 @@ MimiObj *initObj(MimiObj *obj, char *name)
     }
     MimiObj *thisClass = obj_getClassObjByNewFun(obj, name, newObjFun);
     MimiObj *newObj = thisClass;
-    obj_setPtr(newObj, "classPtr", newObjFun);
     // MimiObj *newObj = removeMethodInfo(thisClass);
     char *type = args_getType(obj->attributeList, name);
     args_setPtrWithType(obj->attributeList, name, type, newObj);
@@ -789,7 +788,6 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
     char *methodPath = getMethodPath(args_getBuff(buffs, 256), methodToken);
 
     MimiObj *methodHostObj = obj_getObj(self, methodPath, 1);
-    void *classPtr = args_getPtr(methodHostObj->attributeList, "classPtr");
     // MimiObj *methodHostClass = obj_getClassObjByNewFun(methodHostObj, "classObj", classPtr);
     // obj_deinit(methodHostClass);
     if (NULL == methodHostObj)
