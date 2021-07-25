@@ -19,7 +19,7 @@ int obj_setObjbyClass(MimiObj *self, char *objName, char *classPath)
     void *newFunPtr = getClassPtr(classHost, classPath);
 
     /* class means subprocess init */
-    char prifix[] = "[cls]";
+    char prifix[] = "[mate]";
     char *mataObjName = args_getBuff(buffs, 256);
     strAppend(mataObjName, prifix);
     strAppend(mataObjName, objName);

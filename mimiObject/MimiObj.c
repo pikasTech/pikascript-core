@@ -230,7 +230,7 @@ void _beforDinit(MimiObj *self)
 int obj_setObjWithoutClass(MimiObj *self, char *objName, void *newFun)
 {
     /* class means subprocess init */
-    char prifix[] = "[cls]";
+    char prifix[] = "[mate]";
     Args *buffs = New_strBuff();
     char *mataObjName = args_getBuff(buffs, 256);
     strAppend(mataObjName, prifix);
@@ -340,10 +340,10 @@ MimiObj *removeMethodInfo(MimiObj *thisClass)
     return thisClass;
 }
 
-MimiObj *obj_getClassObjByNewFun(MimiObj *self, char *name, void *(*newClassFun)(Args *initArgs))
+MimiObj *obj_getClassObjByNewFun(MimiObj *context, char *name, void *(*newClassFun)(Args *initArgs))
 {
     Args *initArgs = New_args(NULL);
-    args_setPtr(initArgs, "context", self);
+    args_setPtr(initArgs, "context", context);
     args_setStr(initArgs, "name", name);
     MimiObj *thisClass = newClassFun(initArgs);
     obj_setPtr(thisClass, "classPtr", newClassFun);
@@ -374,11 +374,20 @@ void *getNewClassObjFunByName(MimiObj *obj, char *name)
 {
     Args *buffs = New_strBuff();
     char *emptyBuff = args_getBuff(buffs, 256);
-    char *classPath = strAppend(strAppend(emptyBuff, "[cls]"), name);
+    char *classPath = strAppend(strAppend(emptyBuff, "[mate]"), name);
     /* init the subprocess */
     void *(*newClassObjFun)(Args * initArgs) = args_getPtr(obj->attributeList, classPath);
+    /* delete [mate]<objName> */
+    obj_removeArg(obj, classPath);
     args_deinit(buffs);
     return newClassObjFun;
+}
+
+MimiObj *obj_newObjByFun(char *name, void *newObjFun)
+{
+    MimiObj *thisClass = obj_getClassObjByNewFun(NULL, name, newObjFun);
+    MimiObj *newObj = removeMethodInfo(thisClass);
+    return newObj;
 }
 
 MimiObj *initObj(MimiObj *obj, char *name)
@@ -390,8 +399,15 @@ MimiObj *initObj(MimiObj *obj, char *name)
         return NULL;
     }
     MimiObj *thisClass = obj_getClassObjByNewFun(obj, name, newObjFun);
-    // MimiObj *newObj = thisClass;
     MimiObj *newObj = removeMethodInfo(thisClass);
+    /* delete "class" object */
+    MimiObj *classObj = args_getPtr(newObj->attributeList, "class");
+    if (NULL != classObj)
+    {
+        obj_deinit(classObj);
+        args_removeArg(newObj->attributeList, "class");
+    }
+
     char *type = args_getType(obj->attributeList, name);
     args_setPtrWithType(obj->attributeList, name, type, newObj);
     return obj_getPtr(obj, name);
