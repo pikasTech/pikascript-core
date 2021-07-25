@@ -74,3 +74,4 @@ void obj_run(MimiObj *self, char *cmd);
 Args *obj_runDirect(MimiObj *self, char *cmd);
 int obj_removeArg(MimiObj *self, char *argPath);
 int obj_isArgExist(MimiObj *self, char *argPath);
+MimiObj *obj_getClassObjByNewFun(MimiObj *self, char *name, void *(*newClassFun)(Args *initArgs));

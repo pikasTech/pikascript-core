@@ -340,15 +340,7 @@ MimiObj *removeMethodInfo(MimiObj *thisClass)
     return thisClass;
 }
 
-void newObjByClassObj(MimiObj *self, char *name, MimiObj *thisClass)
-{
-    MimiObj *newObj = thisClass;
-    // MimiObj *newObj = removeMethodInfo(thisClass);
-    char *type = args_getType(self->attributeList, name);
-    args_setPtrWithType(self->attributeList, name, type, newObj);
-}
-
-MimiObj *getClassObj(MimiObj *self, char *name, void *(*newClassFun)(Args *initArgs))
+MimiObj *obj_getClassObjByNewFun(MimiObj *self, char *name, void *(*newClassFun)(Args *initArgs))
 {
     Args *initArgs = New_args(NULL);
     args_setPtr(initArgs, "context", self);
@@ -366,41 +358,42 @@ char *obj_getClassPath(MimiObj *objHost, Args *buffs, char *objName)
     return classPath;
 }
 
-void *getNewObjFunByClass(MimiObj *obj, char *name, char *classPath)
+void *getNewObjFunByClass(MimiObj *obj, char *classPath)
 {
-    MimiObj *classHost = obj_getObj(obj, "class", 0);
+    MimiObj *classHost = args_getPtr(obj->attributeList, "class");
+    if (NULL == classHost)
+    {
+        return NULL;
+    }
     void *(*newObjFun)(Args * initArgs) = args_getPtr(classHost->attributeList, classPath);
     return newObjFun;
 }
 
-void *getNewObjFunByName(MimiObj *obj, char *name)
+void *getNewClassObjFunByName(MimiObj *obj, char *name)
 {
     Args *buffs = New_strBuff();
-    char *NewClassPath = obj_getClassPath(obj, buffs, name);
     char *emptyBuff = args_getBuff(buffs, 256);
     char *classPath = strAppend(strAppend(emptyBuff, "[cls]"), name);
     /* init the subprocess */
-    void *(*newObjFun)(Args * initArgs) = args_getPtr(obj->attributeList, classPath);
+    void *(*newClassObjFun)(Args * initArgs) = args_getPtr(obj->attributeList, classPath);
     args_deinit(buffs);
-    return newObjFun;
+    return newClassObjFun;
 }
 
-MimiObj *getClassObjByName(MimiObj *obj, char *name)
+MimiObj *initObj(MimiObj *obj, char *name)
 {
-    void *(*newObjFun)(Args * initArgs) = getNewObjFunByName(obj, name);
+    void *(*newObjFun)(Args * initArgs) = getNewClassObjFunByName(obj, name);
     if (NULL == newObjFun)
     {
         /* no such object */
         return NULL;
     }
-    MimiObj *thisClass = getClassObj(obj, name, newObjFun);
-    return thisClass;
-}
-
-MimiObj *initObj(MimiObj *obj, char *name)
-{
-    MimiObj *thisClass = getClassObjByName(obj, name);
-    newObjByClassObj(obj, name, thisClass);
+    MimiObj *thisClass = obj_getClassObjByNewFun(obj, name, newObjFun);
+    MimiObj *newObj = thisClass;
+    obj_setPtr(newObj, "classPtr", newObjFun);
+    // MimiObj *newObj = removeMethodInfo(thisClass);
+    char *type = args_getType(obj->attributeList, name);
+    args_setPtrWithType(obj->attributeList, name, type, newObj);
     return obj_getPtr(obj, name);
 }
 
@@ -460,11 +453,11 @@ void loadMethodInfo(MimiObj *methodHost, char *methodName, char *methodDeclearat
     args_deinit(buffs);
 }
 
-static char *getMethodDeclearation(MimiObj *methodHost, char *methodName)
+static char *getMethodDeclearation(MimiObj *obj, char *methodName)
 {
     Args *buffs = New_strBuff();
     char *methodDeclearationPath = strAppend(strAppend(args_getBuff(buffs, 256), "[methodDec]"), methodName);
-    char *res = obj_getStr(methodHost, methodDeclearationPath);
+    char *res = obj_getStr(obj, methodDeclearationPath);
     args_deinit(buffs);
     return res;
 }
@@ -473,6 +466,7 @@ static void *getMethodPtr(MimiObj *methodHost, char *methodName)
 {
     Args *buffs = New_strBuff();
     char *methodPtrPath = strAppend(strAppend(args_getBuff(buffs, 256), "[methodPtr]"), methodName);
+
     void *res = obj_getPtr(methodHost, methodPtrPath);
     args_deinit(buffs);
     return res;
@@ -794,8 +788,11 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
     char *methodToken = strGetFirstToken(args_getBuff(buffs, 256), cleanCmd, '(');
     char *methodPath = getMethodPath(args_getBuff(buffs, 256), methodToken);
 
-    MimiObj *methodHost = obj_getObj(self, methodPath, 1);
-    if (NULL == methodHost)
+    MimiObj *methodHostObj = obj_getObj(self, methodPath, 1);
+    void *classPtr = args_getPtr(methodHostObj->attributeList, "classPtr");
+    // MimiObj *methodHostClass = obj_getClassObjByNewFun(methodHostObj, "classObj", classPtr);
+    // obj_deinit(methodHostClass);
+    if (NULL == methodHostObj)
     {
         /* error, not found object */
         args_setInt(res, "errCode", 1);
@@ -805,8 +802,8 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
     char *methodName = strGetLastToken(args_getBuff(buffs, 256), methodPath, '.');
 
     /* get method Ptr */
-    void (*methodPtr)(MimiObj * self, Args * args) = getMethodPtr(methodHost, methodName);
-    char *methodDeclearation = getMethodDeclearation(methodHost, methodName);
+    void (*methodPtr)(MimiObj * self, Args * args) = getMethodPtr(methodHostObj, methodName);
+    char *methodDeclearation = getMethodDeclearation(methodHostObj, methodName);
 
     /* assert */
     if ((NULL == methodDeclearation) || (NULL == methodPtr))
@@ -851,7 +848,7 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
         goto exit;
     }
     /* run method */
-    methodPtr(methodHost, args);
+    methodPtr(methodHostObj, args);
     /* transfer return */
     if (strIsContain(methodToken, '='))
     {
