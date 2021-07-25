@@ -234,7 +234,6 @@ static void print(MimiObj *obj, Args *args)
     method_sysOut(args, res);
 }
 
-<<<<<<< HEAD
 int obj_import(MimiObj *self, char *className, void *classPtr)
 {
     MimiObj *classObj = obj_getObj(self, "classLoader", 0);
@@ -246,9 +245,6 @@ int obj_import(MimiObj *self, char *className, void *classPtr)
 
 
 void obj_importByCmd(MimiObj *self, char *className, void *classPtr)
-=======
-void obj_import(MimiObj *self, char *className, void *classPtr)
->>>>>>> d29517d7e63d0ff1398e0b4cf5f7596aba03a129
 {
     Args *buffs = New_strBuff();
     {
