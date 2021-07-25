@@ -358,27 +358,33 @@ MimiObj *getClassObj(MimiObj *self, char *name, void *(*newClassFun)(Args *initA
     return thisClass;
 }
 
-void newObjDirect(MimiObj *self, char *name, void *(*newClassFun)(Args *initArgs))
-{
-    MimiObj *thisClass = getClassObj(self, name, newClassFun);
-    newObjByClassObj(self, name, thisClass);
-}
-
-MimiObj *initObj(MimiObj *obj, char *name)
+void *getNewObjFunByName(MimiObj *obj, char *name)
 {
     Args *buffs = New_strBuff();
     char *emptyBuff = args_getBuff(buffs, 256);
     char *classPath = strAppend(strAppend(emptyBuff, "[cls]"), name);
     /* init the subprocess */
     void *(*newObjFun)(Args * initArgs) = args_getPtr(obj->attributeList, classPath);
+    args_deinit(buffs);
+    return newObjFun;
+}
+
+MimiObj *getClassObjByName(MimiObj *obj, char *name)
+{
+    void *(*newObjFun)(Args * initArgs) = getNewObjFunByName(obj, name);
     if (NULL == newObjFun)
     {
         /* no such object */
-        args_deinit(buffs);
         return NULL;
     }
-    newObjDirect(obj, name, newObjFun);
-    args_deinit(buffs);
+    MimiObj *thisClass = getClassObj(obj, name, newObjFun);
+    return thisClass;
+}
+
+MimiObj *initObj(MimiObj *obj, char *name)
+{
+    MimiObj *thisClass = getClassObjByName(obj, name);
+    newObjByClassObj(obj, name, thisClass);
     return obj_getPtr(obj, name);
 }
 
