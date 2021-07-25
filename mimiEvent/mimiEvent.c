@@ -46,8 +46,10 @@ static void follow(MimiObj *self, Args *args)
 static void init_Event(MimiObj *self, Args *args)
 {
     /* attribute */
-    obj_importAndSetObj(self, "fansList", New_MimiObj_FansList);
-    obj_importAndSetObj(self, "mailBox", New_MimiObj_Mailbox);
+    obj_import(self, "FansList", New_MimiObj_FansList);
+    obj_import(self, "MailBox", New_MimiObj_Mailbox);
+    obj_run(self, "new('fansList','FansList')");
+    obj_run(self, "new('mailBox','MailBox')");
 
     /* method */
     obj_defineMethod(self, "follow(argPath:string, handle:pointer)", follow);
