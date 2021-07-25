@@ -57,7 +57,7 @@ static void newObj(MimiObj *self, Args *args)
     /* operation */
     MimiObj *classObj = obj_getObj(self, "class", 0);
     void *NewObjPtr = getClassPtr(classObj, args, classPath);
-    obj_importAndSetObj(self, objPath, NewObjPtr);
+    obj_setObjbyClass(self, objPath, classPath);
 }
 
 static void import(MimiObj *self, Args *args)
@@ -219,7 +219,6 @@ static void print(MimiObj *obj, Args *args)
     method_sysOut(args, res);
 }
 
-
 void obj_import(MimiObj *self, char *className, void *classPtr)
 {
     Args *buffs = New_strBuff();
@@ -237,7 +236,7 @@ void obj_import(MimiObj *self, char *className, void *classPtr)
     }
 }
 
-void obj_importAndSetObj(MimiObj *sys, char *objName, void * NewObjFun)
+void obj_importAndSetObj(MimiObj *sys, char *objName, void *NewObjFun)
 {
     obj_import(sys, objName, NewObjFun);
     obj_setObjbyClass(sys, objName, objName);
@@ -257,7 +256,7 @@ static void init_sys(MimiObj *self, Args *args)
     obj_defineMethod(self, "new(objPath:string,classPath:string)", newObj);
 
     /* object */
-    obj_setObj(self, "class", New_MimiObj);
+    obj_setObjWithoutClass(self, "class", New_MimiObj);
 
     /* override */
 }

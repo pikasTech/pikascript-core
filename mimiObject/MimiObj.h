@@ -57,7 +57,7 @@ int obj_load(MimiObj *self, Args *args, char *name);
 
 // subObject
 int obj_addOther(MimiObj *self, char *subObjectName, void *new_projcetFun);
-int obj_setObj(MimiObj *self, char *subObjectName, void *new_projcetFun);
+int obj_setObjWithoutClass(MimiObj *self, char *subObjectName, void *new_projcetFun);
 MimiObj *obj_getObjDirect(MimiObj *self, char *name);
 MimiObj *obj_getObj(MimiObj *self, char *processPathectory, int deepth);
 

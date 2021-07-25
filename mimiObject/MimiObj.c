@@ -227,7 +227,7 @@ void _beforDinit(MimiObj *self)
     /* override in user code */
 }
 
-int obj_setObj(MimiObj *self, char *objName, void *newFun)
+int obj_setObjWithoutClass(MimiObj *self, char *objName, void *newFun)
 {
     /* class means subprocess init */
     char prifix[] = "[cls]";
@@ -237,7 +237,7 @@ int obj_setObj(MimiObj *self, char *objName, void *newFun)
     strAppend(mataObjName, objName);
     obj_setPtr(self, mataObjName, newFun);
     /* add void object Ptr, no inited */
-    args_setObjectWithClass(self->attributeList, objName, "obj", NULL);
+    args_setObjectWithClass(self->attributeList, objName, "none", NULL);
     args_deinit(buffs);
     return 0;
 }
@@ -340,34 +340,46 @@ MimiObj *removeMethodInfo(MimiObj *thisClass)
     return thisClass;
 }
 
-void newObjDirect(MimiObj *self, char *name, void *(*newClassFun)(Args *initArgs))
+void newObjByClassObj(MimiObj *self, char *name, MimiObj *thisClass)
+{
+    MimiObj *newObj = thisClass;
+    // MimiObj *newObj = removeMethodInfo(thisClass);
+    char *type = args_getType(self->attributeList, name);
+    args_setPtrWithType(self->attributeList, name, type, newObj);
+}
+
+MimiObj *getClassObj(MimiObj *self, char *name, void *(*newClassFun)(Args *initArgs))
 {
     Args *initArgs = New_args(NULL);
     args_setPtr(initArgs, "context", self);
     args_setStr(initArgs, "name", name);
     MimiObj *thisClass = newClassFun(initArgs);
-    MimiObj *newObj = removeMethodInfo(thisClass);
-    char *type = args_getType(self->attributeList, name);
-    args_setPtrWithType(self->attributeList, name, type, newObj);
     args_deinit(initArgs);
+    return thisClass;
 }
 
-MimiObj *initObj(MimiObj *self, char *name)
+void newObjDirect(MimiObj *self, char *name, void *(*newClassFun)(Args *initArgs))
 {
-    char prifix[] = "[cls]";
+    MimiObj *thisClass = getClassObj(self, name, newClassFun);
+    newObjByClassObj(self, name, thisClass);
+}
+
+MimiObj *initObj(MimiObj *obj, char *name)
+{
     Args *buffs = New_strBuff();
-    char *classPath = strAppend(strAppend(args_getBuff(buffs, 256), prifix), name);
+    char *emptyBuff = args_getBuff(buffs, 256);
+    char *classPath = strAppend(strAppend(emptyBuff, "[cls]"), name);
     /* init the subprocess */
-    void *(*newObjFun)(Args * initArgs) = args_getPtr(self->attributeList, classPath);
+    void *(*newObjFun)(Args * initArgs) = args_getPtr(obj->attributeList, classPath);
     if (NULL == newObjFun)
     {
         /* no such object */
         args_deinit(buffs);
         return NULL;
     }
-    newObjDirect(self, name, newObjFun);
+    newObjDirect(obj, name, newObjFun);
     args_deinit(buffs);
-    return obj_getPtr(self, name);
+    return obj_getPtr(obj, name);
 }
 
 MimiObj *obj_getObjDirect(MimiObj *self, char *name)
