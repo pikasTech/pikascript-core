@@ -51,8 +51,8 @@ exit:
 
 int obj_newObj(MimiObj *self, char *objPath, char *classPath)
 {
-    MimiObj *classObj = obj_getObj(self, "classLoader", 0);
-    void *NewObjPtr = getClassPtr(classObj, classPath);
+    MimiObj *classLoader = obj_getObj(self, "classLoader", 0);
+    void *NewObjPtr = getClassPtr(classLoader, classPath);
     if (NULL == NewObjPtr)
     {
         return 1;
@@ -236,13 +236,12 @@ static void print(MimiObj *obj, Args *args)
 
 int obj_import(MimiObj *self, char *className, void *classPtr)
 {
-    MimiObj *classObj = obj_getObj(self, "classLoader", 0);
+    MimiObj *classLoader = obj_getObj(self, "classLoader", 0);
     Args *buffs = New_args(NULL);
-    int res =storeClassInfo(classObj, buffs, className, classPtr);
+    int res = storeClassInfo(classLoader, buffs, className, classPtr);
     args_deinit(buffs);
     return res;
 }
-
 
 void obj_importByCmd(MimiObj *self, char *className, void *classPtr)
 {
@@ -308,6 +307,11 @@ static void init_sys(MimiObj *self, Args *args)
 
     /* object */
     obj_setObjWithoutClass(self, "classLoader", New_MimiObj);
+    /* 
+        init classLoader now, in order to the delete it when 
+    the self object is inited.
+    */
+    obj_getObj(self, "classLoader", 0);
 
     /* override */
 }
