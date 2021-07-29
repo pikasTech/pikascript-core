@@ -816,19 +816,22 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
     methodHostClass = obj_getClassObjByNewFun(methodHostObj, "classObj", classPtr);
     /* get method Ptr */
     void (*methodPtr)(MimiObj * self, Args * args) = getMethodPtr(methodHostClass, methodName);
-    char *methodDeclearation = getMethodDeclearation(methodHostClass, methodName);
-
+    char *methodDecInClass = getMethodDeclearation(methodHostClass, methodName);
     /* assert method*/
-    if ((NULL == methodDeclearation) || (NULL == methodPtr))
+    if ((NULL == methodDecInClass) || (NULL == methodPtr))
     {
         /* error, method no found */
         args_setInt(res, "errCode", 2);
         method_sysOut(res, "[error] runner: method no found.");
         goto exit;
     }
+    char *methodDec = strsCopy(buffs, methodDecInClass);
+    /* free method host class to save memory */
+    obj_deinit(methodHostClass);
+    methodHostClass = NULL;
 
     /* get type list */
-    char *typeList = strsCut(buffs, methodDeclearation, '(', ')');
+    char *typeList = strsCut(buffs, methodDec, '(', ')');
     if (typeList == NULL)
     {
         /* typeList no found */
@@ -850,7 +853,7 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
     }
 
     /* get return type */
-    char *returnType = strsGetLastToken(buffs, methodDeclearation, ')');
+    char *returnType = strsGetLastToken(buffs, methodDec, ')');
     /* get args */
     Args *args = getArgsBySentence(self, typeList, argList);
     if (NULL == args)
