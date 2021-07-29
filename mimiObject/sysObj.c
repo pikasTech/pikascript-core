@@ -89,6 +89,20 @@ static void type(MimiObj *obj, Args *args)
 {
     args_setInt(args, "errCode", 0);
     char *argPath = args_getStr(args, "argPath");
+    if (NULL == argPath)
+    {
+        /* no input obj path, use current obj */
+        MimiObj *objHost = obj_getPtr(obj, "context");
+        Arg *objArg = obj_getArg(objHost, obj->name);
+        if (NULL == objArg)
+        {
+            method_sysOut(args, "[error] arg no found.");
+            args_setInt(args, "errCode", 1);
+            return;
+        }
+        method_sysOut(args, arg_getType(objArg));
+        return;
+    }
     Arg *arg = obj_getArg(obj, argPath);
     if (NULL == arg)
     {

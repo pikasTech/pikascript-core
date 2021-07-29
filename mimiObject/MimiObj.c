@@ -813,7 +813,8 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
     char *methodName = strsGetLastToken(buffs, methodPath, '.');
 
     void *classPtr = obj_getPtr(methodHostObj, "classPtr");
-    methodHostClass = obj_getClassObjByNewFun(methodHostObj, "classObj", classPtr);
+    char *methodHostClassName = strsAppend(buffs, "classObj-", methodHostObj->name);
+    methodHostClass = obj_getClassObjByNewFun(methodHostObj, methodHostClassName, classPtr);
     /* get method Ptr */
     void (*methodPtr)(MimiObj * self, Args * args) = getMethodPtr(methodHostClass, methodName);
     char *methodDecInClass = getMethodDeclearation(methodHostClass, methodName);
