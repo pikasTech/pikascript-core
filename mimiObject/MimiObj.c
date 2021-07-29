@@ -791,11 +791,11 @@ static void transferReturnVal(MimiObj *self, char *returnType, char *returnName,
     }
 }
 
-char *getMethodPath(char *buff, char *methodToken)
+char *getMethodPath(Args *buffs, char *methodToken)
 {
     if (strIsContain(methodToken, '='))
     {
-        return strGetLastToken(buff, methodToken, '=');
+        return strsGetLastToken(buffs, methodToken, '=');
     }
     else
     {
@@ -809,9 +809,9 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
     Args *res = New_args(NULL);
     args_setInt(res, "errCode", 0);
     Args *buffs = New_strBuff();
-    char *cleanCmd = strDeleteChar(args_getBuff(buffs, 256), cmd, ' ');
-    char *methodToken = strGetFirstToken(args_getBuff(buffs, 256), cleanCmd, '(');
-    char *methodPath = getMethodPath(args_getBuff(buffs, 256), methodToken);
+    char *cleanCmd = strsDeleteChar(buffs, cmd, ' ');
+    char *methodToken = strsGetFirstToken(buffs, cleanCmd, '(');
+    char *methodPath = getMethodPath(buffs, methodToken);
 
     MimiObj *methodHostObj = obj_getObj(self, methodPath, 1);
     MimiObj *methodHostClass = NULL;
@@ -822,7 +822,7 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
         method_sysOut(res, "[error] runner: object no found.");
         goto exit;
     }
-    char *methodName = strGetLastToken(args_getBuff(buffs, 256), methodPath, '.');
+    char *methodName = strsGetLastToken(buffs, methodPath, '.');
 
     void *classPtr = obj_getPtr(methodHostObj, "classPtr");
     methodHostClass = obj_getClassObjByNewFun(methodHostObj, "classObj", classPtr);
@@ -840,7 +840,7 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
     }
 
     /* get type list */
-    char *typeList = strCut(args_getBuff(buffs, 256), methodDeclearation, '(', ')');
+    char *typeList = strsCut(buffs, methodDeclearation, '(', ')');
     if (typeList == NULL)
     {
         /* typeList no found */
