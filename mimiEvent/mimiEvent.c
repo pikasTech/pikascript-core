@@ -26,19 +26,25 @@ static void publish(MimiObj *self, Args *args)
     args_deinit(argsHandle);
 }
 
-static void follow(MimiObj *self, Args *args)
+void event_follow(MimiObj *self, char *argPath, void *handle)
 {
-    char *argPath = args_getStr(args, "argPath");
-    void *handle = args_getPtr(args, "handle");
-    args_setInt(args, "errCode", 0);
-
+    Args *buffs = New_args(NULL);
     MimiObj *publisher = obj_getObj(self, argPath, 1);
     MimiObj *fansInfo = obj_getObj(publisher, "fansList.fansInfo", 0);
-    char *argName = strsGetLastToken(args, argPath, '.');
+    char *argName = strsGetLastToken(buffs, argPath, '.');
 
     obj_setPtr(fansInfo, "fansPtr", self);
     obj_setPtr(fansInfo, "handle", handle);
     obj_setStr(fansInfo, "followedArgName", argName);
+    args_deinit(buffs);
+}
+
+static void followMethod(MimiObj *self, Args *args)
+{
+    char *argPath = args_getStr(args, "argPath");
+    void *handle = args_getPtr(args, "handle");
+    args_setInt(args, "errCode", 0);
+    event_follow(self, argPath, handle);
 }
 
 static void init_Event(MimiObj *self, Args *args)
@@ -50,7 +56,7 @@ static void init_Event(MimiObj *self, Args *args)
     obj_newObj(self, "mailBox", "MailBox");
 
     /* method */
-    obj_defineMethod(self, "follow(argPath:string, handle:pointer)", follow);
+    obj_defineMethod(self, "follow(argPath:string, handle:pointer)", followMethod);
     obj_defineMethod(self, "publish(argPath:string)", publish);
 }
 
