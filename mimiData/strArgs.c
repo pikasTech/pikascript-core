@@ -6,6 +6,13 @@ Args *New_strBuff(void)
     return New_args(NULL);
 }
 
+char *strsRemovePrefix(Args *buffs, char *inputStr, char *prefix)
+{
+    int size = strGetSize(inputStr);
+    char *buff = args_getBuff(buffs, size);
+    return strRemovePrefix(inputStr, prefix, buff);
+}
+
 char *strsGetLastToken(Args *buffs, char *argPath, char sign)
 {
     int size = strGetSize(argPath);
