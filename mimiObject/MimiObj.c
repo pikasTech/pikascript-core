@@ -818,7 +818,7 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
     void (*methodPtr)(MimiObj * self, Args * args) = getMethodPtr(methodHostClass, methodName);
     char *methodDeclearation = getMethodDeclearation(methodHostClass, methodName);
 
-    /* assert */
+    /* assert method*/
     if ((NULL == methodDeclearation) || (NULL == methodPtr))
     {
         /* error, method no found */
@@ -860,13 +860,23 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
         method_sysOut(res, "[error] runner: solve arg faild.");
         goto exit;
     }
-    /* run method */
-    methodPtr(methodHostObj, args);
     /* transfer return */
+    Args *returnBuffs = NULL;
+    char *returnName = NULL;
     if (strIsContain(methodToken, '='))
     {
-        char *returnName = strsGetFirstToken(buffs, methodToken, '=');
+        returnBuffs = New_args(NULL);
+        returnName = strsGetFirstToken(returnBuffs, methodToken, '=');
+    }
+    /* run method */
+    args_deinit(buffs);
+    buffs = NULL;
+    methodPtr(methodHostObj, args);
+    /* transfer return */
+    if (NULL != returnBuffs)
+    {
         transferReturnVal(self, returnType, returnName, args);
+        args_deinit(returnBuffs);
     }
     /* transfer sysOut */
     char *sysOut = args_getStr(args, "sysOut");
@@ -888,7 +898,10 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
     }
     goto exit;
 exit:
-    args_deinit(buffs);
+    if (NULL != buffs)
+    {
+        args_deinit(buffs);
+    }
     if (NULL != methodHostClass)
     {
         obj_deinit(methodHostClass);
