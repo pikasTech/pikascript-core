@@ -9,4 +9,5 @@ char *strsCopy(Args *buffs, char *source);
 char *strsDeleteChar(Args *buff, char *strIn, char ch);
 char *strsCut(Args *buffs, char *strIn, char startSign, char endSign);
 char *strsRemovePrefix(Args *buffs, char *inputStr, char *prefix);
+char *strsAppend(Args *buffs, char *strOrigin, char *strAppend);
 #endif

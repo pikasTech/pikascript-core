@@ -228,11 +228,8 @@ void _beforDinit(MimiObj *self)
 int obj_setObjWithoutClass(MimiObj *self, char *objName, void *newFun)
 {
     /* class means subprocess init */
-    char prifix[] = "[mate]";
     Args *buffs = New_strBuff();
-    char *mataObjName = args_getBuff(buffs, 256);
-    strAppend(mataObjName, prifix);
-    strAppend(mataObjName, objName);
+    char *mataObjName = strsAppend(buffs, "[mate]", objName);
     obj_setPtr(self, mataObjName, newFun);
     /* add void object Ptr, no inited */
     args_setObjectWithClass(self->attributeList, objName, "none", NULL);
@@ -371,8 +368,7 @@ void *getNewObjFunByClass(MimiObj *obj, char *classPath)
 void *getNewClassObjFunByName(MimiObj *obj, char *name)
 {
     Args *buffs = New_strBuff();
-    char *emptyBuff = args_getBuff(buffs, 256);
-    char *classPath = strAppend(strAppend(emptyBuff, "[mate]"), name);
+    char *classPath = strsAppend(buffs, "[mate]", name);
     /* init the subprocess */
     void *(*newClassObjFun)(Args * initArgs) = args_getPtr(obj->attributeList, classPath);
     args_deinit(buffs);
@@ -400,7 +396,7 @@ MimiObj *initObj(MimiObj *obj, char *name)
     MimiObj *thisClass = obj_getClassObjByNewFun(obj, name, newObjFun);
     MimiObj *newObj = removeMethodInfo(thisClass);
     /* delete [mate]<objName> */
-    char *classPath = strAppend(strAppend(args_getBuff(buffs, 256), "[mate]"), name);
+    char *classPath = strsAppend(buffs, "[mate]", name);
     obj_removeArg(obj, classPath);
     /* delete "classLoader" object */
     MimiObj *classObj = args_getPtr(newObj->attributeList, "classLoader");
@@ -468,8 +464,8 @@ exit:
 void loadMethodInfo(MimiObj *methodHost, char *methodName, char *methodDeclearation, void *methodPtr)
 {
     Args *buffs = New_strBuff();
-    char *methodPtrPath = strAppend(strAppend(args_getBuff(buffs, 256), "[methodPtr]"), methodName);
-    char *methodDeclearationPath = strAppend(strAppend(args_getBuff(buffs, 256), "[methodDec]"), methodName);
+    char *methodPtrPath = strsAppend(buffs, "[methodPtr]", methodName);
+    char *methodDeclearationPath = strsAppend(buffs, "[methodDec]", methodName);
     obj_setPtr(methodHost, methodPtrPath, methodPtr);
     obj_setStr(methodHost, methodDeclearationPath, methodDeclearation);
     args_deinit(buffs);
@@ -478,7 +474,7 @@ void loadMethodInfo(MimiObj *methodHost, char *methodName, char *methodDeclearat
 static char *getMethodDeclearation(MimiObj *obj, char *methodName)
 {
     Args *buffs = New_strBuff();
-    char *methodDeclearationPath = strAppend(strAppend(args_getBuff(buffs, 256), "[methodDec]"), methodName);
+    char *methodDeclearationPath = strsAppend(buffs, "[methodDec]", methodName);
     char *res = obj_getStr(obj, methodDeclearationPath);
     args_deinit(buffs);
     return res;
@@ -487,8 +483,7 @@ static char *getMethodDeclearation(MimiObj *obj, char *methodName)
 static void *getMethodPtr(MimiObj *methodHost, char *methodName)
 {
     Args *buffs = New_strBuff();
-    char *methodPtrPath = strAppend(strAppend(args_getBuff(buffs, 256), "[methodPtr]"), methodName);
-
+    char *methodPtrPath = strsAppend(buffs, "[methodPtr]", methodName);
     void *res = obj_getPtr(methodHost, methodPtrPath);
     args_deinit(buffs);
     return res;
@@ -663,13 +658,13 @@ static int loadArgByType(MimiObj *self,
     return 2;
 }
 
-char *getTypeVal(char *buff, char *typeToken)
+char *getTypeVal(Args *buffs, char *typeToken)
 {
     if (!strIsContain(typeToken, ':'))
     {
-        return strAppend(buff, "");
+        return strsCopy(buffs, "");
     }
-    return strGetLastToken(buff, typeToken, ':');
+    return strsGetLastToken(buffs, typeToken, ':');
 }
 
 static Args *getArgsBySort(MimiObj *self, char *typeList, char *argList)
@@ -689,7 +684,7 @@ static Args *getArgsBySort(MimiObj *self, char *typeList, char *argList)
         }
 
         char *typeName = strsGetFirstToken(buffs, typeToken, ':');
-        char *typeVal = getTypeVal(args_getBuff(buffs, 256), typeToken);
+        char *typeVal = getTypeVal(buffs, typeToken);
         char *argPath = argToken;
 
         if (0 != loadArgByType(self,
@@ -722,7 +717,7 @@ static Args *getArgsByNameMatch(MimiObj *self, char *typeList, char *argList)
         }
 
         char *typeName = strsGetFirstToken(buffs, typeToken, ':');
-        char *typeVal = getTypeVal(args_getBuff(buffs, 256), typeToken);
+        char *typeVal = getTypeVal(buffs, typeToken);
 
         char *argListBuff = strsCopy(buffs, argList);
         while (1)
