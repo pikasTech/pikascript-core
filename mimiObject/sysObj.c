@@ -19,10 +19,7 @@ int obj_setObjbyClass(MimiObj *self, char *objName, char *classPath)
     void *newFunPtr = getClassPtr(classHost, classPath);
 
     /* class means subprocess init */
-    char prifix[] = "[mate]";
-    char *mataObjName = args_getBuff(buffs, 256);
-    strAppend(mataObjName, prifix);
-    strAppend(mataObjName, objName);
+    char *mataObjName = strsAppend(buffs, "[mate]", objName);
     obj_setPtr(self, mataObjName, newFunPtr);
     /* add void process Ptr, no inited */
     args_setObjectWithClass(self->attributeList, objName, classPath, NULL);
@@ -153,7 +150,7 @@ static void set(MimiObj *obj, Args *args)
     /* new arg */
     Arg *val = args_getArg(args, "val");
     Arg *newArg = arg_copy(val);
-    char *argName = strGetLastToken(args_getBuff(args, 256), argPath, '.');
+    char *argName = strsGetLastToken(args, argPath, '.');
     arg_setName(newArg, argName);
     int res = obj_setArg(obj, argPath, newArg);
     if (res == 1)
@@ -167,14 +164,14 @@ static void set(MimiObj *obj, Args *args)
 
 static int listEachArg(Arg *argEach, Args *handleArgs)
 {
+    Args *buffs = handleArgs;
     if (NULL == handleArgs)
     {
         /* error: not handleArgs input */
         return 1;
     }
 
-    char *argName = args_getBuff(handleArgs, 256);
-    memcpy(argName, arg_getName(argEach), strGetSize(arg_getName(argEach)));
+    char *argName = strsCopy(buffs, arg_getName(argEach));
     if (strIsStartWith(argName, "["))
     {
         /* skip */

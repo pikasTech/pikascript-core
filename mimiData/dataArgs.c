@@ -290,8 +290,7 @@ Arg *args_getArg(Args *self, char *name)
 void args_bind(Args *self, char *type, char *name, void *pointer)
 {
     Args *buffs = New_strBuff();
-    char *typeWithBind = strCopy(args_getBuff(buffs, 256), "_bind-");
-    strAppend(typeWithBind, type);
+    char *typeWithBind = strsAppend(buffs, "_bind-", type);
     Arg *argNew = New_arg(NULL);
     arg_setType(argNew, typeWithBind);
     arg_setName(argNew, name);
@@ -319,9 +318,7 @@ void args_bindStr(Args *self, char *name, char **stringPtr)
 char *getPrintSring(Args *self, char *name, char *valString)
 {
     Args *buffs = New_strBuff();
-    char *printName = args_getBuff(buffs, 256);
-    strAppend(printName, "[printBuff]");
-    strAppend(printName, name);
+    char *printName = strsAppend(buffs, "[printBuff]", name);
     char *printString = args_getBuff(buffs, 256);
     sprintf(printString, "%s", valString);
     args_setStr(self, printName, printString);
@@ -405,8 +402,7 @@ char *args_print(Args *self, char *name)
     char *bindTypePrefix = strsCopy(self, "_bind-");
     if (strIsStartWith(type, bindTypePrefix))
     {
-        char *typeWithoutBind = args_getBuff(buffs, 256);
-        strRemovePrefix(type, bindTypePrefix, typeWithoutBind);
+        char *typeWithoutBind = strsRemovePrefix(buffs, type, bindTypePrefix);
         if (strEqu(typeWithoutBind, "int"))
         {
             int *valPtr = args_getPtr(self, name);
@@ -478,8 +474,7 @@ int args_set(Args *self, char *name, char *valStr)
     char *bindTypePrefix = strsCopy(self, "_bind-");
     if (strIsStartWith(type, bindTypePrefix))
     {
-        char *typeWithoutBind = args_getBuff(buffs, 256);
-        strRemovePrefix(type, bindTypePrefix, typeWithoutBind);
+        char *typeWithoutBind = strsRemovePrefix(buffs, type, bindTypePrefix);
         if (strEqu(typeWithoutBind, "int"))
         {
             int *valPtr = args_getPtr(self, name);
@@ -529,7 +524,7 @@ int args_setPtrWithType(Args *self, char *objName, char *type, void *objPtr)
 int args_setObjectWithClass(Args *self, char *objName, char *className, void *objPtr)
 {
     Args *buffs = New_strBuff();
-    char *typeWithClass = strAppend(strAppend(args_getBuff(buffs, 256), "_class-"), className);
+    char *typeWithClass = strsAppend(buffs, "_class-", className);
     args_setPtrWithType(self, objName, typeWithClass, objPtr);
     args_deinit(buffs);
     return 0;
