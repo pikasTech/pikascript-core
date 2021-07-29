@@ -43,6 +43,7 @@ typedef struct
     uint16_t apply_num;                  //内存申请表占用数目
     int blk_num;                         //内存块占用数目
     int reqTimes;                        //memory request times
+    int maxNum;
 } DMEM_STATE;
 
 //若返回空，则申请失败

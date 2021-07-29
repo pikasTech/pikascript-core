@@ -12,6 +12,10 @@ DMEM *DynMemGet(uint32_t size)
     DMEM *user = NULL;
     DMEM_APPLY *apply = NULL;
     DMEMS.reqTimes++;
+    if (DMEMS.blk_num > DMEMS.maxNum)
+    {
+        DMEMS.maxNum = DMEMS.blk_num;
+    }
 
     //申请内存大小不能为0
     if (size == 0)
