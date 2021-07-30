@@ -6,8 +6,8 @@
 static void init_FansList(MimiObj *self, Args *args)
 {
     /* attribute */
-    obj_import(self, "FansInfo", New_MimiObj_FansInfo);
-    obj_newObj(self, "fansInfo", "FansInfo");
+    sysObj_import(self, "FansInfo", New_MimiObj_FansInfo);
+    sysObj_newObj(self, "fansInfo", "FansInfo");
 
     /* operation */
 

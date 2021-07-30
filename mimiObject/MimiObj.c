@@ -375,7 +375,7 @@ void *getNewClassObjFunByName(MimiObj *obj, char *name)
     return newClassObjFun;
 }
 
-MimiObj *obj_newObjByFun(char *name, void *newObjFun)
+MimiObj *obj_newObj(char *name, void *newObjFun)
 {
     MimiObj *thisClass = obj_getClassObjByNewFun(NULL, name, newObjFun);
     MimiObj *newObj = removeMethodInfo(thisClass);
@@ -1033,6 +1033,5 @@ MimiObj *New_MimiObj(Args *args)
     MimiObj *self = (void *)(mem->addr);
     self->mem = mem;
     obj_init(self, args);
-    obj_setPtr(self, "classPtr", New_MimiObj);
     return self;
 }

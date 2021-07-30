@@ -11,7 +11,7 @@ static void *getClassPtr(MimiObj *classObj, char *classPath)
     return obj_getPtr(classObj, ptrPath);
 }
 
-int obj_setObjbyClass(MimiObj *self, char *objName, char *classPath)
+int sysObj_setObjbyClass(MimiObj *self, char *objName, char *classPath)
 {
     /* class means subprocess init */
     Args *buffs = New_strBuff();
@@ -46,7 +46,7 @@ exit:
     return res;
 }
 
-int obj_newObj(MimiObj *self, char *objPath, char *classPath)
+int sysObj_newObj(MimiObj *self, char *objPath, char *classPath)
 {
     MimiObj *classLoader = obj_getObj(self, "classLoader", 0);
     void *NewObjPtr = getClassPtr(classLoader, classPath);
@@ -54,7 +54,7 @@ int obj_newObj(MimiObj *self, char *objPath, char *classPath)
     {
         return 1;
     }
-    obj_setObjbyClass(self, objPath, classPath);
+    sysObj_setObjbyClass(self, objPath, classPath);
     return 0;
 }
 
@@ -63,7 +63,7 @@ static void newObjMethod(MimiObj *self, Args *args)
     /* get arg */
     char *objPath = args_getStr(args, "objPath");
     char *classPath = args_getStr(args, "classPath");
-    int res = obj_newObj(self, objPath, classPath);
+    int res = sysObj_newObj(self, objPath, classPath);
     if (1 == res)
     {
         method_sysOut(args, "[error] new: class not found .");
@@ -96,8 +96,8 @@ static void type(MimiObj *obj, Args *args)
         Arg *objArg = obj_getArg(objHost, obj->name);
         if (NULL == objArg)
         {
-            method_sysOut(args, "[error] arg no found.");
-            args_setInt(args, "errCode", 1);
+            method_sysOut(args, "[error] type: arg no found.");
+            method_setErrorCode(args, 1);
             return;
         }
         method_sysOut(args, arg_getType(objArg));
@@ -106,8 +106,8 @@ static void type(MimiObj *obj, Args *args)
     Arg *arg = obj_getArg(obj, argPath);
     if (NULL == arg)
     {
-        method_sysOut(args, "[error] arg no found.");
-        args_setInt(args, "errCode", 1);
+        method_sysOut(args, "[error] type: arg no found.");
+        method_setErrorCode(args, 1);
         return;
     }
     method_sysOut(args, arg_getType(arg));
@@ -245,7 +245,7 @@ static void print(MimiObj *obj, Args *args)
     method_sysOut(args, res);
 }
 
-int obj_import(MimiObj *self, char *className, void *classPtr)
+int sysObj_import(MimiObj *self, char *className, void *classPtr)
 {
     MimiObj *classLoader = obj_getObj(self, "classLoader", 0);
     Args *buffs = New_args(NULL);
@@ -254,7 +254,7 @@ int obj_import(MimiObj *self, char *className, void *classPtr)
     return res;
 }
 
-void obj_importByCmd(MimiObj *self, char *className, void *classPtr)
+void sysObj_importByCmd(MimiObj *self, char *className, void *classPtr)
 {
     Args *buffs = New_strBuff();
     {
@@ -271,10 +271,10 @@ void obj_importByCmd(MimiObj *self, char *className, void *classPtr)
     }
 }
 
-void obj_importAndSetObj(MimiObj *sys, char *objName, void *NewObjFun)
+void sysObj_importAndSetObj(MimiObj *sys, char *objName, void *NewObjFun)
 {
-    obj_import(sys, objName, NewObjFun);
-    obj_newObj(sys, objName, objName);
+    sysObj_import(sys, objName, NewObjFun);
+    sysObj_newObj(sys, objName, objName);
 }
 
 int loadExceptMethod(Arg *argEach, Args *handleArgs)
@@ -330,7 +330,6 @@ static void init_sys(MimiObj *self, Args *args)
 MimiObj *New_MimiObj_sys(Args *args)
 {
     MimiObj *self = New_MimiObj(args);
-    obj_setPtr(self, "classPtr", New_MimiObj_sys);
     init_sys(self, args);
     return self;
 }
