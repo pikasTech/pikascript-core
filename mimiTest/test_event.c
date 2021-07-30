@@ -10,7 +10,7 @@ void handle1(MimiObj *obj)
 int TEST_Event(int isShow)
 {
     {
-        MimiObj *root = obj_newRootObj("root", New_MimiObj_Event);
+        MimiObj *root = newRootObj("root", New_MimiObj_Event);
         sysObj_importAndSetObj(root, "publisher", New_MimiObj_Event);
         obj_setStr(root, "publisher.message", "hello");
         obj_setPtr(root, "handle", handle1);

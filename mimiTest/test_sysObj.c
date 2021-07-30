@@ -7,7 +7,7 @@
 int TEST_sysObj(int isShow)
 {
     {
-        MimiObj *sys = obj_newRootObj("sys",New_MimiObj_sys);
+        MimiObj *sys = newRootObj("sys",New_MimiObj_sys);
         obj_import(sys, "Sys", New_MimiObj_sys);
         sysObj_setObjbyClass(sys, "sys", "Sys");
         obj_run(sys, "sys.ls()");

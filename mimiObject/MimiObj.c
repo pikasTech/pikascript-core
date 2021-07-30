@@ -375,7 +375,7 @@ void *getNewClassObjFunByName(MimiObj *obj, char *name)
     return newClassObjFun;
 }
 
-MimiObj *obj_newRootObj(char *name, void *newObjFun)
+MimiObj *newRootObj(char *name, void *newObjFun)
 {
     MimiObj *thisClass = obj_getClassObjByNewFun(NULL, name, newObjFun);
     MimiObj *newObj = removeMethodInfo(thisClass);
