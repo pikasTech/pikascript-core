@@ -56,8 +56,8 @@ static void init_Event(MimiObj *self, Args *args)
     sysObj_newObj(self, "mailBox", "MailBox");
 
     /* method */
-    obj_defineMethod(self, "follow(argPath:string, handle:pointer)", followMethod);
-    obj_defineMethod(self, "publish(argPath:string)", publish);
+    class_defineMethod(self, "follow(argPath:string, handle:pointer)", followMethod);
+    class_defineMethod(self, "publish(argPath:string)", publish);
 }
 
 MimiObj *New_MimiObj_Event(Args *args)

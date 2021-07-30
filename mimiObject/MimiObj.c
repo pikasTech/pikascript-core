@@ -489,7 +489,7 @@ static void *getMethodPtr(MimiObj *methodHost, char *methodName)
     return res;
 }
 
-int obj_defineMethod(MimiObj *self,
+int class_defineMethod(MimiObj *self,
                      char *declearation,
                      void (*methodPtr)(MimiObj *self, Args *args))
 {
@@ -971,29 +971,6 @@ exit:
     return res;
 }
 
-int obj_init(MimiObj *self, Args *args)
-{
-    /* List */
-    self->attributeList = New_args(NULL);
-
-    /* override */
-    self->_updateHandle = _UpdateHandle;
-    self->_beforDinit = _beforDinit;
-
-    /* attribute */
-    obj_setPtr(self, "context", self);
-    obj_setStr(self, "name", "root");
-
-    /* load */
-    if (NULL != args)
-    {
-        obj_load(self, args, "name");
-        obj_load(self, args, "context");
-    }
-    self->name = obj_getStr(self, "name");
-    return 0;
-}
-
 void obj_runNoRes(MimiObj *slef, char *cmd)
 {
     /* unsafe, nothing would happend when error occord */
@@ -1032,6 +1009,26 @@ MimiObj *New_MimiObj(Args *args)
     }
     MimiObj *self = (void *)(mem->addr);
     self->mem = mem;
-    obj_init(self, args);
+
+    /* List */
+    self->attributeList = New_args(NULL);
+
+    /* override */
+    self->_updateHandle = _UpdateHandle;
+    self->_beforDinit = _beforDinit;
+
+    /* attribute */
+    obj_setPtr(self, "context", self);
+    obj_setStr(self, "name", "root");
+
+    /* load */
+    if (NULL != args)
+    {
+        obj_load(self, args, "name");
+        obj_load(self, args, "context");
+    }
+
+    /* hard attribute */
+    self->name = obj_getStr(self, "name");
     return self;
 }

@@ -303,33 +303,31 @@ MimiObj *obj_loadWithoutMethod(MimiObj *thisClass)
     return newObj;
 }
 
-static void init_sys(MimiObj *self, Args *args)
+MimiObj *New_MimiObj_sys(Args *args)
 {
+    /* derive from */
+    MimiObj *self = New_MimiObj(args);
+
     /* attribute */
 
     /* method */
-    obj_defineMethod(self, "print(val:any)", print);
-    obj_defineMethod(self, "set(argPath:string, val:any)", set);
-    obj_defineMethod(self, "ls(objPath:string)", list);
-    obj_defineMethod(self, "del(argPath:string)", del);
-    obj_defineMethod(self, "type(argPath:string)", type);
-    obj_defineMethod(self, "import(classPath:string,classPtr:pointer)", import);
-    obj_defineMethod(self, "new(objPath:string,classPath:string)", newObjMethod);
+    class_defineMethod(self, "print(val:any)", print);
+    class_defineMethod(self, "set(argPath:string, val:any)", set);
+    class_defineMethod(self, "ls(objPath:string)", list);
+    class_defineMethod(self, "del(argPath:string)", del);
+    class_defineMethod(self, "type(argPath:string)", type);
+    class_defineMethod(self, "import(classPath:string,classPtr:pointer)", import);
+    class_defineMethod(self, "new(objPath:string,classPath:string)", newObjMethod);
 
     /* object */
     obj_setObjWithoutClass(self, "classLoader", New_MimiObj);
     /* 
-        init classLoader now, in order to the delete it when 
-    the self object is inited.
+        init classLoader now, in order to the 
+        find it after inited the self object.
     */
     obj_getObj(self, "classLoader", 0);
 
     /* override */
-}
 
-MimiObj *New_MimiObj_sys(Args *args)
-{
-    MimiObj *self = New_MimiObj(args);
-    init_sys(self, args);
     return self;
 }
