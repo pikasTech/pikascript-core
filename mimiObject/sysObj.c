@@ -46,7 +46,7 @@ exit:
     return res;
 }
 
-int sysObj_newObj(MimiObj *self, char *objPath, char *classPath)
+int obj_newObj(MimiObj *self, char *objPath, char *classPath)
 {
     MimiObj *classLoader = obj_getObj(self, "classLoader", 0);
     void *NewObjPtr = getClassPtr(classLoader, classPath);
@@ -63,7 +63,7 @@ static void newObjMethod(MimiObj *self, Args *args)
     /* get arg */
     char *objPath = args_getStr(args, "objPath");
     char *classPath = args_getStr(args, "classPath");
-    int res = sysObj_newObj(self, objPath, classPath);
+    int res = obj_newObj(self, objPath, classPath);
     if (1 == res)
     {
         method_sysOut(args, "[error] new: class not found .");
@@ -245,7 +245,7 @@ static void print(MimiObj *obj, Args *args)
     method_sysOut(args, res);
 }
 
-int sysObj_import(MimiObj *self, char *className, void *classPtr)
+int obj_import(MimiObj *self, char *className, void *classPtr)
 {
     MimiObj *classLoader = obj_getObj(self, "classLoader", 0);
     Args *buffs = New_args(NULL);
@@ -273,8 +273,8 @@ void sysObj_importByCmd(MimiObj *self, char *className, void *classPtr)
 
 void sysObj_importAndSetObj(MimiObj *sys, char *objName, void *NewObjFun)
 {
-    sysObj_import(sys, objName, NewObjFun);
-    sysObj_newObj(sys, objName, objName);
+    obj_import(sys, objName, NewObjFun);
+    obj_newObj(sys, objName, objName);
 }
 
 int loadExceptMethod(Arg *argEach, Args *handleArgs)

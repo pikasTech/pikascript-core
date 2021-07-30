@@ -77,7 +77,7 @@ int TEST_MimiObj(int isShow)
         obj_deinit(process);
     }
     {
-        MimiObj *process = obj_newObj("sys",New_MimiObj_sys);
+        MimiObj *process = obj_newRootObj("sys",New_MimiObj_sys);
         float floatTest = 12.231;
         obj_bindFloat(process, "testFloatBind", &floatTest);
         if (isShow)
@@ -91,19 +91,19 @@ int TEST_MimiObj(int isShow)
         obj_deinit(process);
     }
     {
-        MimiObj *obj = obj_newObj("test", New_MimiObj_test);
+        MimiObj *obj = obj_newRootObj("test", New_MimiObj_test);
         obj_setInt(obj, "isShow", isShow);
         obj_run(obj, "hello(name = 'world', isShow = isShow)");
         obj_deinit(obj);
     }
     {
-        MimiObj *obj = obj_newObj("test", New_MimiObj_test);
+        MimiObj *obj = obj_newRootObj("test", New_MimiObj_test);
         obj_setInt(obj, "isShow", isShow);
         obj_run(obj, "hello2(name2='tom', name1='john', name3='cat', isShow=isShow) ");
         obj_deinit(obj);
     }
     {
-        MimiObj *obj = obj_newObj("test", New_MimiObj_test);
+        MimiObj *obj = obj_newRootObj("test", New_MimiObj_test);
         sysObj_importAndSetObj(obj, "hello", New_MimiObj_test);
         obj_setInt(obj, "isShow", isShow);
         obj_run(obj, "hello.hello2(name2 = 'tom', \
@@ -113,7 +113,7 @@ int TEST_MimiObj(int isShow)
         obj_deinit(obj);
     }
     {
-        MimiObj *obj = obj_newObj("sys",New_MimiObj_sys);
+        MimiObj *obj = obj_newRootObj("sys",New_MimiObj_sys);
         sysObj_importAndSetObj(obj, "hello", New_MimiObj_test);
         obj_setStr(obj, "name1", "john");
         obj_setInt(obj, "isShow", isShow);
@@ -121,7 +121,7 @@ int TEST_MimiObj(int isShow)
         obj_deinit(obj);
     }
     {
-        MimiObj *obj = obj_newObj("test", New_MimiObj_test);
+        MimiObj *obj = obj_newRootObj("test", New_MimiObj_test);
         obj_setInt(obj, "isShow", isShow);
         obj_setFloat(obj, "val2", 3.11);
         obj_run(obj, "res = testFloat(val1 = 3.22,val2 = val2,isShow = isShow)");
@@ -137,7 +137,7 @@ int TEST_MimiObj(int isShow)
         obj_deinit(obj);
     }
     {
-        MimiObj *obj = obj_newObj("test", New_MimiObj_test);
+        MimiObj *obj = obj_newRootObj("test", New_MimiObj_test);
         obj_run(obj, "res = add(val1 = 1, val2 = 2)");
         int res = obj_getInt(obj, "res");
         if (isShow)
@@ -151,7 +151,7 @@ int TEST_MimiObj(int isShow)
         obj_deinit(obj);
     }
     {
-        MimiObj *obj = obj_newObj("test", New_MimiObj_test);
+        MimiObj *obj = obj_newRootObj("test", New_MimiObj_test);
         obj_run(obj, "res = add(1, 2)");
         int res = obj_getInt(obj, "res");
         if (isShow)
@@ -165,7 +165,7 @@ int TEST_MimiObj(int isShow)
         obj_deinit(obj);
     }
     {
-        MimiObj *sys = obj_newObj("sys",New_MimiObj_sys);
+        MimiObj *sys = obj_newRootObj("sys",New_MimiObj_sys);
         int a = 0;
         obj_bind(sys, "int", "a", &a);
         obj_run(sys, "set('a', 1)");
@@ -180,7 +180,7 @@ int TEST_MimiObj(int isShow)
         }
     }
     {
-        MimiObj *sys = obj_newObj("sys",New_MimiObj_sys);
+        MimiObj *sys = obj_newRootObj("sys",New_MimiObj_sys);
         sysObj_importAndSetObj(sys, "b", New_MimiObj);
         obj_run(sys, "set('b.a', 1)");
         int a = obj_getInt(sys, "b.a");
@@ -195,13 +195,13 @@ int TEST_MimiObj(int isShow)
         }
     }
     {
-        MimiObj *sys = obj_newObj("sys",New_MimiObj_sys);
+        MimiObj *sys = obj_newRootObj("sys",New_MimiObj_sys);
         obj_run(sys, "set('a', 1)");
         obj_run(sys, "del('a')");
         obj_deinit(sys);
     }
     {
-        MimiObj *sys = obj_newObj("sys",New_MimiObj_sys);
+        MimiObj *sys = obj_newRootObj("sys",New_MimiObj_sys);
         sysObj_importAndSetObj(sys, "b", New_MimiObj);
         obj_run(sys, "set('b.a', 1)");
         obj_run(sys, "del('b.a')");
@@ -218,7 +218,7 @@ int TEST_MimiObj(int isShow)
         }
     }
     {
-        MimiObj *sys = obj_newObj("sys",New_MimiObj_sys);
+        MimiObj *sys = obj_newRootObj("sys",New_MimiObj_sys);
         obj_run(sys, "ls()");
         obj_setPtr(sys, "baseClass", New_MimiObj);
         obj_run(sys, "import('baseClass', baseClass)");

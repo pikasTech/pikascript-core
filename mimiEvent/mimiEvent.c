@@ -52,10 +52,10 @@ static void followMethod(MimiObj *self, Args *args)
 static void init_Event(MimiObj *self, Args *args)
 {
     /* attribute */
-    sysObj_import(self, "FansList", New_MimiObj_FansList);
-    sysObj_import(self, "MailBox", New_MimiObj_Mailbox);
-    sysObj_newObj(self, "fansList", "FansList");
-    sysObj_newObj(self, "mailBox", "MailBox");
+    obj_import(self, "FansList", New_MimiObj_FansList);
+    obj_import(self, "MailBox", New_MimiObj_Mailbox);
+    obj_newObj(self, "fansList", "FansList");
+    obj_newObj(self, "mailBox", "MailBox");
 
     /* method */
     class_defineMethod(self, "follow(argPath:string, handle:pointer)", followMethod);
