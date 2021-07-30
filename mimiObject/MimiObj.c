@@ -1000,6 +1000,7 @@ void obj_run(MimiObj *self, char *cmd)
 
 MimiObj *New_MimiObj(Args *args)
 {
+    /* request memory */
     DMEM *mem = DynMemGet(sizeof(MimiObj));
     if (NULL == mem)
     {

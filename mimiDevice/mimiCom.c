@@ -70,7 +70,6 @@ MimiCom *New_mimiCom(Args *args)
     DMEM *mem = DynMemGet(sizeof(MimiCom));
     MimiCom *self = (void *)(mem->addr);
     self->mem = mem;
-    self->init = init;
-    self->init(self, args);
+    init(self, args);
     return self;
 }

@@ -305,7 +305,7 @@ MimiObj *obj_loadWithoutMethod(MimiObj *thisClass)
 
 MimiObj *New_MimiObj_sys(Args *args)
 {
-    /* derive from */
+    /* derive */
     MimiObj *self = New_MimiObj(args);
 
     /* attribute */

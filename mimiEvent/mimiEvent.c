@@ -12,26 +12,28 @@ static void publish(MimiObj *self, Args *args)
     char *argPath = args_getStr(args, "argPath");
     args_setInt(args, "errCode", 0);
 
-    MimiObj *publisher = obj_getObj(self, argPath, 1);
-    char *folloedArgName = obj_getStr(publisher, "fansList.fansInfo.followedArgName");
+    MimiObj *publishHost = obj_getObj(self, argPath, 1);
+    char *folloedArgName = obj_getStr(publishHost, "fansList.fansInfo.followedArgName");
     char *argName = strsGetLastToken(args, argPath, '.');
     if (!strEqu(argName, folloedArgName))
     {
+        method_sysOut(args, "[error] publish: publish arg no found.");
+        method_setErrorCode(args, 1);
         return;
     }
-    MimiObj *fans = obj_getPtr(publisher, "fansList.fansInfo.fansPtr");
-    void (*handle)(MimiObj * obj, Args * args) = obj_getPtr(publisher, "fansList.fansInfo.handle");
+    MimiObj *fansPtr = obj_getPtr(publishHost, "fansList.fansInfo.fansPtr");
+    void (*handle)(MimiObj * obj, Args * args) = obj_getPtr(publishHost, "fansList.fansInfo.handle");
     Args *argsHandle = New_args(NULL);
-    handle(fans, argsHandle);
+    handle(fansPtr, argsHandle);
     args_deinit(argsHandle);
 }
 
-void event_follow(MimiObj *self, char *argPath, void *handle)
+void event_follow(MimiObj *self, char *publishArgPath, void *handle)
 {
     Args *buffs = New_args(NULL);
-    MimiObj *publisher = obj_getObj(self, argPath, 1);
-    MimiObj *fansInfo = obj_getObj(publisher, "fansList.fansInfo", 0);
-    char *argName = strsGetLastToken(buffs, argPath, '.');
+    MimiObj *publishHost = obj_getObj(self, publishArgPath, 1);
+    MimiObj *fansInfo = obj_getObj(publishHost, "fansList.fansInfo", 0);
+    char *argName = strsGetLastToken(buffs, publishArgPath, '.');
 
     obj_setPtr(fansInfo, "fansPtr", self);
     obj_setPtr(fansInfo, "handle", handle);
