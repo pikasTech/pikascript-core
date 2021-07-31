@@ -33,7 +33,7 @@ MimiObj *New_MimiObj_test(Args *args)
     /* 继承类 */
     MimiObj *self = New_MimiObj_sys(args);
     /* 定义方法，此处使用typescript的定义格式（简单的修改即可支持python格式） */
-    class_defineMethod(self, "add(val1:int, val2:int):int", add);
+    class_defineMethod(self, "add(val1:int, val2:int):int", add); //传入定义和方法的函数指针
     /* 返回对象 */
     return self;
 }
