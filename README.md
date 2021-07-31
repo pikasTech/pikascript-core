@@ -46,10 +46,10 @@ void main()
     obj_run(obj, "res = add(val1 = 1, val2 = 2)");
     /* 从对象容器中取出返回值 */
     int res = obj_getInt(obj, "res");
-    /* 打印返回值 res = 3*/
-    printf("%d\r\n", res);
     /* 析构对象 */
     obj_deinit(obj);
+    /* 打印返回值 res = 3*/
+    printf("%d\r\n", res);    
 }
 ```
 
