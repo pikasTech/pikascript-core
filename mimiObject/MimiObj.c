@@ -382,6 +382,16 @@ MimiObj *newRootObj(char *name, void *newObjFun)
     return newObj;
 }
 
+static void *removeClassLoader(MimiObj *obj)
+{
+    MimiObj *classObj = args_getPtr(obj->attributeList, "classLoader");
+    if (NULL != classObj)
+    {
+        obj_deinit(classObj);
+        args_removeArg(obj->attributeList, "classLoader");
+    }
+}
+
 MimiObj *initObj(MimiObj *obj, char *name)
 {
     MimiObj *res = NULL;
@@ -398,12 +408,7 @@ MimiObj *initObj(MimiObj *obj, char *name)
     /* delete [mate]<objName> */
     obj_removeArg(obj, strsAppend(buffs, "[mate]", name));
     /* delete "classLoader" object */
-    MimiObj *classObj = args_getPtr(newObj->attributeList, "classLoader");
-    if (NULL != classObj)
-    {
-        obj_deinit(classObj);
-        args_removeArg(newObj->attributeList, "classLoader");
-    }
+    removeClassLoader(newObj);
 
     char *type = args_getType(obj->attributeList, name);
     args_setPtrWithType(obj->attributeList, name, type, newObj);
