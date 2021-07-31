@@ -3,7 +3,7 @@
 #include "sysObj.h"
 #include "dataMemory.h"
 #include "dataString.h"
-#include "strArgs.h"
+#include "dataStrs.h"
 
 static void *getClassPtr(MimiObj *classObj, char *classPath)
 {

@@ -4,6 +4,5 @@
 #include "MimiObj.h"
 
 MimiObj *New_MimiObj_Event(Args *args);
-void event_follow(MimiObj *self, char *argPath, void *handle);
 
 #endif

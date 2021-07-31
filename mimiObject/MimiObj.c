@@ -2,7 +2,7 @@
 #include "dataArgs.h"
 #include "dataMemory.h"
 #include "dataString.h"
-#include "strArgs.h"
+#include "dataStrs.h"
 #include "mimiFansList.h"
 #include "mimiMailbox.h"
 #include "sysObj.h"

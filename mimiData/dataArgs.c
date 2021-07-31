@@ -1,5 +1,5 @@
 #include "dataArgs.h"
-#include "strArgs.h"
+#include "dataStrs.h"
 #include "dataLink.h"
 #include "dataMemory.h"
 #include "dataString.h"

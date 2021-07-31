@@ -1,6 +1,6 @@
 #include "MimiObj.h"
 #include "dataMemory.h"
-#include "strArgs.h"
+#include "dataStrs.h"
 #include "dataString.h"
 
 static void init_class(MimiObj *self, Args *args)

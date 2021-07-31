@@ -1,4 +1,4 @@
-#include "strArgs.h"
+#include "dataStrs.h"
 #include "dataString.h"
 
 Args *New_strBuff(void)

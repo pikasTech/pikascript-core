@@ -1,6 +1,6 @@
 #include "sysObj.h"
 #include "baseObj.h"
-#include "strArgs.h"
+#include "dataStrs.h"
 #include "dataMemory.h"
 #include "mimiFansInfo.h"
 #include "mimiFansList.h"
@@ -28,7 +28,7 @@ static void publish(MimiObj *self, Args *args)
     args_deinit(argsHandle);
 }
 
-void event_follow(MimiObj *self, char *publishArgPath, void *handle)
+static void event_follow(MimiObj *self, char *publishArgPath, void *handle)
 {
     Args *buffs = New_args(NULL);
     MimiObj *publishHost = obj_getObj(self, publishArgPath, 1);
