@@ -39,8 +39,7 @@ void add(MimiObj *obj, Args *args)
     int val2 = args_getInt(args, "val2");
     method_returnInt(args, val1 + val2);
 }
-```
-``` c
+
 /* 定义测试类 */
 MimiObj *New_MimiObj_test(Args *args)
 {
@@ -51,17 +50,15 @@ MimiObj *New_MimiObj_test(Args *args)
     /* 返回对象 */
     return self;
 }
-```
 
-``` c
-    /* 新建对象容器，对象名为“testObj” */
-    MimiObj *obj = newRootObj("testObj", New_MimiObj_Root);
-    /* 调用方法 */
-    obj_run(obj, "res = add(val1 = 1, val2 = 2)");
-    /* 从对象容器中取出返回值 */
-    int res = obj_getInt(obj, "res");
-    /* 输出返回值 res = 3*/
-    printf("%d\r\n", res);
-    /* 析构 */
-    obj_deinit(obj);
+/* 新建对象容器，对象名为“testObj” */
+MimiObj *obj = newRootObj("testObj", New_MimiObj_Root);
+/* 调用方法 */
+obj_run(obj, "res = add(val1 = 1, val2 = 2)");
+/* 从对象容器中取出返回值 */
+int res = obj_getInt(obj, "res");
+/* 输出返回值 res = 3*/
+printf("%d\r\n", res);
+/* 析构 */
+obj_deinit(obj);
 ```
