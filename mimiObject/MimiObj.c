@@ -396,8 +396,7 @@ MimiObj *initObj(MimiObj *obj, char *name)
     MimiObj *thisClass = obj_getClassObjByNewFun(obj, name, newObjFun);
     MimiObj *newObj = removeMethodInfo(thisClass);
     /* delete [mate]<objName> */
-    char *classPath = strsAppend(buffs, "[mate]", name);
-    obj_removeArg(obj, classPath);
+    obj_removeArg(obj, strsAppend(buffs, "[mate]", name));
     /* delete "classLoader" object */
     MimiObj *classObj = args_getPtr(newObj->attributeList, "classLoader");
     if (NULL != classObj)
