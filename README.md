@@ -23,7 +23,7 @@ void add(MimiObj *obj, Args *args)
     int val1 = args_getInt(args, "val1");
     /* 从参数列表容器中取出参数 val2 */
     int val2 = args_getInt(args, "val2");
-    /* 将返回值传回参数列表容器
+    /* 将返回值传回参数列表容器 */
     method_returnInt(args, val1 + val2);
 }
 
