@@ -1,37 +1,19 @@
 # 简介
-mimiscript是一个跨平台的面向对象c语言脚本库，提供动态对象，对象树以及非侵入式的python/typescript脚本绑定。
+mimiscript是一个用于资源有限的mcu的面向对象c语言脚本库，提供动态对象，对象树以及非侵入式的python/typescript脚本绑定。
 
-仅使用C标准库，支持裸机运行，不使用任何宏定义！
+支持裸机运行，可运行于内存40Kb以上的mcu中，如stm32f103,esp32等。
 
-# 结构摘要：
+支持跨平台，可运行于linux环境。
 
-## 1.数据结构 mimidata
-datamemory：内存管理
+仅使用C标准库，尽可能的结构清晰（水平有限），几乎不使用宏。
 
-datalink：非侵入式双向链表
-
-dataArg：数据容器，支持int、float、string、object类型和自定义类型
-
-dataArgs：基于双向链表的数据列表，常用作动态参数列表，并用来存储对象的属性和方法
-
-dataSting，字符串处理
-
-## 2.对象支持 (mimiObject) 
-dataObject：对象构造、对象析构、对象树、创建属性、绑定属性、绑定方法、python接口绑定、python接口解析
-
-## 3.命令行交互层 (mimishell) 
-mimiSH：用于调用python接口
-
-## 4.基于发布-订阅模型的事件机制（mimiEvnet）
-支持同步事件回调
-
-## 5.单元测试 (mimitest) 
-几乎完全覆盖的单元测试
 
 ## 使用方法：
 
 测试例：
 ``` c
+#include "sysObj.h"
+
 /* 被绑定的方法 */
 void add(MimiObj *obj, Args *args)
 {
@@ -62,3 +44,29 @@ printf("%d\r\n", res);
 /* 析构 */
 obj_deinit(obj);
 ```
+
+# 结构摘要：
+
+## 1.数据结构 mimidata
+datamemory：内存管理
+
+datalink：非侵入式双向链表
+
+dataArg：数据容器，支持int、float、string、object类型和自定义类型
+
+dataArgs：基于双向链表的数据列表，常用作动态参数列表，并用来存储对象的属性和方法
+
+dataSting，字符串处理
+
+## 2.对象支持 (mimiObject) 
+dataObject：对象构造、对象析构、对象树、创建属性、绑定属性、绑定方法、python接口绑定、python接口解析
+
+## 3.命令行交互层 (mimishell) 
+mimiSH：用于调用python接口
+
+## 4.基于发布-订阅模型的事件机制（mimiEvnet）
+支持同步事件回调
+
+## 5.单元测试 (mimitest) 
+几乎完全覆盖的单元测试
+
