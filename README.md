@@ -1,7 +1,7 @@
 # 简介
 mimiscript是一个用于资源有限的mcu的面向对象c语言脚本库，提供动态对象，对象树以及非侵入式的python/typescript脚本绑定。
 
-支持裸机运行，可运行于内存40Kb以上的mcu中，如stm32f103,esp32等。
+支持裸机运行，可运行于内存40Kb以上的mcu中，如stm32f103，esp32。
 
 支持跨平台，可运行于linux环境。
 
