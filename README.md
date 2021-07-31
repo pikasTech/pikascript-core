@@ -38,16 +38,19 @@ MimiObj *New_MimiObj_test(Args *args)
     return self;
 }
 
-/* 新建根对象容器，对象名为“testObj” */
-MimiObj *obj = newRootObj("testObj", New_MimiObj_Root);/* 传入对象名和构造器的函数指针 */
-/* 运行单行脚本，也支持 "res = add(1,2)"的调用方式 */
-obj_run(obj, "res = add(val1 = 1, val2 = 2)");
-/* 从对象容器中取出返回值 */
-int res = obj_getInt(obj, "res");
-/* 打印返回值 res = 3*/
-printf("%d\r\n", res);
-/* 析构对象 */
-obj_deinit(obj);
+void main()
+{
+    /* 新建根对象容器，对象名为“testObj” */
+    MimiObj *obj = newRootObj("testObj", New_MimiObj_Root);/* 传入对象名和构造器的函数指针 */
+    /* 运行单行脚本，也支持 "res = add(1,2)"的调用方式 */
+    obj_run(obj, "res = add(val1 = 1, val2 = 2)");
+    /* 从对象容器中取出返回值 */
+    int res = obj_getInt(obj, "res");
+    /* 打印返回值 res = 3*/
+    printf("%d\r\n", res);
+    /* 析构对象 */
+    obj_deinit(obj);
+}
 ```
 
 # 结构摘要：
