@@ -17,13 +17,13 @@ mimiscript是一个用于资源有限的mcu的面向对象c语言脚本库，提
 /* 被绑定的方法 */
 void add(MimiObj *obj, Args *args) 
 {
-    /* obj 是对象指针，args是参数列表容器，所有被绑定的方法均使用此形参 */
+    /* obj 是对象指针，args是参数列表，所有被绑定的方法均使用此形参 */
     
-    /* 从参数列表容器中取出参数 val1 */
+    /* 从参数列表中取出参数 val1 */
     int val1 = args_getInt(args, "val1");
-    /* 从参数列表容器中取出参数 val2 */
+    /* 从参数列表中取出参数 val2 */
     int val2 = args_getInt(args, "val2");
-    /* 将返回值传回参数列表容器 */
+    /* 将返回值传回参数列表 */
     method_returnInt(args, val1 + val2);
 }
 
@@ -40,11 +40,11 @@ MimiObj *New_MimiObj_test(Args *args)
 
 void main()
 {
-    /* 新建根对象容器，对象名为“testObj” */
+    /* 新建根对象，对象名为“testObj” */
     MimiObj *obj = newRootObj("testObj", New_MimiObj_test);/* 传入对象名和构造器的函数指针 */
     /* 运行单行脚本，也支持 "res = add(1,2)"的调用方式 */
     obj_run(obj, "res = add(val1 = 1, val2 = 2)");
-    /* 从对象容器中取出返回值 */
+    /* 从对象中取出返回值 */
     int res = obj_getInt(obj, "res");
     /* 析构对象 */
     obj_deinit(obj);
