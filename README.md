@@ -20,7 +20,7 @@ dataSting，字符串处理
 dataObject：对象构造、对象析构、对象树、创建属性、绑定属性、绑定方法、python接口绑定、python接口解析
 
 ## 3.命令行交互层 (mimishell) 
-mimiShell：用于调用python接口
+mimiSH：用于调用python接口
 
 ## 4.基于发布-订阅模型的事件机制（mimiEvnet）
 支持同步事件回调
@@ -41,14 +41,25 @@ void add(MimiObj *obj, Args *args)
 }
 ```
 ``` c
-    /* 新建对象 */
-    MimiObj *obj = New_MimiObj(NULL);
-    /* 绑定方法 */
-    obj_defineMethod(obj, "add(val1:int, val2:int):int", add);
+/* 定义测试类 */
+MimiObj *New_MimiObj_test(Args *args)
+{
+    /* 继承类 */
+    MimiObj *self = New_MimiObj_sys(args);
+    /* 定义方法 */
+    class_defineMethod(self, "add(val1:int, val2:int):int", add);
+    /* 返回对象 */
+    return self;
+}
+``` c
+    /* 新建对象容器，对象名为“testObj” */
+    MimiObj *obj = newRootObj("testObj", New_MimiObj_Root);
     /* 调用方法 */
-    obj_runNoRes(obj, "res = add(val1 = 1, val2 = 2)");
-    /* 取出返回值 */
+    obj_run(obj, "res = add(val1 = 1, val2 = 2)");
+    /* 从对象容器中取出返回值 */
     int res = obj_getInt(obj, "res");
+    /* 输出返回值 res = 3*/
+    printf("%d\r\n", res);
     /* 析构 */
     obj_deinit(obj);
 ```
