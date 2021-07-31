@@ -51,6 +51,8 @@ MimiObj *New_MimiObj_test(Args *args)
     /* 返回对象 */
     return self;
 }
+```
+
 ``` c
     /* 新建对象容器，对象名为“testObj” */
     MimiObj *obj = newRootObj("testObj", New_MimiObj_Root);
