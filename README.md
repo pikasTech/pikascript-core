@@ -15,33 +15,39 @@ mimiscript是一个用于资源有限的mcu的面向对象c语言脚本库，提
 #include "sysObj.h"
 
 /* 被绑定的方法 */
-void add(MimiObj *obj, Args *args)
+void add(MimiObj *obj, Args *args) 
 {
+    /* obj 是对象指针，args是参数列表容器，所有被绑定的方法均使用此形参 */
+    
+    /* 从参数列表容器中取出参数 val1 */
     int val1 = args_getInt(args, "val1");
+    /* 从参数列表容器中取出参数 val2 */
     int val2 = args_getInt(args, "val2");
+    /* 将返回值传回参数列表容器
     method_returnInt(args, val1 + val2);
 }
 
-/* 定义测试类 */
+/* 定义测试类的构造器 */
 MimiObj *New_MimiObj_test(Args *args)
 {
     /* 继承类 */
     MimiObj *self = New_MimiObj_sys(args);
-    /* 定义方法 */
+    /* 定义方法，此处使用typescript的定义格式（简单的修改即可支持python格式） */
     class_defineMethod(self, "add(val1:int, val2:int):int", add);
     /* 返回对象 */
     return self;
 }
 
-/* 新建对象容器，对象名为“testObj” */
+/* 新建根对象容器，对象名为“testObj” */
+/* 传入对象名和构造器的函数指针 */
 MimiObj *obj = newRootObj("testObj", New_MimiObj_Root);
-/* 调用方法 */
+/* 运行单行脚本，也支持 "res = add(1,2)"的调用方式 */
 obj_run(obj, "res = add(val1 = 1, val2 = 2)");
 /* 从对象容器中取出返回值 */
 int res = obj_getInt(obj, "res");
-/* 输出返回值 res = 3*/
+/* 打印返回值 res = 3*/
 printf("%d\r\n", res);
-/* 析构 */
+/* 析构对象 */
 obj_deinit(obj);
 ```
 
