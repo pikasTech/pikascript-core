@@ -39,8 +39,7 @@ MimiObj *New_MimiObj_test(Args *args)
 }
 
 /* 新建根对象容器，对象名为“testObj” */
-/* 传入对象名和构造器的函数指针 */
-MimiObj *obj = newRootObj("testObj", New_MimiObj_Root);
+MimiObj *obj = newRootObj("testObj", New_MimiObj_Root);/* 传入对象名和构造器的函数指针 */
 /* 运行单行脚本，也支持 "res = add(1,2)"的调用方式 */
 obj_run(obj, "res = add(val1 = 1, val2 = 2)");
 /* 从对象容器中取出返回值 */
