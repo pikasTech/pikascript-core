@@ -74,7 +74,8 @@ void main()
     MimiObj *sys = newRootObj("sys", New_MimiObj_sys);
 
     /* 
-        新建test对象，test对象挂载在sys对象下
+        新建test对象
+        test对象作为子对象挂载在sys对象下（对象树）
     */
     obj_newObj(sys, "test", New_MimiObj_test);
     
