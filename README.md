@@ -36,19 +36,27 @@ void add(MimiObj *self, Args *args)
     method_returnInt(args, res);
 }
 
-/* 定义测试类的构造器 */
+/* 
+    定义测试类的构造器
+    通过构造器新建对象
+    args是构造器的初始化参数列表
+    MimiObj*是新建对象的指针
+    （所有构造器均使用此形参）
+*/
 MimiObj *New_MimiObj_test(Args *args)
 {
-    /* 继承类 */
+    /* 
+        继承sys类
+        只需要直接调用父类的构造器即可
+    */
     MimiObj *self = New_MimiObj_sys(args);
     
-    
     /* 
-        为脚本绑定一个方法
-        传入的第一个参数是对象指针
-        传入的第二参数是被绑定方法的接口定义
+        为test类绑定一个方法（支持重载）
+        1.入口参数self：对象指针，指向当前对象
+        2.传入的第二参数是被绑定方法的接口定义
         （此处使用typescript语法，简单的修改即可支持python格式）
-        传入的第三个参数是被绑定方法的函数指针
+        3.传入的第三个参数是被绑定方法的函数指针
     */
     class_defineMethod(self, "add(val1:int, val2:int):int", add); 
 
