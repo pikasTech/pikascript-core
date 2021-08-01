@@ -1,5 +1,5 @@
 # 简介
-mimiscript是一个用于资源有限的mcu的脚本绑定工具，提供非侵入式python/typescript脚本绑定以及动态对象、对象树。
+mimilib包含mimiobject和mimiscript，可以为mcu裸机c开发提供对象容器和python脚本绑定。
 
 支持裸机运行，可运行于内存40Kb以上的mcu中，如stm32f103，esp32。
 
