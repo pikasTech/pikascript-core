@@ -17,15 +17,23 @@ mimiscript是一个用于资源有限的mcu的脚本绑定工具，提供非侵�
 /* 被绑定的方法 */
 void add(MimiObj *obj, Args *args) 
 {
-    /* obj 是对象指针，args是参数列表，
-        所有被绑定的方法均使用此形参 */
+    /* 
+        obj 是对象指针，args是参数列表，
+        所有被绑定的方法均使用此形参 
+    */
     
     /* 从参数列表中取出参数 val1 */
     int val1 = args_getInt(args, "val1");
+    
     /* 从参数列表中取出参数 val2 */
     int val2 = args_getInt(args, "val2");
+    
+    /* 方法的处理部分 */
+    
+    int res = val1 + val2;
+    
     /* 将返回值传回参数列表 */
-    method_returnInt(args, val1 + val2);
+    method_returnInt(args, res);
 }
 
 /* 定义测试类的构造器 */
