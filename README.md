@@ -28,7 +28,7 @@ void add(MimiObj *obj, Args *args)
     /* 从参数列表中取出参数 val2 */
     int val2 = args_getInt(args, "val2");
     
-    /* 方法的处理部分 */
+    /* 实现方法的功能 */
     
     int res = val1 + val2;
     
