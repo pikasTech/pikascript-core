@@ -30,7 +30,6 @@ void add(MimiObj *self, Args *args)
     int val2 = args_getInt(args, "val2");
     
     /* 实现方法的功能 */
-    
     int res = val1 + val2;
     
     /* 将返回值传回参数列表 */
