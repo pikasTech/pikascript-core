@@ -1,11 +1,11 @@
 # 简介
-mimiscript是一个用于资源有限的mcu的面向对象c语言脚本库，提供动态对象，对象树以及非侵入式的python/typescript脚本绑定。
+mimiscript是一个用于资源有限的mcu的脚本绑定工具，提供动态对象，对象树以及非侵入式的python/typescript脚本绑定。
 
 支持裸机运行，可运行于内存40Kb以上的mcu中，如stm32f103，esp32。
 
 支持跨平台，可运行于linux环境。
 
-仅使用C标准库，尽可能的结构清晰（水平有限），几乎不使用宏。
+仅使用C标准库，尽可能的结构清晰（尽我所能），几乎不使用宏。
 
 
 ## 使用方法：
@@ -17,13 +17,14 @@ mimiscript是一个用于资源有限的mcu的面向对象c语言脚本库，提
 /* 被绑定的方法 */
 void add(MimiObj *obj, Args *args) 
 {
-    /* obj 是对象指针，args是参数列表容器，所有被绑定的方法均使用此形参 */
+    /* obj 是对象指针，args是参数列表，
+        所有被绑定的方法均使用此形参 */
     
-    /* 从参数列表容器中取出参数 val1 */
+    /* 从参数列表中取出参数 val1 */
     int val1 = args_getInt(args, "val1");
-    /* 从参数列表容器中取出参数 val2 */
+    /* 从参数列表中取出参数 val2 */
     int val2 = args_getInt(args, "val2");
-    /* 将返回值传回参数列表容器 */
+    /* 将返回值传回参数列表 */
     method_returnInt(args, val1 + val2);
 }
 
@@ -32,24 +33,27 @@ MimiObj *New_MimiObj_test(Args *args)
 {
     /* 继承类 */
     MimiObj *self = New_MimiObj_sys(args);
-    /* 定义方法，此处使用typescript的定义格式（简单的修改即可支持python格式） */
-    class_defineMethod(self, "add(val1:int, val2:int):int", add);
+    /* 定义方法，此处使用typescript的定义格式
+        （简单的修改即可支持python格式） */
+    class_defineMethod(self, "add(val1:int, val2:int):int", add); 
+    //传入定义和方法的函数指针
     /* 返回对象 */
     return self;
 }
 
 void main()
 {
-    /* 新建根对象容器，对象名为“testObj” */
-    MimiObj *obj = newRootObj("testObj", New_MimiObj_Root);/* 传入对象名和构造器的函数指针 */
+    /* 新建根对象，对象名为“testObj” */
+    MimiObj *obj = newRootObj("testObj", New_MimiObj_test);
+    /* 传入对象名和构造器的函数指针 */
     /* 运行单行脚本，也支持 "res = add(1,2)"的调用方式 */
     obj_run(obj, "res = add(val1 = 1, val2 = 2)");
-    /* 从对象容器中取出返回值 */
+    /* 从对象中取出返回值 */
     int res = obj_getInt(obj, "res");
-    /* 打印返回值 res = 3*/
-    printf("%d\r\n", res);
     /* 析构对象 */
     obj_deinit(obj);
+    /* 打印返回值 res = 3*/
+    printf("%d\r\n", res);    
 }
 ```
 
