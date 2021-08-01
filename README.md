@@ -33,25 +33,57 @@ MimiObj *New_MimiObj_test(Args *args)
 {
     /* 继承类 */
     MimiObj *self = New_MimiObj_sys(args);
-    /* 定义方法，此处使用typescript的定义格式
-        （简单的修改即可支持python格式） */
+    
+    
+    /* 
+        为脚本绑定一个方法
+        传入的第一个参数是对象指针
+        传入的第二参数是被绑定方法的接口定义
+        （此处使用typescript语法，简单的修改即可支持python格式）
+        传入的第三个参数是被绑定方法的函数指针
+    */
     class_defineMethod(self, "add(val1:int, val2:int):int", add); 
-    //传入定义和方法的函数指针
+
+
     /* 返回对象 */
     return self;
 }
 
 void main()
 {
-    /* 新建根对象，对象名为“testObj” */
-    MimiObj *obj = newRootObj("testObj", New_MimiObj_test);
-    /* 传入对象名和构造器的函数指针 */
-    /* 运行单行脚本，也支持 "res = add(1,2)"的调用方式 */
-    obj_run(obj, "res = add(val1 = 1, val2 = 2)");
-    /* 从对象中取出返回值 */
-    int res = obj_getInt(obj, "res");
-    /* 析构对象 */
-    obj_deinit(obj);
+    /* 
+        新建根对象，对象名为“sys” 
+        传入对象名和构造器的函数指针
+    */
+    
+    MimiObj *sys = newRootObj("sys", New_MimiObj_sys);
+
+    /* 
+        新建test对象，test对象挂载在sys对象下
+    */
+    obj_newObj(sys, "test", New_MimiObj_test);
+    
+    /*  
+        运行单行脚本。
+        因为test对象挂在在sys对象下，
+        因此可以通过test.add调用test对象的方法
+    */
+    obj_run(sys, "res = test.add(val1 = 1, val2 = 2)");
+    /*
+        (也支持 "res = test.add(1, 2)"的调用方式)
+    */
+    
+    /* 从对象中取出属性值 */
+    int res = obj_getInt(sys, "res");
+    
+    /* 
+        析构对象
+        所有挂在在sys对象下的子对象都会被自动析构
+        本例中挂载了test对象，因此在析构sys对象前，
+        test对象会被自动析构
+    */
+    obj_deinit(sys);
+    
     /* 打印返回值 res = 3*/
     printf("%d\r\n", res);    
 }
