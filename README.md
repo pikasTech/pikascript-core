@@ -22,10 +22,11 @@ void add(MimiObj *obj, Args *args)
         所有被绑定的方法均使用此形参 
     */
     
-    /* 从参数列表中取出参数 val1 */
+    /* 
+        参数传递 
+        从参数列表中取出输入参数val1和val2
+    */
     int val1 = args_getInt(args, "val1");
-    
-    /* 从参数列表中取出参数 val2 */
     int val2 = args_getInt(args, "val2");
     
     /* 实现方法的功能 */
