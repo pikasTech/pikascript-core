@@ -68,10 +68,9 @@ MimiObj *New_MimiObj_test(Args *args)
 void main()
 {
     /* 
-        新建根对象，对象名为“sys” 
+        新建根对象，对象名为“sys”
         传入对象名和构造器的函数指针
     */
-    
     MimiObj *sys = newRootObj("sys", New_MimiObj_sys);
 
     /* 
