@@ -83,13 +83,14 @@ void main()
         运行单行脚本。
         因为test对象挂在在sys对象下，
         因此可以通过test.add调用test对象的方法
+        运行后会动态新建res属性，该属性属于sys对象
     */
     obj_run(sys, "res = test.add(val1 = 1, val2 = 2)");
     /*
         (也支持 "res = test.add(1, 2)"的调用方式)
     */
     
-    /* 从对象中取出属性值 */
+    /* 从sys对象中取出属性值res */
     int res = obj_getInt(sys, "res");
     
     /* 
