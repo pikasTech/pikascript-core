@@ -1,8 +1,5 @@
 #include "sysObj.h"
-#include "MimiClass.h"
-#include "sysObj.h"
 #include "mimiCom.h"
-#include "dataString.h"
 
 void testFloat(MimiObj *obj, Args *args)
 {

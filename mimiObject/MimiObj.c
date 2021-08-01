@@ -382,7 +382,7 @@ MimiObj *newRootObj(char *name, void *newObjFun)
     return newObj;
 }
 
-static void *removeClassLoader(MimiObj *obj)
+static void removeClassLoader(MimiObj *obj)
 {
     MimiObj *classObj = args_getPtr(obj->attributeList, "classLoader");
     if (NULL != classObj)
@@ -494,8 +494,8 @@ static void *getMethodPtr(MimiObj *methodHost, char *methodName)
 }
 
 int class_defineMethod(MimiObj *self,
-                     char *declearation,
-                     void (*methodPtr)(MimiObj *self, Args *args))
+                       char *declearation,
+                       void (*methodPtr)(MimiObj *self, Args *args))
 {
     int size = strGetSize(declearation);
     int res = 0;
@@ -795,13 +795,39 @@ char *getMethodPath(Args *buffs, char *methodToken)
     }
 }
 
+static char *getCleanCmd(Args *buffs, char *cmd)
+{
+    int size = strGetSize(cmd);
+    char *strOut = args_getBuff(buffs, size);
+    int iOut = 0;
+    char delChar = ' ';
+    int isInStr = 0;
+    for (int i = 0; i < strGetSize(cmd); i++)
+    {
+        if ('\'' == cmd[i])
+        {
+            isInStr = !isInStr;
+        }
+        if ((delChar == cmd[i]) && (!isInStr))
+        {
+            /* do not load char */
+            continue;
+        }
+        strOut[iOut] = cmd[i];
+        iOut++;
+    }
+    /* add \0 */
+    strOut[iOut] = 0;
+    return strOut;
+}
+
 Args *obj_runDirect(MimiObj *self, char *cmd)
 {
     /* the Args returned need to be deinit */
     Args *res = New_args(NULL);
     args_setInt(res, "errCode", 0);
     Args *buffs = New_strBuff();
-    char *cleanCmd = strsDeleteChar(buffs, cmd, ' ');
+    char *cleanCmd = getCleanCmd(buffs, cmd);
     char *methodToken = strsGetFirstToken(buffs, cleanCmd, '(');
     char *methodPath = getMethodPath(buffs, methodToken);
 
