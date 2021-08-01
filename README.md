@@ -14,14 +14,14 @@ mimiscript是一个用于资源有限的mcu的脚本绑定工具，提供非侵�
 ``` c
 #include "sysObj.h"
 
-/* 被绑定的方法 */
-void add(MimiObj *obj, Args *args) 
+/* 
+    被绑定的方法 
+    self 是对象指针，指向执行方法的对象
+    args 是参数列表，用于传入传出参数
+    所有被绑定的方法均使用此形参
+*/
+void add(MimiObj *self, Args *args) 
 {
-    /* 
-        obj 是对象指针，args是参数列表，
-        所有被绑定的方法均使用此形参 
-    */
-    
     /* 
         参数传递 
         从参数列表中取出输入参数val1和val2
