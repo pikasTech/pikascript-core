@@ -50,8 +50,8 @@ MimiObj *New_MimiObj_test(Args *args)
     MimiObj *self = New_MimiObj_sys(args);
     class_defineMethod(self, "hello(name:string, isShow:int)", hello);
     class_defineMethod(self, "hello2(name1:string, name2:string, name3:string, isShow:int)", hello2);
-    class_defineMethod(self, "testFloat(val1:float, val2:float, isShow:int):float", testFloat);
-    class_defineMethod(self, "add(val1:int, val2:int):int", add);
+    class_defineMethod(self, "testFloat(val1:float, val2:float, isShow:int)->float", testFloat);
+    class_defineMethod(self, "add(val1:int, val2:int)->int", add);
     return self;
 }
 
