@@ -3,8 +3,6 @@
 #include "dataMemory.h"
 #include "dataString.h"
 #include "dataStrs.h"
-#include "mimiFansList.h"
-#include "mimiMailbox.h"
 #include "sysObj.h"
 
 int deinitEachSubObj(Arg *argEach, Args *handleArgs)
