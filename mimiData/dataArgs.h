@@ -1,6 +1,7 @@
 #ifndef _dataArgs__H
 #define _dataArgs__H
 #include "dataLink.h"
+#include "dataString.h"
 #include "dataMemory.h"
 #include "dataArg.h"
 

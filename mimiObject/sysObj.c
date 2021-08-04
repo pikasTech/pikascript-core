@@ -1,62 +1,10 @@
 #include "MimiObj.h"
 #include "method.h"
 #include "sysObj.h"
+#include "baseObj.h"
 #include "dataMemory.h"
 #include "dataString.h"
 #include "dataStrs.h"
-
-static void *getClassPtr(MimiObj *classObj, char *classPath)
-{
-    char *ptrPath = classPath;
-    return obj_getPtr(classObj, ptrPath);
-}
-
-int sysObj_setObjbyClass(MimiObj *self, char *objName, char *classPath)
-{
-    /* class means subprocess init */
-    Args *buffs = New_strBuff();
-    MimiObj *classHost = obj_getObj(self, "classLoader", 0);
-    void *newFunPtr = getClassPtr(classHost, classPath);
-
-    /* class means subprocess init */
-    char *mataObjName = strsAppend(buffs, "[mate]", objName);
-    obj_setPtr(self, mataObjName, newFunPtr);
-    /* add void process Ptr, no inited */
-    args_setObjectWithClass(self->attributeList, objName, classPath, NULL);
-
-    args_deinit(buffs);
-    return 0;
-}
-
-static int storeClassInfo(MimiObj *self, Args *buffs, char *classPath, void *classPtr)
-{
-    int res = 0;
-    MimiObj *classHost = obj_getObj(self, classPath, 1);
-    if (NULL == classHost)
-    {
-        res = 1;
-        goto exit;
-    }
-    char *className = strsGetLastToken(buffs, classPath, '.');
-    char *classStoreName = className;
-    obj_setPtr(classHost, classStoreName, classPtr);
-    res = 0;
-    goto exit;
-exit:
-    return res;
-}
-
-int obj_newObj(MimiObj *self, char *objPath, char *classPath)
-{
-    MimiObj *classLoader = obj_getObj(self, "classLoader", 0);
-    void *NewObjPtr = getClassPtr(classLoader, classPath);
-    if (NULL == NewObjPtr)
-    {
-        return 1;
-    }
-    sysObj_setObjbyClass(self, objPath, classPath);
-    return 0;
-}
 
 static void newObjMethod(MimiObj *self, Args *args)
 {
@@ -69,19 +17,6 @@ static void newObjMethod(MimiObj *self, Args *args)
         method_sysOut(args, "[error] new: class not found .");
         method_setErrorCode(args, 1);
         return;
-    }
-}
-
-static void import(MimiObj *self, Args *args)
-{
-    char *classPath = args_getStr(args, "classPath");
-    void *classPtr = args_getPtr(args, "classPtr");
-    MimiObj *classObj = obj_getObj(self, "classLoader", 0);
-    int res = storeClassInfo(classObj, args, classPath, classPtr);
-    if (1 == res)
-    {
-        args_setInt(args, "errCode", 1);
-        method_sysOut(args, "[error] class host not found.");
     }
 }
 
@@ -245,37 +180,7 @@ static void print(MimiObj *obj, Args *args)
     method_sysOut(args, res);
 }
 
-int obj_import(MimiObj *self, char *className, void *classPtr)
-{
-    MimiObj *classLoader = obj_getObj(self, "classLoader", 0);
-    Args *buffs = New_args(NULL);
-    int res = storeClassInfo(classLoader, buffs, className, classPtr);
-    args_deinit(buffs);
-    return res;
-}
 
-void sysObj_importByCmd(MimiObj *self, char *className, void *classPtr)
-{
-    Args *buffs = New_strBuff();
-    {
-        char *cmd = args_getBuff(buffs, 256);
-        obj_setPtr(self, className, classPtr);
-        sprintf(cmd, "import('%s',%s)", className, className);
-        obj_run(self, cmd);
-    }
-    {
-        char *cmd = args_getBuff(buffs, 256);
-        sprintf(cmd, "del('%s')", className);
-        obj_run(self, cmd);
-        args_deinit(buffs);
-    }
-}
-
-void sysObj_importAndSetObj(MimiObj *sys, char *objName, void *NewObjFun)
-{
-    obj_import(sys, objName, NewObjFun);
-    obj_newObj(sys, objName, objName);
-}
 
 int loadExceptMethod(Arg *argEach, Args *handleArgs)
 {
@@ -296,7 +201,7 @@ int loadExceptMethod(Arg *argEach, Args *handleArgs)
 
 MimiObj *obj_loadWithoutMethod(MimiObj *thisClass)
 {
-    MimiObj *newObj = New_MimiObj(NULL);
+    MimiObj *newObj = New_TinyObj(NULL);
     Args *thisClassArgs = thisClass->attributeList;
     Args *newObjArgs = newObj->attributeList;
     args_foreach(thisClassArgs, loadExceptMethod, newObjArgs);
@@ -306,7 +211,7 @@ MimiObj *obj_loadWithoutMethod(MimiObj *thisClass)
 MimiObj *New_MimiObj_sys(Args *args)
 {
     /* derive */
-    MimiObj *self = New_MimiObj(args);
+    MimiObj *self = New_baseObj(args);
 
     /* attribute */
 
@@ -316,16 +221,7 @@ MimiObj *New_MimiObj_sys(Args *args)
     class_defineMethod(self, "ls(objPath:string)", list);
     class_defineMethod(self, "del(argPath:string)", del);
     class_defineMethod(self, "type(argPath:string)", type);
-    class_defineMethod(self, "import(classPath:string,classPtr:pointer)", import);
     class_defineMethod(self, "new(objPath:string,classPath:string)", newObjMethod);
-
-    /* object */
-    obj_setObjWithoutClass(self, "classLoader", New_MimiObj);
-    /* 
-        init classLoader now, in order to the 
-        find it after inited the self object.
-    */
-    obj_getObj(self, "classLoader", 0);
 
     /* override */
 

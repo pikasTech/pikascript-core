@@ -21,7 +21,7 @@ struct Class_process
     void (*_beforDinit)(MimiObj *self);
     void (*_updateHandle)(MimiObj *self);
 };
-MimiObj *New_MimiObj(Args *args);
+MimiObj *New_TinyObj(Args *args);
 #endif
 
 /* operation */

@@ -16,7 +16,7 @@ static void init_class(MimiObj *self, Args *args)
 
 MimiObj *New_MimiObj_class(Args *args)
 {
-    MimiObj *self = New_MimiObj(args);
+    MimiObj *self = New_TinyObj(args);
     init_class(self, args);
     return self;
 }
