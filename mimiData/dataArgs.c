@@ -101,7 +101,7 @@ int args_setStr(Args *self, char *name, char *strIn)
 {
     int errCode = 0;
     Arg *argNew = New_arg(NULL);
-    arg_setType(argNew, "string");
+    arg_setType(argNew, "str");
     arg_setStr(argNew, strIn);
     arg_setName(argNew, name);
     args_setArg(self, argNew);
@@ -312,7 +312,7 @@ void args_bindFloat(Args *self, char *name, float *floatPtr)
 
 void args_bindStr(Args *self, char *name, char **stringPtr)
 {
-    args_bind(self, "string", name, stringPtr);
+    args_bind(self, "str", name, stringPtr);
 }
 
 char *getPrintSring(Args *self, char *name, char *valString)
@@ -386,7 +386,7 @@ char *args_print(Args *self, char *name)
         goto exit;
     }
 
-    if (strEqu(type, "string"))
+    if (strEqu(type, "str"))
     {
         res = args_getStr(self, name);
         goto exit;
@@ -417,7 +417,7 @@ char *args_print(Args *self, char *name)
             res = getPrintStringFromFloat(self, name, val);
             goto exit;
         }
-        if (strEqu(typeWithoutBind, "string"))
+        if (strEqu(typeWithoutBind, "str"))
         {
             // the value of &string is equal to string it self
             char *string = args_getPtr(self, name);
@@ -463,7 +463,7 @@ int args_set(Args *self, char *name, char *valStr)
         err = 0;
         goto exit;
     }
-    if (strEqu("string", type))
+    if (strEqu("str", type))
     {
         args_setStr(self, name, valStr);
         // operation succeed
@@ -493,7 +493,7 @@ int args_set(Args *self, char *name, char *valStr)
             err = 0;
             goto exit;
         }
-        if (strEqu(typeWithoutBind, "string"))
+        if (strEqu(typeWithoutBind, "str"))
         {
             char *stringBinded = args_getPtr(self, name);
             /* size add 1 to copy the '\0' */

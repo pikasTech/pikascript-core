@@ -217,11 +217,11 @@ MimiObj *New_MimiObj_sys(Args *args)
 
     /* method */
     class_defineMethod(self, "print(val:any)", print);
-    class_defineMethod(self, "set(argPath:string, val:any)", set);
-    class_defineMethod(self, "ls(objPath:string)", list);
-    class_defineMethod(self, "del(argPath:string)", del);
-    class_defineMethod(self, "type(argPath:string)", type);
-    class_defineMethod(self, "new(objPath:string,classPath:string)", newObjMethod);
+    class_defineMethod(self, "set(argPath:str, val:any)", set);
+    class_defineMethod(self, "ls(objPath:str)", list);
+    class_defineMethod(self, "del(argPath:str)", del);
+    class_defineMethod(self, "type(argPath:str)", type);
+    class_defineMethod(self, "new(objPath:str,classPath:str)", newObjMethod);
 
     /* override */
 

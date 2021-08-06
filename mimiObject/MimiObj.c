@@ -578,7 +578,7 @@ static int loadArgByType(MimiObj *self,
         args_setArg(args, argCopied);
         return 0;
     }
-    if (strEqu(definedType, "string"))
+    if (strEqu(definedType, "str"))
     {
         /* solve the string type */
         char *directStr = getDirectStr(args, argPath);
@@ -775,7 +775,7 @@ static void transferReturnVal(MimiObj *self, char *returnType, char *returnName,
     {
         obj_setFloat(self, returnName, args_getFloat(args, "return"));
     }
-    if (strEqu("->string", returnType))
+    if (strEqu("->str", returnType))
     {
         obj_setStr(self, returnName, args_getStr(args, "return"));
     }
