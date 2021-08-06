@@ -17,7 +17,7 @@
 #endif
 
 #define DMEM_BLOCK_SIZE 32                                 //内存块大小为32字节
-#define DMEM_BLOCK_NUM 32 * 1024 * 10                      //内存块个数为2048个
+#define DMEM_BLOCK_NUM 2000                      //内存块个数为2048个
 #define DMEM_TOTAL_SIZE (DMEM_BLOCK_SIZE * DMEM_BLOCK_NUM) //内存总大小
 
 typedef enum
