@@ -1,4 +1,4 @@
-#include "sysObj.h"
+#include "SysObj.h"
 #include "dataMemory.h"
 
 static void init_FansInfo(MimiObj *self, Args *args)

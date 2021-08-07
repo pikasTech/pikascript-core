@@ -1,7 +1,8 @@
 #include "MimiObj.h"
+#include "TinyObj.h"
 #include "method.h"
-#include "sysObj.h"
-#include "baseObj.h"
+#include "SysObj.h"
+#include "BaseObj.h"
 #include "dataMemory.h"
 #include "dataString.h"
 #include "dataStrs.h"
@@ -211,7 +212,7 @@ MimiObj *obj_loadWithoutMethod(MimiObj *thisClass)
 MimiObj *New_MimiObj_sys(Args *args)
 {
     /* derive */
-    MimiObj *self = New_baseObj(args);
+    MimiObj *self = New_BaseObj(args);
 
     /* attribute */
 

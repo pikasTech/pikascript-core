@@ -3,7 +3,7 @@
 #include "dataMemory.h"
 #include "dataString.h"
 #include "dataStrs.h"
-#include "sysObj.h"
+#include "SysObj.h"
 
 int deinitEachSubObj(Arg *argEach, Args *handleArgs)
 {
@@ -49,10 +49,6 @@ int obj_update(MimiObj *self)
     }
     self->_updateHandle(self);
     return 0;
-}
-void _UpdateHandle(MimiObj *self)
-{
-    // override the handle function here
 }
 
 int obj_enable(MimiObj *self)
@@ -218,10 +214,6 @@ int obj_load(MimiObj *self, Args *args, char *name)
     return 0;
 }
 
-void _beforDinit(MimiObj *self)
-{
-    /* override in user code */
-}
 
 int obj_setObjWithoutClass(MimiObj *self, char *objName, void *newFun)
 {
@@ -1024,40 +1016,4 @@ void obj_run(MimiObj *self, char *cmd)
     {
         args_deinit(res);
     }
-}
-
-MimiObj *New_TinyObj(Args *args)
-{
-    /* request memory */
-    DMEM *mem = DynMemGet(sizeof(MimiObj));
-    if (NULL == mem)
-    {
-        printf("[error] memory is empty!");
-        while (1)
-            ;
-    }
-    MimiObj *self = (void *)(mem->addr);
-    self->mem = mem;
-
-    /* List */
-    self->attributeList = New_args(NULL);
-
-    /* override */
-    self->_updateHandle = _UpdateHandle;
-    self->_beforDinit = _beforDinit;
-
-    /* attribute */
-    obj_setPtr(self, "context", self);
-    obj_setStr(self, "name", "root");
-
-    /* load */
-    if (NULL != args)
-    {
-        obj_load(self, args, "name");
-        obj_load(self, args, "context");
-    }
-
-    /* hard attribute */
-    self->name = obj_getStr(self, "name");
-    return self;
 }

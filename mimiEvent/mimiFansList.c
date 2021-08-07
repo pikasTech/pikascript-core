@@ -1,5 +1,5 @@
-#include "sysObj.h"
-#include "baseObj.h"
+#include "SysObj.h"
+#include "BaseObj.h"
 #include "dataMemory.h"
 #include "mimiFansInfo.h"
 

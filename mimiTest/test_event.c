@@ -1,5 +1,5 @@
 #include "mimiEvent.h"
-#include "sysObj.h"
+#include "SysObj.h"
 
 void handle1(MimiObj *obj)
 {

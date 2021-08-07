@@ -1,5 +1,6 @@
 #include "MimiObj.h"
-#include "baseObj.h"
+#include "TinyObj.h"
+#include "BaseObj.h"
 #include "dataMemory.h"
 #include "dataString.h"
 #include "dataStrs.h"
@@ -104,7 +105,7 @@ static void init_baseObj(MimiObj *self, Args *args)
     /* override */
 }
 
-MimiObj *New_baseObj(Args *args)
+MimiObj *New_BaseObj(Args *args)
 {
     MimiObj *self = New_TinyObj(args);
     init_baseObj(self, args);

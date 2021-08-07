@@ -1,5 +1,6 @@
-#include "sysObj.h"
+#include "SysObj.h"
 #include "mimiCom.h"
+#include "TinyObj.h"
 
 void testFloat(MimiObj *obj, Args *args)
 {
