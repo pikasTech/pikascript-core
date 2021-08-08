@@ -28,7 +28,7 @@ static void type(MimiObj *obj, Args *args)
     if (NULL == argPath)
     {
         /* no input obj path, use current obj */
-        MimiObj *objHost = obj_getPtr(obj, "context");
+        MimiObj *objHost = obj_getPtr(obj, "__context");
         Arg *objArg = obj_getArg(objHost, obj->name);
         if (NULL == objArg)
         {

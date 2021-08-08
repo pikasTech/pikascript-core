@@ -31,7 +31,7 @@ void hello2(MimiObj *obj, Args *args)
 
 void hello(MimiObj *obj, Args *args)
 {
-    char *name = args_getStr(args, "name");
+    char *name = args_getStr(args, "__name");
     int isShow = args_getInt(args, "isShow");
     if (isShow)
     {

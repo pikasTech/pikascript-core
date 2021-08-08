@@ -31,17 +31,17 @@ MimiObj *New_TinyObj(Args *args)
     self->_beforDinit = _beforDinit;
 
     /* attribute */
-    obj_setPtr(self, "context", self);
-    obj_setStr(self, "name", "root");
+    obj_setPtr(self, "__context", self);
+    obj_setStr(self, "__name", "root");
 
     /* load */
     if (NULL != args)
     {
-        obj_load(self, args, "name");
-        obj_load(self, args, "context");
+        obj_load(self, args, "__name");
+        obj_load(self, args, "__context");
     }
 
     /* hard attribute */
-    self->name = obj_getStr(self, "name");
+    self->name = obj_getStr(self, "__name");
     return self;
 }

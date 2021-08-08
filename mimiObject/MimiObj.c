@@ -230,7 +230,7 @@ int obj_setObjWithoutClass(MimiObj *self, char *objName, void *newFun)
 int obj_addOther(MimiObj *self, char *subObjectName, void *new_ObjectFun)
 {
     Args *initArgs = New_args(NULL);
-    args_setPtr(initArgs, "context", self);
+    args_setPtr(initArgs, "__context", self);
     void *(*new_Object)(Args * initArgs) = (void *(*)(Args *))new_ObjectFun;
     void *subObject = new_Object(initArgs);
     obj_setPtr(self, subObjectName, subObject);
@@ -328,8 +328,8 @@ MimiObj *removeMethodInfo(MimiObj *thisClass)
 MimiObj *obj_getClassObjByNewFun(MimiObj *context, char *name, void *(*newClassFun)(Args *initArgs))
 {
     Args *initArgs = New_args(NULL);
-    args_setPtr(initArgs, "context", context);
-    args_setStr(initArgs, "name", name);
+    args_setPtr(initArgs, "__context", context);
+    args_setStr(initArgs, "__name", name);
     MimiObj *thisClass = newClassFun(initArgs);
     obj_setPtr(thisClass, "classPtr", newClassFun);
     args_deinit(initArgs);
