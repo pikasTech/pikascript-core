@@ -64,7 +64,7 @@ static void init_Event(MimiObj *self, Args *args)
 
 MimiObj *New_MimiObj_Event(Args *args)
 {
-    MimiObj *self = New_MimiObj_sys(args);
+    MimiObj *self = New_SysObj(args);
     init_Event(self, args);
     return self;
 }

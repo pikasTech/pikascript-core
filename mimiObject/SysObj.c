@@ -209,7 +209,7 @@ MimiObj *obj_loadWithoutMethod(MimiObj *thisClass)
     return newObj;
 }
 
-MimiObj *New_MimiObj_sys(Args *args)
+MimiObj *New_SysObj(Args *args)
 {
     /* derive */
     MimiObj *self = New_BaseObj(args);

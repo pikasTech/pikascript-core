@@ -14,7 +14,7 @@ static void init_FansInfo(MimiObj *self, Args *args)
 
 MimiObj *New_MimiObj_FansInfo(Args *args)
 {
-    MimiObj *self = New_MimiObj_sys(args);
+    MimiObj *self = New_SysObj(args);
     init_FansInfo(self, args);
     return self;
 }

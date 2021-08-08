@@ -18,7 +18,7 @@ static void init_FansList(MimiObj *self, Args *args)
 
 MimiObj *New_MimiObj_FansList(Args *args)
 {
-    MimiObj *self = New_MimiObj_sys(args);
+    MimiObj *self = New_SysObj(args);
     init_FansList(self, args);
     return self;
 }

@@ -48,7 +48,7 @@ void add(MimiObj *obj, Args *args)
 
 MimiObj *New_MimiObj_test(Args *args)
 {
-    MimiObj *self = New_MimiObj_sys(args);
+    MimiObj *self = New_SysObj(args);
     class_defineMethod(self, "hello(name:str, isShow:int)", hello);
     class_defineMethod(self, "hello2(name1:str, name2:str, name3:str, isShow:int)", hello2);
     class_defineMethod(self, "testFloat(val1:float, val2:float, isShow:int)->float", testFloat);
@@ -61,7 +61,7 @@ int TEST_MimiObj(int isShow)
     {
         Args *args = New_args(NULL);
         args_setInt(args, "isEnable", 0);
-        MimiObj *process = New_MimiObj_sys(args);
+        MimiObj *process = New_SysObj(args);
         if (isShow)
         {
             printf("the isEnable = %d\r\n", (int)args_getInt(process->attributeList, "isEnable"));
@@ -70,7 +70,7 @@ int TEST_MimiObj(int isShow)
         obj_deinit(process);
     }
     {
-        MimiObj *process = newRootObj("sys",New_MimiObj_sys);
+        MimiObj *process = newRootObj("sys",New_SysObj);
         float floatTest = 12.231;
         obj_bindFloat(process, "testFloatBind", &floatTest);
         if (isShow)
@@ -158,7 +158,7 @@ int TEST_MimiObj(int isShow)
         obj_deinit(obj);
     }
     {
-        MimiObj *sys = newRootObj("sys",New_MimiObj_sys);
+        MimiObj *sys = newRootObj("sys",New_SysObj);
         int a = 0;
         obj_bind(sys, "int", "a", &a);
         obj_run(sys, "set('a', 1)");
@@ -188,7 +188,7 @@ int TEST_MimiObj(int isShow)
     //     }
     // }
     {
-        MimiObj *sys = newRootObj("sys",New_MimiObj_sys);
+        MimiObj *sys = newRootObj("sys",New_SysObj);
         obj_run(sys, "set('a', 1)");
         obj_run(sys, "del('a')");
         obj_deinit(sys);
@@ -211,7 +211,7 @@ int TEST_MimiObj(int isShow)
     //     }
     // }
     {
-        MimiObj *sys = newRootObj("sys",New_MimiObj_sys);
+        MimiObj *sys = newRootObj("sys",New_SysObj);
         obj_run(sys, "ls()");
         obj_setPtr(sys, "baseClass", New_TinyObj);
         obj_run(sys, "ls()");
