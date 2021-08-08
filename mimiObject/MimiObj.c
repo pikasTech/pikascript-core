@@ -331,7 +331,7 @@ MimiObj *obj_getClassObjByNewFun(MimiObj *context, char *name, void *(*newClassF
     args_setPtr(initArgs, "__context", context);
     args_setStr(initArgs, "__name", name);
     MimiObj *thisClass = newClassFun(initArgs);
-    obj_setPtr(thisClass, "classPtr", newClassFun);
+    obj_setPtr(thisClass, "__classPtr", newClassFun);
     args_deinit(initArgs);
     return thisClass;
 }
@@ -346,7 +346,7 @@ char *obj_getClassPath(MimiObj *objHost, Args *buffs, char *objName)
 
 void *getNewObjFunByClass(MimiObj *obj, char *classPath)
 {
-    MimiObj *classHost = args_getPtr(obj->attributeList, "classLoader");
+    MimiObj *classHost = args_getPtr(obj->attributeList, "__classLoader");
     if (NULL == classHost)
     {
         return NULL;
@@ -374,11 +374,11 @@ MimiObj *newRootObj(char *name, void *newObjFun)
 
 static void removeClassLoader(MimiObj *obj)
 {
-    MimiObj *classObj = args_getPtr(obj->attributeList, "classLoader");
+    MimiObj *classObj = args_getPtr(obj->attributeList, "__classLoader");
     if (NULL != classObj)
     {
         obj_deinit(classObj);
-        args_removeArg(obj->attributeList, "classLoader");
+        args_removeArg(obj->attributeList, "__classLoader");
     }
 }
 
@@ -397,7 +397,7 @@ MimiObj *initObj(MimiObj *obj, char *name)
     MimiObj *newObj = removeMethodInfo(thisClass);
     /* delete [mate]<objName> */
     obj_removeArg(obj, strsAppend(buffs, "[mate]", name));
-    /* delete "classLoader" object */
+    /* delete "__classLoader" object */
     removeClassLoader(newObj);
 
     char *type = args_getType(obj->attributeList, name);
@@ -832,7 +832,7 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
     }
     char *methodName = strsGetLastToken(buffs, methodPath, '.');
 
-    void *classPtr = obj_getPtr(methodHostObj, "classPtr");
+    void *classPtr = obj_getPtr(methodHostObj, "__classPtr");
     char *methodHostClassName = strsAppend(buffs, "classObj-", methodHostObj->name);
     methodHostClass = obj_getClassObjByNewFun(methodHostObj, methodHostClassName, classPtr);
     /* get method Ptr */

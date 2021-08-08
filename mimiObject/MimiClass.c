@@ -1,4 +1,5 @@
 #include "MimiObj.h"
+#include "TinyObj.h"
 #include "dataMemory.h"
 #include "dataStrs.h"
 #include "dataString.h"
