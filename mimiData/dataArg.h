@@ -15,19 +15,19 @@ struct Class_arg
 };
 
 void arg_setName(Arg *self, char *name);
-void arg_setContant(Arg *self, uint8_t *contant, int32_t size);
-void arg_newContant(Arg *self, int32_t size);
+void arg_setContant(Arg *self, uint8_t *contant, uint32_t size);
+void arg_newContant(Arg *self, uint32_t size);
 void arg_setType(Arg *self, char *type);
 char *arg_getName(Arg *self);
 char *arg_getType(Arg *self);
 char *arg_getContant(Arg *self);
 
-void arg_setInt(Arg *self, long long val);
+void arg_setInt(Arg *self, int64_t val);
 void arg_setFloat(Arg *self, float val);
 void arg_setPtr(Arg *self, void *pointer);
 void arg_setStr(Arg *self, char *string);
 
-long long arg_getInt(Arg *self);
+int64_t arg_getInt(Arg *self);
 float arg_getFloat(Arg *self);
 void *arg_getPtr(Arg *self);
 char *arg_getStr(Arg *self);
