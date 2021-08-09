@@ -7,7 +7,7 @@ void testFloat(MimiObj *obj, Args *args)
 {
     float val1 = args_getFloat(args, "val1");
     float val2 = args_getFloat(args, "val2");
-    int isShow = args_getInt(args, "isShow");
+    int32_t isShow = args_getInt(args, "isShow");
     if (isShow)
     {
         printf("the float val1 is: %f\r\n", val1);
@@ -22,7 +22,7 @@ void hello2(MimiObj *obj, Args *args)
     char *name2 = args_getStr(args, "name2");
     char *name3 = args_getStr(args, "name3");
     char *myName = obj->name;
-    int isShow = args_getInt(args, "isShow");
+    int32_t isShow = args_getInt(args, "isShow");
     if (isShow)
     {
         printf("hello, %s, %s and %s!\r\n", name1, name2, name3);
@@ -33,7 +33,7 @@ void hello2(MimiObj *obj, Args *args)
 void hello(MimiObj *obj, Args *args)
 {
     char *name = args_getStr(args, "__name");
-    int isShow = args_getInt(args, "isShow");
+    int32_t isShow = args_getInt(args, "isShow");
     if (isShow)
     {
         printf("hello, %s!\r\n", name);
@@ -42,8 +42,8 @@ void hello(MimiObj *obj, Args *args)
 
 void add(MimiObj *obj, Args *args)
 {
-    int val1 = args_getInt(args, "val1");
-    int val2 = args_getInt(args, "val2");
+    int32_t val1 = args_getInt(args, "val1");
+    int32_t val2 = args_getInt(args, "val2");
     method_returnInt(args, val1 + val2);
 }
 
@@ -115,7 +115,7 @@ int TEST_MimiObj(int isShow)
     {
         MimiObj *obj = newRootObj("test", New_MimiObj_test);
         obj_run(obj, "res = add(val1 = 1, val2 = 2)");
-        int res = obj_getInt(obj, "res");
+        int32_t res = obj_getInt(obj, "res");
         if (isShow)
         {
             printf("the res is %d.\r\n", res);
@@ -129,7 +129,7 @@ int TEST_MimiObj(int isShow)
     {
         MimiObj *obj = newRootObj("test", New_MimiObj_test);
         obj_run(obj, "res = add(1, 2)");
-        int res = obj_getInt(obj, "res");
+        int32_t res = obj_getInt(obj, "res");
         if (isShow)
         {
             printf("the res is %d.\r\n", res);
@@ -142,7 +142,7 @@ int TEST_MimiObj(int isShow)
     }
     {
         MimiObj *sys = newRootObj("sys",New_SysObj);
-        int a = 0;
+        int32_t a = 0;
         obj_bind(sys, "int", "a", &a);
         obj_run(sys, "set('a', 1)");
         obj_deinit(sys);

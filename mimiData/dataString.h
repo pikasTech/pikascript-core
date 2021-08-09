@@ -1,12 +1,13 @@
 #ifndef __MY_TEST_TOOLS_H 
 #define __MY_TEST_TOOLS_H 
+#include <stdint.h>
 
 /* size */
-unsigned short int strGetSize(char *pData);
+uint32_t strGetSize(char *pData);
 /* append */
 char *strAppend(char *strOut, char *pData);
 char *strAppend_unlimited(char *strOut, char *pData);
-char *strAppendWithSize(char *strOut, char *pData, int Size);
+char *strAppendWithSize(char *strOut, char *pData,int32_t Size);
 /* cut */
 char *strCut(char *strOut, char *strIn, char startSign, char endSign);
 /* assert */

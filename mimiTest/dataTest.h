@@ -8,8 +8,8 @@ struct Class_dataTest
     /* attribute */
     DMEM *mem;
     void *context;
-    int a;
-    int b;
+    int32_t a;
+    int32_t b;
 
     /* operation */
     void (*deinit)(dataTest_t *self);

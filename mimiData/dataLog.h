@@ -9,7 +9,7 @@ typedef struct dataLog
 
    DMEM *log_mem;
    char *log;
-   int log_size;
+  int32_t log_size;
    void (*print)(struct dataLog *loger, char *str);
    void (*deinit)(struct dataLog *loger);
 } Loger;

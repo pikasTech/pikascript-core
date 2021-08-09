@@ -46,7 +46,7 @@ Arg *obj_getArg(MimiObj *self, char *argPath);
 int obj_bind(MimiObj *self, char *type, char *name, void *pointer);
 int obj_set(MimiObj *self, char *name, char *valStr);
 
-int obj_bindInt(MimiObj *self, char *name, int *valPtr);
+int obj_bindInt(MimiObj *self, char *name, int32_t *valPtr);
 int obj_bindFloat(MimiObj *self, char *name, float *valPtr);
 int obj_bindString(MimiObj *self, char *name, char **valPtr);
 
@@ -59,7 +59,7 @@ int obj_load(MimiObj *self, Args *args, char *name);
 int obj_addOther(MimiObj *self, char *subObjectName, void *new_projcetFun);
 int obj_setObjWithoutClass(MimiObj *self, char *subObjectName, void *new_projcetFun);
 MimiObj *obj_getObjDirect(MimiObj *self, char *name);
-MimiObj *obj_getObj(MimiObj *self, char *processPathectory, int deepth);
+MimiObj *obj_getObj(MimiObj *self, char *processPathectory, int32_t deepth);
 
 // subProcess
 int obj_freeObj(MimiObj *self, char *subObjectName);

@@ -19,7 +19,7 @@ char *getDefaultName(Args *self, char *strOut)
     return strOut;
 }
 
-char *args_getStrByIndex(Args *self, int index)
+char *args_getStrByIndex(Args *self,int32_t index)
 {
     Arg *arg = args_getArgByIndex(self, index);
     if (NULL == arg)
@@ -57,7 +57,7 @@ int args_setFloat(Args *self, char *name, float argFloat)
     return 0;
 }
 
-float args_getFloatByIndex(Args *self, int index)
+float args_getFloatByIndex(Args *self,int32_t index)
 {
     float val = 0;
     Arg *arg = args_getArgByIndex(self, index);
@@ -65,7 +65,7 @@ float args_getFloatByIndex(Args *self, int index)
     return val;
 }
 
-void *args_getPointerByIndex(Args *self, int index)
+void *args_getPointerByIndex(Args *self,int32_t index)
 {
     void *pointer = NULL;
     Arg *arg = args_getArgByIndex(self, index);
@@ -88,7 +88,7 @@ void *args_getPtr(Args *self, char *name)
 
 int args_setPtr(Args *self, char *name, void *argPointer)
 {
-    int errCode = 0;
+   int32_t errCode = 0;
     Arg *argNew = New_arg(NULL);
     arg_setType(argNew, "pointer");
     arg_setName(argNew, name);
@@ -99,7 +99,7 @@ int args_setPtr(Args *self, char *name, void *argPointer)
 
 int args_setStr(Args *self, char *name, char *strIn)
 {
-    int errCode = 0;
+   int32_t errCode = 0;
     Arg *argNew = New_arg(NULL);
     arg_setType(argNew, "str");
     arg_setStr(argNew, strIn);
@@ -115,7 +115,7 @@ void setArgDirect(Args *self, Arg *arg)
                  (void (*)(void *))arg_deinit);
 }
 
-char *args_getBuff(Args *self, int size)
+char *args_getBuff(Args *self,int32_t size)
 {
     Arg *argNew = New_arg(NULL);
     arg_newContant(argNew, size);
@@ -147,7 +147,7 @@ int args_setInt(Args *self, char *name, long long int64In)
     return 0;
 }
 
-long long args_getIntByIndex(Args *self, int index)
+long long args_getIntByIndex(Args *self,int32_t index)
 {
     Arg *arg = args_getArgByIndex(self, index);
     if (NULL == arg)
@@ -183,7 +183,7 @@ char *args_getType(Args *self, char *name)
     return (char *)arg->typeDynMem->addr;
 }
 
-Arg *args_getArgByIndex(Args *self, int index)
+Arg *args_getArgByIndex(Args *self,int32_t index)
 {
     Arg *arg;
     if (index == -1)
@@ -300,7 +300,7 @@ void args_bind(Args *self, char *type, char *name, void *pointer)
     return;
 }
 
-void args_bindInt(Args *self, char *name, int *intPtr)
+void args_bindInt(Args *self, char *name,int32_t *intPtr)
 {
     args_bind(self, "int", name, intPtr);
 }
@@ -326,7 +326,7 @@ char *getPrintSring(Args *self, char *name, char *valString)
     return args_getStr(self, printName);
 }
 
-char *getPrintStringFromInt(Args *self, char *name, int val)
+char *getPrintStringFromInt(Args *self, char *name,int32_t val)
 {
     Args *buffs = New_strBuff();
     char *res = NULL;
@@ -374,7 +374,7 @@ char *args_print(Args *self, char *name)
 
     if (strEqu(type, "int"))
     {
-        int val = args_getInt(self, name);
+       int32_t val = args_getInt(self, name);
         res = getPrintStringFromInt(self, name, val);
         goto exit;
     }
@@ -405,8 +405,8 @@ char *args_print(Args *self, char *name)
         char *typeWithoutBind = strsRemovePrefix(buffs, type, bindTypePrefix);
         if (strEqu(typeWithoutBind, "int"))
         {
-            int *valPtr = args_getPtr(self, name);
-            int val = *valPtr;
+           int32_t *valPtr = args_getPtr(self, name);
+           int32_t val = *valPtr;
             res = getPrintStringFromInt(self, name, val);
             goto exit;
         }
@@ -438,7 +438,7 @@ int args_set(Args *self, char *name, char *valStr)
 {
     char *type = args_getType(self, name);
     Args *buffs = New_strBuff();
-    int err = 0;
+   int32_t err = 0;
 
     if (NULL == type)
     {
@@ -449,7 +449,7 @@ int args_set(Args *self, char *name, char *valStr)
 
     if (strEqu("int", type))
     {
-        int val = atoi(valStr);
+       int32_t val = atoi(valStr);
         args_setInt(self, name, val);
         // operation succeed
         err = 0;
@@ -477,8 +477,8 @@ int args_set(Args *self, char *name, char *valStr)
         char *typeWithoutBind = strsRemovePrefix(buffs, type, bindTypePrefix);
         if (strEqu(typeWithoutBind, "int"))
         {
-            int *valPtr = args_getPtr(self, name);
-            int val = atoi(valStr);
+           int32_t *valPtr = args_getPtr(self, name);
+           int32_t val = atoi(valStr);
             *valPtr = val;
             // operation succeed
             err = 0;
@@ -530,7 +530,7 @@ int args_setObjectWithClass(Args *self, char *objName, char *className, void *ob
     return 0;
 }
 
-int args_foreach(Args *self, int (*eachHandle)(Arg *argEach, Args *handleArgs), Args *handleArgs)
+int args_foreach(Args *self,int32_t (*eachHandle)(Arg *argEach, Args *handleArgs), Args *handleArgs)
 {
     LinkNode *nodeNow = self->argLinkList->firstNode;
     while (1)

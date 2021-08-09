@@ -1,9 +1,10 @@
 #include "dataString.h"
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
-char *strAppendWithSize_unlimited(char *strOut, char *pData, int Size)
+char *strAppendWithSize_unlimited(char *strOut, char *pData, int32_t Size)
 {
 	int strOut_i = strGetSize(strOut);
 	for (int i = 0; i < Size; i++)
@@ -74,9 +75,9 @@ char *strDeleteEnter(char *str)
 	return strDeleteChar(str, str, '\n');
 }
 
-char *strAppendWithSize(char *strOut, char *pData, int Size)
+char *strAppendWithSize(char *strOut, char *pData,int32_t Size)
 {
-	unsigned short int strOut_i = strGetSize(strOut);
+	int32_t strOut_i = strGetSize(strOut);
 	for (int i = 0; i < Size; i++)
 	{
 		strOut[strOut_i + i] = pData[i];
@@ -106,9 +107,9 @@ int strGetTokenNum(char *strIn, char sign)
 	return strCountSign(strIn, sign) + 1;
 }
 
-unsigned short int strGetSize(char *pData)
+uint32_t strGetSize(char *pData)
 {
-	unsigned short int Size = 0;
+	uint32_t Size = 0;
 	if (NULL == pData)
 	{
 		return 0;
@@ -122,7 +123,7 @@ unsigned short int strGetSize(char *pData)
 
 char *strAppend_unlimited(char *strOut, char *pData)
 {
-	unsigned short int Size = 0;
+	uint32_t Size = 0;
 	Size = strGetSize(pData);
 	return strAppendWithSize_unlimited(strOut, pData, Size);
 }
@@ -234,7 +235,7 @@ int strGetToken(char *string, char **argv, char sign)
 
 char *strAppend(char *strOut, char *pData)
 {
-	unsigned short int Size = 0;
+	uint32_t Size = 0;
 	Size = strGetSize(pData);
 	return strAppendWithSize(strOut, pData, Size);
 }
@@ -246,8 +247,8 @@ int strIsStartWith(char *str, char *strStart)
 		/* input is null */
 		return 0;
 	}
-	unsigned short int size = strGetSize(strStart);
-	unsigned short int CMDName_get = 1;
+	uint32_t size = strGetSize(strStart);
+	uint32_t CMDName_get = 1;
 	for (int i = 0; i < size; i++)
 	{
 		if (str[i] != strStart[i])

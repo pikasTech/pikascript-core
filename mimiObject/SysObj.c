@@ -12,7 +12,7 @@ static void newObjMethod(MimiObj *self, Args *args)
     /* get arg */
     char *objPath = args_getStr(args, "objPath");
     char *classPath = args_getStr(args, "classPath");
-    int res = obj_newObj(self, objPath, classPath);
+    int32_t res = obj_newObj(self, objPath, classPath);
     if (1 == res)
     {
         method_sysOut(args, "[error] new: class not found .");
@@ -53,7 +53,7 @@ static void del(MimiObj *obj, Args *args)
 {
     args_setInt(args, "errCode", 0);
     char *argPath = args_getStr(args, "argPath");
-    int res = obj_removeArg(obj, argPath);
+    int32_t res = obj_removeArg(obj, argPath);
     if (1 == res)
     {
         method_sysOut(args, "[error] del: object no found.");
@@ -76,7 +76,7 @@ static void set(MimiObj *obj, Args *args)
     {
         /* update arg */
         char *valStr = args_print(args, "val");
-        int res = obj_set(obj, argPath, valStr);
+        int32_t res = obj_set(obj, argPath, valStr);
         if (1 == res)
         {
             method_sysOut(args, "[error] set: arg no found.");
@@ -102,7 +102,7 @@ static void set(MimiObj *obj, Args *args)
     Arg *newArg = arg_copy(val);
     char *argName = strsGetLastToken(args, argPath, '.');
     arg_setName(newArg, argName);
-    int res = obj_setArg(obj, argPath, newArg);
+    int32_t res = obj_setArg(obj, argPath, newArg);
     if (res == 1)
     {
         method_sysOut(args, "[error] set: object not found.");
@@ -112,7 +112,7 @@ static void set(MimiObj *obj, Args *args)
     return;
 }
 
-static int listEachArg(Arg *argEach, Args *handleArgs)
+static int32_t listEachArg(Arg *argEach, Args *handleArgs)
 {
     Args *buffs = handleArgs;
     if (NULL == handleArgs)

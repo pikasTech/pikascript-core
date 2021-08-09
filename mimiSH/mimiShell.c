@@ -9,7 +9,7 @@
 // used to config the cmdMap of sh
 
 // start_i is used to skip severl chars in the frount of CMD
-static int strGetArgs_With_Start_i(char *CMD, char **argv, int start_i)
+static int32_t strGetArgs_With_Start_i(char *CMD, char **argv, int32_t start_i)
 {
 	int argc = 0;
 	int i = 0;
@@ -48,7 +48,7 @@ int strGetArgs(char *CMD, char **argv)
 static void *_detector_shellLuancher(Shell *self,
 									 void *(*fun_d)(Shell *, char *, void *(fun)(Shell *, int, char **)),
 									 char *CMD,
-									 void *(fun)(Shell *, int argc, char **argv))
+									 void *(fun)(Shell *, int32_t argc, char **argv))
 {
 	DMEM *memOut;
 	DMEM *memAdd;
@@ -96,7 +96,7 @@ Arg *shell_cmd(Shell *self, char *cmd)
 void shell_addMap(Shell *self,
 				  char *name,
 				  void *(*fun)(Shell *shell,
-							   int argc,
+							   int32_t argc,
 							   char **argv))
 {
 	args_setPtr(self->mapList,

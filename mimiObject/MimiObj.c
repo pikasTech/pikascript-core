@@ -260,7 +260,7 @@ char *obj_print(MimiObj *self, char *name)
     return args_print(self->attributeList, name);
 }
 
-int obj_bindInt(MimiObj *self, char *name, int *valPtr)
+int obj_bindInt(MimiObj *self, char *name, int32_t *valPtr)
 {
     args_bindInt(self->attributeList, name, valPtr);
     return 0;
@@ -288,7 +288,7 @@ int obj_set(MimiObj *self, char *argPath, char *valStr)
     }
     Args *buffs = New_strBuff();
     char *argName = strsGetLastToken(buffs, argPath, '.');
-    int res = args_set(obj->attributeList, argName, valStr);
+    int32_t res = args_set(obj->attributeList, argName, valStr);
     args_deinit(buffs);
     if (res == 1)
     {
@@ -434,11 +434,11 @@ MimiObj *obj_getObjDirect(MimiObj *self, char *name)
     return obj_getPtr(self, name);
 }
 
-MimiObj *obj_getObj(MimiObj *self, char *objPath, int keepDeepth)
+MimiObj *obj_getObj(MimiObj *self, char *objPath, int32_t keepDeepth)
 {
     Args *buffs = New_strBuff();
     char *objPathBuff = strsCopy(buffs, objPath);
-    int tokenNum = strGetTokenNum(objPath, '.');
+    int32_t tokenNum = strGetTokenNum(objPath, '.');
     MimiObj *obj = self;
     for (int i = 0; i < tokenNum - keepDeepth; i++)
     {
@@ -487,8 +487,8 @@ int class_defineMethod(MimiObj *self,
                        char *declearation,
                        void (*methodPtr)(MimiObj *self, Args *args))
 {
-    int size = strGetSize(declearation);
-    int res = 0;
+    int32_t size = strGetSize(declearation);
+    int32_t res = 0;
     Args *buffs = New_strBuff();
     char *cleanDeclearation = strDeleteChar(args_getBuff(buffs, size), declearation, ' ');
     char *methodPath = strGetFirstToken(args_getBuff(buffs, size), cleanDeclearation, '(');
@@ -526,7 +526,7 @@ char *getDirectStr(Args *buffs, char *argPath)
     return NULL;
 }
 
-static int loadArgByType(MimiObj *self,
+static int32_t loadArgByType(MimiObj *self,
                          char *definedName,
                          char *definedType,
                          char *argPath,
@@ -594,7 +594,7 @@ static int loadArgByType(MimiObj *self,
     }
     if (strEqu(definedType, "int"))
     {
-        /* solve the int type */
+        /* solve the int32_t type */
         args_setInt(args, definedName, 0);
         if ((argPath[0] >= '0') && (argPath[0] <= '9'))
         {
@@ -609,7 +609,7 @@ static int loadArgByType(MimiObj *self,
             /* can not get reference */
             return 3;
         }
-        int referenceVal = obj_getInt(self, argPath);
+        int32_t referenceVal = obj_getInt(self, argPath);
         args_setInt(args, definedName, referenceVal);
         /* succeed */
         return 0;
@@ -787,11 +787,11 @@ char *getMethodPath(Args *buffs, char *methodToken)
 
 static char *getCleanCmd(Args *buffs, char *cmd)
 {
-    int size = strGetSize(cmd);
+    int32_t size = strGetSize(cmd);
     char *strOut = args_getBuff(buffs, size);
-    int iOut = 0;
+    int32_t iOut = 0;
     char delChar = ' ';
-    int isInStr = 0;
+    int32_t isInStr = 0;
     for (int i = 0; i < strGetSize(cmd); i++)
     {
         if ('\'' == cmd[i])
@@ -914,7 +914,7 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
     {
         goto exit;
     }
-    int errCode = args_getInt(args, "errCode");
+    int32_t errCode = args_getInt(args, "errCode");
     if (0 != errCode)
     {
         /* method error */
@@ -942,7 +942,7 @@ int obj_removeArg(MimiObj *self, char *argPath)
         obj_deinit(obj);
     }
     Args *buffs = New_strBuff();
-    int err = 0;
+    int32_t err = 0;
     if (NULL == objHost)
     {
         /* [error] object no found */
@@ -950,7 +950,7 @@ int obj_removeArg(MimiObj *self, char *argPath)
         goto exit;
     }
     char *argName = strsGetLastToken(buffs, argPath, '.');
-    int res = args_removeArg(objHost->attributeList, argName);
+    int32_t res = args_removeArg(objHost->attributeList, argName);
     if (1 == res)
     {
         /*[error] not found arg*/
@@ -967,7 +967,7 @@ int obj_isArgExist(MimiObj *self, char *argPath)
 {
     MimiObj *obj = obj_getObj(self, argPath, 1);
     Args *buffs = New_strBuff();
-    int res = 0;
+    int32_t res = 0;
     if (NULL == obj)
     {
         /* [error] object no found */

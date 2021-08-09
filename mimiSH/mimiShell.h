@@ -22,12 +22,12 @@ struct Class_mimiShell2
     void *(*_detector)(Shell *self,
                        void *(*fun_d)(Shell *self, char *, void *(fun)(Shell *self, int, char **)),
                        char *CMD,
-                       void *(fun)(Shell *self, int argc, char **argv));
+                       void *(fun)(Shell *self, int32_t argc, char **argv));
 };
 
 /* operation */
 Arg *shell_cmd(Shell *self, char *cmd);
-void shell_addMap(Shell *self, char *, void *(*)(Shell *shell, int argc, char **argv));
+void shell_addMap(Shell *self, char *, void *(*)(Shell *shell, int32_t argc, char **argv));
 void shell_deinit(Shell *self);
 
 Shell *New_shell(Args *initArgs);

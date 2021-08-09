@@ -43,9 +43,9 @@ int sysObj_setObjbyClass(MimiObj *self, char *objName, char *classPath)
     return 0;
 }
 
-static int storeClassInfo(MimiObj *self, Args *buffs, char *classPath, void *classPtr)
+static int32_t storeClassInfo(MimiObj *self, Args *buffs, char *classPath, void *classPtr)
 {
-    int res = 0;
+    int32_t res = 0;
     MimiObj *classHost = obj_getObj(self, classPath, 1);
     if (NULL == classHost)
     {
@@ -65,7 +65,7 @@ int obj_import(MimiObj *self, char *className, void *classPtr)
 {
     MimiObj *classLoader = obj_getObj(self, "__classLoader", 0);
     Args *buffs = New_args(NULL);
-    int res = storeClassInfo(classLoader, buffs, className, classPtr);
+    int32_t res = storeClassInfo(classLoader, buffs, className, classPtr);
     args_deinit(buffs);
     return res;
 }

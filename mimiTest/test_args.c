@@ -2,7 +2,7 @@
 #include "dataString.h"
 int TEST_args2(int isShow)
 {
-    int err = 0;
+    int32_t err = 0;
     {
         Args *args = New_args(NULL);
         float floatOut = 0;
@@ -91,7 +91,7 @@ int TEST_args2(int isShow)
         args_deinit(args2);
     }
     {
-        int testint = 12333;
+        int32_t testint = 12333;
         Args *args = New_args(NULL);
         args_setInt(args, "testint", testint);
         if (isShow)
@@ -101,7 +101,7 @@ int TEST_args2(int isShow)
         args_deinit(args);
     }
     {
-        int testInt = 124;
+        int32_t testInt = 124;
         Args *args = New_args(NULL);
         args_bind(args, "int", "testInt", &testInt);
         char *type = args_getType(args, "testInt");
@@ -182,7 +182,7 @@ int TEST_args2(int isShow)
         char *printOutBefore = args_print(args, "testInt");
         if (isShow)
         {
-            printf("test set int before: %s\r\n", printOutBefore);
+            printf("test set int32_t before: %s\r\n", printOutBefore);
         }
         if (!strEqu(printOutBefore, "1"))
         {
@@ -192,7 +192,7 @@ int TEST_args2(int isShow)
         char *printOutAfter = args_print(args, "testInt");
         if (isShow)
         {
-            printf("test set int after: %s\r\n", printOutAfter);
+            printf("test set int32_t after: %s\r\n", printOutAfter);
         }
         if (!strEqu(printOutAfter, "4"))
         {

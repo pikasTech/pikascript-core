@@ -79,7 +79,7 @@ void link_removeNode(Link *self, void *contant)
 int link_getSize(Link *self)
 {
     LinkNode *NowNode;
-    int size = 0;
+   int32_t size = 0;
     NowNode = self->firstNode;
     while (NULL != NowNode)
     {
