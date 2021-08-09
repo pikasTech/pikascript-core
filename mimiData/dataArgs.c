@@ -26,7 +26,7 @@ char *args_getStrByIndex(Args *self, int index)
     {
         return NULL;
     }
-    return arg->contantDynMem->addr;
+    return (char *)arg->contantDynMem->addr;
 }
 
 int args_setStrWithDefaultName(Args *self, char *strIn)
@@ -120,7 +120,7 @@ char *args_getBuff(Args *self, int size)
     Arg *argNew = New_arg(NULL);
     arg_newContant(argNew, size);
     setArgDirect(self, argNew);
-    return argNew->contantDynMem->addr;
+    return (char *)argNew->contantDynMem->addr;
 }
 
 char *args_getStr(Args *self, char *name)
@@ -134,7 +134,7 @@ char *args_getStr(Args *self, char *name)
     {
         return NULL;
     }
-    return arg->contantDynMem->addr;
+    return (char *)arg->contantDynMem->addr;
 }
 
 int args_setInt(Args *self, char *name, long long int64In)
@@ -180,7 +180,7 @@ char *args_getType(Args *self, char *name)
     {
         return NULL;
     }
-    return arg->typeDynMem->addr;
+    return (char *)arg->typeDynMem->addr;
 }
 
 Arg *args_getArgByIndex(Args *self, int index)
@@ -240,7 +240,7 @@ int args_isArgExist(Args *self, char *name)
 int updateArg(Args *self, Arg *argNew)
 {
     // arg New must be a new arg
-    Arg *argOld = args_getArg(self, argNew->nameDynMem->addr);
+    Arg *argOld = args_getArg(self, arg_getName(argNew));
 
     // check type
     if (!strEqu(arg_getType(argOld), arg_getType(argNew)))
@@ -353,8 +353,8 @@ char *getPrintStringFromPtr(Args *self, char *name, void *val)
     Args *buffs = New_strBuff();
     char *res = NULL;
     char *valString = args_getBuff(buffs, 256);
-    unsigned int intVal = (unsigned int)val;
-    sprintf(valString, "0x%x", intVal);
+    uint64_t intVal = (uint64_t)val;
+    sprintf(valString, "0x%lx", intVal);
     res = getPrintSring(self, name, valString);
     args_deinit(buffs);
     return res;

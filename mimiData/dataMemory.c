@@ -1,4 +1,5 @@
 #include "dataMemory.h"
+#include <stdint.h>
 /* 
     本文件代码修改自作者： piaolingtear
     来源：http://blog.csdn.net/u011833609/article/details/46834203
@@ -73,7 +74,7 @@ DMEM *DynMemGet(uint32_t size)
             }
             if (find >= blk_num_want)
             {                                                          //寻找到的空闲内存块数目已经够用
-                user->addr = (char *)DMEMORY + loop * DMEM_BLOCK_SIZE; //计算申请到的内存的地址
+                user->addr = (uint8_t *)DMEMORY + loop * DMEM_BLOCK_SIZE; //计算申请到的内存的地址
                 apply->blk_s = loop;                                   //记录申请到的内存块首序号
                 apply->blk_num = blk_num_want;                         //记录申请到的内存块数目
                 for (find = 0; find < apply->blk_num; find++)

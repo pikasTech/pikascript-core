@@ -15,7 +15,7 @@ struct Class_arg
 };
 
 void arg_setName(Arg *self, char *name);
-void arg_setContant(Arg *self, char *contant, int size);
+void arg_setContant(Arg *self, uint8_t *contant, int32_t size);
 void arg_newContant(Arg *self, int size);
 void arg_setType(Arg *self, char *type);
 char *arg_getName(Arg *self);
@@ -32,7 +32,6 @@ float arg_getFloat(Arg *self);
 void *arg_getPtr(Arg *self);
 char *arg_getStr(Arg *self);
 Arg *arg_copy(Arg *argToBeCopy);
-
 
 void arg_init(Arg *self, void *voidPointer);
 void arg_deinit(Arg *self);

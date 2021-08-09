@@ -53,7 +53,7 @@ static void *_detector_shellLuancher(Shell *self,
 	DMEM *memOut;
 	DMEM *memAdd;
 	memAdd = DynMemGet(sizeof(char) * 256);
-	char *strAdd = memAdd->addr;
+	char *strAdd = (char *)memAdd->addr;
 	strAdd[0] = 0;
 	memOut = (DMEM *)fun_d(self, CMD, fun);
 	if (NULL != memOut)
