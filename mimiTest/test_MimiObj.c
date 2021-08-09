@@ -57,6 +57,44 @@ MimiObj *New_MimiObj_test(Args *args)
     return self;
 }
 
+void sendMethod(MimiObj *self, Args *args)
+{
+    char *data = args_getStr(args, "data");
+    /* send to com1 */
+    printf("[com1]: %s\r\n", data);
+}
+
+MimiObj *New_USART(Args *args)
+{
+    /*	Derive from the tiny object class.
+		Tiny object can not import sub object.	
+		Tiny object is the smallest object. */
+    MimiObj *self = New_TinyObj(args);
+
+    /* bind the method */
+    class_defineMethod(self, "send(data:str)", sendMethod);
+
+    /* return the object */
+    return self;
+}
+
+MimiObj *New_MYROOT1(Args *args)
+{
+    /*	Derive from the base object class .
+		BaseObj is the smallest object that can 
+		import sub object.		*/
+    MimiObj *self = New_BaseObj(args);
+
+    /* import LED class */
+    obj_import(self, "USART", New_USART);
+
+    /* new led object bellow root object */
+    obj_newObj(self, "usart", "USART");
+
+    /* return the object */
+    return self;
+}
+
 int TEST_MimiObj(int isShow)
 {
     {
@@ -71,7 +109,7 @@ int TEST_MimiObj(int isShow)
         obj_deinit(process);
     }
     {
-        MimiObj *process = newRootObj("sys",New_SysObj);
+        MimiObj *process = newRootObj("sys", New_SysObj);
         float floatTest = 12.231;
         obj_bindFloat(process, "testFloatBind", &floatTest);
         if (isShow)
@@ -141,7 +179,7 @@ int TEST_MimiObj(int isShow)
         obj_deinit(obj);
     }
     {
-        MimiObj *sys = newRootObj("sys",New_SysObj);
+        MimiObj *sys = newRootObj("sys", New_SysObj);
         int32_t a = 0;
         obj_bind(sys, "int", "a", &a);
         obj_run(sys, "set('a', 1)");
@@ -156,17 +194,23 @@ int TEST_MimiObj(int isShow)
         }
     }
     {
-        MimiObj *sys = newRootObj("sys",New_SysObj);
+        MimiObj *sys = newRootObj("sys", New_SysObj);
         obj_run(sys, "set('a', 1)");
         obj_run(sys, "del('a')");
         obj_deinit(sys);
     }
     {
-        MimiObj *sys = newRootObj("sys",New_SysObj);
+        MimiObj *sys = newRootObj("sys", New_SysObj);
         obj_run(sys, "ls()");
         obj_setPtr(sys, "baseClass", New_TinyObj);
         obj_run(sys, "ls()");
         obj_deinit(sys);
+    }
+
+    {
+        MimiObj *root = newRootObj("root", New_MYROOT1);
+        obj_run(root, "res = usart.send('hello world')");
+        obj_deinit(root);
     }
 
     return 0;
