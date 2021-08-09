@@ -12,7 +12,6 @@ extern "C"
 // SubTest
 #include "dataMemory.h"
 #include "test_args.h"
-#include "test_dataLog.h"
 #include "test_link.h"
 #include "test_MimiObj.h"
 #include "test_event.h"
@@ -24,9 +23,8 @@ extern DMEM_STATE DMEMS;
 extern int32_t error_num;
 extern int32_t memory_warnning_num;
 
-void test_mimiCore(int isShow)
+void test_mimiCore(int32_t isShow)
 {
-    ASSERT_RETURN(TEST_datalog, isShow);
     ASSERT_RETURN(TEST_link2, isShow);
     ASSERT_RETURN(TEST_args2, isShow);
     ASSERT_RETURN(TEST_mimiCom, isShow);

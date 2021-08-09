@@ -29,7 +29,7 @@ char *args_getStrByIndex(Args *self,int32_t index)
     return (char *)arg->contantDynMem->addr;
 }
 
-int args_setStrWithDefaultName(Args *self, char *strIn)
+int32_t args_setStrWithDefaultName(Args *self, char *strIn)
 {
     Args *buffs = New_strBuff();
     char *name = getDefaultName(self, args_getBuff(buffs, 256));
@@ -38,7 +38,7 @@ int args_setStrWithDefaultName(Args *self, char *strIn)
     return 0;
 }
 
-int args_setFloatWithDefaultName(Args *self, float argFloat)
+int32_t args_setFloatWithDefaultName(Args *self, float argFloat)
 {
     Args *buffs = New_strBuff();
     char *name = getDefaultName(self, args_getBuff(buffs, 256));
@@ -47,7 +47,7 @@ int args_setFloatWithDefaultName(Args *self, float argFloat)
     return 0;
 }
 
-int args_setFloat(Args *self, char *name, float argFloat)
+int32_t args_setFloat(Args *self, char *name, float argFloat)
 {
     Arg *argNew = New_arg(NULL);
     arg_setType(argNew, "float");
@@ -86,7 +86,7 @@ void *args_getPtr(Args *self, char *name)
     return pointer;
 }
 
-int args_setPtr(Args *self, char *name, void *argPointer)
+int32_t args_setPtr(Args *self, char *name, void *argPointer)
 {
    int32_t errCode = 0;
     Arg *argNew = New_arg(NULL);
@@ -97,7 +97,7 @@ int args_setPtr(Args *self, char *name, void *argPointer)
     return errCode;
 }
 
-int args_setStr(Args *self, char *name, char *strIn)
+int32_t args_setStr(Args *self, char *name, char *strIn)
 {
    int32_t errCode = 0;
     Arg *argNew = New_arg(NULL);
@@ -137,7 +137,7 @@ char *args_getStr(Args *self, char *name)
     return (char *)arg->contantDynMem->addr;
 }
 
-int args_setInt(Args *self, char *name, long long int64In)
+int32_t args_setInt(Args *self, char *name, long long int64In)
 {
     Arg *argNew = New_arg(NULL);
     arg_setName(argNew, name);
@@ -167,7 +167,7 @@ long long args_getInt(Args *self, char *name)
     return arg_getInt(arg);
 }
 
-int args_getSize(Args *self)
+int32_t args_getSize(Args *self)
 {
     return link_getSize(self->argLinkList);
 }
@@ -205,7 +205,7 @@ float args_getFloat(Args *self, char *name)
     return arg_getFloat(arg);
 }
 
-int args_copyArg(Args *self, Arg *argToBeCopy)
+int32_t args_copyArg(Args *self, Arg *argToBeCopy)
 {
     if (NULL == argToBeCopy)
     {
@@ -217,14 +217,14 @@ int args_copyArg(Args *self, Arg *argToBeCopy)
     return 0;
 }
 
-int args_copyArgByName(Args *self, char *name, Args *directArgs)
+int32_t args_copyArgByName(Args *self, char *name, Args *directArgs)
 {
     Arg *argToBeCopy = args_getArg(self, name);
     args_copyArg(directArgs, argToBeCopy);
     return 0;
 }
 
-int args_isArgExist(Args *self, char *name)
+int32_t args_isArgExist(Args *self, char *name)
 {
     if (NULL == name)
     {
@@ -237,7 +237,7 @@ int args_isArgExist(Args *self, char *name)
     return 0;
 }
 
-int updateArg(Args *self, Arg *argNew)
+int32_t updateArg(Args *self, Arg *argNew)
 {
     // arg New must be a new arg
     Arg *argOld = args_getArg(self, arg_getName(argNew));
@@ -253,7 +253,7 @@ int updateArg(Args *self, Arg *argNew)
     return 0;
 }
 
-int args_setArg(Args *self, Arg *arg)
+int32_t args_setArg(Args *self, Arg *arg)
 {
     char *name = arg_getName(arg);
     if (!args_isArgExist(self, name))
@@ -434,7 +434,7 @@ exit:
     return res;
 }
 
-int args_set(Args *self, char *name, char *valStr)
+int32_t args_set(Args *self, char *name, char *valStr)
 {
     char *type = args_getType(self, name);
     Args *buffs = New_strBuff();
@@ -511,7 +511,7 @@ exit:
     return err;
 }
 
-int args_setPtrWithType(Args *self, char *objName, char *type, void *objPtr)
+int32_t args_setPtrWithType(Args *self, char *objName, char *type, void *objPtr)
 {
     Arg *argNew = New_arg(NULL);
     arg_setName(argNew, objName);
@@ -521,7 +521,7 @@ int args_setPtrWithType(Args *self, char *objName, char *type, void *objPtr)
     return 0;
 }
 
-int args_setObjectWithClass(Args *self, char *objName, char *className, void *objPtr)
+int32_t args_setObjectWithClass(Args *self, char *objName, char *className, void *objPtr)
 {
     Args *buffs = New_strBuff();
     char *typeWithClass = strsAppend(buffs, "_class-", className);
@@ -530,7 +530,7 @@ int args_setObjectWithClass(Args *self, char *objName, char *className, void *ob
     return 0;
 }
 
-int args_foreach(Args *self,int32_t (*eachHandle)(Arg *argEach, Args *handleArgs), Args *handleArgs)
+int32_t args_foreach(Args *self,int32_t (*eachHandle)(Arg *argEach, Args *handleArgs), Args *handleArgs)
 {
     LinkNode *nodeNow = self->argLinkList->firstNode;
     while (1)
@@ -551,7 +551,7 @@ int args_foreach(Args *self,int32_t (*eachHandle)(Arg *argEach, Args *handleArgs
     return 0;
 }
 
-int args_removeArg(Args *self, char *name)
+int32_t args_removeArg(Args *self, char *name)
 {
     Arg *argNow = args_getArg(self, name);
     if (NULL == argNow)

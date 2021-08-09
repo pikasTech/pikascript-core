@@ -76,7 +76,7 @@ void link_removeNode(Link *self, void *contant)
     return;
 }
 
-int link_getSize(Link *self)
+int32_t link_getSize(Link *self)
 {
     LinkNode *NowNode;
    int32_t size = 0;

@@ -20,7 +20,7 @@ struct Class_linkNode
 void linkNode_deinit(LinkNode *self);
 void linkNode_init(LinkNode *self, void *args);
 long long linkNode_getId(LinkNode *self);
-int linkNode_isId(LinkNode *self, long long id);
+int32_t linkNode_isId(LinkNode *self, long long id);
 
 LinkNode *New_linkNode(void *args);
 #endif

@@ -12,7 +12,7 @@ long long linkNode_getId(LinkNode *self)
     return self->id;
 }
 
-int linkNode_isId(LinkNode *self, long long id)
+int32_t linkNode_isId(LinkNode *self, long long id)
 {
     if (id == linkNode_getId(self))
     {

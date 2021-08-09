@@ -25,7 +25,7 @@ void arg_deinit(Arg *self)
 void arg_newContant(Arg *self, int32_t size)
 {
     self->contantDynMem = DynMemGet((size + 1) * sizeof(char));
-    for (int i = 0; i < size + 1; i++)
+    for (int32_t i = 0; i < size + 1; i++)
     {
         self->contantDynMem->addr[i] = 0;
     }
@@ -78,7 +78,7 @@ void arg_setInt(Arg *self, long long val)
 {
     unsigned long long int64Temp = val;
     unsigned char contantBuff[8];
-    for (int i = 0; i < 8; i++)
+    for (int32_t i = 0; i < 8; i++)
     {
         // add 0x30 to void \0
         contantBuff[i] = int64Temp;
@@ -91,7 +91,7 @@ void arg_setFloat(Arg *self, float val)
 {
     uint8_t contantBuff[4];
     uint8_t *valPtr = (uint8_t *)&val;
-    for (int i = 0; i < 4; i++)
+    for (int32_t i = 0; i < 4; i++)
     {
         // add 0x30 to void \0
         contantBuff[i] = valPtr[i];
@@ -108,7 +108,7 @@ float arg_getFloat(Arg *self)
     float valOut = 0;
     uint8_t *valOutPtr = (uint8_t *)(&valOut);
     uint8_t *valPtr = self->contantDynMem->addr;
-    for (int i = 0; i < 4; i++)
+    for (int32_t i = 0; i < 4; i++)
     {
         valOutPtr[i] = valPtr[i];
     }
@@ -119,7 +119,7 @@ void arg_setPtr(Arg *self, void *pointer)
 {
     uint64_t pointerTemp = (uint64_t)pointer;
     uint8_t contantBuff[8];
-    for (int i = 0; i < 8; i++)
+    for (int32_t i = 0; i < 8; i++)
     {
         // aboid \0
         contantBuff[i] = pointerTemp;
@@ -140,7 +140,7 @@ long long arg_getInt(Arg *self)
         return -999999;
     }
     unsigned long long int64Temp = 0;
-    for (int i = 7; i > -1; i--)
+    for (int32_t i = 7; i > -1; i--)
     {
         // add 0x30 to avoid 0
         int64Temp = (int64Temp << 8);
@@ -158,7 +158,7 @@ void *arg_getPtr(Arg *self)
         return NULL;
     }
     uint8_t *contant = self->contantDynMem->addr;
-    for (int i = 7; i > -1; i--)
+    for (int32_t i = 7; i > -1; i--)
     {
         // avoid \0
         uint8_t val = contant[i];

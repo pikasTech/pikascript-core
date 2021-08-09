@@ -1,6 +1,6 @@
 #include "dataArgs.h"
 #include "dataString.h"
-int TEST_args2(int isShow)
+int32_t TEST_args2(int32_t isShow)
 {
     int32_t err = 0;
     {
@@ -11,11 +11,11 @@ int TEST_args2(int isShow)
         char *strOut = NULL;
         args_setFloatWithDefaultName(args, 24.5);
         args_setInt(args,
-                     "int64Test",
-                     (long long)22221);
+                    "int64Test",
+                    (long long)22221);
         args_setPtr(args,
-                     "pointerTest",
-                     (void *)2222322);
+                    "pointerTest",
+                    (void *)2222322);
         args_setStr(args, "strTest", "teeeds");
 
         floatOut = args_getFloatByIndex(args, 0);
@@ -96,7 +96,7 @@ int TEST_args2(int isShow)
         args_setInt(args, "testint", testint);
         if (isShow)
         {
-            printf("args print test int: %s\r\n", args_print(args, "testint"));
+            printf("args print32_t test int: %s\r\n", args_print(args, "testint"));
         }
         args_deinit(args);
     }
@@ -123,7 +123,7 @@ int TEST_args2(int isShow)
         args_setFloat(args, "testfloat", 1.42);
         if (isShow)
         {
-            printf("test arg print for float:%s\r\n", args_print(args, "testfloat"));
+            printf("test arg print32_t for float:%s\r\n", args_print(args, "testfloat"));
         }
         if (!strEqu("1.420000", args_print(args, "testfloat")))
         {

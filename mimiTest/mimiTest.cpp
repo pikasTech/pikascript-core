@@ -7,10 +7,10 @@ extern "C"
 
 extern DMEM_STATE DMEMS;
 
-int error_num = 0;
-int memory_warnning_num = 0;
+int32_t error_num = 0;
+int32_t memory_warnning_num = 0;
 
-int assert_return(test_fun_t test_fun, int32_t isShow, char *test_name)
+int32_t assert_return(test_fun_t test_fun, int32_t isShow, char *test_name)
 {
     // std::cout << "Testing: " << test_name << std::endl;
     int32_t ret;
@@ -37,7 +37,7 @@ int assert_return(test_fun_t test_fun, int32_t isShow, char *test_name)
     return 0;
 }
 
-int detector_memoryCheck(assert_return_fun_t assert_result_fun, test_fun_t test_fun, int32_t isShow, char *test_name)
+int32_t detector_memoryCheck(assert_return_fun_t assert_result_fun, test_fun_t test_fun, int32_t isShow, char *test_name)
 {
     int32_t out = 0;
     out = assert_result_fun(test_fun, isShow, test_name);

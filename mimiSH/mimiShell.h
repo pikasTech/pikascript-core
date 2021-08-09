@@ -7,7 +7,7 @@ typedef struct Class_mimiShell2 Shell;
 #define SHELL2_CMD_NAME_LENGTH 32
 #define SHELL2_CMD_LENGTH 256
 
-int strGetArgs(char *CMD, char **argv);
+int32_t strGetArgs(char *CMD, char **argv);
 
 struct Class_mimiShell2
 {

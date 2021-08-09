@@ -5,7 +5,7 @@
 #include "mimiCom.h"
 #include "dataString.h"
 
-int TEST_sysObj(int isShow)
+int32_t TEST_sysObj(int32_t isShow)
 {
     {
         // MimiObj *sys = newRootObj("sys",New_MimiObj_sys);

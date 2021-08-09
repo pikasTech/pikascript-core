@@ -3,7 +3,7 @@
 #include "dataTest.h"
 #include <stdio.h>
 
-int TEST_link2(int isShow)
+int32_t TEST_link2(int32_t isShow)
 {
     int32_t err = 0;
     {

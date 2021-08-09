@@ -7,7 +7,7 @@ void handle1(MimiObj *obj)
     printf("message is: %s\r\n", message);
 }
 
-int TEST_Event(int isShow)
+int32_t TEST_Event(int32_t isShow)
 {
     // {
     //     MimiObj *root = newRootObj("root", New_MimiObj_Event);

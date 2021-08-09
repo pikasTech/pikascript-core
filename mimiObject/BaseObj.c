@@ -11,7 +11,7 @@ static void *getClassPtr(MimiObj *classObj, char *classPath)
     return obj_getPtr(classObj, ptrPath);
 }
 
-int sysObj_setObjbyClassAndPtr(MimiObj *self, char *objName, char *className, void *newFunPtr)
+int32_t sysObj_setObjbyClassAndPtr(MimiObj *self, char *objName, char *className, void *newFunPtr)
 {
     /* class means subprocess init */
     Args *buffs = New_strBuff();
@@ -26,7 +26,7 @@ int sysObj_setObjbyClassAndPtr(MimiObj *self, char *objName, char *className, vo
     return 0;
 }
 
-int sysObj_setObjbyClass(MimiObj *self, char *objName, char *classPath)
+int32_t sysObj_setObjbyClass(MimiObj *self, char *objName, char *classPath)
 {
     /* class means subprocess init */
     Args *buffs = New_strBuff();
@@ -61,7 +61,7 @@ exit:
     return res;
 }
 
-int obj_import(MimiObj *self, char *className, void *classPtr)
+int32_t obj_import(MimiObj *self, char *className, void *classPtr)
 {
     MimiObj *classLoader = obj_getObj(self, "__classLoader", 0);
     Args *buffs = New_args(NULL);
@@ -70,7 +70,7 @@ int obj_import(MimiObj *self, char *className, void *classPtr)
     return res;
 }
 
-int obj_newObj(MimiObj *self, char *objPath, char *classPath)
+int32_t obj_newObj(MimiObj *self, char *objPath, char *classPath)
 {
     MimiObj *classLoader = obj_getObj(self, "__classLoader", 0);
     Args *buffs = New_args(NULL);

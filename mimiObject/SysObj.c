@@ -173,7 +173,7 @@ static void print(MimiObj *obj, Args *args)
     char *res = args_print(args, "val");
     if (NULL == res)
     {
-        method_sysOut(args, "[error] print: can not print val");
+        method_sysOut(args, "[error] print: can not print32_t val");
         args_setInt(args, "errCode", 1);
         return;
     }
@@ -183,7 +183,7 @@ static void print(MimiObj *obj, Args *args)
 
 
 
-int loadExceptMethod(Arg *argEach, Args *handleArgs)
+int32_t loadExceptMethod(Arg *argEach, Args *handleArgs)
 {
     char *argName = arg_getName(argEach);
     if (strIsStartWith(argName, "[methodDec]"))

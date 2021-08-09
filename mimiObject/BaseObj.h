@@ -5,6 +5,6 @@
 #include "TinyObj.h"
 
 MimiObj *New_BaseObj(Args *args);
-int obj_newObj(MimiObj *self, char *objPath, char *classPath);
-int obj_import(MimiObj *self, char *className, void *classPtr);
+int32_t obj_newObj(MimiObj *self, char *objPath, char *classPath);
+int32_t obj_import(MimiObj *self, char *className, void *classPtr);
 #endif

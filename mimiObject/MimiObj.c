@@ -5,7 +5,7 @@
 #include "dataStrs.h"
 #include "SysObj.h"
 
-int deinitEachSubObj(Arg *argEach, Args *handleArgs)
+int32_t deinitEachSubObj(Arg *argEach, Args *handleArgs)
 {
     if (NULL != handleArgs)
     {
@@ -30,7 +30,7 @@ void deinitAllSubObj(MimiObj *self)
     args_foreach(args, deinitEachSubObj, NULL);
 }
 
-int obj_deinit(MimiObj *self)
+int32_t obj_deinit(MimiObj *self)
 {
     self->_beforDinit(self);
     deinitAllSubObj(self);
@@ -40,7 +40,7 @@ int obj_deinit(MimiObj *self)
     return 0;
 }
 
-int obj_update(MimiObj *self)
+int32_t obj_update(MimiObj *self)
 {
     // return if is not enable
     if (0 == obj_getInt(self, "isEnable"))
@@ -51,19 +51,19 @@ int obj_update(MimiObj *self)
     return 0;
 }
 
-int obj_enable(MimiObj *self)
+int32_t obj_enable(MimiObj *self)
 {
     obj_setInt(self, "isEnable", 1);
     return 0;
 }
 
-int obj_disable(MimiObj *self)
+int32_t obj_disable(MimiObj *self)
 {
     obj_setInt(self, "isEnable", 0);
     return 0;
 }
 
-int obj_setInt(MimiObj *self, char *argPath, long long val)
+int32_t obj_setInt(MimiObj *self, char *argPath, long long val)
 {
     MimiObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
@@ -78,7 +78,7 @@ int obj_setInt(MimiObj *self, char *argPath, long long val)
     return 0;
 }
 
-int obj_setPtr(MimiObj *self, char *argPath, void *pointer)
+int32_t obj_setPtr(MimiObj *self, char *argPath, void *pointer)
 {
     MimiObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
@@ -93,7 +93,7 @@ int obj_setPtr(MimiObj *self, char *argPath, void *pointer)
     return 0;
 }
 
-int obj_setFloat(MimiObj *self, char *argPath, float value)
+int32_t obj_setFloat(MimiObj *self, char *argPath, float value)
 {
     MimiObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
@@ -108,7 +108,7 @@ int obj_setFloat(MimiObj *self, char *argPath, float value)
     return 0;
 }
 
-int obj_setStr(MimiObj *self, char *argPath, char *str)
+int32_t obj_setStr(MimiObj *self, char *argPath, char *str)
 {
     MimiObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
@@ -151,7 +151,7 @@ Arg *obj_getArg(MimiObj *self, char *argPath)
     return res;
 }
 
-int obj_setArg(MimiObj *self, char *argPath, Arg *arg)
+int32_t obj_setArg(MimiObj *self, char *argPath, Arg *arg)
 {
     /* setArg would copy arg */
     MimiObj *obj = obj_getObj(self, argPath, 1);
@@ -208,14 +208,14 @@ char *obj_getStr(MimiObj *self, char *argPath)
     return res;
 }
 
-int obj_load(MimiObj *self, Args *args, char *name)
+int32_t obj_load(MimiObj *self, Args *args, char *name)
 {
     args_copyArgByName(args, name, self->attributeList);
     return 0;
 }
 
 
-int obj_setObjWithoutClass(MimiObj *self, char *objName, void *newFun)
+int32_t obj_setObjWithoutClass(MimiObj *self, char *objName, void *newFun)
 {
     /* class means subprocess init */
     Args *buffs = New_strBuff();
@@ -227,7 +227,7 @@ int obj_setObjWithoutClass(MimiObj *self, char *objName, void *newFun)
     return 0;
 }
 
-int obj_addOther(MimiObj *self, char *subObjectName, void *new_ObjectFun)
+int32_t obj_addOther(MimiObj *self, char *subObjectName, void *new_ObjectFun)
 {
     Args *initArgs = New_args(NULL);
     args_setPtr(initArgs, "__context", self);
@@ -238,14 +238,14 @@ int obj_addOther(MimiObj *self, char *subObjectName, void *new_ObjectFun)
     return 0;
 }
 
-int obj_freeObj(MimiObj *self, char *objPath)
+int32_t obj_freeObj(MimiObj *self, char *objPath)
 {
     MimiObj *obj = obj_getPtr(self, objPath);
     obj_deinit(obj);
     return 0;
 }
 
-int obj_bind(MimiObj *self, char *type, char *name, void *pointer)
+int32_t obj_bind(MimiObj *self, char *type, char *name, void *pointer)
 {
     args_bind(self->attributeList, type, name, pointer);
     return 0;
@@ -260,25 +260,25 @@ char *obj_print(MimiObj *self, char *name)
     return args_print(self->attributeList, name);
 }
 
-int obj_bindInt(MimiObj *self, char *name, int32_t *valPtr)
+int32_t obj_bindInt(MimiObj *self, char *name, int32_t *valPtr)
 {
     args_bindInt(self->attributeList, name, valPtr);
     return 0;
 }
 
-int obj_bindFloat(MimiObj *self, char *name, float *valPtr)
+int32_t obj_bindFloat(MimiObj *self, char *name, float *valPtr)
 {
     args_bindFloat(self->attributeList, name, valPtr);
     return 0;
 }
 
-int obj_bindString(MimiObj *self, char *name, char **valPtr)
+int32_t obj_bindString(MimiObj *self, char *name, char **valPtr)
 {
     args_bindStr(self->attributeList, name, valPtr);
     return 0;
 }
 
-int obj_set(MimiObj *self, char *argPath, char *valStr)
+int32_t obj_set(MimiObj *self, char *argPath, char *valStr)
 {
     MimiObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
@@ -304,7 +304,7 @@ int obj_set(MimiObj *self, char *argPath, char *valStr)
     return 0;
 }
 
-int removeEachMethodInfo(Arg *argNow, Args *argList)
+int32_t removeEachMethodInfo(Arg *argNow, Args *argList)
 {
     if (strIsStartWith(arg_getName(argNow), "[methodDec]"))
     {
@@ -440,7 +440,7 @@ MimiObj *obj_getObj(MimiObj *self, char *objPath, int32_t keepDeepth)
     char *objPathBuff = strsCopy(buffs, objPath);
     int32_t tokenNum = strGetTokenNum(objPath, '.');
     MimiObj *obj = self;
-    for (int i = 0; i < tokenNum - keepDeepth; i++)
+    for (int32_t i = 0; i < tokenNum - keepDeepth; i++)
     {
         char *token = strsPopToken(buffs, objPathBuff, '.');
         obj = obj_getObjDirect(obj, token);
@@ -483,7 +483,7 @@ static void *getMethodPtr(MimiObj *methodHost, char *methodName)
     return res;
 }
 
-int class_defineMethod(MimiObj *self,
+int32_t class_defineMethod(MimiObj *self,
                        char *declearation,
                        void (*methodPtr)(MimiObj *self, Args *args))
 {
@@ -792,7 +792,7 @@ static char *getCleanCmd(Args *buffs, char *cmd)
     int32_t iOut = 0;
     char delChar = ' ';
     int32_t isInStr = 0;
-    for (int i = 0; i < strGetSize(cmd); i++)
+    for (int32_t i = 0; i < strGetSize(cmd); i++)
     {
         if ('\'' == cmd[i])
         {
@@ -933,7 +933,7 @@ exit:
     return res;
 }
 
-int obj_removeArg(MimiObj *self, char *argPath)
+int32_t obj_removeArg(MimiObj *self, char *argPath)
 {
     MimiObj *objHost = obj_getObj(self, argPath, 1);
     MimiObj *obj = obj_getObj(self, argPath, 0);
@@ -963,7 +963,7 @@ exit:
     return err;
 }
 
-int obj_isArgExist(MimiObj *self, char *argPath)
+int32_t obj_isArgExist(MimiObj *self, char *argPath)
 {
     MimiObj *obj = obj_getObj(self, argPath, 1);
     Args *buffs = New_strBuff();
@@ -999,7 +999,7 @@ void obj_runNoRes(MimiObj *slef, char *cmd)
 
 void obj_run(MimiObj *self, char *cmd)
 {
-    /* safe, stop when error occord and error info would be print */
+    /* safe, stop when error occord and error info would be print32_t */
     Args *res = obj_runDirect(self, cmd);
     char *sysOut = args_getStr(res, "sysOut");
     if (NULL != sysOut)

@@ -95,7 +95,7 @@ MimiObj *New_MYROOT1(Args *args)
     return self;
 }
 
-int TEST_MimiObj(int isShow)
+int32_t TEST_MimiObj(int32_t isShow)
 {
     {
         Args *args = New_args(NULL);

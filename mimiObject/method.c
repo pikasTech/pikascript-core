@@ -21,7 +21,7 @@ void method_sysOut(Args *args, char *str)
 {
     args_setStr(args, "sysOut", str);
 }
-int method_getInt(Args *args, char *argName)
+int32_t method_getInt(Args *args, char *argName)
 {
     return args_getInt(args, argName);
 }

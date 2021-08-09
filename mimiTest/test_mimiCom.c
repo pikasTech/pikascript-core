@@ -1,7 +1,7 @@
 #include "test_mimiCom.h"
 #include "mimiCom.h"
 
-int TEST_mimiCom(int isShow)
+int32_t TEST_mimiCom(int32_t isShow)
 {
     MimiCom *com = New_mimiCom(NULL);
 

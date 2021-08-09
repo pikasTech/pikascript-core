@@ -11,12 +11,12 @@
 // start_i is used to skip severl chars in the frount of CMD
 static int32_t strGetArgs_With_Start_i(char *CMD, char **argv, int32_t start_i)
 {
-	int argc = 0;
-	int i = 0;
-	//arg_i point to the arg operated now
-	int arg_i = 0;
+	int32_t argc = 0;
+	int32_t i = 0;
+	//arg_i point32_t to the arg operated now
+	int32_t arg_i = 0;
 	// if not found ' ', then put chars from CMD to argv_tem
-	int char_i = 0;
+	int32_t char_i = 0;
 	for (i = start_i; (i < strGetSize(CMD)); i++)
 	{
 		if (CMD[i] != ' ')
@@ -38,7 +38,7 @@ static int32_t strGetArgs_With_Start_i(char *CMD, char **argv, int32_t start_i)
 	return argc;
 }
 
-int strGetArgs(char *CMD, char **argv)
+int32_t strGetArgs(char *CMD, char **argv)
 {
 	strGetArgs_With_Start_i(CMD, argv, 0);
 	return 0;
