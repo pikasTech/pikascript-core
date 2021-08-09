@@ -3,6 +3,7 @@
 #include "dataMemory.h"
 #include "dataString.h"
 #include "stdlib.h"
+#include <stdint.h>
 
 void arg_deinit(Arg *self)
 {
@@ -75,7 +76,7 @@ char *arg_getContant(Arg *self)
 
 void arg_setInt(Arg *self, long long val)
 {
-    unsigned long int int64Temp = val;
+    unsigned long long int64Temp = val;
     unsigned char contantBuff[8];
     for (int i = 0; i < 8; i++)
     {
@@ -116,8 +117,8 @@ float arg_getFloat(Arg *self)
 
 void arg_setPtr(Arg *self, void *pointer)
 {
-    unsigned long int pointerTemp = (unsigned long int)pointer;
-    unsigned char contantBuff[8];
+    uint64_t pointerTemp = (uint64_t)pointer;
+    uint8_t contantBuff[8];
     for (int i = 0; i < 8; i++)
     {
         // aboid \0
@@ -151,16 +152,18 @@ long long arg_getInt(Arg *self)
 void *arg_getPtr(Arg *self)
 {
     void *pointer = NULL;
-    unsigned long int pointerTemp = 0;
+    uint64_t pointerTemp = 0;
     if (NULL == self->contantDynMem)
     {
         return NULL;
     }
+    uint8_t * contant = self->contantDynMem->addr;
     for (int i = 7; i > -1; i--)
     {
         // avoid \0
+        uint8_t val = contant[i];
         pointerTemp = (pointerTemp << 8);
-        pointerTemp += ((unsigned char *)(self->contantDynMem->addr))[i];
+        pointerTemp += val;
     }
     pointer = (void *)pointerTemp;
     return pointer;
