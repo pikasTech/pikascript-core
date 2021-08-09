@@ -43,7 +43,7 @@ static void init(MimiCom *self, Args *initArgs)
     self->args = New_args(NULL);
     self->RxBuff[0] = 0;
 
-    args_setPtr(self->args, "context", self);
+    args_setPtr(self->args, "__context", self);
     args_setStr(self->args, "RxSingleLine", "");
 
     /* operation */
@@ -62,7 +62,7 @@ static void init(MimiCom *self, Args *initArgs)
     {
         return;
     }
-    args_copyArgByName(initArgs, "context", self->args);
+    args_copyArgByName(initArgs, "__context", self->args);
 }
 
 MimiCom *New_mimiCom(Args *args)

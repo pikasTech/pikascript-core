@@ -1,5 +1,5 @@
-#include "sysObj.h"
-#include "baseObj.h"
+#include "SysObj.h"
+#include "BaseObj.h"
 #include "dataStrs.h"
 #include "dataMemory.h"
 #include "mimiFansInfo.h"
@@ -58,13 +58,13 @@ static void init_Event(MimiObj *self, Args *args)
     obj_newObj(self, "mailBox", "MailBox");
 
     /* method */
-    class_defineMethod(self, "follow(argPath:string, handle:pointer)", followMethod);
-    class_defineMethod(self, "publish(argPath:string)", publish);
+    class_defineMethod(self, "follow(argPath:str, handle:pointer)", followMethod);
+    class_defineMethod(self, "publish(argPath:str)", publish);
 }
 
 MimiObj *New_MimiObj_Event(Args *args)
 {
-    MimiObj *self = New_MimiObj_sys(args);
+    MimiObj *self = New_SysObj(args);
     init_Event(self, args);
     return self;
 }

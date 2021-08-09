@@ -2,5 +2,5 @@
 #define _MimiObj_sys__H
 #include "MimiObj.h"
 
-MimiObj *New_MimiObj_sys(Args *args);
+MimiObj *New_SysObj(Args *args);
 #endif

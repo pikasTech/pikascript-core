@@ -1,7 +1,7 @@
 #include "MimiObj.h"
 #include "MimiClass.h"
-#include "sysObj.h"
-#include "baseObj.h"
+#include "SysObj.h"
+#include "BaseObj.h"
 #include "mimiCom.h"
 #include "dataString.h"
 

@@ -59,7 +59,7 @@ int TEST_args2(int isShow)
         {
             err = 7;
         }
-        if (0 != strcmp("string", args_getType(args, "strTest")))
+        if (0 != strcmp("str", args_getType(args, "strTest")))
         {
             err = 8;
         }

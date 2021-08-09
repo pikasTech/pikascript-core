@@ -1,5 +1,5 @@
-#include "sysObj.h"
-#include "baseObj.h"
+#include "SysObj.h"
+#include "BaseObj.h"
 #include "dataMemory.h"
 #include "mimiFansInfo.h"
 
@@ -18,7 +18,7 @@ static void init_FansList(MimiObj *self, Args *args)
 
 MimiObj *New_MimiObj_FansList(Args *args)
 {
-    MimiObj *self = New_MimiObj_sys(args);
+    MimiObj *self = New_SysObj(args);
     init_FansList(self, args);
     return self;
 }

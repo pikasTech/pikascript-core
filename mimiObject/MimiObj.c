@@ -3,7 +3,7 @@
 #include "dataMemory.h"
 #include "dataString.h"
 #include "dataStrs.h"
-#include "sysObj.h"
+#include "SysObj.h"
 
 int deinitEachSubObj(Arg *argEach, Args *handleArgs)
 {
@@ -49,10 +49,6 @@ int obj_update(MimiObj *self)
     }
     self->_updateHandle(self);
     return 0;
-}
-void _UpdateHandle(MimiObj *self)
-{
-    // override the handle function here
 }
 
 int obj_enable(MimiObj *self)
@@ -218,10 +214,6 @@ int obj_load(MimiObj *self, Args *args, char *name)
     return 0;
 }
 
-void _beforDinit(MimiObj *self)
-{
-    /* override in user code */
-}
 
 int obj_setObjWithoutClass(MimiObj *self, char *objName, void *newFun)
 {
@@ -238,7 +230,7 @@ int obj_setObjWithoutClass(MimiObj *self, char *objName, void *newFun)
 int obj_addOther(MimiObj *self, char *subObjectName, void *new_ObjectFun)
 {
     Args *initArgs = New_args(NULL);
-    args_setPtr(initArgs, "context", self);
+    args_setPtr(initArgs, "__context", self);
     void *(*new_Object)(Args * initArgs) = (void *(*)(Args *))new_ObjectFun;
     void *subObject = new_Object(initArgs);
     obj_setPtr(self, subObjectName, subObject);
@@ -336,10 +328,10 @@ MimiObj *removeMethodInfo(MimiObj *thisClass)
 MimiObj *obj_getClassObjByNewFun(MimiObj *context, char *name, void *(*newClassFun)(Args *initArgs))
 {
     Args *initArgs = New_args(NULL);
-    args_setPtr(initArgs, "context", context);
-    args_setStr(initArgs, "name", name);
+    args_setPtr(initArgs, "__context", context);
+    args_setStr(initArgs, "__name", name);
     MimiObj *thisClass = newClassFun(initArgs);
-    obj_setPtr(thisClass, "classPtr", newClassFun);
+    obj_setPtr(thisClass, "__classPtr", newClassFun);
     args_deinit(initArgs);
     return thisClass;
 }
@@ -354,7 +346,7 @@ char *obj_getClassPath(MimiObj *objHost, Args *buffs, char *objName)
 
 void *getNewObjFunByClass(MimiObj *obj, char *classPath)
 {
-    MimiObj *classHost = args_getPtr(obj->attributeList, "classLoader");
+    MimiObj *classHost = args_getPtr(obj->attributeList, "__classLoader");
     if (NULL == classHost)
     {
         return NULL;
@@ -382,11 +374,11 @@ MimiObj *newRootObj(char *name, void *newObjFun)
 
 static void removeClassLoader(MimiObj *obj)
 {
-    MimiObj *classObj = args_getPtr(obj->attributeList, "classLoader");
+    MimiObj *classObj = args_getPtr(obj->attributeList, "__classLoader");
     if (NULL != classObj)
     {
         obj_deinit(classObj);
-        args_removeArg(obj->attributeList, "classLoader");
+        args_removeArg(obj->attributeList, "__classLoader");
     }
 }
 
@@ -405,7 +397,7 @@ MimiObj *initObj(MimiObj *obj, char *name)
     MimiObj *newObj = removeMethodInfo(thisClass);
     /* delete [mate]<objName> */
     obj_removeArg(obj, strsAppend(buffs, "[mate]", name));
-    /* delete "classLoader" object */
+    /* delete "__classLoader" object */
     removeClassLoader(newObj);
 
     char *type = args_getType(obj->attributeList, name);
@@ -578,7 +570,7 @@ static int loadArgByType(MimiObj *self,
         args_setArg(args, argCopied);
         return 0;
     }
-    if (strEqu(definedType, "string"))
+    if (strEqu(definedType, "str"))
     {
         /* solve the string type */
         char *directStr = getDirectStr(args, argPath);
@@ -775,7 +767,7 @@ static void transferReturnVal(MimiObj *self, char *returnType, char *returnName,
     {
         obj_setFloat(self, returnName, args_getFloat(args, "return"));
     }
-    if (strEqu("->string", returnType))
+    if (strEqu("->str", returnType))
     {
         obj_setStr(self, returnName, args_getStr(args, "return"));
     }
@@ -840,7 +832,7 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
     }
     char *methodName = strsGetLastToken(buffs, methodPath, '.');
 
-    void *classPtr = obj_getPtr(methodHostObj, "classPtr");
+    void *classPtr = obj_getPtr(methodHostObj, "__classPtr");
     char *methodHostClassName = strsAppend(buffs, "classObj-", methodHostObj->name);
     methodHostClass = obj_getClassObjByNewFun(methodHostObj, methodHostClassName, classPtr);
     /* get method Ptr */
@@ -1024,40 +1016,4 @@ void obj_run(MimiObj *self, char *cmd)
     {
         args_deinit(res);
     }
-}
-
-MimiObj *New_TinyObj(Args *args)
-{
-    /* request memory */
-    DMEM *mem = DynMemGet(sizeof(MimiObj));
-    if (NULL == mem)
-    {
-        printf("[error] memory is empty!");
-        while (1)
-            ;
-    }
-    MimiObj *self = (void *)(mem->addr);
-    self->mem = mem;
-
-    /* List */
-    self->attributeList = New_args(NULL);
-
-    /* override */
-    self->_updateHandle = _UpdateHandle;
-    self->_beforDinit = _beforDinit;
-
-    /* attribute */
-    obj_setPtr(self, "context", self);
-    obj_setStr(self, "name", "root");
-
-    /* load */
-    if (NULL != args)
-    {
-        obj_load(self, args, "name");
-        obj_load(self, args, "context");
-    }
-
-    /* hard attribute */
-    self->name = obj_getStr(self, "name");
-    return self;
 }

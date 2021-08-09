@@ -21,8 +21,6 @@ struct Class_process
     void (*_beforDinit)(MimiObj *self);
     void (*_updateHandle)(MimiObj *self);
 };
-MimiObj *New_TinyObj(Args *args);
-#endif
 
 /* operation */
 int obj_deinit(MimiObj *self);
@@ -78,3 +76,5 @@ int obj_removeArg(MimiObj *self, char *argPath);
 int obj_isArgExist(MimiObj *self, char *argPath);
 MimiObj *obj_getClassObjByNewFun(MimiObj *self, char *name, void *(*newClassFun)(Args *initArgs));
 MimiObj *newRootObj(char *name, void *newObjFun);
+
+#endif

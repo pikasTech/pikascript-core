@@ -1,7 +1,8 @@
 #include "MimiObj.h"
+#include "TinyObj.h"
 #include "method.h"
-#include "sysObj.h"
-#include "baseObj.h"
+#include "SysObj.h"
+#include "BaseObj.h"
 #include "dataMemory.h"
 #include "dataString.h"
 #include "dataStrs.h"
@@ -27,7 +28,7 @@ static void type(MimiObj *obj, Args *args)
     if (NULL == argPath)
     {
         /* no input obj path, use current obj */
-        MimiObj *objHost = obj_getPtr(obj, "context");
+        MimiObj *objHost = obj_getPtr(obj, "__context");
         Arg *objArg = obj_getArg(objHost, obj->name);
         if (NULL == objArg)
         {
@@ -208,20 +209,20 @@ MimiObj *obj_loadWithoutMethod(MimiObj *thisClass)
     return newObj;
 }
 
-MimiObj *New_MimiObj_sys(Args *args)
+MimiObj *New_SysObj(Args *args)
 {
     /* derive */
-    MimiObj *self = New_baseObj(args);
+    MimiObj *self = New_BaseObj(args);
 
     /* attribute */
 
     /* method */
     class_defineMethod(self, "print(val:any)", print);
-    class_defineMethod(self, "set(argPath:string, val:any)", set);
-    class_defineMethod(self, "ls(objPath:string)", list);
-    class_defineMethod(self, "del(argPath:string)", del);
-    class_defineMethod(self, "type(argPath:string)", type);
-    class_defineMethod(self, "new(objPath:string,classPath:string)", newObjMethod);
+    class_defineMethod(self, "set(argPath:str, val:any)", set);
+    class_defineMethod(self, "ls(objPath:str)", list);
+    class_defineMethod(self, "del(argPath:str)", del);
+    class_defineMethod(self, "type(argPath:str)", type);
+    class_defineMethod(self, "new(objPath:str,classPath:str)", newObjMethod);
 
     /* override */
 
