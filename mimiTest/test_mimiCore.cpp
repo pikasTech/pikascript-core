@@ -27,8 +27,6 @@ extern int memory_warnning_num;
 void test_mimiCore(int isShow)
 {
     ASSERT_RETURN(TEST_datalog, isShow);
-    // ASSERT_RETURN(TEST_dataQueue, 1);
-    // ASSERT_RETURN(TEST_VM_device, isShow);
     ASSERT_RETURN(TEST_link2, isShow);
     ASSERT_RETURN(TEST_args2, isShow);
     ASSERT_RETURN(TEST_mimiCom, isShow);
