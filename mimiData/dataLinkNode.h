@@ -8,7 +8,7 @@ struct Class_linkNode
     DMEM *mem;
     LinkNode *priorNode;
     LinkNode *nextNode;
-    long long id;
+    int64_t id;
 
     /* virtual operation */
     void (*_contantDinit)(void *contant);
@@ -19,8 +19,8 @@ struct Class_linkNode
 
 void linkNode_deinit(LinkNode *self);
 void linkNode_init(LinkNode *self, void *args);
-long long linkNode_getId(LinkNode *self);
-int32_t linkNode_isId(LinkNode *self, long long id);
+int64_t linkNode_getId(LinkNode *self);
+int32_t linkNode_isId(LinkNode *self, int64_t id);
 
 LinkNode *New_linkNode(void *args);
 #endif

@@ -6,13 +6,13 @@ int32_t TEST_args2(int32_t isShow)
     {
         Args *args = New_args(NULL);
         float floatOut = 0;
-        long long int64Out = 0;
+        int64_t int64Out = 0;
         void *pointer = NULL;
         char *strOut = NULL;
         args_setFloatWithDefaultName(args, 24.5);
         args_setInt(args,
                     "int64Test",
-                    (long long)22221);
+                    (int64_t )22221);
         args_setPtr(args,
                     "pointerTest",
                     (void *)2222322);
@@ -29,7 +29,7 @@ int32_t TEST_args2(int32_t isShow)
             printf("the float type is: [%s]\r\n", args_getType(args, "arg1"));
             printf("the int64 output is: %d\r\n", (int)int64Out);
             printf("the int64 type is: [%s]\r\n", args_getType(args, "int64Test"));
-            printf("the pointer output is: %d\r\n", (int)(long long)pointer);
+            printf("the pointer output is: %d\r\n", (int)(int64_t )pointer);
             printf("the pointer type is: [%s]\r\n", args_getType(args, "pointerTest"));
             printf("the string output is: %s\r\n", strOut);
             printf("the string type is: [%s]\r\n", args_getType(args, "strTest"));
@@ -43,7 +43,7 @@ int32_t TEST_args2(int32_t isShow)
         {
             err = 2;
         }
-        if (2222322 != (int)(long long)pointer)
+        if (2222322 != (int)(int64_t )pointer)
         {
             err = 3;
         }

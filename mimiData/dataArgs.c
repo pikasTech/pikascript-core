@@ -137,7 +137,7 @@ char *args_getStr(Args *self, char *name)
     return (char *)arg->contantDynMem->addr;
 }
 
-int32_t args_setInt(Args *self, char *name, long long int64In)
+int32_t args_setInt(Args *self, char *name, int64_t int64In)
 {
     Arg *argNew = New_arg(NULL);
     arg_setName(argNew, name);
@@ -147,7 +147,7 @@ int32_t args_setInt(Args *self, char *name, long long int64In)
     return 0;
 }
 
-long long args_getIntByIndex(Args *self,int32_t index)
+int64_t args_getIntByIndex(Args *self,int32_t index)
 {
     Arg *arg = args_getArgByIndex(self, index);
     if (NULL == arg)
@@ -157,7 +157,7 @@ long long args_getIntByIndex(Args *self,int32_t index)
     return arg_getInt(arg);
 }
 
-long long args_getInt(Args *self, char *name)
+int64_t args_getInt(Args *self, char *name)
 {
     Arg *arg = args_getArg(self, name);
     if (NULL == arg)

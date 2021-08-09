@@ -7,12 +7,12 @@ void linkNode_deinit(LinkNode *self)
     self->_contantDinit(self->contant);
 }
 
-long long linkNode_getId(LinkNode *self)
+int64_t linkNode_getId(LinkNode *self)
 {
     return self->id;
 }
 
-int32_t linkNode_isId(LinkNode *self, long long id)
+int32_t linkNode_isId(LinkNode *self, int64_t id)
 {
     if (id == linkNode_getId(self))
     {

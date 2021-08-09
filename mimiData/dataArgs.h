@@ -49,9 +49,9 @@ int32_t args_setPtr(Args *self, char *name, void *argPointer);
 void *args_getPtr(Args *self, char *name);
 void *args_getPointerByIndex(Args *self,int32_t index);
 
-int32_t args_setInt(Args *self, char *name, long long int64In);
-long long args_getInt(Args *self, char *name);
-long long args_getIntByIndex(Args *self,int32_t index);
+int32_t args_setInt(Args *self, char *name, int64_t int64In);
+int64_t args_getInt(Args *self, char *name);
+int64_t args_getIntByIndex(Args *self,int32_t index);
 
 void args_bindInt(Args *self, char *name,int32_t *intPtr);
 void args_bindFloat(Args *self, char *name, float *floatPtr);

@@ -9,7 +9,7 @@ struct Class_link
     /* attribute */
     DMEM *mem;
     LinkNode *firstNode;
-    long long TopId;
+    int64_t TopId;
  
     /* virtual operation */
 
@@ -20,7 +20,7 @@ void link_deinit(Link *self);
 void link_init(Link *self, void *args);
 void link_addNode(Link *self, void *contant, void (*_contantDinit)(void *contant));
 void link_removeNode(Link *self, void *contant);
-LinkNode *link_getNode(Link *self, long long id);
+LinkNode *link_getNode(Link *self, int64_t id);
 int32_t link_getSize(Link *self);
 
 Link *New_link(void *args);

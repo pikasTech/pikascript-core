@@ -89,7 +89,7 @@ int32_t link_getSize(Link *self)
     return size;
 }
 
-LinkNode *link_getNode(Link *self, long long id)
+LinkNode *link_getNode(Link *self, int64_t id)
 {
     LinkNode *nodeNow = self->firstNode;
     while (1)

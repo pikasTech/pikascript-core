@@ -63,7 +63,7 @@ int32_t obj_disable(MimiObj *self)
     return 0;
 }
 
-int32_t obj_setInt(MimiObj *self, char *argPath, long long val)
+int32_t obj_setInt(MimiObj *self, char *argPath, int64_t val)
 {
     MimiObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
@@ -123,7 +123,7 @@ int32_t obj_setStr(MimiObj *self, char *argPath, char *str)
     return 0;
 }
 
-long long obj_getInt(MimiObj *self, char *argPath)
+int64_t obj_getInt(MimiObj *self, char *argPath)
 {
     MimiObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)

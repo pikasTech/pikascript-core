@@ -30,7 +30,7 @@ int32_t obj_enable(MimiObj *self);
 int32_t obj_disable(MimiObj *self);
 
 // arg type operations
-int32_t obj_setInt(MimiObj *self, char *argPath, long long val);
+int32_t obj_setInt(MimiObj *self, char *argPath, int64_t val);
 int32_t obj_setPtr(MimiObj *self, char *argPath, void *pointer);
 int32_t obj_setFloat(MimiObj *self, char *argPath, float value);
 int32_t obj_setStr(MimiObj *self, char *argPath, char *str);
@@ -39,7 +39,7 @@ int32_t obj_setArg(MimiObj *self, char *argPath, Arg *arg);
 void *obj_getPtr(MimiObj *self, char *argPath);
 float obj_getFloat(MimiObj *self, char *argPath);
 char *obj_getStr(MimiObj *self, char *argPath);
-long long obj_getInt(MimiObj *self, char *argPath);
+int64_t obj_getInt(MimiObj *self, char *argPath);
 Arg *obj_getArg(MimiObj *self, char *argPath);
 
 // arg general operations
