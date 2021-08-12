@@ -82,6 +82,11 @@ int32_t obj_newObj(MimiObj *self, char *objPath, char *classPath)
         goto exit;
     }
     MimiObj *objHost = obj_getObj(self, objPath, 1);
+    if (NULL == objHost)
+    {
+        res = 2;
+        goto exit;
+    }
     char *objName = strsGetLastToken(buffs, objPath, '.');
     sysObj_setObjbyClassAndPtr(objHost, objName, classPath, NewObjPtr);
     res = 0;

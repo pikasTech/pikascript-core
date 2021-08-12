@@ -118,7 +118,7 @@ void setArgDirect(Args *self, Arg *arg)
 char *args_getBuff(Args *self, int32_t size)
 {
     Arg *argNew = New_arg(NULL);
-    arg_newContant(argNew, size);
+    arg_newContant(argNew, size + 1);
     setArgDirect(self, argNew);
     return (char *)argNew->contantDynMem->addr;
 }

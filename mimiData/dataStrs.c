@@ -18,7 +18,8 @@ char *strsAppend(Args *buffs, char *strOrigin, char *strToAppend)
     int32_t size = strGetSize(strOrigin) + strGetSize(strToAppend);
     char *buff = args_getBuff(buffs, size);
     char *strOut = strCopy(buff, strOrigin);
-    return strAppend(strOut, strToAppend);
+    strAppend(strOut, strToAppend);
+    return strOut;
 }
 
 char *strsGetLastToken(Args *buffs, char *argPath, char sign)

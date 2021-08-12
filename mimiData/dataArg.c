@@ -24,8 +24,8 @@ void arg_deinit(Arg *self)
 
 void arg_newContant(Arg *self, uint32_t size)
 {
-    self->contantDynMem = DynMemGet((size + 1) * sizeof(char));
-    for (uint32_t i = 0; i < size + 1; i++)
+    self->contantDynMem = DynMemGet((size) * sizeof(char));
+    for (uint32_t i = 0; i < size; i++)
     {
         self->contantDynMem->addr[i] = 0;
     }
