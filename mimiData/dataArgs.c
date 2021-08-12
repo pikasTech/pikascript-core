@@ -354,7 +354,7 @@ char *getPrintStringFromPtr(Args *self, char *name, void *val)
     char *res = NULL;
     char *valString = args_getBuff(buffs, 256);
     uint64_t intVal = (uint64_t)val;
-    sprintf(valString, "0x%lx", intVal);
+    sprintf(valString, "0x%llx", intVal);
     res = getPrintSring(self, name, valString);
     args_deinit(buffs);
     return res;
