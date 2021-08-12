@@ -75,7 +75,7 @@ char *strDeleteEnter(char *str)
 	return strDeleteChar(str, str, '\n');
 }
 
-char *strAppendWithSize(char *strOut, char *pData,int32_t Size)
+char *strAppendWithSize(char *strOut, char *pData, int32_t Size)
 {
 	int32_t strOut_i = strGetSize(strOut);
 	for (int32_t i = 0; i < Size; i++)
@@ -261,6 +261,10 @@ int32_t strIsStartWith(char *str, char *strStart)
 
 int32_t strEqu(char *str1, char *str2)
 {
+	if (str1 == NULL || str2 == NULL)
+	{
+		return 0;
+	}
 	int32_t size1 = strGetSize(str1);
 	int32_t size2 = strGetSize(str2);
 	if (size1 != size2)
