@@ -74,17 +74,22 @@ int32_t obj_newObj(MimiObj *self, char *objPath, char *classPath)
 {
     MimiObj *classLoader = obj_getObj(self, "__classLoader", 0);
     Args *buffs = New_args(NULL);
+    int res = 0;
     void *NewObjPtr = getClassPtr(classLoader, classPath);
     if (NULL == NewObjPtr)
     {
-        return 1;
-        args_deinit(buffs);
+        res = 1;
+        goto exit;
     }
     MimiObj *objHost = obj_getObj(self, objPath, 1);
     char *objName = strsGetLastToken(buffs, objPath, '.');
     sysObj_setObjbyClassAndPtr(objHost, objName, classPath, NewObjPtr);
+    res = 0;
+    goto exit;
+
+    exit:
     args_deinit(buffs);
-    return 0;
+    return res;
 }
 
 static void init_baseObj(MimiObj *self, Args *args)

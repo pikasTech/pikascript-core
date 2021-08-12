@@ -37,8 +37,8 @@ void arg_setContant(Arg *self, uint8_t *contant, uint32_t size)
     {
         DynMemPut(self->contantDynMem);
     }
-    self->contantDynMem = DynMemGet((size + 1) * sizeof(char));
-    memcpy(self->contantDynMem->addr, contant, size + 1);
+    self->contantDynMem = DynMemGet((size) * sizeof(char));
+    memcpy(self->contantDynMem->addr, contant, size);
 }
 
 void arg_setName(Arg *self, char *name)
@@ -130,7 +130,7 @@ void arg_setPtr(Arg *self, void *pointer)
 
 void arg_setStr(Arg *self, char *string)
 {
-    arg_setContant(self, (uint8_t *)string, strGetSize(string));
+    arg_setContant(self, (uint8_t *)string, strGetSize(string) + 1);
 }
 
 int64_t arg_getInt(Arg *self)
