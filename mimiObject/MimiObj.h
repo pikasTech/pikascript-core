@@ -66,15 +66,15 @@ int32_t obj_freeObj(MimiObj *self, char *subObjectName);
 
 /* method */
 int32_t class_defineMethod(MimiObj *self,
-                     char *declearation,
-                     void (*methodPtr)(MimiObj *self, Args *args));
+                           char *declearation,
+                           void (*methodPtr)(MimiObj *self, Args *args));
 
 void obj_runNoRes(MimiObj *slef, char *cmd);
 void obj_run(MimiObj *self, char *cmd);
 Args *obj_runDirect(MimiObj *self, char *cmd);
 int32_t obj_removeArg(MimiObj *self, char *argPath);
 int32_t obj_isArgExist(MimiObj *self, char *argPath);
-MimiObj *obj_getClassObjByNewFun(MimiObj *self, char *name, void *(*newClassFun)(Args *initArgs));
-MimiObj *newRootObj(char *name, void *newObjFun);
+MimiObj *obj_getClassObjByNewFun(MimiObj *self, char *name, NewFun newClassFun);
+MimiObj *newRootObj(char *name, NewFun newObjFun);
 
 #endif

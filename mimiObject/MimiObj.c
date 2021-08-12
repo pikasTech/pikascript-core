@@ -214,7 +214,6 @@ int32_t obj_load(MimiObj *self, Args *args, char *name)
     return 0;
 }
 
-
 int32_t obj_setObjWithoutClass(MimiObj *self, char *objName, void *newFun)
 {
     /* class means subprocess init */
@@ -325,7 +324,7 @@ MimiObj *removeMethodInfo(MimiObj *thisClass)
     return thisClass;
 }
 
-MimiObj *obj_getClassObjByNewFun(MimiObj *context, char *name, void *(*newClassFun)(Args *initArgs))
+MimiObj *obj_getClassObjByNewFun(MimiObj *context, char *name, NewFun newClassFun)
 {
     Args *initArgs = New_args(NULL);
     args_setPtr(initArgs, "__context", context);
@@ -365,7 +364,7 @@ void *getNewClassObjFunByName(MimiObj *obj, char *name)
     return newClassObjFun;
 }
 
-MimiObj *newRootObj(char *name, void *newObjFun)
+MimiObj *newRootObj(char *name, NewFun newObjFun)
 {
     MimiObj *thisClass = obj_getClassObjByNewFun(NULL, name, newObjFun);
     MimiObj *newObj = removeMethodInfo(thisClass);
@@ -385,7 +384,7 @@ static void removeClassLoader(MimiObj *obj)
 MimiObj *initObj(MimiObj *obj, char *name)
 {
     MimiObj *res = NULL;
-    void *(*newObjFun)(Args * initArgs) = getNewClassObjFunByName(obj, name);
+    NewFun newObjFun = getNewClassObjFunByName(obj, name);
     Args *buffs = New_args(NULL);
     if (NULL == newObjFun)
     {
@@ -484,8 +483,8 @@ static void *getMethodPtr(MimiObj *methodHost, char *methodName)
 }
 
 int32_t class_defineMethod(MimiObj *self,
-                       char *declearation,
-                       void (*methodPtr)(MimiObj *self, Args *args))
+                           char *declearation,
+                           void (*methodPtr)(MimiObj *self, Args *args))
 {
     int32_t size = strGetSize(declearation);
     int32_t res = 0;
@@ -527,10 +526,10 @@ char *getDirectStr(Args *buffs, char *argPath)
 }
 
 static int32_t loadArgByType(MimiObj *self,
-                         char *definedName,
-                         char *definedType,
-                         char *argPath,
-                         Args *args)
+                             char *definedName,
+                             char *definedType,
+                             char *argPath,
+                             Args *args)
 {
     if (strEqu(definedType, "any"))
     {

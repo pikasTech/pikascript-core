@@ -61,7 +61,7 @@ exit:
     return res;
 }
 
-int32_t obj_import(MimiObj *self, char *className, void *classPtr)
+int32_t obj_import(MimiObj *self, char *className, NewFun classPtr)
 {
     MimiObj *classLoader = obj_getObj(self, "__classLoader", 0);
     Args *buffs = New_args(NULL);
