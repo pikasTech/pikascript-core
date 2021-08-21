@@ -19,12 +19,26 @@ void arg_deinit(Arg *self)
     {
         DynMemPut(self->typeDynMem);
     }
-    DynMemPut(self->mem);
+
+    if (NULL != self->content)
+    {
+        pikaFree(self->content, self->contentSize);
+    }
+
+    pikaFree(self, self->memSize);
 }
 
 void arg_newContant(Arg *self, uint32_t size)
 {
     self->contantDynMem = DynMemGet((size) * sizeof(char));
+    
+    self->content = pikaMalloc(size);
+    self->contentSize = size;
+    for (uint32_t i = 0; i < size; i++)
+    {
+        self->content[i] = 0;
+    }
+
     for (uint32_t i = 0; i < size; i++)
     {
         self->contantDynMem->addr[i] = 0;
@@ -180,6 +194,13 @@ void arg_init(Arg *self, void *voidPointer)
     self->nameDynMem = NULL;
     self->typeDynMem = NULL;
 
+    self->content = NULL;
+    self->name = NULL;
+    self->type = NULL;
+
+    self->contentSize = 0;
+    
+
     /* operation */
 
     /* object */
@@ -207,9 +228,8 @@ char *arg_getType(Arg *self)
 
 Arg *New_arg(void *voidPointer)
 {
-    DMEM *mem = DynMemGet(sizeof(Arg));
-    Arg *self = (void *)(mem->addr);
-    self->mem = mem;
+    Arg *self = pikaMalloc(sizeof(Arg));
+    self->memSize = sizeof(Arg);
     arg_init(self, voidPointer);
     return self;
 }

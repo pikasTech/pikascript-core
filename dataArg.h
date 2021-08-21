@@ -8,6 +8,12 @@ struct Class_arg
     /* attribute */
     DMEM *mem;
     void *context;
+    uint32_t memSize;
+
+    uint8_t *content;
+    uint32_t contentSize;
+    uint8_t *name;
+    uint8_t *type;
 
     DMEM *contantDynMem;
     DMEM *nameDynMem;

@@ -1,5 +1,6 @@
 #include "dataMemory.h"
 #include <stdint.h>
+#include <stdlib.h>
 /* 
     本文件代码修改自作者： piaolingtear
     来源：http://blog.csdn.net/u011833609/article/details/46834203

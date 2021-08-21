@@ -580,9 +580,6 @@ void args_init(Args *self, Args *args)
 
 Args *New_args(Args *args)
 {
-    // DMEM *mem = DynMemGet(sizeof(Args));
-    // Args *self = (void *)(mem->addr);
-    // self->mem = mem;
     Args *self = pikaMalloc(sizeof(Args));
     self->memSize = sizeof(Args);
     args_init(self, args);

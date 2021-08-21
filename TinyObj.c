@@ -12,17 +12,6 @@ void _beforDinit(MimiObj *self)
 
 MimiObj *New_TinyObj(Args *args)
 {
-    /* request memory */
-    // DMEM *mem = DynMemGet(sizeof(MimiObj));
-    // if (NULL == mem)
-    // {
-    //     printf("[error] memory is empty!");
-    //     while (1)
-    //         ;
-    // }
-    // MimiObj *self = (void *)(mem->addr);
-    // self->mem = mem;
-
     MimiObj *self = pikaMalloc(sizeof(MimiObj));
     self->memSize = sizeof(MimiObj);
 

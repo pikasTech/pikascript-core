@@ -120,9 +120,6 @@ void link_init(Link *self, void *args)
 
 Link *New_link(void *args)
 {
-    // DMEM *mem = DynMemGet(sizeof(Link));
-    // Link *self = (void *)(mem->addr);
-    // self->mem = mem;
     Link *self = pikaMalloc(sizeof(Link));
     self->memSize = sizeof(Link);
     link_init(self, args);
