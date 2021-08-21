@@ -43,10 +43,12 @@ typedef struct
     uint16_t blk_num;                    //内存块占用数目
     uint16_t reqTimes;                   //memory request times
     uint16_t maxNum;
+    uint32_t heapUsed;
 } DMEM_STATE;
 
 //若返回空，则申请失败
 DMEM *DynMemGet(uint32_t size);
 void DynMemPut(DMEM *pDmem);
-
+void pikaFree(void *mem, uint32_t size);
+void *pikaMalloc(uint32_t size);
 #endif //__MEMORY_H__

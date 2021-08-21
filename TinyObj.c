@@ -23,7 +23,8 @@ MimiObj *New_TinyObj(Args *args)
     // MimiObj *self = (void *)(mem->addr);
     // self->mem = mem;
 
-    MimiObj *self = malloc(sizeof(MimiObj));
+    MimiObj *self = pikaMalloc(sizeof(MimiObj));
+    self->memSize = sizeof(MimiObj);
 
     /* List */
     self->attributeList = New_args(NULL);

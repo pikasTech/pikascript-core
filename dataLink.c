@@ -11,7 +11,7 @@ void link_deinit(Link *self)
         nowNode = nowNode->nextNode;
     }
     // DynMemPut(self->mem);
-    free(self);
+    pikaFree(self,self->memSize);
 }
 
 void link_addNode(Link *self, void *contant, void (*_contantDinit)(void *contant))
@@ -123,7 +123,8 @@ Link *New_link(void *args)
     // DMEM *mem = DynMemGet(sizeof(Link));
     // Link *self = (void *)(mem->addr);
     // self->mem = mem;
-    Link *self = malloc(sizeof(Link));
+    Link *self = pikaMalloc(sizeof(Link));
+    self->memSize = sizeof(Link);
     link_init(self, args);
     return self;
 }

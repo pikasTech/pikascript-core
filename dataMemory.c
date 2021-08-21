@@ -8,6 +8,19 @@ static uint8_t DMEMORY[DMEM_TOTAL_SIZE];
 
 DMEM_STATE DMEMS = {0};
 
+void *pikaMalloc(uint32_t size)
+{
+    DMEMS.heapUsed += size;
+    return malloc(size);
+}
+
+void pikaFree(void *mem, uint32_t size)
+{
+    free(mem);
+    mem = NULL;
+    DMEMS.heapUsed -= size;
+}
+
 DMEM *DynMemGet(uint32_t size)
 {
     uint16_t loop = 0;

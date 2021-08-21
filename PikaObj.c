@@ -36,7 +36,7 @@ int32_t obj_deinit(MimiObj *self)
     deinitAllSubObj(self);
     args_deinit(self->attributeList);
     //DynMemPut(self->mem);
-    free(self);
+    pikaFree(self,self->memSize);
     self = NULL;
     return 0;
 }

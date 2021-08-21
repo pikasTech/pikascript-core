@@ -10,7 +10,7 @@ struct Class_link
     DMEM *mem;
     LinkNode *firstNode;
     int64_t TopId;
-
+    uint32_t *memSize;
     /* virtual operation */
 
     /* object */

@@ -11,7 +11,7 @@ void args_deinit(Args *self)
 {
     // DynMemPut(self->mem);
     link_deinit(self->argLinkList);
-    free(self);
+    pikaFree(self,self->memSize);
     self == NULL;
 }
 
@@ -583,7 +583,8 @@ Args *New_args(Args *args)
     // DMEM *mem = DynMemGet(sizeof(Args));
     // Args *self = (void *)(mem->addr);
     // self->mem = mem;
-    Args *self = malloc(sizeof(Args));
+    Args *self = pikaMalloc(sizeof(Args));
+    self->memSize = sizeof(Args);
     args_init(self, args);
     return self;
 }
