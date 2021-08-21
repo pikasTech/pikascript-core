@@ -204,6 +204,10 @@ Arg *args_getArgByIndex(Args *self, int32_t index)
 float args_getFloat(Args *self, char *name)
 {
     Arg *arg = args_getArg(self, name);
+    if (NULL == arg)
+    {
+        return -999999999;
+    }
     return arg_getFloat(arg);
 }
 
@@ -543,13 +547,14 @@ int32_t args_foreach(Args *self, int32_t (*eachHandle)(Arg *argEach, Args *handl
         {
             continue;
         }
+        LinkNode *nextNode = nodeNow->nextNode;
         eachHandle(argNow, handleArgs);
 
-        if (NULL == nodeNow->nextNode)
+        if (NULL == nextNode)
         {
             break;
         }
-        nodeNow = nodeNow->nextNode;
+        nodeNow = nextNode;
     }
     return 0;
 }

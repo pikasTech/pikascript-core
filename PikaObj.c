@@ -908,13 +908,13 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
     {
         args_setStr(res, "sysOut", args_getStr(args, "sysOut"));
     }
-    args_deinit(args);
     /* solve errCode */
     if (!args_isArgExist(args, "errCode"))
     {
         goto exit;
     }
     int32_t errCode = args_getInt(args, "errCode");
+
     if (0 != errCode)
     {
         /* method error */
@@ -930,6 +930,7 @@ exit:
     {
         obj_deinit(methodHostClass);
     }
+    args_deinit(args);
     return res;
 }
 
