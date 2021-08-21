@@ -324,8 +324,9 @@ char *getPrintSring(Args *self, char *name, char *valString)
     char *printString = args_getBuff(buffs, 256);
     sprintf(printString, "%s", valString);
     args_setStr(self, printName, printString);
+    char *res = args_getStr(self, printName);
     args_deinit(buffs);
-    return args_getStr(self, printName);
+    return res;
 }
 
 char *getPrintStringFromInt(Args *self, char *name, int32_t val)
