@@ -1,7 +1,7 @@
 #ifndef _MimiObj_baseObj__H
 #define _MimiObj_baseObj__H
 #include "dataMemory.h"
-#include "MimiObj.h"
+#include "PikaObj.h"
 #include "TinyObj.h"
 
 MimiObj *New_BaseObj(Args *args);

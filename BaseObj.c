@@ -1,4 +1,4 @@
-#include "MimiObj.h"
+#include "PikaObj.h"
 #include "TinyObj.h"
 #include "BaseObj.h"
 #include "dataMemory.h"
