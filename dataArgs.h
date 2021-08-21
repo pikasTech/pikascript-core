@@ -12,7 +12,7 @@ struct Class_Arglist
     DMEM *mem;
     void *context;
     Link *argLinkList;
-    uint32_t *memSize;
+    uint32_t memSize;
 
     /* virtual operation */
 

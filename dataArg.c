@@ -7,10 +7,6 @@
 
 void arg_deinit(Arg *self)
 {
-    if (NULL != self->contantDynMem)
-    {
-        DynMemPut(self->contantDynMem);
-    }
     if (NULL != self->nameDynMem)
     {
         DynMemPut(self->nameDynMem);
@@ -30,29 +26,23 @@ void arg_deinit(Arg *self)
 
 void arg_newContant(Arg *self, uint32_t size)
 {
-    self->contantDynMem = DynMemGet((size) * sizeof(char));
-    
     self->content = pikaMalloc(size);
     self->contentSize = size;
     for (uint32_t i = 0; i < size; i++)
     {
         self->content[i] = 0;
     }
-
-    for (uint32_t i = 0; i < size; i++)
-    {
-        self->contantDynMem->addr[i] = 0;
-    }
 }
 
 void arg_setContant(Arg *self, uint8_t *contant, uint32_t size)
 {
-    if (NULL != self->contantDynMem)
+    if (NULL != self->content)
     {
-        DynMemPut(self->contantDynMem);
+        pikaFree(self->content, self->contentSize);
     }
-    self->contantDynMem = DynMemGet((size) * sizeof(char));
-    memcpy(self->contantDynMem->addr, contant, size);
+    self->content = pikaMalloc(size);
+    self->contentSize = size;
+    memcpy(self->content, contant, size);
 }
 
 void arg_setName(Arg *self, char *name)
@@ -80,12 +70,7 @@ void arg_setType(Arg *self, char *type)
 
 char *arg_getContant(Arg *self)
 {
-    // return self->contactConst;
-    if (self->contantDynMem == NULL)
-    {
-        return NULL;
-    }
-    return (char *)self->contantDynMem->addr;
+    return (char *)self->content;
 }
 
 void arg_setInt(Arg *self, int64_t val)
@@ -115,13 +100,13 @@ void arg_setFloat(Arg *self, float val)
 
 float arg_getFloat(Arg *self)
 {
-    if (NULL == self->contantDynMem)
+    if (NULL == arg_getContant(self))
     {
         return -999.999;
     }
     float valOut = 0;
     uint8_t *valOutPtr = (uint8_t *)(&valOut);
-    uint8_t *valPtr = self->contantDynMem->addr;
+    uint8_t *valPtr = arg_getContant(self);
     for (uint32_t i = 0; i < 4; i++)
     {
         valOutPtr[i] = valPtr[i];
@@ -149,7 +134,7 @@ void arg_setStr(Arg *self, char *string)
 
 int64_t arg_getInt(Arg *self)
 {
-    if (NULL == self->contantDynMem)
+    if (NULL == arg_getContant(self))
     {
         return -999999;
     }
@@ -158,7 +143,7 @@ int64_t arg_getInt(Arg *self)
     {
         // add 0x30 to avoid 0
         int64Temp = (int64Temp << 8);
-        int64Temp += (self->contantDynMem->addr)[i];
+        int64Temp += arg_getContant(self)[i];
     }
     return int64Temp;
 }
@@ -167,11 +152,11 @@ void *arg_getPtr(Arg *self)
 {
     void *pointer = NULL;
     uint64_t pointerTemp = 0;
-    if (NULL == self->contantDynMem)
+    if (NULL == arg_getContant(self))
     {
         return NULL;
     }
-    uint8_t *contant = self->contantDynMem->addr;
+    uint8_t *contant = arg_getContant(self);
     for (int32_t i = 7; i > -1; i--)
     {
         // avoid \0
@@ -190,7 +175,6 @@ void arg_init(Arg *self, void *voidPointer)
 {
     /* attribute */
     self->context = self;
-    self->contantDynMem = NULL;
     self->nameDynMem = NULL;
     self->typeDynMem = NULL;
 
@@ -237,7 +221,7 @@ Arg *New_arg(void *voidPointer)
 Arg *arg_copy(Arg *argToBeCopy)
 {
     Arg *argCopied = New_arg(NULL);
-    arg_setContant(argCopied, argToBeCopy->contantDynMem->addr, argToBeCopy->contantDynMem->size);
+    arg_setContant(argCopied, arg_getContant(argToBeCopy), argToBeCopy->contentSize);
     arg_setName(argCopied, arg_getName(argToBeCopy));
     arg_setType(argCopied, arg_getType(argToBeCopy));
     return argCopied;

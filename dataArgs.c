@@ -28,7 +28,7 @@ char *args_getStrByIndex(Args *self, int32_t index)
     {
         return NULL;
     }
-    return (char *)arg->contantDynMem->addr;
+    return (char *)arg_getContant(arg);
 }
 
 int32_t args_setStrWithDefaultName(Args *self, char *strIn)
@@ -122,7 +122,7 @@ char *args_getBuff(Args *self, int32_t size)
     Arg *argNew = New_arg(NULL);
     arg_newContant(argNew, size + 1);
     setArgDirect(self, argNew);
-    return (char *)argNew->contantDynMem->addr;
+    return (char *)arg_getContant(argNew);
 }
 
 char *args_getStr(Args *self, char *name)
@@ -132,11 +132,11 @@ char *args_getStr(Args *self, char *name)
     {
         return NULL;
     }
-    if (NULL == arg->contantDynMem)
+    if (NULL == arg_getContant(arg))
     {
         return NULL;
     }
-    return (char *)arg->contantDynMem->addr;
+    return (char *)arg_getContant;
 }
 
 int32_t args_setInt(Args *self, char *name, int64_t int64In)
@@ -250,7 +250,7 @@ int32_t updateArg(Args *self, Arg *argNew)
         return 1;
         // type do not match
     }
-    arg_setContant(argOld, argNew->contantDynMem->addr, argNew->contantDynMem->size);
+    arg_setContant(argOld, arg_getContant(argNew), argNew->contentSize);
     arg_deinit(argNew);
     return 0;
 }

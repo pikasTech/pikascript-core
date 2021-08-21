@@ -9,7 +9,7 @@ struct Class_linkNode
     LinkNode *priorNode;
     LinkNode *nextNode;
     int64_t id;
-    uint32_t *memSize;
+    uint32_t memSize;
 
     /* virtual operation */
     void (*_contantDinit)(void *contant);

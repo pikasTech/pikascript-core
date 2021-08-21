@@ -15,7 +15,6 @@ struct Class_arg
     uint8_t *name;
     uint8_t *type;
 
-    DMEM *contantDynMem;
     DMEM *nameDynMem;
     DMEM *typeDynMem;
 };
