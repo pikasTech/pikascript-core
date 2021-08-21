@@ -44,6 +44,7 @@ typedef struct
     uint16_t reqTimes;                   //memory request times
     uint16_t maxNum;
     uint32_t heapUsed;
+    uint32_t heapUsedMax;
 } DMEM_STATE;
 
 //若返回空，则申请失败

@@ -11,6 +11,10 @@ DMEM_STATE DMEMS = {0};
 void *pikaMalloc(uint32_t size)
 {
     DMEMS.heapUsed += size;
+    if (DMEMS.heapUsedMax<DMEMS.heapUsed)
+    {
+        DMEMS.heapUsedMax = DMEMS.heapUsed;
+    }
     return malloc(size);
 }
 
