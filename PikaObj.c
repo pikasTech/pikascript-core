@@ -35,7 +35,8 @@ int32_t obj_deinit(MimiObj *self)
     self->_beforDinit(self);
     deinitAllSubObj(self);
     args_deinit(self->attributeList);
-    DynMemPut(self->mem);
+    //DynMemPut(self->mem);
+    free(self);
     self = NULL;
     return 0;
 }

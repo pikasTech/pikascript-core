@@ -3,8 +3,9 @@
 
 void linkNode_deinit(LinkNode *self)
 {
-    DynMemPut(self->mem);
     self->_contantDinit(self->contant);
+    // DynMemPut(self->mem);
+    free(self);
 }
 
 int64_t linkNode_getId(LinkNode *self)
@@ -38,9 +39,10 @@ void linkNode_init(LinkNode *self, void *args)
 
 LinkNode *New_linkNode(void *args)
 {
-    DMEM *mem = DynMemGet(sizeof(LinkNode));
-    LinkNode *self = (void *)(mem->addr);
-    self->mem = mem;
+    // DMEM *mem = DynMemGet(sizeof(LinkNode));
+    // LinkNode *self = (void *)(mem->addr);
+    // self->mem = mem;
+    LinkNode *self = malloc(sizeof(LinkNode));
     linkNode_init(self, args);
     return self;
 }

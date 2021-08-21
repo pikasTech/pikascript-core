@@ -9,8 +9,10 @@
 
 void args_deinit(Args *self)
 {
-    DynMemPut(self->mem);
+    // DynMemPut(self->mem);
     link_deinit(self->argLinkList);
+    free(self);
+    self == NULL;
 }
 
 char *getDefaultName(Args *self, char *strOut)
@@ -578,9 +580,10 @@ void args_init(Args *self, Args *args)
 
 Args *New_args(Args *args)
 {
-    DMEM *mem = DynMemGet(sizeof(Args));
-    Args *self = (void *)(mem->addr);
-    self->mem = mem;
+    // DMEM *mem = DynMemGet(sizeof(Args));
+    // Args *self = (void *)(mem->addr);
+    // self->mem = mem;
+    Args *self = malloc(sizeof(Args));
     args_init(self, args);
     return self;
 }

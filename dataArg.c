@@ -7,7 +7,6 @@
 
 void arg_deinit(Arg *self)
 {
-    DynMemPut(self->mem);
     if (NULL != self->contantDynMem)
     {
         DynMemPut(self->contantDynMem);
@@ -20,6 +19,7 @@ void arg_deinit(Arg *self)
     {
         DynMemPut(self->typeDynMem);
     }
+    DynMemPut(self->mem);
 }
 
 void arg_newContant(Arg *self, uint32_t size)

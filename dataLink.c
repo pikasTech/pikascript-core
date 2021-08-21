@@ -4,13 +4,14 @@
 
 void link_deinit(Link *self)
 {
-    DynMemPut(self->mem);
     LinkNode *nowNode = self->firstNode;
     while (NULL != nowNode)
     {
         linkNode_deinit(nowNode);
         nowNode = nowNode->nextNode;
     }
+    // DynMemPut(self->mem);
+    free(self);
 }
 
 void link_addNode(Link *self, void *contant, void (*_contantDinit)(void *contant))
@@ -119,9 +120,10 @@ void link_init(Link *self, void *args)
 
 Link *New_link(void *args)
 {
-    DMEM *mem = DynMemGet(sizeof(Link));
-    Link *self = (void *)(mem->addr);
-    self->mem = mem;
+    // DMEM *mem = DynMemGet(sizeof(Link));
+    // Link *self = (void *)(mem->addr);
+    // self->mem = mem;
+    Link *self = malloc(sizeof(Link));
     link_init(self, args);
     return self;
 }
