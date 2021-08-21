@@ -68,9 +68,9 @@ void arg_setType(Arg *self, char *type)
     memcpy(self->typeDynMem->addr, type, size + 1);
 }
 
-char *arg_getContant(Arg *self)
+uint8_t *arg_getContant(Arg *self)
 {
-    return (char *)self->content;
+    return self->content;
 }
 
 void arg_setInt(Arg *self, int64_t val)
@@ -183,7 +183,6 @@ void arg_init(Arg *self, void *voidPointer)
     self->type = NULL;
 
     self->contentSize = 0;
-    
 
     /* operation */
 

@@ -25,7 +25,7 @@ void arg_newContant(Arg *self, uint32_t size);
 void arg_setType(Arg *self, char *type);
 char *arg_getName(Arg *self);
 char *arg_getType(Arg *self);
-char *arg_getContant(Arg *self);
+uint8_t *arg_getContant(Arg *self);
 
 void arg_setInt(Arg *self, int64_t val);
 void arg_setFloat(Arg *self, float val);
