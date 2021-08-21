@@ -136,7 +136,7 @@ char *args_getStr(Args *self, char *name)
     {
         return NULL;
     }
-    return (char *)arg_getContant;
+    return (char *)arg_getContant(arg);
 }
 
 int32_t args_setInt(Args *self, char *name, int64_t int64In)
