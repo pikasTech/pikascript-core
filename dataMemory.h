@@ -10,8 +10,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#define DMEM_BLOCK_SIZE 128                                //内存块大小为32字节
-#define DMEM_BLOCK_NUM 1024/DMEM_BLOCK_SIZE *  33          //20K                  
+#define DMEM_BLOCK_SIZE 32                                 //内存块大小为32字节
+#define DMEM_BLOCK_NUM 1024/DMEM_BLOCK_SIZE *  20          //20K                  
 #define DMEM_TOTAL_SIZE (DMEM_BLOCK_SIZE * DMEM_BLOCK_NUM) //内存总大小
 
 typedef enum
