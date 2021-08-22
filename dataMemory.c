@@ -7,7 +7,7 @@ PikaMemInfo pikaMemInfo = {0};
 void *pikaMalloc(uint32_t size)
 {
     pikaMemInfo.heapUsed += size;
-    if (pikaMemInfo.heapUsedMax<pikaMemInfo.heapUsed)
+    if (pikaMemInfo.heapUsedMax < pikaMemInfo.heapUsed)
     {
         pikaMemInfo.heapUsedMax = pikaMemInfo.heapUsed;
     }
