@@ -36,7 +36,7 @@ int32_t obj_deinit(MimiObj *self)
     deinitAllSubObj(self);
     args_deinit(self->attributeList);
     //DynMemPut(self->mem);
-    pikaFree(self,self->memSize);
+    pikaFree(self, self->memSize);
     self = NULL;
     return 0;
 }
@@ -761,15 +761,18 @@ static void transferReturnVal(MimiObj *self, char *returnType, char *returnName,
 {
     if (strEqu("->int", returnType))
     {
-        obj_setInt(self, returnName, args_getInt(args, "return"));
+        int returnVal = args_getInt(args, "return");
+        obj_setInt(self, returnName, returnVal);
     }
     if (strEqu("->float", returnType))
     {
-        obj_setFloat(self, returnName, args_getFloat(args, "return"));
+        float returnVal = args_getFloat(args, "return");
+        obj_setFloat(self, returnName, returnVal);
     }
     if (strEqu("->str", returnType))
     {
-        obj_setStr(self, returnName, args_getStr(args, "return"));
+        char *returnVal = args_getStr(args, "return");
+        obj_setStr(self, returnName, returnVal);
     }
 }
 
@@ -884,21 +887,14 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
         method_sysOut(res, "[error] runner: solve arg faild.");
         goto exit;
     }
-    /* transfer return */
-    Args *returnBuffs = NULL;
-    char *returnName = NULL;
-    if (strIsContain(methodToken, '='))
-    {
-        returnBuffs = New_args(NULL);
-        returnName = strsGetFirstToken(returnBuffs, methodToken, '=');
-    }
     /* run method */
     methodPtr(methodHostObj, args);
+
     /* transfer return */
-    if (NULL != returnBuffs)
+    if (strIsContain(methodToken, '='))
     {
+        char *returnName = strsGetFirstToken(buffs, methodToken, '=');
         transferReturnVal(self, returnType, returnName, args);
-        args_deinit(returnBuffs);
     }
     /* transfer sysOut */
     char *sysOut = args_getStr(args, "sysOut");
