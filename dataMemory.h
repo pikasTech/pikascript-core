@@ -9,7 +9,7 @@ typedef struct
 {
     uint32_t heapUsed;
     uint32_t heapUsedMax;
-} DMEM_STATE;
+} PikaMemInfo;
 
 void pikaFree(void *mem, uint32_t size);
 void *pikaMalloc(uint32_t size);
