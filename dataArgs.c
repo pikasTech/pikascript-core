@@ -182,7 +182,7 @@ char *args_getType(Args *self, char *name)
     {
         return NULL;
     }
-    return (char *)arg->typeDynMem->addr;
+    return arg_getType(arg);
 }
 
 Arg *args_getArgByIndex(Args *self, int32_t index)

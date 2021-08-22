@@ -7,11 +7,6 @@
 
 void arg_deinit(Arg *self)
 {
-    if (NULL != self->typeDynMem)
-    {
-        DynMemPut(self->typeDynMem);
-    }
-
     if (NULL != self->content)
     {
         pikaFree(self->content, self->contentSize);
@@ -23,6 +18,12 @@ void arg_deinit(Arg *self)
         pikaFree(self->name, self->nameSize);
         self->name = NULL;
         self->nameSize = 0;
+    }
+    if (NULL != self->type)
+    {
+        pikaFree(self->type, self->typeSize);
+        self->type = NULL;
+        self->typeSize = 0;
     }
 
     pikaFree(self, self->memSize);
@@ -68,12 +69,15 @@ void arg_setName(Arg *self, char *name)
 void arg_setType(Arg *self, char *type)
 {
     uint32_t size = strGetSize(type);
-    if (NULL != self->typeDynMem)
+    if (NULL != self->type)
     {
-        DynMemPut(self->typeDynMem);
+        pikaFree(self->type, self->typeSize);
+        self->type = NULL;
+        self->typeSize = 0;
     }
-    self->typeDynMem = DynMemGet((size + 1) * sizeof(char));
-    memcpy(self->typeDynMem->addr, type, size + 1);
+    self->type = pikaMalloc(size + 1);
+    self->typeSize = size + 1;
+    memcpy(self->type, type, size + 1);
 }
 
 uint8_t *arg_getContant(Arg *self)
@@ -208,11 +212,7 @@ char *arg_getName(Arg *self)
 
 char *arg_getType(Arg *self)
 {
-    if (self->typeDynMem == NULL)
-    {
-        return NULL;
-    }
-    return (char *)self->typeDynMem->addr;
+    return (char *)self->type;
 }
 
 Arg *New_arg(void *voidPointer)
