@@ -77,5 +77,7 @@ void obj_setSysOut(PikaObj *self, char *str);
 char *args_getSysOut(Args *args);
 void args_setErrorCode(Args *args, int32_t errCode);
 int32_t args_getErrorCode(Args *args);
+void args_setSysOut(Args *args, char *str);
+char *obj_getSysOut(PikaObj *self);
 
 #endif

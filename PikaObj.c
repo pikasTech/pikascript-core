@@ -819,7 +819,7 @@ Args *obj_runDirect(PikaObj *self, char *cmd)
     {
         /* error, not found object */
         args_setErrorCode(res, 1);
-        obj_setSysOut(self, "[error] runner: object no found.");
+        args_setSysOut(res, "[error] runner: object no found.");
         goto exit;
     }
     char *methodName = strsGetLastToken(buffs, methodPath, '.');
@@ -835,7 +835,7 @@ Args *obj_runDirect(PikaObj *self, char *cmd)
     {
         /* error, method no found */
         args_setErrorCode(res, 2);
-        obj_setSysOut(self, "[error] runner: method no found.");
+        args_setSysOut(res, "[error] runner: method no found.");
         goto exit;
     }
     char *methodDec = strsCopy(buffs, methodDecInClass);
@@ -849,7 +849,7 @@ Args *obj_runDirect(PikaObj *self, char *cmd)
     {
         /* typeList no found */
         args_setErrorCode(res, 3);
-        obj_setSysOut(self, "[error] runner: type list no found.");
+        args_setSysOut(res, "[error] runner: type list no found.");
         goto exit;
     }
 
@@ -860,7 +860,7 @@ Args *obj_runDirect(PikaObj *self, char *cmd)
         {
             /* argL List no found */
             args_setErrorCode(res, 4);
-            obj_setSysOut(self, "[error] runner: arg list no found.");
+            args_setSysOut(res, "[error] runner: arg list no found.");
             goto exit;
         }
     }
@@ -873,9 +873,11 @@ Args *obj_runDirect(PikaObj *self, char *cmd)
     {
         /* get args faild */
         args_setErrorCode(res, 5);
-        obj_setSysOut(self, "[error] runner: solve arg faild.");
+        args_setSysOut(res, "[error] runner: solve arg faild.");
         goto exit;
     }
+    obj_setErrorCode(methodHostObj, 0);
+    obj_setSysOut(methodHostObj, "");
     /* run method */
     methodPtr(methodHostObj, args);
 
@@ -886,10 +888,10 @@ Args *obj_runDirect(PikaObj *self, char *cmd)
         transferReturnVal(self, returnType, returnName, args);
     }
     /* transfer sysOut */
-    char *sysOut = obj_getStr(methodHostObj, "__sysOut");
+    char *sysOut = obj_getSysOut(methodHostObj);
     if (NULL != sysOut)
     {
-        args_setStr(res, "__sysOut", sysOut);
+        args_setSysOut(res, sysOut);
     }
     /* transfer errCode */
     if (0 != obj_getErrorCode(methodHostObj))
@@ -1032,7 +1034,17 @@ void obj_setSysOut(PikaObj *self, char *str)
     obj_setStr(self, "__sysOut", str);
 }
 
+char *obj_getSysOut(PikaObj *self)
+{
+    return obj_getStr(self, "__sysOut");
+}
+
 char *args_getSysOut(Args *args)
 {
     return args_getStr(args, "__sysOut");
+}
+
+void args_setSysOut(Args *args, char *str)
+{
+    args_setStr(args, "__sysOut", str);
 }
