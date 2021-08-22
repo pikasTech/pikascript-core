@@ -893,8 +893,6 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
         returnName = strsGetFirstToken(returnBuffs, methodToken, '=');
     }
     /* run method */
-    args_deinit(buffs);
-    buffs = NULL;
     methodPtr(methodHostObj, args);
     /* transfer return */
     if (NULL != returnBuffs)
