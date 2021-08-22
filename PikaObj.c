@@ -133,9 +133,9 @@ int64_t obj_getInt(MimiObj *self, char *argPath)
     }
     Args *buffs = New_strBuff();
     char *argName = strsGetLastToken(buffs, argPath, '.');
+    int res = args_getInt(obj->attributeList, argName);
     args_deinit(buffs);
-    return args_getInt(obj->attributeList,
-                       argName);
+    return res;
 }
 
 Arg *obj_getArg(MimiObj *self, char *argPath)
