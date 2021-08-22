@@ -13,9 +13,10 @@ struct Class_arg
     uint8_t *content;
     uint32_t contentSize;
     uint8_t *name;
+    uint32_t nameSize;
     uint8_t *type;
+    uint32_t typeSize;
 
-    DMEM *nameDynMem;
     DMEM *typeDynMem;
 };
 
