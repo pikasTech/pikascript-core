@@ -17,10 +17,7 @@ void method_returnPtr(Args *args, void *val)
 {
     args_setPtr(args, "return", val);
 }
-void method_sysOut(Args *args, char *str)
-{
-    args_setStr(args, "sysOut", str);
-}
+
 int32_t method_getInt(Args *args, char *argName)
 {
     return args_getInt(args, argName);
@@ -32,9 +29,4 @@ float method_getFloat(Args *args, char *argName)
 char *method_getStr(Args *args, char *argName)
 {
     return args_getStr(args, argName);
-}
-
-void method_setErrorCode(Args *args, int32_t errCode)
-{
-    args_setInt(args, "errCode", 1);
 }

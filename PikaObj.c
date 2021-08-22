@@ -806,7 +806,7 @@ Args *obj_runDirect(PikaObj *self, char *cmd)
 {
     /* the Args returned need to be deinit */
     Args *res = New_args(NULL);
-    args_setInt(res, "errCode", 0);
+    args_setErrorCode(res, 0);
     Args *buffs = New_strBuff();
     char *cleanCmd = getCleanCmd(buffs, cmd);
     char *methodToken = strsGetFirstToken(buffs, cleanCmd, '(');
@@ -818,8 +818,8 @@ Args *obj_runDirect(PikaObj *self, char *cmd)
     if (NULL == methodHostObj)
     {
         /* error, not found object */
-        args_setInt(res, "errCode", 1);
-        method_sysOut(res, "[error] runner: object no found.");
+        args_setErrorCode(res, 1);
+        obj_setSysOut(self, "[error] runner: object no found.");
         goto exit;
     }
     char *methodName = strsGetLastToken(buffs, methodPath, '.');
@@ -834,8 +834,8 @@ Args *obj_runDirect(PikaObj *self, char *cmd)
     if ((NULL == methodDecInClass) || (NULL == methodPtr))
     {
         /* error, method no found */
-        args_setInt(res, "errCode", 2);
-        method_sysOut(res, "[error] runner: method no found.");
+        args_setErrorCode(res, 2);
+        obj_setSysOut(self, "[error] runner: method no found.");
         goto exit;
     }
     char *methodDec = strsCopy(buffs, methodDecInClass);
@@ -848,8 +848,8 @@ Args *obj_runDirect(PikaObj *self, char *cmd)
     if (typeList == NULL)
     {
         /* typeList no found */
-        args_setInt(res, "errCode", 3);
-        method_sysOut(res, "[error] runner: type list no found.");
+        args_setErrorCode(res, 3);
+        obj_setSysOut(self, "[error] runner: type list no found.");
         goto exit;
     }
 
@@ -859,8 +859,8 @@ Args *obj_runDirect(PikaObj *self, char *cmd)
         if (argList == NULL)
         {
             /* argL List no found */
-            args_setInt(res, "errCode", 4);
-            method_sysOut(res, "[error] runner: arg list no found.");
+            args_setErrorCode(res, 4);
+            obj_setSysOut(self, "[error] runner: arg list no found.");
             goto exit;
         }
     }
@@ -872,8 +872,8 @@ Args *obj_runDirect(PikaObj *self, char *cmd)
     if (NULL == args)
     {
         /* get args faild */
-        args_setInt(res, "errCode", 5);
-        method_sysOut(res, "[error] runner: solve arg faild.");
+        args_setErrorCode(res, 5);
+        obj_setSysOut(self, "[error] runner: solve arg faild.");
         goto exit;
     }
     /* run method */
@@ -886,22 +886,16 @@ Args *obj_runDirect(PikaObj *self, char *cmd)
         transferReturnVal(self, returnType, returnName, args);
     }
     /* transfer sysOut */
-    char *sysOut = args_getStr(args, "sysOut");
+    char *sysOut = obj_getStr(methodHostObj, "__sysOut");
     if (NULL != sysOut)
     {
-        args_setStr(res, "sysOut", args_getStr(args, "sysOut"));
+        args_setStr(res, "__sysOut", sysOut);
     }
-    /* solve errCode */
-    if (!args_isArgExist(args, "errCode"))
-    {
-        goto exit;
-    }
-    int32_t errCode = args_getInt(args, "errCode");
-
-    if (0 != errCode)
+    /* transfer errCode */
+    if (0 != obj_getErrorCode(methodHostObj))
     {
         /* method error */
-        args_setInt(res, "errCode", 6);
+        args_setErrorCode(res, 6);
     }
     goto exit;
 exit:
@@ -988,12 +982,12 @@ void obj_run(PikaObj *self, char *cmd)
 {
     /* safe, stop when error occord and error info would be print32_t */
     Args *res = obj_runDirect(self, cmd);
-    char *sysOut = args_getStr(res, "sysOut");
+    char *sysOut = args_getStr(res, "__sysOut");
     if (NULL != sysOut)
     {
         printf("%s\r\n", sysOut);
     }
-    if (0 != args_getInt(res, "errCode"))
+    if (0 != args_getErrorCode(res))
     {
         printf("[info] input commond: %s\r\n", cmd);
         while (1)
@@ -1003,4 +997,42 @@ void obj_run(PikaObj *self, char *cmd)
     {
         args_deinit(res);
     }
+}
+
+void obj_setErrorCode(PikaObj *self, int32_t errCode)
+{
+    obj_setInt(self, "__errCode", errCode);
+}
+
+int32_t obj_getErrorCode(PikaObj *self)
+{
+    if (!obj_isArgExist(self, "__errCode"))
+    {
+        return 0;
+    }
+    return obj_getInt(self, "__errCode");
+}
+
+void args_setErrorCode(Args *args, int32_t errCode)
+{
+    args_setInt(args, "__errCode", errCode);
+}
+
+int32_t args_getErrorCode(Args *args)
+{
+    if (!args_isArgExist(args, "__errCode"))
+    {
+        return 0;
+    }
+    return args_getInt(args, "__errCode");
+}
+
+void obj_setSysOut(PikaObj *self, char *str)
+{
+    obj_setStr(self, "__sysOut", str);
+}
+
+char *args_getSysOut(Args *args)
+{
+    return args_getStr(args, "__sysOut");
 }

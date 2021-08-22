@@ -15,84 +15,84 @@ static void newObjMethod(PikaObj *self, Args *args)
     int32_t res = obj_newObj(self, objPath, classPath);
     if (1 == res)
     {
-        method_sysOut(args, "[error] new: class not found .");
-        method_setErrorCode(args, 1);
+        obj_setSysOut(self, "[error] new: class not found .");
+        obj_setErrorCode(self, 1);
         return;
     }
 }
 
-static void type(PikaObj *obj, Args *args)
+static void type(PikaObj *self, Args *args)
 {
-    args_setInt(args, "errCode", 0);
+    obj_setErrorCode(self, 0);
     char *argPath = args_getStr(args, "argPath");
     if (NULL == argPath)
     {
         /* no input obj path, use current obj */
-        PikaObj *objHost = obj_getPtr(obj, "__context");
-        Arg *objArg = obj_getArg(objHost, obj->name);
+        PikaObj *objHost = obj_getPtr(self, "__context");
+        Arg *objArg = obj_getArg(objHost, self->name);
         if (NULL == objArg)
         {
-            method_sysOut(args, "[error] type: arg no found.");
-            method_setErrorCode(args, 1);
+            obj_setSysOut(self, "[error] type: arg no found.");
+            obj_setErrorCode(self, 1);
             return;
         }
-        method_sysOut(args, arg_getType(objArg));
+        obj_setSysOut(self, arg_getType(objArg));
         return;
     }
-    Arg *arg = obj_getArg(obj, argPath);
+    Arg *arg = obj_getArg(self, argPath);
     if (NULL == arg)
     {
-        method_sysOut(args, "[error] type: arg no found.");
-        method_setErrorCode(args, 1);
+        obj_setSysOut(self, "[error] type: arg no found.");
+        obj_setErrorCode(self, 1);
         return;
     }
-    method_sysOut(args, arg_getType(arg));
+    obj_setSysOut(self, arg_getType(arg));
 }
 
-static void del(PikaObj *obj, Args *args)
+static void del(PikaObj *self, Args *args)
 {
-    args_setInt(args, "errCode", 0);
+    obj_setErrorCode(self, 0);
     char *argPath = args_getStr(args, "argPath");
-    int32_t res = obj_removeArg(obj, argPath);
+    int32_t res = obj_removeArg(self, argPath);
     if (1 == res)
     {
-        method_sysOut(args, "[error] del: object no found.");
-        args_setInt(args, "errCode", 1);
+        obj_setSysOut(self, "[error] del: object no found.");
+        obj_setErrorCode(self, 1);
         return;
     }
     if (2 == res)
     {
-        method_sysOut(args, "[error] del: arg not match.");
-        args_setInt(args, "errCode", 2);
+        obj_setSysOut(self, "[error] del: arg not match.");
+        obj_setErrorCode(self, 2);
         return;
     }
 }
 
-static void set(PikaObj *obj, Args *args)
+static void set(PikaObj *self, Args *args)
 {
-    args_setInt(args, "errCode", 0);
+    obj_setErrorCode(self, 0);
     char *argPath = method_getStr(args, "argPath");
-    if (obj_isArgExist(obj, argPath))
+    if (obj_isArgExist(self, argPath))
     {
         /* update arg */
         char *valStr = args_print(args, "val");
-        int32_t res = obj_set(obj, argPath, valStr);
+        int32_t res = obj_set(self, argPath, valStr);
         if (1 == res)
         {
-            method_sysOut(args, "[error] set: arg no found.");
-            args_setInt(args, "errCode", 1);
+            obj_setSysOut(self, "[error] set: arg no found.");
+            obj_setErrorCode(self, 1);
             return;
         }
         if (2 == res)
         {
-            method_sysOut(args, "[error] set: type not match.");
-            args_setInt(args, "errCode", 1);
+            obj_setSysOut(self, "[error] set: type not match.");
+            obj_setErrorCode(self, 1);
             return;
         }
         if (3 == res)
         {
-            method_sysOut(args, "[error] set: object not found.");
-            args_setInt(args, "errCode", 1);
+            obj_setSysOut(self, "[error] set: object not found.");
+            obj_setErrorCode(self, 1);
             return;
         }
         return;
@@ -102,11 +102,11 @@ static void set(PikaObj *obj, Args *args)
     Arg *newArg = arg_copy(val);
     char *argName = strsGetLastToken(args, argPath, '.');
     arg_setName(newArg, argName);
-    int32_t res = obj_setArg(obj, argPath, newArg);
+    int32_t res = obj_setArg(self, argPath, newArg);
     if (res == 1)
     {
-        method_sysOut(args, "[error] set: object not found.");
-        args_setInt(args, "errCode", 1);
+        obj_setSysOut(self, "[error] set: object not found.");
+        obj_setErrorCode(self, 1);
     }
     arg_deinit(newArg);
     newArg = NULL;
@@ -145,44 +145,42 @@ static int32_t listEachArg(Arg *argEach, Args *handleArgs)
 static void list(PikaObj *self, Args *args)
 {
     char *objPath = args_getStr(args, "objPath");
-    args_setInt(args, "errCode", 0);
+    obj_setErrorCode(self, 0);
     args_setStr(args, "stringOut", "");
     if (NULL == objPath)
     {
         /* no input obj path, use current obj */
         args_foreach(self->attributeList, listEachArg, args);
-        method_sysOut(args, args_getStr(args, "stringOut"));
+        obj_setSysOut(self, args_getStr(args, "stringOut"));
         return;
     }
     PikaObj *obj = obj_getObj(self, objPath, 0);
     if (NULL == obj)
     {
         /* do not find obj */
-        method_sysOut(args, "[error] list: object no found.");
-        method_setErrorCode(args, 1);
+        obj_setSysOut(self, "[error] list: object no found.");
+        obj_setErrorCode(self, 1);
         return;
     }
     /* list args */
     args_foreach(obj->attributeList, listEachArg, args);
-    method_sysOut(args, args_getStr(args, "stringOut"));
+    obj_setSysOut(self, args_getStr(args, "stringOut"));
     return;
 }
 
-static void print(PikaObj *obj, Args *args)
+static void print(PikaObj *self, Args *args)
 {
-    args_setInt(args, "errCode", 0);
+    obj_setErrorCode(self, 0);
     char *res = args_print(args, "val");
     if (NULL == res)
     {
-        method_sysOut(args, "[error] print: can not print32_t val");
-        args_setInt(args, "errCode", 1);
+        obj_setSysOut(self, "[error] print: can not print32_t val");
+        obj_setErrorCode(self, 1);
         return;
     }
     /* not empty */
-    method_sysOut(args, res);
+    obj_setSysOut(self, res);
 }
-
-
 
 int32_t loadExceptMethod(Arg *argEach, Args *handleArgs)
 {
