@@ -12,7 +12,7 @@ void args_deinit(Args *self)
     // DynMemPut(self->mem);
     link_deinit(self->argLinkList);
     pikaFree(self, self->memSize);
-    self == NULL;
+    self = NULL;
 }
 
 char *getDefaultName(Args *self, char *strOut)
@@ -206,7 +206,7 @@ float args_getFloat(Args *self, char *name)
     Arg *arg = args_getArg(self, name);
     if (NULL == arg)
     {
-        return -999999999;
+        return -999999999.0;
     }
     return arg_getFloat(arg);
 }
