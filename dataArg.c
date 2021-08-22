@@ -19,9 +19,12 @@ void arg_deinit(Arg *self)
     if (NULL != self->content)
     {
         pikaFree(self->content, self->contentSize);
+        self->content = NULL;
+        self->contentSize = 0;
     }
 
     pikaFree(self, self->memSize);
+    self = NULL;
 }
 
 void arg_newContant(Arg *self, uint32_t size)
@@ -39,6 +42,8 @@ void arg_setContant(Arg *self, uint8_t *contant, uint32_t size)
     if (NULL != self->content)
     {
         pikaFree(self->content, self->contentSize);
+        self->content = NULL;
+        self->contentSize = 0;
     }
     self->content = pikaMalloc(size);
     self->contentSize = size;

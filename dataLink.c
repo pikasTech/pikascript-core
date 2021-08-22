@@ -13,6 +13,7 @@ void link_deinit(Link *self)
     }
     // DynMemPut(self->mem);
     pikaFree(self, self->memSize);
+    self = NULL;
 }
 
 void link_addNode(Link *self, void *contant, void (*_contantDinit)(void *contant))

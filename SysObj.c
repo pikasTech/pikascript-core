@@ -135,8 +135,8 @@ static int32_t listEachArg(Arg *argEach, Args *handleArgs)
         return 1;
     }
 
-    strAppend(stringOut, argName);
-    strAppend(stringOut, " ");
+    stringOut = strsAppend(buffs, stringOut, argName);
+    stringOut = strsAppend(buffs, stringOut, " ");
     args_setStr(handleArgs, "stringOut", stringOut);
     return 0;
 }

@@ -6,6 +6,7 @@ void linkNode_deinit(LinkNode *self)
     self->_contantDinit(self->contant);
     // DynMemPut(self->mem);
     pikaFree(self, self->memSize);
+    self = NULL;
 }
 
 int64_t linkNode_getId(LinkNode *self)

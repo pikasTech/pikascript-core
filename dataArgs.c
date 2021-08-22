@@ -11,7 +11,7 @@ void args_deinit(Args *self)
 {
     // DynMemPut(self->mem);
     link_deinit(self->argLinkList);
-    pikaFree(self,self->memSize);
+    pikaFree(self, self->memSize);
     self == NULL;
 }
 
