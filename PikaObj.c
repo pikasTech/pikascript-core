@@ -15,7 +15,7 @@ int32_t deinitEachSubObj(Arg *argEach, Args *handleArgs)
     char *type = arg_getType(argEach);
     if (strIsStartWith(type, "_class"))
     {
-        MimiObj *subObj = arg_getPtr(argEach);
+        PikaObj *subObj = arg_getPtr(argEach);
         if (NULL != subObj)
         {
             obj_deinit(subObj);
@@ -24,13 +24,13 @@ int32_t deinitEachSubObj(Arg *argEach, Args *handleArgs)
     return 0;
 }
 
-void deinitAllSubObj(MimiObj *self)
+void deinitAllSubObj(PikaObj *self)
 {
     Args *args = self->attributeList;
     args_foreach(args, deinitEachSubObj, NULL);
 }
 
-int32_t obj_deinit(MimiObj *self)
+int32_t obj_deinit(PikaObj *self)
 {
     deinitAllSubObj(self);
     args_deinit(self->attributeList);
@@ -40,21 +40,21 @@ int32_t obj_deinit(MimiObj *self)
     return 0;
 }
 
-int32_t obj_enable(MimiObj *self)
+int32_t obj_enable(PikaObj *self)
 {
     obj_setInt(self, "isEnable", 1);
     return 0;
 }
 
-int32_t obj_disable(MimiObj *self)
+int32_t obj_disable(PikaObj *self)
 {
     obj_setInt(self, "isEnable", 0);
     return 0;
 }
 
-int32_t obj_setInt(MimiObj *self, char *argPath, int64_t val)
+int32_t obj_setInt(PikaObj *self, char *argPath, int64_t val)
 {
-    MimiObj *obj = obj_getObj(self, argPath, 1);
+    PikaObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
     {
         /* [error] object no found */
@@ -67,9 +67,9 @@ int32_t obj_setInt(MimiObj *self, char *argPath, int64_t val)
     return 0;
 }
 
-int32_t obj_setPtr(MimiObj *self, char *argPath, void *pointer)
+int32_t obj_setPtr(PikaObj *self, char *argPath, void *pointer)
 {
-    MimiObj *obj = obj_getObj(self, argPath, 1);
+    PikaObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
     {
         return 1;
@@ -82,9 +82,9 @@ int32_t obj_setPtr(MimiObj *self, char *argPath, void *pointer)
     return 0;
 }
 
-int32_t obj_setFloat(MimiObj *self, char *argPath, float value)
+int32_t obj_setFloat(PikaObj *self, char *argPath, float value)
 {
-    MimiObj *obj = obj_getObj(self, argPath, 1);
+    PikaObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
     {
         return 1;
@@ -97,9 +97,9 @@ int32_t obj_setFloat(MimiObj *self, char *argPath, float value)
     return 0;
 }
 
-int32_t obj_setStr(MimiObj *self, char *argPath, char *str)
+int32_t obj_setStr(PikaObj *self, char *argPath, char *str)
 {
-    MimiObj *obj = obj_getObj(self, argPath, 1);
+    PikaObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
     {
         return 1;
@@ -112,9 +112,9 @@ int32_t obj_setStr(MimiObj *self, char *argPath, char *str)
     return 0;
 }
 
-int64_t obj_getInt(MimiObj *self, char *argPath)
+int64_t obj_getInt(PikaObj *self, char *argPath)
 {
-    MimiObj *obj = obj_getObj(self, argPath, 1);
+    PikaObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
     {
         return -999999999;
@@ -126,9 +126,9 @@ int64_t obj_getInt(MimiObj *self, char *argPath)
     return res;
 }
 
-Arg *obj_getArg(MimiObj *self, char *argPath)
+Arg *obj_getArg(PikaObj *self, char *argPath)
 {
-    MimiObj *obj = obj_getObj(self, argPath, 1);
+    PikaObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
     {
         return NULL;
@@ -140,10 +140,10 @@ Arg *obj_getArg(MimiObj *self, char *argPath)
     return res;
 }
 
-int32_t obj_setArg(MimiObj *self, char *argPath, Arg *arg)
+int32_t obj_setArg(PikaObj *self, char *argPath, Arg *arg)
 {
     /* setArg would copy arg */
-    MimiObj *obj = obj_getObj(self, argPath, 1);
+    PikaObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
     {
         /* object no found */
@@ -153,9 +153,9 @@ int32_t obj_setArg(MimiObj *self, char *argPath, Arg *arg)
     return 0;
 }
 
-void *obj_getPtr(MimiObj *self, char *argPath)
+void *obj_getPtr(PikaObj *self, char *argPath)
 {
-    MimiObj *obj = obj_getObj(self, argPath, 1);
+    PikaObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
     {
         return NULL;
@@ -167,9 +167,9 @@ void *obj_getPtr(MimiObj *self, char *argPath)
     return res;
 }
 
-float obj_getFloat(MimiObj *self, char *argPath)
+float obj_getFloat(PikaObj *self, char *argPath)
 {
-    MimiObj *obj = obj_getObj(self, argPath, 1);
+    PikaObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
     {
         return -999.999;
@@ -182,9 +182,9 @@ float obj_getFloat(MimiObj *self, char *argPath)
     return res;
 }
 
-char *obj_getStr(MimiObj *self, char *argPath)
+char *obj_getStr(PikaObj *self, char *argPath)
 {
-    MimiObj *obj = obj_getObj(self, argPath, 1);
+    PikaObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
     {
         return NULL;
@@ -197,13 +197,13 @@ char *obj_getStr(MimiObj *self, char *argPath)
     return res;
 }
 
-int32_t obj_load(MimiObj *self, Args *args, char *name)
+int32_t obj_load(PikaObj *self, Args *args, char *name)
 {
     args_copyArgByName(args, name, self->attributeList);
     return 0;
 }
 
-int32_t obj_setObjWithoutClass(MimiObj *self, char *objName, void *newFun)
+int32_t obj_setObjWithoutClass(PikaObj *self, char *objName, void *newFun)
 {
     /* class means subprocess init */
     Args *buffs = New_strBuff();
@@ -215,7 +215,7 @@ int32_t obj_setObjWithoutClass(MimiObj *self, char *objName, void *newFun)
     return 0;
 }
 
-int32_t obj_addOther(MimiObj *self, char *subObjectName, void *new_ObjectFun)
+int32_t obj_addOther(PikaObj *self, char *subObjectName, void *new_ObjectFun)
 {
     Args *initArgs = New_args(NULL);
     args_setPtr(initArgs, "__context", self);
@@ -226,20 +226,20 @@ int32_t obj_addOther(MimiObj *self, char *subObjectName, void *new_ObjectFun)
     return 0;
 }
 
-int32_t obj_freeObj(MimiObj *self, char *objPath)
+int32_t obj_freeObj(PikaObj *self, char *objPath)
 {
-    MimiObj *obj = obj_getPtr(self, objPath);
+    PikaObj *obj = obj_getPtr(self, objPath);
     obj_deinit(obj);
     return 0;
 }
 
-int32_t obj_bind(MimiObj *self, char *type, char *name, void *pointer)
+int32_t obj_bind(PikaObj *self, char *type, char *name, void *pointer)
 {
     args_bind(self->attributeList, type, name, pointer);
     return 0;
 }
 
-char *obj_print(MimiObj *self, char *name)
+char *obj_print(PikaObj *self, char *name)
 {
     if (NULL == self)
     {
@@ -248,27 +248,27 @@ char *obj_print(MimiObj *self, char *name)
     return args_print(self->attributeList, name);
 }
 
-int32_t obj_bindInt(MimiObj *self, char *name, int32_t *valPtr)
+int32_t obj_bindInt(PikaObj *self, char *name, int32_t *valPtr)
 {
     args_bindInt(self->attributeList, name, valPtr);
     return 0;
 }
 
-int32_t obj_bindFloat(MimiObj *self, char *name, float *valPtr)
+int32_t obj_bindFloat(PikaObj *self, char *name, float *valPtr)
 {
     args_bindFloat(self->attributeList, name, valPtr);
     return 0;
 }
 
-int32_t obj_bindString(MimiObj *self, char *name, char **valPtr)
+int32_t obj_bindString(PikaObj *self, char *name, char **valPtr)
 {
     args_bindStr(self->attributeList, name, valPtr);
     return 0;
 }
 
-int32_t obj_set(MimiObj *self, char *argPath, char *valStr)
+int32_t obj_set(PikaObj *self, char *argPath, char *valStr)
 {
-    MimiObj *obj = obj_getObj(self, argPath, 1);
+    PikaObj *obj = obj_getObj(self, argPath, 1);
     if (NULL == obj)
     {
         /* cant get object */
@@ -307,24 +307,24 @@ int32_t removeEachMethodInfo(Arg *argNow, Args *argList)
     return 0;
 }
 
-MimiObj *removeMethodInfo(MimiObj *thisClass)
+PikaObj *removeMethodInfo(PikaObj *thisClass)
 {
     args_foreach(thisClass->attributeList, removeEachMethodInfo, thisClass->attributeList);
     return thisClass;
 }
 
-MimiObj *obj_getClassObjByNewFun(MimiObj *context, char *name, NewFun newClassFun)
+PikaObj *obj_getClassObjByNewFun(PikaObj *context, char *name, NewFun newClassFun)
 {
     Args *initArgs = New_args(NULL);
     args_setPtr(initArgs, "__context", context);
     args_setStr(initArgs, "__name", name);
-    MimiObj *thisClass = newClassFun(initArgs);
+    PikaObj *thisClass = newClassFun(initArgs);
     obj_setPtr(thisClass, "__classPtr", newClassFun);
     args_deinit(initArgs);
     return thisClass;
 }
 
-char *obj_getClassPath(MimiObj *objHost, Args *buffs, char *objName)
+char *obj_getClassPath(PikaObj *objHost, Args *buffs, char *objName)
 {
     Arg *objArg = obj_getArg(objHost, objName);
     char *objType = arg_getType(objArg);
@@ -332,9 +332,9 @@ char *obj_getClassPath(MimiObj *objHost, Args *buffs, char *objName)
     return classPath;
 }
 
-void *getNewObjFunByClass(MimiObj *obj, char *classPath)
+void *getNewObjFunByClass(PikaObj *obj, char *classPath)
 {
-    MimiObj *classHost = args_getPtr(obj->attributeList, "__classLoader");
+    PikaObj *classHost = args_getPtr(obj->attributeList, "__classLoader");
     if (NULL == classHost)
     {
         return NULL;
@@ -343,7 +343,7 @@ void *getNewObjFunByClass(MimiObj *obj, char *classPath)
     return newObjFun;
 }
 
-void *getNewClassObjFunByName(MimiObj *obj, char *name)
+void *getNewClassObjFunByName(PikaObj *obj, char *name)
 {
     Args *buffs = New_strBuff();
     char *classPath = strsAppend(buffs, "[mate]", name);
@@ -353,16 +353,16 @@ void *getNewClassObjFunByName(MimiObj *obj, char *name)
     return newClassObjFun;
 }
 
-MimiObj *newRootObj(char *name, NewFun newObjFun)
+PikaObj *newRootObj(char *name, NewFun newObjFun)
 {
-    MimiObj *thisClass = obj_getClassObjByNewFun(NULL, name, newObjFun);
-    MimiObj *newObj = removeMethodInfo(thisClass);
+    PikaObj *thisClass = obj_getClassObjByNewFun(NULL, name, newObjFun);
+    PikaObj *newObj = removeMethodInfo(thisClass);
     return newObj;
 }
 
-static void removeClassLoader(MimiObj *obj)
+static void removeClassLoader(PikaObj *obj)
 {
-    MimiObj *classObj = args_getPtr(obj->attributeList, "__classLoader");
+    PikaObj *classObj = args_getPtr(obj->attributeList, "__classLoader");
     if (NULL != classObj)
     {
         obj_deinit(classObj);
@@ -370,9 +370,9 @@ static void removeClassLoader(MimiObj *obj)
     }
 }
 
-MimiObj *initObj(MimiObj *obj, char *name)
+PikaObj *initObj(PikaObj *obj, char *name)
 {
-    MimiObj *res = NULL;
+    PikaObj *res = NULL;
     NewFun newObjFun = getNewClassObjFunByName(obj, name);
     Args *buffs = New_args(NULL);
     if (NULL == newObjFun)
@@ -381,8 +381,8 @@ MimiObj *initObj(MimiObj *obj, char *name)
         res = NULL;
         goto exit;
     }
-    MimiObj *thisClass = obj_getClassObjByNewFun(obj, name, newObjFun);
-    MimiObj *newObj = removeMethodInfo(thisClass);
+    PikaObj *thisClass = obj_getClassObjByNewFun(obj, name, newObjFun);
+    PikaObj *newObj = removeMethodInfo(thisClass);
     /* delete [mate]<objName> */
     obj_removeArg(obj, strsAppend(buffs, "[mate]", name));
     /* delete "__classLoader" object */
@@ -397,7 +397,7 @@ exit:
     return res;
 }
 
-MimiObj *obj_getObjDirect(MimiObj *self, char *name)
+PikaObj *obj_getObjDirect(PikaObj *self, char *name)
 {
     if (NULL == self)
     {
@@ -422,12 +422,12 @@ MimiObj *obj_getObjDirect(MimiObj *self, char *name)
     return obj_getPtr(self, name);
 }
 
-MimiObj *obj_getObj(MimiObj *self, char *objPath, int32_t keepDeepth)
+PikaObj *obj_getObj(PikaObj *self, char *objPath, int32_t keepDeepth)
 {
     Args *buffs = New_strBuff();
     char *objPathBuff = strsCopy(buffs, objPath);
     int32_t tokenNum = strGetTokenNum(objPath, '.');
-    MimiObj *obj = self;
+    PikaObj *obj = self;
     for (int32_t i = 0; i < tokenNum - keepDeepth; i++)
     {
         char *token = strsPopToken(buffs, objPathBuff, '.');
@@ -443,7 +443,7 @@ exit:
     return obj;
 }
 
-void loadMethodInfo(MimiObj *methodHost, char *methodName, char *methodDeclearation, void *methodPtr)
+void loadMethodInfo(PikaObj *methodHost, char *methodName, char *methodDeclearation, void *methodPtr)
 {
     Args *buffs = New_strBuff();
     char *methodPtrPath = strsAppend(buffs, "[methodPtr]", methodName);
@@ -453,7 +453,7 @@ void loadMethodInfo(MimiObj *methodHost, char *methodName, char *methodDeclearat
     args_deinit(buffs);
 }
 
-static char *getMethodDeclearation(MimiObj *obj, char *methodName)
+static char *getMethodDeclearation(PikaObj *obj, char *methodName)
 {
     Args *buffs = New_strBuff();
     char *methodDeclearationPath = strsAppend(buffs, "[methodDec]", methodName);
@@ -462,7 +462,7 @@ static char *getMethodDeclearation(MimiObj *obj, char *methodName)
     return res;
 }
 
-static void *getMethodPtr(MimiObj *methodHost, char *methodName)
+static void *getMethodPtr(PikaObj *methodHost, char *methodName)
 {
     Args *buffs = New_strBuff();
     char *methodPtrPath = strsAppend(buffs, "[methodPtr]", methodName);
@@ -471,9 +471,9 @@ static void *getMethodPtr(MimiObj *methodHost, char *methodName)
     return res;
 }
 
-int32_t class_defineMethod(MimiObj *self,
+int32_t class_defineMethod(PikaObj *self,
                            char *declearation,
-                           void (*methodPtr)(MimiObj *self, Args *args))
+                           void (*methodPtr)(PikaObj *self, Args *args))
 {
     int32_t size = strGetSize(declearation);
     int32_t res = 0;
@@ -481,7 +481,7 @@ int32_t class_defineMethod(MimiObj *self,
     char *cleanDeclearation = strDeleteChar(args_getBuff(buffs, size), declearation, ' ');
     char *methodPath = strGetFirstToken(args_getBuff(buffs, size), cleanDeclearation, '(');
 
-    MimiObj *methodHost = obj_getObj(self, methodPath, 1);
+    PikaObj *methodHost = obj_getObj(self, methodPath, 1);
     if (NULL == methodHost)
     {
         /* no found method object */
@@ -514,7 +514,7 @@ char *getDirectStr(Args *buffs, char *argPath)
     return NULL;
 }
 
-static int32_t loadArgByType(MimiObj *self,
+static int32_t loadArgByType(PikaObj *self,
                              char *definedName,
                              char *definedType,
                              char *argPath,
@@ -649,7 +649,7 @@ char *getTypeVal(Args *buffs, char *typeToken)
     return strsGetLastToken(buffs, typeToken, ':');
 }
 
-static Args *getArgsBySort(MimiObj *self, char *typeList, char *argList)
+static Args *getArgsBySort(PikaObj *self, char *typeList, char *argList)
 {
     Args *buffs = New_strBuff();
     char *typeListBuff = strsCopy(buffs, typeList);
@@ -684,7 +684,7 @@ static Args *getArgsBySort(MimiObj *self, char *typeList, char *argList)
     return args;
 }
 
-static Args *getArgsByNameMatch(MimiObj *self, char *typeList, char *argList)
+static Args *getArgsByNameMatch(PikaObj *self, char *typeList, char *argList)
 {
     Args *buffs = New_strBuff();
     char *typeListBuff = strsCopy(buffs, typeList);
@@ -736,7 +736,7 @@ static Args *getArgsByNameMatch(MimiObj *self, char *typeList, char *argList)
     return args;
 }
 
-static Args *getArgsBySentence(MimiObj *self, char *typeList, char *argList)
+static Args *getArgsBySentence(PikaObj *self, char *typeList, char *argList)
 {
     if (strIsContain(argList, '='))
     {
@@ -745,7 +745,7 @@ static Args *getArgsBySentence(MimiObj *self, char *typeList, char *argList)
     return getArgsBySort(self, typeList, argList);
 }
 
-static void transferReturnVal(MimiObj *self, char *returnType, char *returnName, Args *args)
+static void transferReturnVal(PikaObj *self, char *returnType, char *returnName, Args *args)
 {
     if (strEqu("->int", returnType))
     {
@@ -802,7 +802,7 @@ static char *getCleanCmd(Args *buffs, char *cmd)
     return strOut;
 }
 
-Args *obj_runDirect(MimiObj *self, char *cmd)
+Args *obj_runDirect(PikaObj *self, char *cmd)
 {
     /* the Args returned need to be deinit */
     Args *res = New_args(NULL);
@@ -813,8 +813,8 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
     char *methodPath = getMethodPath(buffs, methodToken);
     Args *args = NULL;
 
-    MimiObj *methodHostObj = obj_getObj(self, methodPath, 1);
-    MimiObj *methodHostClass = NULL;
+    PikaObj *methodHostObj = obj_getObj(self, methodPath, 1);
+    PikaObj *methodHostClass = NULL;
     if (NULL == methodHostObj)
     {
         /* error, not found object */
@@ -828,7 +828,7 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
     char *methodHostClassName = strsAppend(buffs, "classObj-", methodHostObj->name);
     methodHostClass = obj_getClassObjByNewFun(methodHostObj, methodHostClassName, classPtr);
     /* get method Ptr */
-    void (*methodPtr)(MimiObj * self, Args * args) = getMethodPtr(methodHostClass, methodName);
+    void (*methodPtr)(PikaObj * self, Args * args) = getMethodPtr(methodHostClass, methodName);
     char *methodDecInClass = getMethodDeclearation(methodHostClass, methodName);
     /* assert method*/
     if ((NULL == methodDecInClass) || (NULL == methodPtr))
@@ -920,10 +920,10 @@ exit:
     return res;
 }
 
-int32_t obj_removeArg(MimiObj *self, char *argPath)
+int32_t obj_removeArg(PikaObj *self, char *argPath)
 {
-    MimiObj *objHost = obj_getObj(self, argPath, 1);
-    MimiObj *obj = obj_getObj(self, argPath, 0);
+    PikaObj *objHost = obj_getObj(self, argPath, 1);
+    PikaObj *obj = obj_getObj(self, argPath, 0);
     if (NULL != obj)
     {
         obj_deinit(obj);
@@ -950,9 +950,9 @@ exit:
     return err;
 }
 
-int32_t obj_isArgExist(MimiObj *self, char *argPath)
+int32_t obj_isArgExist(PikaObj *self, char *argPath)
 {
-    MimiObj *obj = obj_getObj(self, argPath, 1);
+    PikaObj *obj = obj_getObj(self, argPath, 1);
     Args *buffs = New_strBuff();
     int32_t res = 0;
     if (NULL == obj)
@@ -978,13 +978,13 @@ exit:
     return res;
 }
 
-void obj_runNoRes(MimiObj *slef, char *cmd)
+void obj_runNoRes(PikaObj *slef, char *cmd)
 {
     /* unsafe, nothing would happend when error occord */
     args_deinit(obj_runDirect(slef, cmd));
 }
 
-void obj_run(MimiObj *self, char *cmd)
+void obj_run(PikaObj *self, char *cmd)
 {
     /* safe, stop when error occord and error info would be print32_t */
     Args *res = obj_runDirect(self, cmd);

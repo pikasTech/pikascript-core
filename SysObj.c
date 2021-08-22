@@ -7,7 +7,7 @@
 #include "dataString.h"
 #include "dataStrs.h"
 
-static void newObjMethod(MimiObj *self, Args *args)
+static void newObjMethod(PikaObj *self, Args *args)
 {
     /* get arg */
     char *objPath = args_getStr(args, "objPath");
@@ -21,14 +21,14 @@ static void newObjMethod(MimiObj *self, Args *args)
     }
 }
 
-static void type(MimiObj *obj, Args *args)
+static void type(PikaObj *obj, Args *args)
 {
     args_setInt(args, "errCode", 0);
     char *argPath = args_getStr(args, "argPath");
     if (NULL == argPath)
     {
         /* no input obj path, use current obj */
-        MimiObj *objHost = obj_getPtr(obj, "__context");
+        PikaObj *objHost = obj_getPtr(obj, "__context");
         Arg *objArg = obj_getArg(objHost, obj->name);
         if (NULL == objArg)
         {
@@ -49,7 +49,7 @@ static void type(MimiObj *obj, Args *args)
     method_sysOut(args, arg_getType(arg));
 }
 
-static void del(MimiObj *obj, Args *args)
+static void del(PikaObj *obj, Args *args)
 {
     args_setInt(args, "errCode", 0);
     char *argPath = args_getStr(args, "argPath");
@@ -68,7 +68,7 @@ static void del(MimiObj *obj, Args *args)
     }
 }
 
-static void set(MimiObj *obj, Args *args)
+static void set(PikaObj *obj, Args *args)
 {
     args_setInt(args, "errCode", 0);
     char *argPath = method_getStr(args, "argPath");
@@ -141,7 +141,7 @@ static int32_t listEachArg(Arg *argEach, Args *handleArgs)
     return 0;
 }
 
-static void list(MimiObj *self, Args *args)
+static void list(PikaObj *self, Args *args)
 {
     char *objPath = args_getStr(args, "objPath");
     args_setInt(args, "errCode", 0);
@@ -153,7 +153,7 @@ static void list(MimiObj *self, Args *args)
         method_sysOut(args, args_getStr(args, "stringOut"));
         return;
     }
-    MimiObj *obj = obj_getObj(self, objPath, 0);
+    PikaObj *obj = obj_getObj(self, objPath, 0);
     if (NULL == obj)
     {
         /* do not find obj */
@@ -167,7 +167,7 @@ static void list(MimiObj *self, Args *args)
     return;
 }
 
-static void print(MimiObj *obj, Args *args)
+static void print(PikaObj *obj, Args *args)
 {
     args_setInt(args, "errCode", 0);
     char *res = args_print(args, "val");
@@ -200,19 +200,19 @@ int32_t loadExceptMethod(Arg *argEach, Args *handleArgs)
     return 0;
 }
 
-MimiObj *obj_loadWithoutMethod(MimiObj *thisClass)
+PikaObj *obj_loadWithoutMethod(PikaObj *thisClass)
 {
-    MimiObj *newObj = New_TinyObj(NULL);
+    PikaObj *newObj = New_TinyObj(NULL);
     Args *thisClassArgs = thisClass->attributeList;
     Args *newObjArgs = newObj->attributeList;
     args_foreach(thisClassArgs, loadExceptMethod, newObjArgs);
     return newObj;
 }
 
-MimiObj *New_SysObj(Args *args)
+PikaObj *New_SysObj(Args *args)
 {
     /* derive */
-    MimiObj *self = New_BaseObj(args);
+    PikaObj *self = New_BaseObj(args);
 
     /* attribute */
 

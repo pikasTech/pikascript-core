@@ -1,19 +1,19 @@
 #include "PikaObj.h"
 
-void _UpdateHandle(MimiObj *self)
+void _UpdateHandle(PikaObj *self)
 {
     // override the handle function here
 }
 
-void _beforDinit(MimiObj *self)
+void _beforDinit(PikaObj *self)
 {
     /* override in user code */
 }
 
-MimiObj *New_TinyObj(Args *args)
+PikaObj *New_TinyObj(Args *args)
 {
-    MimiObj *self = pikaMalloc(sizeof(MimiObj));
-    self->memSize = sizeof(MimiObj);
+    PikaObj *self = pikaMalloc(sizeof(PikaObj));
+    self->memSize = sizeof(PikaObj);
 
     /* List */
     self->attributeList = New_args(NULL);

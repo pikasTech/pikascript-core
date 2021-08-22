@@ -1,6 +1,6 @@
-#ifndef _MimiObj_sys__H
-#define _MimiObj_sys__H
+#ifndef _PikaObj_sys__H
+#define _PikaObj_sys__H
 #include "PikaObj.h"
 
-MimiObj *New_SysObj(Args *args);
+PikaObj *New_SysObj(Args *args);
 #endif
