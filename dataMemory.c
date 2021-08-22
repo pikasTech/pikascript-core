@@ -1,10 +1,6 @@
 #include "dataMemory.h"
 #include <stdint.h>
 #include <stdlib.h>
-/* 
-    本文件代码修改自作者： piaolingtear
-    来源：http://blog.csdn.net/u011833609/article/details/46834203
-*/
 
 DMEM_STATE DMEMS = {0};
 
@@ -23,4 +19,19 @@ void pikaFree(void *mem, uint32_t size)
     free(mem);
     mem = NULL;
     DMEMS.heapUsed -= size;
+}
+
+uint16_t pikaMemNow(void)
+{
+    return DMEMS.heapUsed;
+}
+
+uint16_t pikaMemMax(void)
+{
+    return DMEMS.heapUsedMax;
+}
+
+void pikaMemMaxReset(void)
+{
+    DMEMS.heapUsedMax = 0;
 }
