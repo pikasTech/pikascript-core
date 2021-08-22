@@ -9,7 +9,6 @@ typedef struct Class_Arglist Args;
 struct Class_Arglist
 {
     /* attribute */
-    DMEM *mem;
     void *context;
     Link *argLinkList;
     uint32_t memSize;

@@ -6,7 +6,6 @@ typedef struct Class_arg Arg;
 struct Class_arg
 {
     /* attribute */
-    DMEM *mem;
     void *context;
     uint32_t memSize;
 
@@ -16,8 +15,6 @@ struct Class_arg
     uint32_t nameSize;
     uint8_t *type;
     uint32_t typeSize;
-
-    DMEM *typeDynMem;
 };
 
 void arg_setName(Arg *self, char *name);

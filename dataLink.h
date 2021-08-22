@@ -7,7 +7,6 @@ typedef struct Class_link Link;
 struct Class_link
 {
     /* attribute */
-    DMEM *mem;
     LinkNode *firstNode;
     int64_t TopId;
     uint32_t memSize;

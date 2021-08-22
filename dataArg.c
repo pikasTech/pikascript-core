@@ -187,22 +187,12 @@ void arg_init(Arg *self, void *voidPointer)
 {
     /* attribute */
     self->context = self;
-    self->typeDynMem = NULL;
-
     self->content = NULL;
     self->name = NULL;
     self->type = NULL;
     self->contentSize = 0;
     self->nameSize = 0;
     self->typeSize = 0;
-
-    self->contentSize = 0;
-
-    /* operation */
-
-    /* object */
-
-    /* override */
 }
 
 char *arg_getName(Arg *self)

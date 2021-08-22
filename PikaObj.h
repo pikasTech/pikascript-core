@@ -10,9 +10,6 @@ typedef MimiObj *(*InitFun)(MimiObj *self, Args *args);
 
 struct Class_process
 {
-    /* attribute */
-    DMEM *mem;
-
     /* list */
     Args *attributeList;
     char *name;
