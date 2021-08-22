@@ -27,6 +27,7 @@ void linkNode_init(LinkNode *self, void *args)
 {
     /* attribute */
     self->nextNode = NULL;
+    self->priorNode = NULL;
     self->id = 0;
 
     /* object */

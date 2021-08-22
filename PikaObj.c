@@ -924,11 +924,11 @@ int32_t obj_removeArg(PikaObj *self, char *argPath)
 {
     PikaObj *objHost = obj_getObj(self, argPath, 1);
     PikaObj *obj = obj_getObj(self, argPath, 0);
+    Args *buffs = New_strBuff();
     if (NULL != obj)
     {
         obj_deinit(obj);
     }
-    Args *buffs = New_strBuff();
     int32_t err = 0;
     if (NULL == objHost)
     {

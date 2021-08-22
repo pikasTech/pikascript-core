@@ -109,6 +109,7 @@ static void set(PikaObj *obj, Args *args)
         args_setInt(args, "errCode", 1);
     }
     arg_deinit(newArg);
+    newArg = NULL;
     return;
 }
 
