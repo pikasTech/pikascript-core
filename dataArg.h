@@ -7,14 +7,12 @@ struct Class_arg
 {
     /* attribute */
     void *context;
-    uint32_t memSize;
+    uint16_t memSize;
 
     uint8_t *content;
-    uint32_t contentSize;
+    uint16_t contentSize;
     uint8_t *name;
-    uint32_t nameSize;
     uint8_t *type;
-    uint32_t typeSize;
 };
 
 void arg_setName(Arg *self, char *name);

@@ -13,11 +13,7 @@ struct Class_process
     /* list */
     Args *attributeList;
     char *name;
-    uint32_t memSize;
-
-    /* virtual operation */
-    void (*_beforDinit)(MimiObj *self);
-    void (*_updateHandle)(MimiObj *self);
+    uint16_t memSize;
 };
 
 /* operation */

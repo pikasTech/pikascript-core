@@ -8,14 +8,9 @@
 typedef struct Class_Arglist Args;
 struct Class_Arglist
 {
-    /* attribute */
     void *context;
     Link *argLinkList;
-    uint32_t memSize;
-
-    /* virtual operation */
-
-    /* object */
+    uint16_t memSize;
 };
 
 /* operation */

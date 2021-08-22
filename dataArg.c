@@ -15,15 +15,13 @@ void arg_deinit(Arg *self)
     }
     if (NULL != self->name)
     {
-        pikaFree(self->name, self->nameSize);
+        pikaFree(self->name, strGetSize(self->name) + 1);
         self->name = NULL;
-        self->nameSize = 0;
     }
     if (NULL != self->type)
     {
-        pikaFree(self->type, self->typeSize);
+        pikaFree(self->type, strGetSize(self->type) + 1);
         self->type = NULL;
-        self->typeSize = 0;
     }
 
     pikaFree(self, self->memSize);
@@ -58,10 +56,9 @@ void arg_setName(Arg *self, char *name)
     uint32_t size = strGetSize(name);
     if (NULL != self->name)
     {
-        pikaFree(self->name, self->nameSize);
+        pikaFree(self->name, strGetSize(self->name) + 1);
     }
     self->name = pikaMalloc(size + 1);
-    self->nameSize = size + 1;
     // size + 1 to contain \0
     memcpy(self->name, name, size + 1);
 }
@@ -71,12 +68,10 @@ void arg_setType(Arg *self, char *type)
     uint32_t size = strGetSize(type);
     if (NULL != self->type)
     {
-        pikaFree(self->type, self->typeSize);
+        pikaFree(self->type, strGetSize(self->type) + 1);
         self->type = NULL;
-        self->typeSize = 0;
     }
     self->type = pikaMalloc(size + 1);
-    self->typeSize = size + 1;
     memcpy(self->type, type, size + 1);
 }
 
@@ -191,8 +186,6 @@ void arg_init(Arg *self, void *voidPointer)
     self->name = NULL;
     self->type = NULL;
     self->contentSize = 0;
-    self->nameSize = 0;
-    self->typeSize = 0;
 }
 
 char *arg_getName(Arg *self)

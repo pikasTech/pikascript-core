@@ -32,23 +32,11 @@ void deinitAllSubObj(MimiObj *self)
 
 int32_t obj_deinit(MimiObj *self)
 {
-    self->_beforDinit(self);
     deinitAllSubObj(self);
     args_deinit(self->attributeList);
     //DynMemPut(self->mem);
     pikaFree(self, self->memSize);
     self = NULL;
-    return 0;
-}
-
-int32_t obj_update(MimiObj *self)
-{
-    // return if is not enable
-    if (0 == obj_getInt(self, "isEnable"))
-    {
-        return 1;
-    }
-    self->_updateHandle(self);
     return 0;
 }
 
@@ -823,6 +811,7 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
     char *cleanCmd = getCleanCmd(buffs, cmd);
     char *methodToken = strsGetFirstToken(buffs, cleanCmd, '(');
     char *methodPath = getMethodPath(buffs, methodToken);
+    Args *args = NULL;
 
     MimiObj *methodHostObj = obj_getObj(self, methodPath, 1);
     MimiObj *methodHostClass = NULL;
@@ -879,7 +868,7 @@ Args *obj_runDirect(MimiObj *self, char *cmd)
     /* get return type */
     char *returnType = strsGetLastToken(buffs, methodDec, ')');
     /* get args */
-    Args *args = getArgsBySentence(self, typeList, argList);
+    args = getArgsBySentence(self, typeList, argList);
     if (NULL == args)
     {
         /* get args faild */
@@ -924,7 +913,10 @@ exit:
     {
         obj_deinit(methodHostClass);
     }
-    args_deinit(args);
+    if (NULL != args)
+    {
+        args_deinit(args);
+    }
     return res;
 }
 

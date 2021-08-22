@@ -18,10 +18,6 @@ MimiObj *New_TinyObj(Args *args)
     /* List */
     self->attributeList = New_args(NULL);
 
-    /* override */
-    self->_updateHandle = _UpdateHandle;
-    self->_beforDinit = _beforDinit;
-
     /* attribute */
     obj_setPtr(self, "__context", self);
     obj_setStr(self, "__name", "root");

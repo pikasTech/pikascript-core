@@ -6,13 +6,9 @@
 typedef struct Class_link Link;
 struct Class_link
 {
-    /* attribute */
     LinkNode *firstNode;
     int64_t TopId;
-    uint32_t memSize;
-    /* virtual operation */
-
-    /* object */
+    uint16_t memSize;
 };
 
 typedef void (*contantDeinitFun)(void *contant);

@@ -26,7 +26,6 @@ int32_t linkNode_isId(LinkNode *self, int64_t id)
 void linkNode_init(LinkNode *self, void *args)
 {
     /* attribute */
-    self->priorNode = NULL;
     self->nextNode = NULL;
     self->id = 0;
 
