@@ -113,7 +113,7 @@ static void set(PikaObj *self, Args *args)
     return;
 }
 
-static int32_t listEachArg(Arg *argEach, Args *handleArgs)
+static int32_t __foreach_listEachArg(Arg *argEach, Args *handleArgs)
 {
     Args *buffs = handleArgs;
     if (NULL == handleArgs)
@@ -150,7 +150,7 @@ static void list(PikaObj *self, Args *args)
     if (NULL == objPath)
     {
         /* no input obj path, use current obj */
-        args_foreach(self->attributeList, listEachArg, args);
+        args_foreach(self->attributeList, __foreach_listEachArg, args);
         obj_setSysOut(self, args_getStr(args, "stringOut"));
         return;
     }
@@ -163,7 +163,7 @@ static void list(PikaObj *self, Args *args)
         return;
     }
     /* list args */
-    args_foreach(obj->attributeList, listEachArg, args);
+    args_foreach(obj->attributeList, __foreach_listEachArg, args);
     obj_setSysOut(self, args_getStr(args, "stringOut"));
     return;
 }
