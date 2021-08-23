@@ -3,7 +3,6 @@
 #include "dataMemory.h"
 #include "dataString.h"
 #include "dataStrs.h"
-#include "SysObj.h"
 
 int32_t deinitEachSubObj(Arg *argEach, Args *handleArgs)
 {

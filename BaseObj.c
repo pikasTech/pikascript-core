@@ -97,27 +97,72 @@ int32_t obj_newObj(PikaObj *self, char *objPath, char *classPath)
     return res;
 }
 
-static void init_baseObj(PikaObj *self, Args *args)
+static void print(PikaObj *self, Args *args)
 {
-    /* attribute */
-    /* object */
-    obj_setObjWithoutClass(self, "__classLoader", New_TinyObj);
-    /* 
-        init classLoader now, in order to the 
-        find it after inited the self object.
-    */
-    obj_getObj(self, "__classLoader", 0);
-
-    /* operation */
-
-    /* object */
-
-    /* override */
+    obj_setErrorCode(self, 0);
+    char *res = args_print(args, "val");
+    if (NULL == res)
+    {
+        obj_setSysOut(self, "[error] print: can not print32_t val");
+        obj_setErrorCode(self, 1);
+        return;
+    }
+    /* not empty */
+    obj_setSysOut(self, res);
 }
+
+static void set(PikaObj *self, Args *args)
+{
+    obj_setErrorCode(self, 0);
+    char *argPath = method_getStr(args, "argPath");
+    if (obj_isArgExist(self, argPath))
+    {
+        /* update arg */
+        char *valStr = args_print(args, "val");
+        int32_t res = obj_set(self, argPath, valStr);
+        if (1 == res)
+        {
+            obj_setSysOut(self, "[error] set: arg no found.");
+            obj_setErrorCode(self, 1);
+            return;
+        }
+        if (2 == res)
+        {
+            obj_setSysOut(self, "[error] set: type not match.");
+            obj_setErrorCode(self, 1);
+            return;
+        }
+        if (3 == res)
+        {
+            obj_setSysOut(self, "[error] set: object not found.");
+            obj_setErrorCode(self, 1);
+            return;
+        }
+        return;
+    }
+    /* new arg */
+    Arg *val = args_getArg(args, "val");
+    Arg *newArg = arg_copy(val);
+    char *argName = strsGetLastToken(args, argPath, '.');
+    arg_setName(newArg, argName);
+    int32_t res = obj_setArg(self, argPath, newArg);
+    if (res == 1)
+    {
+        obj_setSysOut(self, "[error] set: object not found.");
+        obj_setErrorCode(self, 1);
+    }
+    arg_deinit(newArg);
+    newArg = NULL;
+    return;
+}
+
 
 PikaObj *New_BaseObj(Args *args)
 {
     PikaObj *self = New_TinyObj(args);
-    init_baseObj(self, args);
+    obj_setObjWithoutClass(self, "__classLoader", New_TinyObj);
+    obj_getObj(self, "__classLoader", 0);
+    class_defineMethod(self, "print(val:any)", print);
+    class_defineMethod(self, "set(argPath:str, val:any)", set);
     return self;
 }
