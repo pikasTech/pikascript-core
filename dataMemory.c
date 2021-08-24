@@ -25,7 +25,6 @@ void *pikaMalloc(uint32_t size)
 void pikaFree(void *mem, uint32_t size)
 {
     free(mem);
-    mem = NULL;
     pikaMemInfo.heapUsed -= size;
 }
 
