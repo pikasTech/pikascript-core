@@ -984,7 +984,7 @@ void obj_run(PikaObj *self, char *cmd)
     /* safe, stop when error occord and error info would be print32_t */
     Args *res = obj_runDirect(self, cmd);
     char *sysOut = args_getSysOut(res);
-    if (NULL != sysOut)
+    if (!strEqu("", sysOut))
     {
         printf("%s\r\n", sysOut);
     }
