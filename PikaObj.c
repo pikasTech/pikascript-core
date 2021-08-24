@@ -3,6 +3,7 @@
 #include "dataMemory.h"
 #include "dataString.h"
 #include "dataStrs.h"
+#include <stdarg.h>
 
 int32_t deinitEachSubObj(Arg *argEach, Args *handleArgs)
 {
@@ -1046,4 +1047,14 @@ char *args_getSysOut(Args *args)
 void args_setSysOut(Args *args, char *str)
 {
     args_setStr(args, "__sysOut", str);
+}
+
+void obj_sysPrintf(PikaObj *self, char *fmt, ...)
+{
+    va_list args;
+    va_start(args, fmt);
+    char sysOut[128] = {0};
+    vsprintf(sysOut, fmt, args);
+    obj_setSysOut(self, sysOut);
+    va_end(args);
 }
