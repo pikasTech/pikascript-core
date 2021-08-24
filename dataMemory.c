@@ -11,7 +11,15 @@ void *pikaMalloc(uint32_t size)
     {
         pikaMemInfo.heapUsedMax = pikaMemInfo.heapUsed;
     }
-    return malloc(size);
+    void *mem = malloc(size);
+    if (NULL == mem)
+    {
+        printf("[error]: No heap space!\r\n");
+        while (1)
+        {
+        }
+    }
+    return mem;
 }
 
 void pikaFree(void *mem, uint32_t size)
