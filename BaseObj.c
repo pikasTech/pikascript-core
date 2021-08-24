@@ -11,7 +11,7 @@ static void *getClassPtr(PikaObj *classObj, char *classPath)
     return obj_getPtr(classObj, ptrPath);
 }
 
-int32_t sysObj_setObjbyClassAndPtr(PikaObj *self, char *objName, char *className, void *newFunPtr)
+int32_t obj_newObjByFun(PikaObj *self, char *objName, char *className, void *newFunPtr)
 {
     /* class means subprocess init */
     Args *buffs = New_strBuff();
@@ -30,8 +30,8 @@ int32_t sysObj_setObjbyClass(PikaObj *self, char *objName, char *classPath)
 {
     /* class means subprocess init */
     Args *buffs = New_strBuff();
-    PikaObj *classHost = obj_getObj(self, "__classLoader", 0);
-    void *newFunPtr = getClassPtr(classHost, classPath);
+    PikaObj *classLoader = obj_getObj(self, "__classLoader", 0);
+    void *newFunPtr = getClassPtr(classLoader, classPath);
 
     /* class means subprocess init */
     char *mataObjName = strsAppend(buffs, "[mate]", objName);
@@ -88,7 +88,7 @@ int32_t obj_newObj(PikaObj *self, char *objPath, char *classPath)
         goto exit;
     }
     char *objName = strsGetLastToken(buffs, objPath, '.');
-    sysObj_setObjbyClassAndPtr(objHost, objName, classPath, NewObjPtr);
+    obj_newObjByFun(objHost, objName, classPath, NewObjPtr);
     res = 0;
     goto exit;
 

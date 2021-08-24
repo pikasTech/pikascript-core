@@ -334,12 +334,12 @@ char *obj_getClassPath(PikaObj *objHost, Args *buffs, char *objName)
 
 void *getNewObjFunByClass(PikaObj *obj, char *classPath)
 {
-    PikaObj *classHost = args_getPtr(obj->attributeList, "__classLoader");
-    if (NULL == classHost)
+    PikaObj *classLoader = args_getPtr(obj->attributeList, "__classLoader");
+    if (NULL == classLoader)
     {
         return NULL;
     }
-    void *(*newObjFun)(Args * initArgs) = args_getPtr(classHost->attributeList, classPath);
+    void *(*newObjFun)(Args * initArgs) = args_getPtr(classLoader->attributeList, classPath);
     return newObjFun;
 }
 
@@ -362,10 +362,10 @@ PikaObj *newRootObj(char *name, NewFun newObjFun)
 
 static void removeClassLoader(PikaObj *obj)
 {
-    PikaObj *classObj = args_getPtr(obj->attributeList, "__classLoader");
-    if (NULL != classObj)
+    PikaObj *classLoader = args_getPtr(obj->attributeList, "__classLoader");
+    if (NULL != classLoader)
     {
-        obj_deinit(classObj);
+        obj_deinit(classLoader);
         args_removeArg(obj->attributeList, "__classLoader");
     }
 }
