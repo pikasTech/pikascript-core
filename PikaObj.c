@@ -785,7 +785,7 @@ static char *getCleanCmd(Args *buffs, char *cmd)
     int32_t isInStr = 0;
     for (int32_t i = 0; i < strGetSize(cmd); i++)
     {
-        if ('\'' == cmd[i])
+        if ('\'' == cmd[i] || '\"' == cmd[i])
         {
             isInStr = !isInStr;
         }
