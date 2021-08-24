@@ -16,12 +16,6 @@ void args_deinit(Args *self)
     self = NULL;
 }
 
-char *getDefaultName(Args *self, char *strOut)
-{
-    sprintf((char *)strOut, "arg%d", (int)self->argLinkList->TopId);
-    return strOut;
-}
-
 char *args_getStrByIndex(Args *self, int32_t index)
 {
     Arg *arg = args_getArgByIndex(self, index);
@@ -35,7 +29,7 @@ char *args_getStrByIndex(Args *self, int32_t index)
 int32_t args_setStrWithDefaultName(Args *self, char *strIn)
 {
     Args *buffs = New_strBuff();
-    char *name = getDefaultName(self, args_getBuff(buffs, 256));
+    char *name = strsFormat(buffs, "arg%d", (int)self->argLinkList->TopId);
     args_setStr(self, name, strIn);
     args_deinit(buffs);
     return 0;
@@ -44,7 +38,7 @@ int32_t args_setStrWithDefaultName(Args *self, char *strIn)
 int32_t args_setFloatWithDefaultName(Args *self, float argFloat)
 {
     Args *buffs = New_strBuff();
-    char *name = getDefaultName(self, args_getBuff(buffs, 256));
+    char *name = strsFormat(buffs, "arg%d", (int)self->argLinkList->TopId);
     args_setFloat(self, name, argFloat);
     args_deinit(buffs);
     return 0;
@@ -326,8 +320,7 @@ char *getPrintSring(Args *self, char *name, char *valString)
 {
     Args *buffs = New_strBuff();
     char *printName = strsAppend(buffs, "[printBuff]", name);
-    char *printString = args_getBuff(buffs, 256);
-    sprintf(printString, "%s", valString);
+    char *printString = strsCopy(buffs, valString);
     args_setStr(self, printName, printString);
     char *res = args_getStr(self, printName);
     args_deinit(buffs);
@@ -338,8 +331,7 @@ char *getPrintStringFromInt(Args *self, char *name, int32_t val)
 {
     Args *buffs = New_strBuff();
     char *res = NULL;
-    char *valString = args_getBuff(buffs, 256);
-    sprintf(valString, "%d", val);
+    char *valString = strsFormat(buffs, "%d", val);
     res = getPrintSring(self, name, valString);
     args_deinit(buffs);
     return res;
@@ -349,8 +341,7 @@ char *getPrintStringFromFloat(Args *self, char *name, float val)
 {
     Args *buffs = New_strBuff();
     char *res = NULL;
-    char *valString = args_getBuff(buffs, 256);
-    sprintf(valString, "%f", val);
+    char *valString = strsFormat(buffs, "%f", val);
     res = getPrintSring(self, name, valString);
     args_deinit(buffs);
     return res;
@@ -360,9 +351,8 @@ char *getPrintStringFromPtr(Args *self, char *name, void *val)
 {
     Args *buffs = New_strBuff();
     char *res = NULL;
-    char *valString = args_getBuff(buffs, 256);
     uint64_t intVal = (uint64_t)val;
-    sprintf(valString, "0x%llx", intVal);
+    char *valString = strsFormat(buffs, "0x%llx", intVal);
     res = getPrintSring(self, name, valString);
     args_deinit(buffs);
     return res;
