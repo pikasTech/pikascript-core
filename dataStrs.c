@@ -1,5 +1,7 @@
 #include "dataStrs.h"
 #include "dataString.h"
+#include <stdio.h>
+#include <stdarg.h>
 
 Args *New_strBuff(void)
 {
@@ -60,4 +62,14 @@ char *strsCopy(Args *buffs, char *source)
     int32_t size = strGetSize(source);
     char *buff = args_getBuff(buffs, size);
     return strCopy(buff, source);
+}
+
+char *strsFormat(Args *buffs, const char *fmt, ...)
+{
+    va_list args;
+    va_start(args, fmt);
+    char *res = args_getBuff(buffs, 256);
+    vsprintf(res, fmt, args);
+    va_end(args);
+    return res;
 }
