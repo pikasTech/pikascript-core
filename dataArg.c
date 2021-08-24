@@ -28,7 +28,7 @@ void arg_deinit(Arg *self)
     self = NULL;
 }
 
-void arg_newContant(Arg *self, uint32_t size)
+void arg_newcontent(Arg *self, uint32_t size)
 {
     self->content = pikaMalloc(size);
     self->contentSize = size;
@@ -38,7 +38,7 @@ void arg_newContant(Arg *self, uint32_t size)
     }
 }
 
-void arg_setContant(Arg *self, uint8_t *contant, uint32_t size)
+void arg_setcontent(Arg *self, uint8_t *content, uint32_t size)
 {
     if (NULL != self->content)
     {
@@ -48,7 +48,7 @@ void arg_setContant(Arg *self, uint8_t *contant, uint32_t size)
     }
     self->content = pikaMalloc(size);
     self->contentSize = size;
-    memcpy(self->content, contant, size);
+    memcpy(self->content, content, size);
 }
 
 void arg_setName(Arg *self, char *name)
@@ -75,7 +75,7 @@ void arg_setType(Arg *self, char *type)
     memcpy(self->type, type, size + 1);
 }
 
-uint8_t *arg_getContant(Arg *self)
+uint8_t *arg_getcontent(Arg *self)
 {
     return self->content;
 }
@@ -83,37 +83,37 @@ uint8_t *arg_getContant(Arg *self)
 void arg_setInt(Arg *self, int64_t val)
 {
     int64_t int64Temp = val;
-    uint8_t contantBuff[8];
+    uint8_t contentBuff[8];
     for (uint32_t i = 0; i < 8; i++)
     {
         // add 0x30 to void \0
-        contantBuff[i] = int64Temp;
+        contentBuff[i] = int64Temp;
         int64Temp = int64Temp >> 8;
     }
-    arg_setContant(self, contantBuff, 8);
+    arg_setcontent(self, contentBuff, 8);
 }
 
 void arg_setFloat(Arg *self, float val)
 {
-    uint8_t contantBuff[4];
+    uint8_t contentBuff[4];
     uint8_t *valPtr = (uint8_t *)&val;
     for (uint32_t i = 0; i < 4; i++)
     {
         // add 0x30 to void \0
-        contantBuff[i] = valPtr[i];
+        contentBuff[i] = valPtr[i];
     }
-    arg_setContant(self, contantBuff, 4);
+    arg_setcontent(self, contentBuff, 4);
 }
 
 float arg_getFloat(Arg *self)
 {
-    if (NULL == arg_getContant(self))
+    if (NULL == arg_getcontent(self))
     {
         return -999.999;
     }
     float valOut = 0;
     uint8_t *valOutPtr = (uint8_t *)(&valOut);
-    uint8_t *valPtr = arg_getContant(self);
+    uint8_t *valPtr = arg_getcontent(self);
     for (uint32_t i = 0; i < 4; i++)
     {
         valOutPtr[i] = valPtr[i];
@@ -124,24 +124,24 @@ float arg_getFloat(Arg *self)
 void arg_setPtr(Arg *self, void *pointer)
 {
     uint64_t pointerTemp = (uint64_t)pointer;
-    uint8_t contantBuff[8];
+    uint8_t contentBuff[8];
     for (uint32_t i = 0; i < 8; i++)
     {
         // aboid \0
-        contantBuff[i] = pointerTemp;
+        contentBuff[i] = pointerTemp;
         pointerTemp = pointerTemp >> 8;
     }
-    arg_setContant(self, contantBuff, 8);
+    arg_setcontent(self, contentBuff, 8);
 }
 
 void arg_setStr(Arg *self, char *string)
 {
-    arg_setContant(self, (uint8_t *)string, strGetSize(string) + 1);
+    arg_setcontent(self, (uint8_t *)string, strGetSize(string) + 1);
 }
 
 int64_t arg_getInt(Arg *self)
 {
-    if (NULL == arg_getContant(self))
+    if (NULL == arg_getcontent(self))
     {
         return -999999;
     }
@@ -150,7 +150,7 @@ int64_t arg_getInt(Arg *self)
     {
         // add 0x30 to avoid 0
         int64Temp = (int64Temp << 8);
-        int64Temp += arg_getContant(self)[i];
+        int64Temp += arg_getcontent(self)[i];
     }
     return int64Temp;
 }
@@ -159,15 +159,15 @@ void *arg_getPtr(Arg *self)
 {
     void *pointer = NULL;
     uint64_t pointerTemp = 0;
-    if (NULL == arg_getContant(self))
+    if (NULL == arg_getcontent(self))
     {
         return NULL;
     }
-    uint8_t *contant = arg_getContant(self);
+    uint8_t *content = arg_getcontent(self);
     for (int32_t i = 7; i > -1; i--)
     {
         // avoid \0
-        uint8_t val = contant[i];
+        uint8_t val = content[i];
         pointerTemp = (pointerTemp << 8);
         pointerTemp += val;
     }
@@ -176,7 +176,7 @@ void *arg_getPtr(Arg *self)
 }
 char *arg_getStr(Arg *self)
 {
-    return (char *)arg_getContant(self);
+    return (char *)arg_getcontent(self);
 }
 void arg_init(Arg *self, void *voidPointer)
 {
@@ -208,7 +208,7 @@ Arg *New_arg(void *voidPointer)
 Arg *arg_copy(Arg *argToBeCopy)
 {
     Arg *argCopied = New_arg(NULL);
-    arg_setContant(argCopied, arg_getContant(argToBeCopy), argToBeCopy->contentSize);
+    arg_setcontent(argCopied, arg_getcontent(argToBeCopy), argToBeCopy->contentSize);
     arg_setName(argCopied, arg_getName(argToBeCopy));
     arg_setType(argCopied, arg_getType(argToBeCopy));
     return argCopied;

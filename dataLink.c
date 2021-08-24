@@ -16,11 +16,11 @@ void link_deinit(Link *self)
     self = NULL;
 }
 
-void link_addNode(Link *self, void *contant, void (*_contantDinit)(void *contant))
+void link_addNode(Link *self, void *content, void (*_contentDinit)(void *content))
 {
     LinkNode *NewNode = New_linkNode(NULL);
-    NewNode->contant = contant;
-    NewNode->_contantDinit = _contantDinit;
+    NewNode->content = content;
+    NewNode->_contentDinit = _contentDinit;
     NewNode->id = self->TopId;
     self->TopId++;
 
@@ -38,13 +38,13 @@ void link_addNode(Link *self, void *contant, void (*_contantDinit)(void *contant
     self->firstNode->nextNode = secondNode;
 }
 
-void link_removeNode(Link *self, void *contant)
+void link_removeNode(Link *self, void *content)
 {
     LinkNode *nodeToDelete = NULL;
     LinkNode *nodeNow = self->firstNode;
     while (1)
     {
-        if (nodeNow->contant == contant)
+        if (nodeNow->content == content)
         {
             nodeToDelete = nodeNow;
             break;

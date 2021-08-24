@@ -3,7 +3,7 @@
 
 void linkNode_deinit(LinkNode *self)
 {
-    self->_contantDinit(self->contant);
+    self->_contentDinit(self->content);
     // DynMemPut(self->mem);
     pikaFree(self, self->memSize);
     self = NULL;
@@ -31,10 +31,10 @@ void linkNode_init(LinkNode *self, void *args)
     self->id = 0;
 
     /* object */
-    self->contant = NULL;
+    self->content = NULL;
 
     /* override */
-    self->_contantDinit = NULL;
+    self->_contentDinit = NULL;
 }
 
 LinkNode *New_linkNode(void *args)

@@ -11,9 +11,9 @@ struct Class_linkNode
     uint16_t memSize;
 
     /* virtual operation */
-    void (*_contantDinit)(void *contant);
+    void (*_contentDinit)(void *content);
     /* object */
-    void *contant;
+    void *content;
 };
 
 void linkNode_deinit(LinkNode *self);

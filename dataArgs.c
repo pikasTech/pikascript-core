@@ -28,7 +28,7 @@ char *args_getStrByIndex(Args *self, int32_t index)
     {
         return NULL;
     }
-    return (char *)arg_getContant(arg);
+    return (char *)arg_getcontent(arg);
 }
 
 int32_t args_setStrWithDefaultName(Args *self, char *strIn)
@@ -114,15 +114,15 @@ void setArgDirect(Args *self, Arg *arg)
 {
     link_addNode(self->argLinkList,
                  arg,
-                 (contantDeinitFun)arg_deinit);
+                 (contentDeinitFun)arg_deinit);
 }
 
 char *args_getBuff(Args *self, int32_t size)
 {
     Arg *argNew = New_arg(NULL);
-    arg_newContant(argNew, size + 1);
+    arg_newcontent(argNew, size + 1);
     setArgDirect(self, argNew);
-    return (char *)arg_getContant(argNew);
+    return (char *)arg_getcontent(argNew);
 }
 
 char *args_getStr(Args *self, char *name)
@@ -132,11 +132,11 @@ char *args_getStr(Args *self, char *name)
     {
         return NULL;
     }
-    if (NULL == arg_getContant(arg))
+    if (NULL == arg_getcontent(arg))
     {
         return NULL;
     }
-    return (char *)arg_getContant(arg);
+    return (char *)arg_getcontent(arg);
 }
 
 int32_t args_setInt(Args *self, char *name, int64_t int64In)
@@ -197,7 +197,7 @@ Arg *args_getArgByIndex(Args *self, int32_t index)
     {
         return NULL;
     }
-    arg = node->contant;
+    arg = node->content;
     return arg;
 }
 
@@ -254,7 +254,7 @@ int32_t updateArg(Args *self, Arg *argNew)
         return 1;
         // type do not match
     }
-    arg_setContant(argOld, arg_getContant(argNew), argNew->contentSize);
+    arg_setcontent(argOld, arg_getcontent(argNew), argNew->contentSize);
     arg_deinit(argNew);
     return 0;
 }
@@ -280,7 +280,7 @@ Arg *args_getArg(Args *self, char *name)
     }
     while (1)
     {
-        Arg *arg = nodeNow->contant;
+        Arg *arg = nodeNow->content;
         if (strEqu(name, arg_getName(arg)))
         {
             return arg;
@@ -542,7 +542,7 @@ int32_t args_foreach(Args *self, int32_t (*eachHandle)(Arg *argEach, Args *handl
     LinkNode *nodeNow = self->argLinkList->firstNode;
     while (1)
     {
-        Arg *argNow = nodeNow->contant;
+        Arg *argNow = nodeNow->content;
         if (NULL == argNow)
         {
             continue;
