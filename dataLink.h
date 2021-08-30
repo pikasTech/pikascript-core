@@ -7,7 +7,6 @@ typedef struct Class_link Link;
 struct Class_link
 {
     LinkNode *firstNode;
-    uint16_t memSize;
 };
 
 typedef void (*contentDeinitFun)(void *content);

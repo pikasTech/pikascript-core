@@ -5,7 +5,7 @@ void linkNode_deinit(LinkNode *self)
 {
     self->_contentDinit(self->content);
     // DynMemPut(self->mem);
-    pikaFree(self, self->memSize);
+    pikaFree(self, sizeof(LinkNode));
     self = NULL;
 }
 
@@ -25,7 +25,6 @@ void linkNode_init(LinkNode *self, void *args)
 LinkNode *New_linkNode(void *args)
 {
     LinkNode *self = pikaMalloc(sizeof(LinkNode));
-    self->memSize = sizeof(LinkNode);
     linkNode_init(self, args);
     return self;
 }

@@ -7,7 +7,6 @@ struct Class_linkNode
     /* attribute */
     LinkNode *priorNode;
     LinkNode *nextNode;
-    uint16_t memSize;
 
     /* virtual operation */
     void (*_contentDinit)(void *content);
