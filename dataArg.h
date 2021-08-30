@@ -6,9 +6,16 @@ typedef struct Class_arg Arg;
 struct Class_arg
 {
     uint16_t contentSize;
-    uint8_t *nameWithType;
+    uint8_t *content;
 };
 
+uint16_t content_typeOffset(uint8_t *content);
+uint16_t content_contentOffset(uint8_t *content);
+char *content_getName(uint8_t *content);
+char *content_getType(uint8_t *content);
+uint8_t *content_getContent(uint8_t *content);
+
+uint16_t arg_getTotleSize(Arg *self);
 
 void arg_setName(Arg *self, char *name);
 void arg_setContent(Arg *self, uint8_t *content, uint32_t size);

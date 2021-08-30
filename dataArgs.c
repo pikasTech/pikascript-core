@@ -10,7 +10,6 @@
 
 void args_deinit(Args *self)
 {
-    // DynMemPut(self->mem);
     link_deinit(self->argLinkList);
     pikaFree(self, sizeof(Args));
     self = NULL;
