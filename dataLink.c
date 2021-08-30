@@ -21,8 +21,6 @@ void link_addNode(Link *self, void *content, void (*_contentDinit)(void *content
     LinkNode *NewNode = New_linkNode(NULL);
     NewNode->content = content;
     NewNode->_contentDinit = _contentDinit;
-    NewNode->id = self->TopId;
-    self->TopId++;
 
     // old first node become new second node
     LinkNode *secondNode = self->firstNode;
@@ -92,28 +90,10 @@ int32_t link_getSize(Link *self)
     return size;
 }
 
-LinkNode *link_getNode(Link *self, int64_t id)
-{
-    LinkNode *nodeNow = self->firstNode;
-    while (1)
-    {
-        if (nodeNow->id == id)
-        {
-            return nodeNow;
-        }
-        if (nodeNow->nextNode == NULL)
-        {
-            return NULL;
-        }
-        nodeNow = nodeNow->nextNode;
-    }
-}
-
 void link_init(Link *self, void *args)
 {
     /* attribute */
     self->firstNode = NULL;
-    self->TopId = 0;
 
     /* object */
 

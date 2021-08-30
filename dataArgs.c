@@ -16,34 +16,6 @@ void args_deinit(Args *self)
     self = NULL;
 }
 
-char *args_getStrByIndex(Args *self, int32_t index)
-{
-    Arg *arg = args_getArgByIndex(self, index);
-    if (NULL == arg)
-    {
-        return NULL;
-    }
-    return (char *)arg_getcontent(arg);
-}
-
-int32_t args_setStrWithDefaultName(Args *self, char *strIn)
-{
-    Args *buffs = New_strBuff();
-    char *name = strsFormat(buffs, "arg%d", (int)self->argLinkList->TopId);
-    args_setStr(self, name, strIn);
-    args_deinit(buffs);
-    return 0;
-}
-
-int32_t args_setFloatWithDefaultName(Args *self, float argFloat)
-{
-    Args *buffs = New_strBuff();
-    char *name = strsFormat(buffs, "arg%d", (int)self->argLinkList->TopId);
-    args_setFloat(self, name, argFloat);
-    args_deinit(buffs);
-    return 0;
-}
-
 int32_t args_setFloat(Args *self, char *name, float argFloat)
 {
     Arg *argNew = New_arg(NULL);
@@ -52,22 +24,6 @@ int32_t args_setFloat(Args *self, char *name, float argFloat)
     arg_setFloat(argNew, argFloat);
     args_setArg(self, argNew);
     return 0;
-}
-
-float args_getFloatByIndex(Args *self, int32_t index)
-{
-    float val = 0;
-    Arg *arg = args_getArgByIndex(self, index);
-    val = arg_getFloat(arg);
-    return val;
-}
-
-void *args_getPointerByIndex(Args *self, int32_t index)
-{
-    void *pointer = NULL;
-    Arg *arg = args_getArgByIndex(self, index);
-    pointer = arg_getPtr(arg);
-    return pointer;
 }
 
 void *args_getPtr(Args *self, char *name)
@@ -144,16 +100,6 @@ int32_t args_setInt(Args *self, char *name, int64_t int64In)
     return 0;
 }
 
-int64_t args_getIntByIndex(Args *self, int32_t index)
-{
-    Arg *arg = args_getArgByIndex(self, index);
-    if (NULL == arg)
-    {
-        return -999999999;
-    }
-    return arg_getInt(arg);
-}
-
 int64_t args_getInt(Args *self, char *name)
 {
     Arg *arg = args_getArg(self, name);
@@ -178,22 +124,6 @@ char *args_getType(Args *self, char *name)
         return NULL;
     }
     return arg_getType(arg);
-}
-
-Arg *args_getArgByIndex(Args *self, int32_t index)
-{
-    Arg *arg;
-    if (index == -1)
-    {
-        return NULL;
-    }
-    LinkNode *node = link_getNode(self->argLinkList, index);
-    if (NULL == node)
-    {
-        return NULL;
-    }
-    arg = node->content;
-    return arg;
 }
 
 float args_getFloat(Args *self, char *name)
