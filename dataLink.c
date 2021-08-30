@@ -16,11 +16,10 @@ void link_deinit(Link *self)
     self = NULL;
 }
 
-void link_addNode(Link *self, void *content, void (*_contentDinit)(void *content))
+void link_addNode(Link *self, void *content)
 {
     LinkNode *NewNode = New_linkNode(NULL);
     NewNode->content = content;
-    NewNode->_contentDinit = _contentDinit;
 
     // old first node become new second node
     LinkNode *secondNode = self->firstNode;

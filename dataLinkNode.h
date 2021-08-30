@@ -7,9 +7,6 @@ struct Class_linkNode
     /* attribute */
     LinkNode *priorNode;
     LinkNode *nextNode;
-
-    /* virtual operation */
-    void (*_contentDinit)(void *content);
     /* object */
     void *content;
 };

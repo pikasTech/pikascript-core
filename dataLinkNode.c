@@ -1,9 +1,10 @@
 #include "dataLinkNode.h"
 #include "dataMemory.h"
+#include "dataArg.h"
 
 void linkNode_deinit(LinkNode *self)
 {
-    self->_contentDinit(self->content);
+    arg_deinit(self->content);
     // DynMemPut(self->mem);
     pikaFree(self, sizeof(LinkNode));
     self = NULL;
@@ -17,9 +18,6 @@ void linkNode_init(LinkNode *self, void *args)
 
     /* object */
     self->content = NULL;
-
-    /* override */
-    self->_contentDinit = NULL;
 }
 
 LinkNode *New_linkNode(void *args)
