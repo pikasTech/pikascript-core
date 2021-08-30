@@ -16,6 +16,7 @@ char *content_getType(uint8_t *content);
 uint8_t *content_getContent(uint8_t *content);
 
 uint16_t arg_getTotleSize(Arg *self);
+void arg_freeContent(Arg *self);
 
 void arg_setName(Arg *self, char *name);
 void arg_setContent(Arg *self, uint8_t *content, uint32_t size);

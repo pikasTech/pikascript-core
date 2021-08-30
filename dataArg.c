@@ -7,11 +7,7 @@
 
 void arg_deinit(Arg *self)
 {
-    if (NULL != self->content)
-    {
-        pikaFree(self->content, arg_getTotleSize(self));
-    }
-
+    arg_freeContent(self);
     pikaFree(self, sizeof(Arg));
     self = NULL;
 }
@@ -24,7 +20,7 @@ uint16_t arg_getTotleSize(Arg *self)
            self->contentSize;
 }
 
-static void arg_freeContent(Arg *self)
+void arg_freeContent(Arg *self)
 {
     if (NULL != self->content)
     {
