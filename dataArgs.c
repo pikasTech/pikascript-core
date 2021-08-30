@@ -495,7 +495,6 @@ int32_t args_removeArg(Args *self, char *name)
 void args_init(Args *self, Args *args)
 {
     /* attribute */
-    self->context = self;
     self->argLinkList = New_link(NULL);
 
     /* arg */

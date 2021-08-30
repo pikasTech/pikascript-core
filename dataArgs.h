@@ -8,7 +8,6 @@
 typedef struct Class_Arglist Args;
 struct Class_Arglist
 {
-    void *context;
     Link *argLinkList;
 };
 
