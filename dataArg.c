@@ -201,9 +201,7 @@ void arg_init(Arg *self, void *voidPointer)
 {
     /* attribute */
     self->content = NULL;
-    self->nameWithType = pikaMalloc(2);
-    self->nameWithType[0] = 0;
-    self->nameWithType[1] = 0;
+    self->nameWithType = NULL;
     self->contentSize = 0;
 }
 
@@ -214,6 +212,10 @@ char *arg_getName(Arg *self)
 
 char *arg_getType(Arg *self)
 {
+    if (NULL == arg_getName(self))
+    {
+        return NULL;
+    }
     uint16_t nameSize = strGetSize(arg_getName(self));
     return (char *)self->nameWithType + nameSize + 1;
 }
