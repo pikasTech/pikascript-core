@@ -41,8 +41,8 @@ void arg_setContent(Arg *self, uint8_t *content, uint32_t size)
         self->content = NULL;
         self->contentSize = 0;
     }
-    self->content = pikaMalloc(size);
-    self->contentSize = size;
+
+    arg_newContent(self, size);
     memcpy(self->content, content, size);
 }
 
