@@ -12,12 +12,12 @@ struct Class_arg
 
 
 void arg_setName(Arg *self, char *name);
-void arg_setcontent(Arg *self, uint8_t *content, uint32_t size);
-void arg_newcontent(Arg *self, uint32_t size);
+void arg_setContent(Arg *self, uint8_t *content, uint32_t size);
+void arg_newContent(Arg *self, uint32_t size);
 void arg_setType(Arg *self, char *type);
 char *arg_getName(Arg *self);
 char *arg_getType(Arg *self);
-uint8_t *arg_getcontent(Arg *self);
+uint8_t *arg_getContent(Arg *self);
 
 void arg_setInt(Arg *self, int64_t val);
 void arg_setFloat(Arg *self, float val);

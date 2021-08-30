@@ -23,7 +23,7 @@ void arg_deinit(Arg *self)
     self = NULL;
 }
 
-void arg_newcontent(Arg *self, uint32_t size)
+void arg_newContent(Arg *self, uint32_t size)
 {
     self->content = pikaMalloc(size);
     self->contentSize = size;
@@ -33,7 +33,7 @@ void arg_newcontent(Arg *self, uint32_t size)
     }
 }
 
-void arg_setcontent(Arg *self, uint8_t *content, uint32_t size)
+void arg_setContent(Arg *self, uint8_t *content, uint32_t size)
 {
     if (NULL != self->content)
     {
@@ -94,7 +94,7 @@ void arg_setType(Arg *self, char *type)
     self->nameWithType = nameWithType;
 }
 
-uint8_t *arg_getcontent(Arg *self)
+uint8_t *arg_getContent(Arg *self)
 {
     return self->content;
 }
@@ -109,7 +109,7 @@ void arg_setInt(Arg *self, int64_t val)
         contentBuff[i] = int64Temp;
         int64Temp = int64Temp >> 8;
     }
-    arg_setcontent(self, contentBuff, 8);
+    arg_setContent(self, contentBuff, 8);
 }
 
 void arg_setFloat(Arg *self, float val)
@@ -121,18 +121,18 @@ void arg_setFloat(Arg *self, float val)
         // add 0x30 to void \0
         contentBuff[i] = valPtr[i];
     }
-    arg_setcontent(self, contentBuff, 4);
+    arg_setContent(self, contentBuff, 4);
 }
 
 float arg_getFloat(Arg *self)
 {
-    if (NULL == arg_getcontent(self))
+    if (NULL == arg_getContent(self))
     {
         return -999.999;
     }
     float valOut = 0;
     uint8_t *valOutPtr = (uint8_t *)(&valOut);
-    uint8_t *valPtr = arg_getcontent(self);
+    uint8_t *valPtr = arg_getContent(self);
     for (uint32_t i = 0; i < 4; i++)
     {
         valOutPtr[i] = valPtr[i];
@@ -150,17 +150,17 @@ void arg_setPtr(Arg *self, void *pointer)
         contentBuff[i] = pointerTemp;
         pointerTemp = pointerTemp >> 8;
     }
-    arg_setcontent(self, contentBuff, 8);
+    arg_setContent(self, contentBuff, 8);
 }
 
 void arg_setStr(Arg *self, char *string)
 {
-    arg_setcontent(self, (uint8_t *)string, strGetSize(string) + 1);
+    arg_setContent(self, (uint8_t *)string, strGetSize(string) + 1);
 }
 
 int64_t arg_getInt(Arg *self)
 {
-    if (NULL == arg_getcontent(self))
+    if (NULL == arg_getContent(self))
     {
         return -999999;
     }
@@ -169,7 +169,7 @@ int64_t arg_getInt(Arg *self)
     {
         // add 0x30 to avoid 0
         int64Temp = (int64Temp << 8);
-        int64Temp += arg_getcontent(self)[i];
+        int64Temp += arg_getContent(self)[i];
     }
     return int64Temp;
 }
@@ -178,11 +178,11 @@ void *arg_getPtr(Arg *self)
 {
     void *pointer = NULL;
     uint64_t pointerTemp = 0;
-    if (NULL == arg_getcontent(self))
+    if (NULL == arg_getContent(self))
     {
         return NULL;
     }
-    uint8_t *content = arg_getcontent(self);
+    uint8_t *content = arg_getContent(self);
     for (int32_t i = 7; i > -1; i--)
     {
         // avoid \0
@@ -195,7 +195,7 @@ void *arg_getPtr(Arg *self)
 }
 char *arg_getStr(Arg *self)
 {
-    return (char *)arg_getcontent(self);
+    return (char *)arg_getContent(self);
 }
 void arg_init(Arg *self, void *voidPointer)
 {
@@ -228,7 +228,7 @@ Arg *New_arg(void *voidPointer)
 Arg *arg_copy(Arg *argToBeCopy)
 {
     Arg *argCopied = New_arg(NULL);
-    arg_setcontent(argCopied, arg_getcontent(argToBeCopy), argToBeCopy->contentSize);
+    arg_setContent(argCopied, arg_getContent(argToBeCopy), argToBeCopy->contentSize);
     arg_setName(argCopied, arg_getName(argToBeCopy));
     arg_setType(argCopied, arg_getType(argToBeCopy));
     return argCopied;

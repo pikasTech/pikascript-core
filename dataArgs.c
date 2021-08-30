@@ -70,9 +70,9 @@ void setArgDirect(Args *self, Arg *arg)
 char *args_getBuff(Args *self, int32_t size)
 {
     Arg *argNew = New_arg(NULL);
-    arg_newcontent(argNew, size + 1);
+    arg_newContent(argNew, size + 1);
     setArgDirect(self, argNew);
-    return (char *)arg_getcontent(argNew);
+    return (char *)arg_getContent(argNew);
 }
 
 char *args_getStr(Args *self, char *name)
@@ -82,11 +82,11 @@ char *args_getStr(Args *self, char *name)
     {
         return NULL;
     }
-    if (NULL == arg_getcontent(arg))
+    if (NULL == arg_getContent(arg))
     {
         return NULL;
     }
-    return (char *)arg_getcontent(arg);
+    return (char *)arg_getContent(arg);
 }
 
 int32_t args_setInt(Args *self, char *name, int64_t int64In)
@@ -178,7 +178,7 @@ int32_t updateArg(Args *self, Arg *argNew)
         return 1;
         // type do not match
     }
-    arg_setcontent(argOld, arg_getcontent(argNew), argNew->contentSize);
+    arg_setContent(argOld, arg_getContent(argNew), argNew->contentSize);
     arg_deinit(argNew);
     return 0;
 }
