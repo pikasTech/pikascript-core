@@ -9,7 +9,7 @@ void arg_deinit(Arg *self)
 {
     if (NULL != self->nameWithType)
     {
-        pikaFree(self->nameWithType, strGetSize(arg_getName(self)) + strGetSize(arg_getType(self)) + 2);
+        pikaFree(self->nameWithType, strGetSize(arg_getName(self)) + strGetSize(arg_getType(self)) + 2 + self->contentSize);
     }
 
     pikaFree(self, sizeof(Arg));
@@ -23,18 +23,17 @@ void arg_newContent(Arg *self, uint32_t size)
     uint16_t oldNameSize = strGetSize(oldName);
     uint16_t oldTypeSize = strGetSize(oldType);
 
-    if (NULL != self->nameWithType)
-    {
-        pikaFree(self->nameWithType, oldTypeSize + oldTypeSize + 2 + self->contentSize);
-        self->contentSize = 0;
-    }
-
     char *nameWithType = pikaMalloc(oldTypeSize + oldTypeSize + 2 + size);
 
     memcpy(nameWithType, oldName, oldNameSize);
     nameWithType[oldNameSize] = 0; //add '\0'
     memcpy(nameWithType + oldNameSize + 1, oldType, oldTypeSize);
     nameWithType[oldNameSize + 1 + oldTypeSize] = 0; //add '\0'
+
+    if (NULL != self->nameWithType)
+    {
+        pikaFree(self->nameWithType, oldTypeSize + oldTypeSize + 2 + self->contentSize);
+    }
 
     self->nameWithType = nameWithType;
     self->contentSize = size;
@@ -65,10 +64,13 @@ void arg_setName(Arg *self, char *name)
     nameWithType[newNameSize] = 0; //add '\0'
     memcpy(nameWithType + newNameSize + 1, oldType, oldTypeSize);
     nameWithType[newNameSize + 1 + oldTypeSize] = 0; //add '\0'
+    memcpy(nameWithType + newNameSize + oldTypeSize + 2,
+           arg_getContent(self),
+           self->contentSize);
 
     if (NULL != self->nameWithType)
     {
-        pikaFree(self->nameWithType, oldNameSize + oldTypeSize + 2);
+        pikaFree(self->nameWithType, oldNameSize + oldTypeSize + 2 + self->contentSize);
     }
 
     self->nameWithType = nameWithType;
@@ -83,16 +85,19 @@ void arg_setType(Arg *self, char *type)
     uint16_t oldNameSize = strGetSize(oldName);
     uint16_t oldTypeSize = strGetSize(oldType);
 
-    char *nameWithType = pikaMalloc(oldNameSize + newTypeSize + 2);
+    char *nameWithType = pikaMalloc(oldNameSize + newTypeSize + 2 + self->contentSize);
 
     memcpy(nameWithType, oldName, oldNameSize);
     nameWithType[oldNameSize] = 0; //add '\0'
     memcpy(nameWithType + oldNameSize + 1, type, newTypeSize);
     nameWithType[oldNameSize + 1 + newTypeSize] = 0; //add '\0'
+    memcpy(nameWithType + oldNameSize + newTypeSize + 2,
+           arg_getContent(self),
+           self->contentSize);
 
     if (NULL != self->nameWithType)
     {
-        pikaFree(self->nameWithType, oldNameSize + oldTypeSize + 2);
+        pikaFree(self->nameWithType, oldNameSize + oldTypeSize + self->contentSize + 2);
     }
 
     self->nameWithType = nameWithType;

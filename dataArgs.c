@@ -205,7 +205,8 @@ Arg *args_getArg(Args *self, char *name)
     while (1)
     {
         Arg *arg = nodeNow->content;
-        if (strEqu(name, arg_getName(arg)))
+        char *thisName = arg_getName(arg);
+        if (strEqu(name, thisName))
         {
             return arg;
         }
