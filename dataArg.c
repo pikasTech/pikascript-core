@@ -16,13 +16,7 @@ void arg_deinit(Arg *self)
 
     if (NULL != self->nameWithType)
     {
-        pikaFree(self->nameWithType, strGetSize(arg_getName(self)) + strGetSize(self->type) + 2);
-    }
-
-    if (NULL != self->type)
-    {
-        pikaFree(arg_getType(self), strGetSize((char *)self->type) + 1);
-        self->type = NULL;
+        pikaFree(self->nameWithType, strGetSize(arg_getName(self)) + strGetSize(arg_getType(self)) + 2);
     }
 
     pikaFree(self, sizeof(Arg));
@@ -74,9 +68,6 @@ void arg_setName(Arg *self, char *name)
     }
 
     self->nameWithType = nameWithType;
-
-    // size + 1 to contain \0
-    memcpy(arg_getName(self), name, newNameSize + 1);
 }
 
 void arg_setType(Arg *self, char *type)
@@ -92,8 +83,8 @@ void arg_setType(Arg *self, char *type)
 
     memcpy(nameWithType, oldName, oldNameSize);
     nameWithType[oldNameSize] = 0; //add '\0'
-    memcpy(nameWithType + oldNameSize + 1, oldType, oldTypeSize);
-    nameWithType[oldNameSize + 1 + oldTypeSize] = 0; //add '\0'
+    memcpy(nameWithType + oldNameSize + 1, type, newTypeSize);
+    nameWithType[oldNameSize + 1 + newTypeSize] = 0; //add '\0'
 
     if (NULL != self->nameWithType)
     {
@@ -101,13 +92,6 @@ void arg_setType(Arg *self, char *type)
     }
 
     self->nameWithType = nameWithType;
-
-    if (NULL != oldType)
-    {
-        pikaFree(oldType, strGetSize(oldType) + 1);
-    }
-    self->type = pikaMalloc(newTypeSize + 1);
-    memcpy(arg_getType(self), type, newTypeSize + 1);
 }
 
 uint8_t *arg_getcontent(Arg *self)
@@ -217,8 +201,9 @@ void arg_init(Arg *self, void *voidPointer)
 {
     /* attribute */
     self->content = NULL;
-    self->type = NULL;
-    self->nameWithType = NULL;
+    self->nameWithType = pikaMalloc(2);
+    self->nameWithType[0] = 0;
+    self->nameWithType[1] = 0;
     self->contentSize = 0;
 }
 
@@ -229,7 +214,8 @@ char *arg_getName(Arg *self)
 
 char *arg_getType(Arg *self)
 {
-    return (char *)self->type;
+    uint16_t nameSize = strGetSize(arg_getName(self));
+    return (char *)self->nameWithType + nameSize + 1;
 }
 
 Arg *New_arg(void *voidPointer)

@@ -7,7 +7,6 @@ struct Class_arg
 {
     uint8_t *content;
     uint16_t contentSize;
-    uint8_t *type;
     uint8_t *nameWithType;
 };
 
