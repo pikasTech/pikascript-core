@@ -5,9 +5,6 @@
 typedef struct Class_arg Arg;
 struct Class_arg
 {
-    /* attribute */
-    void *context;
-
     uint8_t *content;
     uint16_t contentSize;
     uint8_t *name;
