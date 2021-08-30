@@ -16,18 +16,12 @@ void arg_deinit(Arg *self)
 
     if (NULL != self->nameWithType)
     {
-        pikaFree(self->nameWithType, strGetSize(self->name) + strGetSize(self->type) + 2);
-    }
-
-    if (NULL != self->name)
-    {
-        pikaFree(self->name, strGetSize((char *)self->name) + 1);
-        self->name = NULL;
+        pikaFree(self->nameWithType, strGetSize(arg_getName(self)) + strGetSize(self->type) + 2);
     }
 
     if (NULL != self->type)
     {
-        pikaFree(self->type, strGetSize((char *)self->type) + 1);
+        pikaFree(arg_getType(self), strGetSize((char *)self->type) + 1);
         self->type = NULL;
     }
 
@@ -69,10 +63,10 @@ void arg_setName(Arg *self, char *name)
 
     char *nameWithType = pikaMalloc(newNameSize + oldTypeSize + 2);
 
-    // memcpy(nameWithType, name, newNameSize);
-    // nameWithType[newNameSize] = 0; //add '\0'
-    // memcpy(nameWithType + newNameSize + 1, oldType, oldTypeSize);
-    // nameWithType[newNameSize + 1 + oldTypeSize] = 0; //add '\0'
+    memcpy(nameWithType, name, newNameSize);
+    nameWithType[newNameSize] = 0; //add '\0'
+    memcpy(nameWithType + newNameSize + 1, oldType, oldTypeSize);
+    nameWithType[newNameSize + 1 + oldTypeSize] = 0; //add '\0'
 
     if (NULL != self->nameWithType)
     {
@@ -81,12 +75,6 @@ void arg_setName(Arg *self, char *name)
 
     self->nameWithType = nameWithType;
 
-    if (NULL != oldName)
-    {
-        pikaFree(oldName, strGetSize(oldName) + 1);
-    }
-
-    self->name = pikaMalloc(newNameSize + 1);
     // size + 1 to contain \0
     memcpy(arg_getName(self), name, newNameSize + 1);
 }
@@ -102,10 +90,10 @@ void arg_setType(Arg *self, char *type)
 
     char *nameWithType = pikaMalloc(oldNameSize + newTypeSize + 2);
 
-    // memcpy(nameWithType, name, newNameSize);
-    // nameWithType[newNameSize] = 0; //add '\0'
-    // memcpy(nameWithType + newNameSize + 1, oldType, oldTypeSize);
-    // nameWithType[newNameSize + 1 + oldTypeSize] = 0; //add '\0'
+    memcpy(nameWithType, oldName, oldNameSize);
+    nameWithType[oldNameSize] = 0; //add '\0'
+    memcpy(nameWithType + oldNameSize + 1, oldType, oldTypeSize);
+    nameWithType[oldNameSize + 1 + oldTypeSize] = 0; //add '\0'
 
     if (NULL != self->nameWithType)
     {
@@ -229,7 +217,6 @@ void arg_init(Arg *self, void *voidPointer)
 {
     /* attribute */
     self->content = NULL;
-    self->name = NULL;
     self->type = NULL;
     self->nameWithType = NULL;
     self->contentSize = 0;
@@ -237,7 +224,7 @@ void arg_init(Arg *self, void *voidPointer)
 
 char *arg_getName(Arg *self)
 {
-    return (char *)self->name;
+    return (char *)self->nameWithType;
 }
 
 char *arg_getType(Arg *self)
