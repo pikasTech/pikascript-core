@@ -59,7 +59,7 @@ void arg_setName(Arg *self, char *name)
     uint16_t oldNameSize = strGetSize(oldName);
     uint16_t oldTypeSize = strGetSize(oldType);
 
-    char *nameWithType = pikaMalloc(newNameSize + oldTypeSize + 2);
+    char *nameWithType = pikaMalloc(newNameSize + oldTypeSize + 2 + self->contentSize);
 
     memcpy(nameWithType, name, newNameSize);
     nameWithType[newNameSize] = 0; //add '\0'
