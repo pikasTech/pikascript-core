@@ -9,7 +9,9 @@ struct Class_arg
     uint16_t contentSize;
     uint8_t *name;
     uint8_t *type;
+    uint8_t *nameWithType;
 };
+
 
 void arg_setName(Arg *self, char *name);
 void arg_setcontent(Arg *self, uint8_t *content, uint32_t size);

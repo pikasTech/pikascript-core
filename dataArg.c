@@ -13,11 +13,18 @@ void arg_deinit(Arg *self)
         self->content = NULL;
         self->contentSize = 0;
     }
+
+    if (NULL != self->nameWithType)
+    {
+        pikaFree(self->nameWithType, strGetSize(self->name) + strGetSize(self->type) + 2);
+    }
+
     if (NULL != self->name)
     {
         pikaFree(self->name, strGetSize((char *)self->name) + 1);
         self->name = NULL;
     }
+
     if (NULL != self->type)
     {
         pikaFree(self->type, strGetSize((char *)self->type) + 1);
@@ -53,26 +60,66 @@ void arg_setcontent(Arg *self, uint8_t *content, uint32_t size)
 
 void arg_setName(Arg *self, char *name)
 {
-    uint32_t size = strGetSize(name);
-    if (NULL != self->name)
+    char *oldName = arg_getName(self);
+    char *oldType = arg_getType(self);
+
+    uint16_t newNameSize = strGetSize(name);
+    uint16_t oldNameSize = strGetSize(oldName);
+    uint16_t oldTypeSize = strGetSize(oldType);
+
+    char *nameWithType = pikaMalloc(newNameSize + oldTypeSize + 2);
+
+    // memcpy(nameWithType, name, newNameSize);
+    // nameWithType[newNameSize] = 0; //add '\0'
+    // memcpy(nameWithType + newNameSize + 1, oldType, oldTypeSize);
+    // nameWithType[newNameSize + 1 + oldTypeSize] = 0; //add '\0'
+
+    if (NULL != self->nameWithType)
     {
-        pikaFree(self->name, strGetSize((char *)self->name) + 1);
+        pikaFree(self->nameWithType, oldNameSize + oldTypeSize + 2);
     }
-    self->name = pikaMalloc(size + 1);
+
+    self->nameWithType = nameWithType;
+
+    if (NULL != oldName)
+    {
+        pikaFree(oldName, strGetSize(oldName) + 1);
+    }
+
+    self->name = pikaMalloc(newNameSize + 1);
     // size + 1 to contain \0
-    memcpy(self->name, name, size + 1);
+    memcpy(arg_getName(self), name, newNameSize + 1);
 }
 
 void arg_setType(Arg *self, char *type)
 {
-    uint32_t size = strGetSize(type);
-    if (NULL != self->type)
+    char *oldName = arg_getName(self);
+    char *oldType = arg_getType(self);
+
+    uint16_t newTypeSize = strGetSize(type);
+    uint16_t oldNameSize = strGetSize(oldName);
+    uint16_t oldTypeSize = strGetSize(oldType);
+
+    char *nameWithType = pikaMalloc(oldNameSize + newTypeSize + 2);
+
+    // memcpy(nameWithType, name, newNameSize);
+    // nameWithType[newNameSize] = 0; //add '\0'
+    // memcpy(nameWithType + newNameSize + 1, oldType, oldTypeSize);
+    // nameWithType[newNameSize + 1 + oldTypeSize] = 0; //add '\0'
+
+    if (NULL != self->nameWithType)
     {
-        pikaFree(self->type, strGetSize((char *)self->type) + 1);
-        self->type = NULL;
+        pikaFree(self->nameWithType, oldNameSize + oldTypeSize + 2);
     }
-    self->type = pikaMalloc(size + 1);
-    memcpy(self->type, type, size + 1);
+
+    self->nameWithType = nameWithType;
+
+    if (NULL != oldType)
+    {
+        pikaFree(oldType, strGetSize(oldType) + 1);
+    }
+    self->type = pikaMalloc(newTypeSize + 1);
+    memcpy(arg_getType(self), type, newTypeSize + 1);
 }
 
 uint8_t *arg_getcontent(Arg *self)
@@ -184,6 +231,7 @@ void arg_init(Arg *self, void *voidPointer)
     self->content = NULL;
     self->name = NULL;
     self->type = NULL;
+    self->nameWithType = NULL;
     self->contentSize = 0;
 }
 
