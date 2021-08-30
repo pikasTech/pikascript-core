@@ -35,7 +35,7 @@ int32_t obj_deinit(PikaObj *self)
     deinitAllSubObj(self);
     args_deinit(self->attributeList);
     //DynMemPut(self->mem);
-    pikaFree(self, self->memSize);
+    pikaFree(self, sizeof(PikaObj));
     self = NULL;
     return 0;
 }

@@ -13,7 +13,6 @@ void _beforDinit(PikaObj *self)
 PikaObj *New_TinyObj(Args *args)
 {
     PikaObj *self = pikaMalloc(sizeof(PikaObj));
-    self->memSize = sizeof(PikaObj);
 
     /* List */
     self->attributeList = New_args(NULL);

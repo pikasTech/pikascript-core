@@ -7,7 +7,6 @@ struct Class_arg
 {
     /* attribute */
     void *context;
-    uint16_t memSize;
 
     uint8_t *content;
     uint16_t contentSize;

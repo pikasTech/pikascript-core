@@ -24,7 +24,7 @@ void arg_deinit(Arg *self)
         self->type = NULL;
     }
 
-    pikaFree(self, self->memSize);
+    pikaFree(self, sizeof(Arg));
     self = NULL;
 }
 
@@ -200,7 +200,6 @@ char *arg_getType(Arg *self)
 Arg *New_arg(void *voidPointer)
 {
     Arg *self = pikaMalloc(sizeof(Arg));
-    self->memSize = sizeof(Arg);
     arg_init(self, voidPointer);
     return self;
 }

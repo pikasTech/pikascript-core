@@ -10,7 +10,6 @@ struct Class_Arglist
 {
     void *context;
     Link *argLinkList;
-    uint16_t memSize;
 };
 
 /* operation */

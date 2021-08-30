@@ -13,7 +13,6 @@ struct PikaObj_t
     /* list */
     Args *attributeList;
     char *name;
-    uint16_t memSize;
 };
 
 /* operation */
