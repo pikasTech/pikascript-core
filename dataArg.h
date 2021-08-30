@@ -5,7 +5,6 @@
 typedef struct Class_arg Arg;
 struct Class_arg
 {
-    uint8_t *content;
     uint16_t contentSize;
     uint8_t *nameWithType;
 };
