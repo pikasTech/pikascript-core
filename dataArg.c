@@ -119,8 +119,7 @@ void arg_newContent(Arg *self, uint32_t size)
 
 void arg_setContent(Arg *self, uint8_t *content, uint32_t size)
 {
-    arg_newContent(self, size);
-    memcpy(arg_getContent(self), content, size);
+    self->mem = content_setContent(self->mem, content, size);
 }
 
 void arg_setName(Arg *self, char *name)
@@ -256,7 +255,7 @@ char *arg_getStr(Arg *self)
 void arg_init(Arg *self, void *voidPointer)
 {
     /* attribute */
-    self->mem = NULL;
+    self->mem = content_init("", "", NULL, 0);
 }
 
 uint16_t content_typeOffset(uint8_t *content)
