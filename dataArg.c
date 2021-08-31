@@ -95,6 +95,7 @@ uint8_t *content_setName(uint8_t *self, char *name)
 {
     char *type = content_getType(self);
     uint8_t *content = content_getContent(self);
+    uint16_t size = content_getSize(self);
     char *newContent = content_init(name, type, content, size);
     content_deinit(self);
     return newContent;
@@ -104,6 +105,7 @@ uint8_t *content_setType(uint8_t *self, char *type)
 {
     char *name = content_getName(self);
     uint8_t *content = content_getContent(self);
+    uint16_t size = content_getSize(self);
     char *newContent = content_init(name, type, content, size);
     content_deinit(self);
     return newContent;
