@@ -66,7 +66,7 @@ void setArgDirect(Args *self, Arg *arg)
 char *args_getBuff(Args *self, int32_t size)
 {
     Arg *argNew = New_arg(NULL);
-    arg_newContent(argNew, size + 1);
+    argNew = arg_newContent(argNew, size + 1);
     setArgDirect(self, argNew);
     return (char *)arg_getContent(argNew);
 }
