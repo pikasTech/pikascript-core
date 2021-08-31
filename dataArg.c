@@ -267,12 +267,12 @@ uint16_t content_typeOffset(uint8_t *content)
 
 char *arg_getName(Arg *self)
 {
-    return content_getName(self);
+    return content_getName(self->mem);
 }
 
 char *arg_getType(Arg *self)
 {
-    return content_getType(self);
+    return content_getType(self->mem);
 }
 
 uint16_t arg_getContentSize(Arg *self)
