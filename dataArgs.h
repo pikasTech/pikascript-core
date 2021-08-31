@@ -5,11 +5,7 @@
 #include "dataMemory.h"
 #include "dataArg.h"
 
-typedef struct Class_Arglist Args;
-struct Class_Arglist
-{
-    Link *argLinkList;
-};
+typedef Link Args;
 
 /* operation */
 void args_deinit(Args *self);

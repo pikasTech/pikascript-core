@@ -10,9 +10,7 @@
 
 void args_deinit(Args *self)
 {
-    link_deinit(self->argLinkList);
-    pikaFree(self, sizeof(Args));
-    self = NULL;
+    link_deinit(self);
 }
 
 int32_t args_setFloat(Args *self, char *name, float argFloat)
@@ -62,7 +60,7 @@ int32_t args_setStr(Args *self, char *name, char *strIn)
 
 void setArgDirect(Args *self, Arg *arg)
 {
-    link_addNode(self->argLinkList,
+    link_addNode(self,
                  arg);
 }
 
@@ -110,7 +108,7 @@ int64_t args_getInt(Args *self, char *name)
 
 int32_t args_getSize(Args *self)
 {
-    return link_getSize(self->argLinkList);
+    return link_getSize(self);
 }
 
 char *args_getType(Args *self, char *name)
@@ -196,7 +194,7 @@ int32_t args_setArg(Args *self, Arg *arg)
 
 Arg *args_getArg(Args *self, char *name)
 {
-    LinkNode *nodeNow = self->argLinkList->firstNode;
+    LinkNode *nodeNow = self->firstNode;
     if (NULL == nodeNow)
     {
         return NULL;
@@ -459,7 +457,7 @@ int32_t args_setObjectWithClass(Args *self, char *objName, char *className, void
 
 int32_t args_foreach(Args *self, int32_t (*eachHandle)(Arg *argEach, Args *handleArgs), Args *handleArgs)
 {
-    LinkNode *nodeNow = self->argLinkList->firstNode;
+    LinkNode *nodeNow = self->firstNode;
     while (1)
     {
         Arg *argNow = nodeNow->content;
@@ -487,25 +485,12 @@ int32_t args_removeArg(Args *self, char *name)
         /* can not found arg */
         return 1;
     }
-    link_removeNode(self->argLinkList, argNow);
+    link_removeNode(self, argNow);
     return 0;
-}
-
-void args_init(Args *self, Args *args)
-{
-    /* attribute */
-    self->argLinkList = New_link(NULL);
-
-    /* arg */
-
-    /* object */
-
-    /* override */
 }
 
 Args *New_args(Args *args)
 {
-    Args *self = pikaMalloc(sizeof(Args));
-    args_init(self, args);
+    Args *self = New_link(NULL);
     return self;
 }
