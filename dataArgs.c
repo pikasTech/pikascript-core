@@ -177,7 +177,7 @@ int32_t updateArg(Args *self, Arg *argNew)
         return 1;
         // type do not match
     }
-    arg_setContent(argOld, arg_getContent(argNew), argNew->contentSize);
+    arg_setContent(argOld, arg_getContent(argNew), arg_getContentSize(argNew));
     arg_deinit(argNew);
     return 0;
 }

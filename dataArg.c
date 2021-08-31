@@ -14,10 +14,7 @@ void arg_deinit(Arg *self)
 
 uint16_t arg_getTotleSize(Arg *self)
 {
-    return strGetSize(arg_getName(self)) +
-           strGetSize(arg_getType(self)) +
-           2 +
-           self->contentSize;
+    return content_totleSize(self->mem);
 }
 
 uint16_t content_sizeOffset(uint8_t *self)
@@ -55,7 +52,10 @@ uint8_t *content_init(char *name, char *type, uint8_t *content, uint16_t size)
     memcpy(typeDir, type, typeSize + 1);
     sizeDir[0] = size;
     sizeDir[1] = size >> 8;
-    memcpy(contentDir, content, size);
+    if (NULL != content)
+    {
+        memcpy(contentDir, content, size);
+    }
     return self;
 }
 
@@ -66,9 +66,10 @@ uint16_t content_totleSize(uint8_t *self)
 
 void arg_freeContent(Arg *self)
 {
-    if (NULL != self->content)
+    if (NULL != self->mem)
     {
-        pikaFree(self->content, arg_getTotleSize(self));
+        content_deinit(self->mem);
+        self->mem = NULL;
     }
 }
 
@@ -113,26 +114,7 @@ uint8_t *content_setType(uint8_t *self, char *type)
 
 void arg_newContent(Arg *self, uint32_t size)
 {
-    char *oldName = arg_getName(self);
-    char *oldType = arg_getType(self);
-    uint16_t oldNameSize = strGetSize(oldName);
-    uint16_t oldTypeSize = strGetSize(oldType);
-
-    char *content = pikaMalloc(oldTypeSize + oldTypeSize + 2 + size);
-
-    memcpy(content_getName(content), oldName, oldNameSize);
-    content[content_typeOffset(content) - 1] = 0;
-    memcpy(content_getType(content), oldType, oldTypeSize);
-    content[content_contentOffset(content) - 1] = 0;
-
-    arg_freeContent(self);
-
-    self->content = content;
-    self->contentSize = size;
-    for (uint32_t i = 0; i < size; i++)
-    {
-        arg_getContent(self)[i] = 0;
-    }
+    self->mem = content_init("", "", NULL, size);
 }
 
 void arg_setContent(Arg *self, uint8_t *content, uint32_t size)
@@ -143,46 +125,12 @@ void arg_setContent(Arg *self, uint8_t *content, uint32_t size)
 
 void arg_setName(Arg *self, char *name)
 {
-    char *oldName = arg_getName(self);
-    char *oldType = arg_getType(self);
-    char *oldContent = arg_getContent(self);
-
-    uint16_t newNameSize = strGetSize(name);
-    uint16_t oldNameSize = strGetSize(oldName);
-    uint16_t oldTypeSize = strGetSize(oldType);
-
-    char *content = pikaMalloc(newNameSize + oldTypeSize + 2 + self->contentSize);
-
-    memcpy(content_getName(content), name, newNameSize);
-    content[content_typeOffset(content) - 1] = 0;
-    memcpy(content_getType(content), oldType, oldTypeSize);
-    content[content_contentOffset(content) - 1] = 0;
-    memcpy(content_getContent(content), oldContent, self->contentSize);
-
-    arg_freeContent(self);
-    self->content = content;
+    self->mem = content_setName(self->mem, name);
 }
 
 void arg_setType(Arg *self, char *type)
 {
-    char *oldName = arg_getName(self);
-    char *oldType = arg_getType(self);
-    char *oldContent = arg_getContent(self);
-
-    uint16_t newTypeSize = strGetSize(type);
-    uint16_t oldNameSize = strGetSize(oldName);
-    uint16_t oldTypeSize = strGetSize(oldType);
-
-    char *content = pikaMalloc(oldNameSize + newTypeSize + 2 + self->contentSize);
-
-    memcpy(content_getName(content), oldName, oldNameSize);
-    content[content_typeOffset(content) - 1] = 0;
-    memcpy(content_getType(content), type, newTypeSize);
-    content[content_contentOffset(content) - 1] = 0;
-    memcpy(content_getContent(content), oldContent, self->contentSize);
-
-    arg_freeContent(self);
-    self->content = content;
+    self->mem = content_setType(self->mem, type);
 }
 
 char *content_getType(uint8_t *self)
@@ -202,11 +150,7 @@ uint8_t *content_getContent(uint8_t *content)
 
 uint8_t *arg_getContent(Arg *self)
 {
-    if (NULL == arg_getName(self))
-    {
-        return NULL;
-    }
-    return self->content + content_contentOffset(self->content);
+    return content_getContent(self->mem);
 }
 
 void arg_setInt(Arg *self, int64_t val)
@@ -312,8 +256,7 @@ char *arg_getStr(Arg *self)
 void arg_init(Arg *self, void *voidPointer)
 {
     /* attribute */
-    self->content = NULL;
-    self->contentSize = 0;
+    self->mem = NULL;
 }
 
 uint16_t content_typeOffset(uint8_t *content)
@@ -325,16 +268,17 @@ uint16_t content_typeOffset(uint8_t *content)
 
 char *arg_getName(Arg *self)
 {
-    return (char *)self->content;
+    return content_getName(self);
 }
 
 char *arg_getType(Arg *self)
 {
-    if (NULL == arg_getName(self))
-    {
-        return NULL;
-    }
-    return (char *)self->content + content_typeOffset(self->content);
+    return content_getType(self);
+}
+
+uint16_t arg_getContentSize(Arg *self)
+{
+    return content_getSize(self->mem);
 }
 
 Arg *New_arg(void *voidPointer)
@@ -347,7 +291,7 @@ Arg *New_arg(void *voidPointer)
 Arg *arg_copy(Arg *argToBeCopy)
 {
     Arg *argCopied = New_arg(NULL);
-    arg_setContent(argCopied, arg_getContent(argToBeCopy), argToBeCopy->contentSize);
+    arg_setContent(argCopied, arg_getContent(argToBeCopy), arg_getContentSize(argToBeCopy));
     arg_setName(argCopied, arg_getName(argToBeCopy));
     arg_setType(argCopied, arg_getType(argToBeCopy));
     return argCopied;
