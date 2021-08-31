@@ -118,7 +118,9 @@ uint8_t *content_setType(uint8_t *self, char *type)
 
 void arg_newContent(Arg *self, uint32_t size)
 {
-    self->mem = content_init("", "", NULL, size);
+    char *newContent = content_init("", "", NULL, size);
+    arg_freeContent(self);
+    self->mem = newContent;
 }
 
 void arg_setContent(Arg *self, uint8_t *content, uint32_t size)
