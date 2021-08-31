@@ -20,6 +20,26 @@ uint16_t arg_getTotleSize(Arg *self)
            self->contentSize;
 }
 
+uint16_t content_sizeOffset(uint8_t *self)
+{
+    return content_typeOffset(self) + strGetSize(content_getType(self)) + 1;
+}
+
+uint16_t content_getSize(uint8_t *self)
+{
+    uint16_t size = 0;
+    // add 0x30 to avoid 0
+    size += self[content_sizeOffset(self) + 1];
+    size = (size << 8);
+    size += self[content_sizeOffset(self)];
+    return size;
+}
+
+uint16_t content_totleSize(uint8_t *self)
+{
+    return content_contentOffset(self) + content_getSize(self);
+}
+
 void arg_freeContent(Arg *self)
 {
     if (NULL != self->content)
@@ -31,6 +51,14 @@ void arg_freeContent(Arg *self)
 char *content_getName(uint8_t *content)
 {
     return content;
+}
+
+uint8_t *content_setName(uint8_t *self, char *name)
+{
+}
+
+uint8_t *content_setType(uint8_t *self, char *type)
+{
 }
 
 void arg_newContent(Arg *self, uint32_t size)
@@ -107,17 +135,14 @@ void arg_setType(Arg *self, char *type)
     self->content = content;
 }
 
-char *content_getType(uint8_t *content)
+char *content_getType(uint8_t *self)
 {
-    return content + content_typeOffset(content);
+    return self + content_typeOffset(self);
 }
 
-uint16_t content_contentOffset(uint8_t *content)
+uint16_t content_contentOffset(uint8_t *self)
 {
-    uint16_t typeOffset = content_typeOffset(content);
-    char *type = content_getType(content);
-    uint16_t typeSize = strGetSize(type);
-    return typeOffset + typeSize + 1;
+    return content_sizeOffset(self) + 2;
 }
 
 uint8_t *content_getContent(uint8_t *content)
@@ -243,8 +268,7 @@ void arg_init(Arg *self, void *voidPointer)
 
 uint16_t content_typeOffset(uint8_t *content)
 {
-    uint16_t nameSize = strGetSize(content);
-    return nameSize + 1;
+    return strGetSize(content_getName(content)) + 1;
 }
 
 char *arg_getName(Arg *self)

@@ -11,9 +11,18 @@ struct Class_arg
 
 uint16_t content_typeOffset(uint8_t *content);
 uint16_t content_contentOffset(uint8_t *content);
+uint16_t content_sizeOffset(uint8_t *self);
+uint16_t content_contentOffset(uint8_t *self);
+
 char *content_getName(uint8_t *content);
 char *content_getType(uint8_t *content);
+uint16_t content_getSize(uint8_t *self);
 uint8_t *content_getContent(uint8_t *content);
+
+uint16_t content_totleSize(uint8_t *self);
+
+uint8_t *content_setName(uint8_t *self, char *name);
+uint8_t *content_setType(uint8_t *self, char *type);
 
 uint16_t arg_getTotleSize(Arg *self);
 void arg_freeContent(Arg *self);
