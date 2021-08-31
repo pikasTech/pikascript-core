@@ -248,7 +248,7 @@ void args_bindStr(Args *self, char *name, char **stringPtr)
 char *getPrintSring(Args *self, char *name, char *valString)
 {
     Args *buffs = New_strBuff();
-    char *printName = strsAppend(buffs, "[printBuff]", name);
+    char *printName = strsFormat(buffs, "[printBuff]%s", name);
     char *printString = strsCopy(buffs, valString);
     args_setStr(self, printName, printString);
     char *res = args_getStr(self, printName);

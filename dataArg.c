@@ -56,6 +56,10 @@ uint8_t *content_init(char *name, char *type, uint8_t *content, uint16_t size)
     {
         memcpy(contentDir, content, size);
     }
+    else
+    {
+        memset(contentDir, 0, size);
+    }
     return self;
 }
 
