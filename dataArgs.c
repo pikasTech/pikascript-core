@@ -16,9 +16,9 @@ void args_deinit(Args *self)
 int32_t args_setFloat(Args *self, char *name, float argFloat)
 {
     Arg *argNew = New_arg(NULL);
-    arg_setType(argNew, "float");
-    arg_setName(argNew, name);
-    arg_setFloat(argNew, argFloat);
+    argNew = arg_setType(argNew, "float");
+    argNew = arg_setName(argNew, name);
+    argNew = arg_setFloat(argNew, argFloat);
     args_setArg(self, argNew);
     return 0;
 }
@@ -40,9 +40,9 @@ int32_t args_setPtr(Args *self, char *name, void *argPointer)
 {
     int32_t errCode = 0;
     Arg *argNew = New_arg(NULL);
-    arg_setType(argNew, "pointer");
-    arg_setName(argNew, name);
-    arg_setPtr(argNew, argPointer);
+    argNew = arg_setType(argNew, "pointer");
+    argNew = arg_setName(argNew, name);
+    argNew = arg_setPtr(argNew, argPointer);
     args_setArg(self, argNew);
     return errCode;
 }
@@ -51,9 +51,9 @@ int32_t args_setStr(Args *self, char *name, char *strIn)
 {
     int32_t errCode = 0;
     Arg *argNew = New_arg(NULL);
-    arg_setType(argNew, "str");
-    arg_setStr(argNew, strIn);
-    arg_setName(argNew, name);
+    argNew = arg_setType(argNew, "str");
+    argNew = arg_setStr(argNew, strIn);
+    argNew = arg_setName(argNew, name);
     args_setArg(self, argNew);
     return errCode;
 }
@@ -88,9 +88,9 @@ char *args_getStr(Args *self, char *name)
 int32_t args_setInt(Args *self, char *name, int64_t int64In)
 {
     Arg *argNew = New_arg(NULL);
-    arg_setName(argNew, name);
-    arg_setInt(argNew, int64In);
-    arg_setType(argNew, "int");
+    argNew = arg_setName(argNew, name);
+    argNew = arg_setInt(argNew, int64In);
+    argNew = arg_setType(argNew, "int");
     args_setArg(self, argNew);
     return 0;
 }
@@ -166,7 +166,8 @@ int32_t args_isArgExist(Args *self, char *name)
 int32_t updateArg(Args *self, Arg *argNew)
 {
     // arg New must be a new arg
-    Arg *argOld = args_getArg(self, arg_getName(argNew));
+    LinkNode *node = args_getNode(self, arg_getName(argNew));
+    Arg *argOld = node->content;
 
     // check type
     if (!strEqu(arg_getType(argOld), arg_getType(argNew)))
@@ -174,7 +175,7 @@ int32_t updateArg(Args *self, Arg *argNew)
         return 1;
         // type do not match
     }
-    arg_setContent(argOld, arg_getContent(argNew), arg_getContentSize(argNew));
+    node->content = arg_setContent(argOld, arg_getContent(argNew), arg_getContentSize(argNew));
     arg_deinit(argNew);
     return 0;
 }
@@ -191,7 +192,7 @@ int32_t args_setArg(Args *self, Arg *arg)
     return 0;
 }
 
-Arg *args_getArg(Args *self, char *name)
+LinkNode *args_getNode(Args *self, char *name)
 {
     LinkNode *nodeNow = self->firstNode;
     if (NULL == nodeNow)
@@ -204,7 +205,7 @@ Arg *args_getArg(Args *self, char *name)
         char *thisName = arg_getName(arg);
         if (strEqu(name, thisName))
         {
-            return arg;
+            return nodeNow;
         }
         if (NULL == nodeNow->nextNode)
         {
@@ -214,14 +215,24 @@ Arg *args_getArg(Args *self, char *name)
     }
 }
 
+Arg *args_getArg(Args *self, char *name)
+{
+    LinkNode *node = args_getNode(self, name);
+    if (NULL == node)
+    {
+        return NULL;
+    }
+    return node->content;
+}
+
 void args_bind(Args *self, char *type, char *name, void *pointer)
 {
     Args *buffs = New_strBuff();
     char *typeWithBind = strsAppend(buffs, "_bind-", type);
     Arg *argNew = New_arg(NULL);
-    arg_setType(argNew, typeWithBind);
-    arg_setName(argNew, name);
-    arg_setPtr(argNew, pointer);
+    argNew = arg_setType(argNew, typeWithBind);
+    argNew = arg_setName(argNew, name);
+    argNew = arg_setPtr(argNew, pointer);
     args_setArg(self, argNew);
     args_deinit(buffs);
     return;
@@ -438,9 +449,9 @@ exit:
 int32_t args_setPtrWithType(Args *self, char *objName, char *type, void *objPtr)
 {
     Arg *argNew = New_arg(NULL);
-    arg_setName(argNew, objName);
-    arg_setPtr(argNew, objPtr);
-    arg_setType(argNew, type);
+    argNew = arg_setName(argNew, objName);
+    argNew = arg_setPtr(argNew, objPtr);
+    argNew = arg_setType(argNew, type);
     args_setArg(self, argNew);
     return 0;
 }

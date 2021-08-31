@@ -144,7 +144,7 @@ static void set(PikaObj *self, Args *args)
     Arg *val = args_getArg(args, "val");
     Arg *newArg = arg_copy(val);
     char *argName = strsGetLastToken(args, argPath, '.');
-    arg_setName(newArg, argName);
+    newArg = arg_setName(newArg, argName);
     int32_t res = obj_setArg(self, argPath, newArg);
     if (res == 1)
     {

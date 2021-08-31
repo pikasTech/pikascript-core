@@ -554,7 +554,7 @@ static int32_t loadArgByType(PikaObj *self,
             return 3;
         }
         Arg *argCopied = arg_copy(arg);
-        arg_setName(argCopied, definedName);
+        argCopied = arg_setName(argCopied, definedName);
         args_setArg(args, argCopied);
         return 0;
     }

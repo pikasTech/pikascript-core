@@ -11,6 +11,7 @@ typedef Link Args;
 void args_deinit(Args *self);
 void args_init(Args *self, Args *args);
 int32_t args_getSize(Args *self);
+LinkNode *args_getNode(Args *self, char *name);
 
 Arg *args_getArgByIndex(Args *self,int32_t index);
 Arg *args_getArg(Args *self, char *name);
