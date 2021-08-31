@@ -79,19 +79,20 @@ void arg_freeContent(Arg *self)
 
 char *content_getName(uint8_t *self)
 {
-    return self;
+    return (char *)self;
 }
 
 uint8_t *content_deinit(uint8_t *self)
 {
     pikaFree(self, content_totleSize(self));
+    return 0;
 }
 
 uint8_t *content_setContent(uint8_t *self, uint8_t *content, uint16_t size)
 {
     char *name = content_getName(self);
     char *type = content_getType(self);
-    char *newContent = content_init(name, type, content, size);
+    uint8_t *newContent = content_init(name, type, content, size);
     content_deinit(self);
     return newContent;
 }
@@ -101,7 +102,7 @@ uint8_t *content_setName(uint8_t *self, char *name)
     char *type = content_getType(self);
     uint8_t *content = content_getContent(self);
     uint16_t size = content_getSize(self);
-    char *newContent = content_init(name, type, content, size);
+    uint8_t *newContent = content_init(name, type, content, size);
     content_deinit(self);
     return newContent;
 }
@@ -111,14 +112,14 @@ uint8_t *content_setType(uint8_t *self, char *type)
     char *name = content_getName(self);
     uint8_t *content = content_getContent(self);
     uint16_t size = content_getSize(self);
-    char *newContent = content_init(name, type, content, size);
+    uint8_t *newContent = content_init(name, type, content, size);
     content_deinit(self);
     return newContent;
 }
 
 void arg_newContent(Arg *self, uint32_t size)
 {
-    char *newContent = content_init("", "", NULL, size);
+    uint8_t *newContent = content_init("", "", NULL, size);
     arg_freeContent(self);
     self->mem = newContent;
 }
@@ -140,7 +141,7 @@ void arg_setType(Arg *self, char *type)
 
 char *content_getType(uint8_t *self)
 {
-    return self + content_typeOffset(self);
+    return (char *)self + content_typeOffset(self);
 }
 
 uint16_t content_contentOffset(uint8_t *self)
