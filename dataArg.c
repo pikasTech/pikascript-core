@@ -22,7 +22,10 @@ uint16_t arg_getTotleSize(Arg *self)
 
 uint16_t content_sizeOffset(uint8_t *self)
 {
-    return content_typeOffset(self) + strGetSize(content_getType(self)) + 1;
+    char *type = content_getType(self);
+    uint16_t typeSize = strGetSize(type);
+    uint16_t typeOffset = content_typeOffset(self);
+    return typeOffset + typeSize + 1;
 }
 
 uint16_t content_getSize(uint8_t *self)
@@ -33,6 +36,27 @@ uint16_t content_getSize(uint8_t *self)
     size = (size << 8);
     size += self[content_sizeOffset(self)];
     return size;
+}
+
+uint8_t *content_init(char *name, char *type, uint8_t *content, uint16_t size)
+{
+    uint16_t nameSize = strGetSize(name);
+    uint16_t typeSize = strGetSize(type);
+    uint8_t *self = (uint8_t *)pikaMalloc(nameSize + 1 +
+                                          typeSize + 1 +
+                                          2 +
+                                          size);
+    uint8_t *nameDir = self;
+    uint8_t *typeDir = nameDir + nameSize + 1;
+    uint8_t *sizeDir = typeDir + typeSize + 1;
+    uint8_t *contentDir = sizeDir + 2;
+
+    memcpy(nameDir, name, nameSize + 1);
+    memcpy(typeDir, type, typeSize + 1);
+    sizeDir[0] = size;
+    sizeDir[1] = size >> 8;
+    memcpy(contentDir, content, size);
+    return self;
 }
 
 uint16_t content_totleSize(uint8_t *self)
@@ -268,7 +292,9 @@ void arg_init(Arg *self, void *voidPointer)
 
 uint16_t content_typeOffset(uint8_t *content)
 {
-    return strGetSize(content_getName(content)) + 1;
+    char *name = content_getName(content);
+    uint16_t nameSize = strGetSize(name);
+    return nameSize + 1;
 }
 
 char *arg_getName(Arg *self)
