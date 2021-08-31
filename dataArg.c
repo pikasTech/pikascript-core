@@ -72,17 +72,41 @@ void arg_freeContent(Arg *self)
     }
 }
 
-char *content_getName(uint8_t *content)
+char *content_getName(uint8_t *self)
 {
-    return content;
+    return self;
+}
+
+uint8_t *content_deinit(uint8_t *self)
+{
+    pikaFree(self, content_totleSize(self));
+}
+
+uint8_t *content_setContent(uint8_t *self, uint8_t *content, uint16_t size)
+{
+    char *name = content_getName(self);
+    char *type = content_getType(self);
+    char *newContent = content_init(name, type, content, size);
+    content_deinit(self);
+    return newContent;
 }
 
 uint8_t *content_setName(uint8_t *self, char *name)
 {
+    char *type = content_getType(self);
+    uint8_t *content = content_getContent(self);
+    char *newContent = content_init(name, type, content, size);
+    content_deinit(self);
+    return newContent;
 }
 
 uint8_t *content_setType(uint8_t *self, char *type)
 {
+    char *name = content_getName(self);
+    uint8_t *content = content_getContent(self);
+    char *newContent = content_init(name, type, content, size);
+    content_deinit(self);
+    return newContent;
 }
 
 void arg_newContent(Arg *self, uint32_t size)
