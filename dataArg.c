@@ -90,6 +90,10 @@ uint8_t *content_deinit(uint8_t *self)
 
 uint8_t *content_setContent(uint8_t *self, uint8_t *content, uint16_t size)
 {
+    if (NULL == self)
+    {
+        return content_init("", "", content, size);
+    }
     char *name = content_getName(self);
     char *type = content_getType(self);
     uint8_t *newContent = content_init(name, type, content, size);
@@ -99,6 +103,10 @@ uint8_t *content_setContent(uint8_t *self, uint8_t *content, uint16_t size)
 
 uint8_t *content_setName(uint8_t *self, char *name)
 {
+    if (NULL == self)
+    {
+        return content_init(name, "", NULL, 0);
+    }
     char *type = content_getType(self);
     uint8_t *content = content_getContent(self);
     uint16_t size = content_getSize(self);
@@ -109,6 +117,10 @@ uint8_t *content_setName(uint8_t *self, char *name)
 
 uint8_t *content_setType(uint8_t *self, char *type)
 {
+    if (NULL == self)
+    {
+        return content_init("", type, NULL, 0);
+    }
     char *name = content_getName(self);
     uint8_t *content = content_getContent(self);
     uint16_t size = content_getSize(self);
@@ -262,7 +274,7 @@ char *arg_getStr(Arg *self)
 void arg_init(Arg *self, void *voidPointer)
 {
     /* attribute */
-    self->mem = content_init("", "", NULL, 0);
+    self->mem = NULL;
 }
 
 uint16_t content_typeOffset(uint8_t *content)

@@ -109,6 +109,10 @@ int32_t strGetTokenNum(char *strIn, char sign)
 
 uint32_t strGetSize(char *pData)
 {
+	if (NULL == pData)
+	{
+		return 0;
+	}
 	uint32_t Size = 0;
 	if (NULL == pData)
 	{

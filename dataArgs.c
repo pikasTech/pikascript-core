@@ -60,8 +60,7 @@ int32_t args_setStr(Args *self, char *name, char *strIn)
 
 void setArgDirect(Args *self, Arg *arg)
 {
-    link_addNode(self,
-                 arg);
+    link_addNode(self, arg);
 }
 
 char *args_getBuff(Args *self, int32_t size)
