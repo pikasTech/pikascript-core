@@ -11,12 +11,13 @@ uint16_t content_contentOffset(uint8_t *self);
 
 char *content_getName(uint8_t *content);
 char *content_getType(uint8_t *content);
+uint8_t *content_getNext(uint8_t *self);
 uint16_t content_getSize(uint8_t *self);
 uint8_t *content_getContent(uint8_t *content);
 
 uint16_t content_totleSize(uint8_t *self);
 
-uint8_t *content_init(char *name, char *type, uint8_t *content, uint16_t size);
+uint8_t *content_init(char *name, char *type, uint8_t *content, uint16_t size, uint8_t *next);
 uint8_t *content_deinit(uint8_t *self);
 uint8_t *content_setName(uint8_t *self, char *name);
 uint8_t *content_setType(uint8_t *self, char *type);
