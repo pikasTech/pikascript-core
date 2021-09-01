@@ -168,7 +168,7 @@ uint8_t *arg_getContent(Arg *self)
     return content_getContent(self);
 }
 
-Arg *arg_setInt(Arg *self, int64_t val)
+Arg *arg_setInt(Arg *self, char *name, int64_t val)
 {
     int64_t int64Temp = val;
     uint8_t contentBuff[8];
@@ -178,10 +178,10 @@ Arg *arg_setInt(Arg *self, int64_t val)
         contentBuff[i] = int64Temp;
         int64Temp = int64Temp >> 8;
     }
-    return arg_setContent(self, contentBuff, 8);
+    return content_init(name, "int", contentBuff, 8);
 }
 
-Arg *arg_setFloat(Arg *self, float val)
+Arg *arg_setFloat(Arg *self, char *name, float val)
 {
     uint8_t contentBuff[4];
     uint8_t *valPtr = (uint8_t *)&val;
@@ -190,7 +190,7 @@ Arg *arg_setFloat(Arg *self, float val)
         // add 0x30 to void \0
         contentBuff[i] = valPtr[i];
     }
-    return arg_setContent(self, contentBuff, 4);
+    return content_init(name, "float", contentBuff, 4);
 }
 
 float arg_getFloat(Arg *self)
@@ -210,7 +210,7 @@ float arg_getFloat(Arg *self)
     return valOut;
 }
 
-Arg *arg_setPtr(Arg *self, void *pointer)
+Arg *arg_setPtr(Arg *self, char *name, char *type, void *pointer)
 {
     uint64_t pointerTemp = (uint64_t)pointer;
     uint8_t contentBuff[8];
@@ -220,12 +220,12 @@ Arg *arg_setPtr(Arg *self, void *pointer)
         contentBuff[i] = pointerTemp;
         pointerTemp = pointerTemp >> 8;
     }
-    return arg_setContent(self, contentBuff, 8);
+    return content_init(name, type, contentBuff, 8);
 }
 
-Arg *arg_setStr(Arg *self, char *string)
+Arg *arg_setStr(Arg *self, char *name, char *string)
 {
-    return arg_setContent(self, (uint8_t *)string, strGetSize(string) + 1);
+    return content_init(name, "str", (uint8_t *)string, strGetSize(string) + 1);
 }
 
 int64_t arg_getInt(Arg *self)

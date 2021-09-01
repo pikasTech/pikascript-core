@@ -16,9 +16,7 @@ void args_deinit(Args *self)
 int32_t args_setFloat(Args *self, char *name, float argFloat)
 {
     Arg *argNew = New_arg(NULL);
-    argNew = arg_setType(argNew, "float");
-    argNew = arg_setName(argNew, name);
-    argNew = arg_setFloat(argNew, argFloat);
+    argNew = arg_setFloat(argNew, name, argFloat);
     args_setArg(self, argNew);
     return 0;
 }
@@ -40,9 +38,7 @@ int32_t args_setPtr(Args *self, char *name, void *argPointer)
 {
     int32_t errCode = 0;
     Arg *argNew = New_arg(NULL);
-    argNew = arg_setType(argNew, "pointer");
-    argNew = arg_setName(argNew, name);
-    argNew = arg_setPtr(argNew, argPointer);
+    argNew = arg_setPtr(argNew, name, "pointer", argPointer);
     args_setArg(self, argNew);
     return errCode;
 }
@@ -51,9 +47,7 @@ int32_t args_setStr(Args *self, char *name, char *strIn)
 {
     int32_t errCode = 0;
     Arg *argNew = New_arg(NULL);
-    argNew = arg_setType(argNew, "str");
-    argNew = arg_setStr(argNew, strIn);
-    argNew = arg_setName(argNew, name);
+    argNew = arg_setStr(argNew, name, strIn);
     args_setArg(self, argNew);
     return errCode;
 }
@@ -88,9 +82,7 @@ char *args_getStr(Args *self, char *name)
 int32_t args_setInt(Args *self, char *name, int64_t int64In)
 {
     Arg *argNew = New_arg(NULL);
-    argNew = arg_setName(argNew, name);
-    argNew = arg_setInt(argNew, int64In);
-    argNew = arg_setType(argNew, "int");
+    argNew = arg_setInt(argNew, name, int64In);
     args_setArg(self, argNew);
     return 0;
 }
@@ -230,9 +222,7 @@ void args_bind(Args *self, char *type, char *name, void *pointer)
     Args *buffs = New_strBuff();
     char *typeWithBind = strsAppend(buffs, "_bind-", type);
     Arg *argNew = New_arg(NULL);
-    argNew = arg_setType(argNew, typeWithBind);
-    argNew = arg_setName(argNew, name);
-    argNew = arg_setPtr(argNew, pointer);
+    argNew = arg_setPtr(argNew, name, typeWithBind, pointer);
     args_setArg(self, argNew);
     args_deinit(buffs);
     return;
@@ -446,12 +436,10 @@ exit:
     return err;
 }
 
-int32_t args_setPtrWithType(Args *self, char *objName, char *type, void *objPtr)
+int32_t args_setPtrWithType(Args *self, char *name, char *type, void *objPtr)
 {
     Arg *argNew = New_arg(NULL);
-    argNew = arg_setName(argNew, objName);
-    argNew = arg_setPtr(argNew, objPtr);
-    argNew = arg_setType(argNew, type);
+    argNew = arg_setPtr(argNew, name, type, objPtr);
     args_setArg(self, argNew);
     return 0;
 }

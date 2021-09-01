@@ -38,10 +38,10 @@ char *arg_getType(Arg *self);
 uint8_t *arg_getContent(Arg *self);
 uint16_t arg_getContentSize(Arg *self);
 
-Arg *arg_setInt(Arg *self, int64_t val);
-Arg *arg_setFloat(Arg *self, float val);
-Arg *arg_setPtr(Arg *self, void *pointer);
-Arg *arg_setStr(Arg *self, char *string);
+Arg *arg_setInt(Arg *self, char *name, int64_t val);
+Arg *arg_setFloat(Arg *self, char *name, float val);
+Arg *arg_setPtr(Arg *self, char *name, char *type, void *pointer);
+Arg *arg_setStr(Arg *self, char *name, char *string);
 
 int64_t arg_getInt(Arg *self);
 float arg_getFloat(Arg *self);
