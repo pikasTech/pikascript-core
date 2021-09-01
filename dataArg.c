@@ -214,13 +214,13 @@ Arg *arg_setPtr(Arg *self, char *name, char *type, void *pointer)
 {
     uint64_t pointerTemp = (uint64_t)pointer;
     uint8_t contentBuff[8];
-    for (uint32_t i = 0; i < 8; i++)
+    for (uint32_t i = 0; i < sizeof(uint8_t *); i++)
     {
         // aboid \0
         contentBuff[i] = pointerTemp;
         pointerTemp = pointerTemp >> 8;
     }
-    return content_init(name, type, contentBuff, 8);
+    return content_init(name, type, contentBuff, sizeof(uint8_t *));
 }
 
 Arg *arg_setStr(Arg *self, char *name, char *string)
@@ -253,7 +253,7 @@ void *arg_getPtr(Arg *self)
         return NULL;
     }
     uint8_t *content = arg_getContent(self);
-    for (int32_t i = 7; i > -1; i--)
+    for (int32_t i = sizeof(uint8_t *) - 1; i > -1; i--)
     {
         // avoid \0
         uint8_t val = content[i];
