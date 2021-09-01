@@ -195,6 +195,21 @@ uint8_t *content_getNext(uint8_t *self)
     return next;
 }
 
+uint8_t *content_setNext(uint8_t *self, uint8_t *next)
+{
+    if (NULL == self)
+    {
+        return content_init("", "", NULL, 0, next);
+    }
+    char *name = content_getName(self);
+    char *type = content_getType(self);
+    uint8_t *content = content_getContent(self);
+    uint16_t size = content_getSize(self);
+    uint8_t *newContent = content_init(name, type, content, size, next);
+    content_deinit(self);
+    return newContent;
+}
+
 uint8_t *content_getContent(uint8_t *self)
 {
     return self + content_contentOffset(self);
