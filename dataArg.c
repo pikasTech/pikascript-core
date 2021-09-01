@@ -172,13 +172,13 @@ Arg *arg_setInt(Arg *self, char *name, int64_t val)
 {
     int64_t int64Temp = val;
     uint8_t contentBuff[8];
-    for (uint32_t i = 0; i < 8; i++)
+    for (uint32_t i = 0; i < 4; i++)
     {
         // add 0x30 to void \0
         contentBuff[i] = int64Temp;
         int64Temp = int64Temp >> 8;
     }
-    return content_init(name, "int", contentBuff, 8);
+    return content_init(name, "int", contentBuff, 4);
 }
 
 Arg *arg_setFloat(Arg *self, char *name, float val)
@@ -235,7 +235,7 @@ int64_t arg_getInt(Arg *self)
         return -999999;
     }
     int64_t int64Temp = 0;
-    for (int32_t i = 7; i > -1; i--)
+    for (int32_t i = 3; i > -1; i--)
     {
         // add 0x30 to avoid 0
         int64Temp = (int64Temp << 8);
