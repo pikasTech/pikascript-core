@@ -3,10 +3,6 @@
 #include "dataMemory.h"
 
 typedef uint8_t Arg;
-struct Class_arg
-{
-    uint8_t *mem;
-};
 
 uint16_t content_typeOffset(uint8_t *content);
 uint16_t content_contentOffset(uint8_t *content);

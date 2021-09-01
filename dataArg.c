@@ -158,9 +158,9 @@ uint16_t content_contentOffset(uint8_t *self)
     return content_sizeOffset(self) + 2;
 }
 
-uint8_t *content_getContent(uint8_t *content)
+uint8_t *content_getContent(uint8_t *self)
 {
-    return content + content_contentOffset(content);
+    return self + content_contentOffset(self);
 }
 
 uint8_t *arg_getContent(Arg *self)
