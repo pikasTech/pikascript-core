@@ -30,7 +30,7 @@ void link_addNode(Link *self, void *content)
     // link the new first node and second node
     if (NULL != secondNode)
     {
-        secondNode->priorNode = self->firstNode;
+        self->firstNode;
     }
     self->firstNode->nextNode = secondNode;
 }
@@ -39,6 +39,7 @@ void link_removeNode(Link *self, void *content)
 {
     LinkNode *nodeToDelete = NULL;
     LinkNode *nodeNow = self->firstNode;
+    LinkNode *priorNode = NULL;
     while (1)
     {
         if (nodeNow->content == content)
@@ -51,11 +52,11 @@ void link_removeNode(Link *self, void *content)
             // error, node no found
             return;
         }
+        priorNode = nodeNow;
         nodeNow = nodeNow->nextNode;
     }
 
     LinkNode *nextNode = nodeToDelete->nextNode;
-    LinkNode *priorNode = nodeToDelete->priorNode;
     if (nodeToDelete == self->firstNode)
     {
         self->firstNode = nodeToDelete->nextNode;
@@ -64,11 +65,6 @@ void link_removeNode(Link *self, void *content)
     if (NULL != priorNode)
     {
         priorNode->nextNode = nextNode;
-    }
-
-    if (NULL != nextNode)
-    {
-        nextNode->priorNode = priorNode;
     }
 
     // deinit the node

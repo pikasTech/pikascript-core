@@ -5,7 +5,6 @@ typedef struct Class_linkNode LinkNode;
 struct Class_linkNode
 {
     /* attribute */
-    LinkNode *priorNode;
     LinkNode *nextNode;
     /* object */
     void *content;
