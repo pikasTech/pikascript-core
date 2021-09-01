@@ -13,10 +13,6 @@ void linkNode_deinit(LinkNode *self)
 void linkNode_init(LinkNode *self, void *args)
 {
     /* attribute */
-    self->nextNode = NULL;
-
-    /* object */
-    self->content = NULL;
 }
 
 LinkNode *New_linkNode(void *args)

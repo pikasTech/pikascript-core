@@ -1,13 +1,14 @@
 #include "dataLink.h"
 #include "dataLinkNode.h"
 #include "dataMemory.h"
+#include "dataArg.h"
 
 void link_deinit(Link *self)
 {
     LinkNode *nowNode = self->firstNode;
     while (NULL != nowNode)
     {
-        LinkNode *nodeNext = nowNode->nextNode;
+        LinkNode *nodeNext = content_getNext(nowNode);
         linkNode_deinit(nowNode);
         nowNode = nodeNext;
     }
@@ -32,7 +33,7 @@ void link_addNode(Link *self, void *content)
     {
         self->firstNode;
     }
-    self->firstNode->nextNode = secondNode;
+    self->firstNode = content_setNext(self->firstNode, secondNode);
 }
 
 void link_removeNode(Link *self, void *content)
@@ -42,24 +43,24 @@ void link_removeNode(Link *self, void *content)
     LinkNode *priorNode = NULL;
     while (1)
     {
-        if (nodeNow->content == content)
+        if (content_getNext(nodeNow) == content)
         {
             nodeToDelete = nodeNow;
             break;
         }
-        if (nodeNow->nextNode == NULL)
+        if (content_getNext(nodeNow) == NULL)
         {
             // error, node no found
             return;
         }
         priorNode = nodeNow;
-        nodeNow = nodeNow->nextNode;
+        nodeNow = content_getNext(nodeNow);
     }
 
-    LinkNode *nextNode = nodeToDelete->nextNode;
+    LinkNode *nextNode = content_getNext(nodeToDelete);
     if (nodeToDelete == self->firstNode)
     {
-        self->firstNode = nodeToDelete->nextNode;
+        self->firstNode = content_getNext(nodeToDelete);
     }
 
     if (NULL != priorNode)

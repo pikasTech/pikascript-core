@@ -199,11 +199,11 @@ LinkNode *args_getNode(Args *self, char *name)
         {
             return nodeNow;
         }
-        if (NULL == nodeNow->nextNode)
+        if (NULL == content_getNext(nodeNow))
         {
             return NULL;
         }
-        nodeNow = nodeNow->nextNode;
+        nodeNow = content_getNext(nodeNow);
     }
 }
 
@@ -463,7 +463,7 @@ int32_t args_foreach(Args *self, int32_t (*eachHandle)(Arg *argEach, Args *handl
         {
             continue;
         }
-        LinkNode *nextNode = nodeNow->nextNode;
+        LinkNode *nextNode = content_getNext(nodeNow);
         eachHandle(argNow, handleArgs);
 
         if (NULL == nextNode)

@@ -1,14 +1,7 @@
 #ifndef _linkNode__H
 #define _linkNode__H
 #include "dataMemory.h"
-typedef struct Class_linkNode LinkNode;
-struct Class_linkNode
-{
-    /* attribute */
-    LinkNode *nextNode;
-    /* object */
-    void *content;
-};
+typedef struct uint8_t *LinkNode;
 
 void linkNode_deinit(LinkNode *self);
 void linkNode_init(LinkNode *self, void *args);
