@@ -34,12 +34,12 @@ void link_removeNode(Link *self, void *content)
     LinkNode *priorNode = NULL;
     while (1)
     {
-        if (content_getNext(nodeNow) == content)
+        if (nodeNow == content)
         {
             nodeToDelete = nodeNow;
             break;
         }
-        if (content_getNext(nodeNow) == NULL)
+        if (nodeNow == NULL)
         {
             // error, node no found
             goto exit;
