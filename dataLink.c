@@ -42,7 +42,7 @@ void link_removeNode(Link *self, void *content)
         if (content_getNext(nodeNow) == NULL)
         {
             // error, node no found
-            return;
+            goto exit;
         }
         priorNode = nodeNow;
         nodeNow = content_getNext(nodeNow);
@@ -54,12 +54,17 @@ void link_removeNode(Link *self, void *content)
         self->firstNode = content_getNext(nodeToDelete);
     }
 
-    if (NULL != priorNode)
+    if (NULL == priorNode)
     {
-        content_setNext(priorNode, nextNode);
+        self->firstNode = nextNode;
+        goto exit;
     }
 
-    // deinit the node
+    content_setNext(priorNode, nextNode);
+    goto exit;
+
+// deinit the node
+exit:
     linkNode_deinit(nodeToDelete);
     return;
 }
