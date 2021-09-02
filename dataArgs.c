@@ -159,7 +159,7 @@ int32_t updateArg(Args *self, Arg *argNew)
 {
     // arg New must be a new arg
     LinkNode *node = args_getNode(self, arg_getName(argNew));
-    Arg *argOld = node->content;
+    Arg *argOld = node;
 
     // check type
     if (!strEqu(arg_getType(argOld), arg_getType(argNew)))
@@ -167,7 +167,7 @@ int32_t updateArg(Args *self, Arg *argNew)
         return 1;
         // type do not match
     }
-    node->content = arg_setContent(argOld, arg_getContent(argNew), arg_getContentSize(argNew));
+    arg_setContent(argOld, arg_getContent(argNew), arg_getContentSize(argNew));
     arg_deinit(argNew);
     return 0;
 }
@@ -193,7 +193,7 @@ LinkNode *args_getNode(Args *self, char *name)
     }
     while (1)
     {
-        Arg *arg = nodeNow->content;
+        Arg *arg = nodeNow;
         char *thisName = arg_getName(arg);
         if (strEqu(name, thisName))
         {
@@ -214,7 +214,7 @@ Arg *args_getArg(Args *self, char *name)
     {
         return NULL;
     }
-    return node->content;
+    return node;
 }
 
 void args_bind(Args *self, char *type, char *name, void *pointer)
@@ -458,7 +458,7 @@ int32_t args_foreach(Args *self, int32_t (*eachHandle)(Arg *argEach, Args *handl
     LinkNode *nodeNow = self->firstNode;
     while (1)
     {
-        Arg *argNow = nodeNow->content;
+        Arg *argNow = nodeNow;
         if (NULL == argNow)
         {
             continue;

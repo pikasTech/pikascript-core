@@ -19,21 +19,12 @@ void link_deinit(Link *self)
 
 void link_addNode(Link *self, void *content)
 {
-    LinkNode *NewNode = New_linkNode(NULL);
-    NewNode->content = content;
 
     // old first node become new second node
     LinkNode *secondNode = self->firstNode;
 
     // change the first node to new node
-    self->firstNode = NewNode;
-
-    // link the new first node and second node
-    if (NULL != secondNode)
-    {
-        self->firstNode;
-    }
-    self->firstNode = content_setNext(self->firstNode, secondNode);
+    self->firstNode = content_setNext(content, secondNode);
 }
 
 void link_removeNode(Link *self, void *content)
@@ -65,7 +56,7 @@ void link_removeNode(Link *self, void *content)
 
     if (NULL != priorNode)
     {
-        priorNode->nextNode = nextNode;
+        content_setNext(priorNode, nextNode);
     }
 
     // deinit the node
@@ -81,7 +72,7 @@ int32_t link_getSize(Link *self)
     while (NULL != NowNode)
     {
         size++;
-        NowNode = NowNode->nextNode;
+        NowNode = content_getNext(NowNode);
     }
     return size;
 }
