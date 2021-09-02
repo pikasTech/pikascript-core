@@ -1,13 +1,14 @@
 #include "dataLink.h"
 #include "dataLinkNode.h"
 #include "dataMemory.h"
+#include "dataArg.h"
 
 void link_deinit(Link *self)
 {
     LinkNode *nowNode = self->firstNode;
     while (NULL != nowNode)
     {
-        LinkNode *nodeNext = nowNode->nextNode;
+        LinkNode *nodeNext = content_getNext(nowNode);
         linkNode_deinit(nowNode);
         nowNode = nodeNext;
     }
@@ -18,21 +19,12 @@ void link_deinit(Link *self)
 
 void link_addNode(Link *self, void *content)
 {
-    LinkNode *NewNode = New_linkNode(NULL);
-    NewNode->content = content;
-
     // old first node become new second node
     LinkNode *secondNode = self->firstNode;
 
+    self->firstNode = content;
     // change the first node to new node
-    self->firstNode = NewNode;
-
-    // link the new first node and second node
-    if (NULL != secondNode)
-    {
-        self->firstNode;
-    }
-    self->firstNode->nextNode = secondNode;
+    content_setNext(content, secondNode);
 }
 
 void link_removeNode(Link *self, void *content)
@@ -42,32 +34,37 @@ void link_removeNode(Link *self, void *content)
     LinkNode *priorNode = NULL;
     while (1)
     {
-        if (nodeNow->content == content)
+        if (nodeNow == content)
         {
             nodeToDelete = nodeNow;
             break;
         }
-        if (nodeNow->nextNode == NULL)
+        if (nodeNow == NULL)
         {
             // error, node no found
-            return;
+            goto exit;
         }
         priorNode = nodeNow;
-        nodeNow = nodeNow->nextNode;
+        nodeNow = content_getNext(nodeNow);
     }
 
-    LinkNode *nextNode = nodeToDelete->nextNode;
+    LinkNode *nextNode = content_getNext(nodeToDelete);
     if (nodeToDelete == self->firstNode)
     {
-        self->firstNode = nodeToDelete->nextNode;
+        self->firstNode = content_getNext(nodeToDelete);
     }
 
-    if (NULL != priorNode)
+    if (NULL == priorNode)
     {
-        priorNode->nextNode = nextNode;
+        self->firstNode = nextNode;
+        goto exit;
     }
 
-    // deinit the node
+    content_setNext(priorNode, nextNode);
+    goto exit;
+
+// deinit the node
+exit:
     linkNode_deinit(nodeToDelete);
     return;
 }
@@ -80,19 +77,14 @@ int32_t link_getSize(Link *self)
     while (NULL != NowNode)
     {
         size++;
-        NowNode = NowNode->nextNode;
+        NowNode = content_getNext(NowNode);
     }
     return size;
 }
 
 void link_init(Link *self, void *args)
 {
-    /* attribute */
     self->firstNode = NULL;
-
-    /* object */
-
-    /* override */
 }
 
 Link *New_link(void *args)

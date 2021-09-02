@@ -33,18 +33,32 @@ uint16_t content_getSize(uint8_t *self)
     return size;
 }
 
-uint8_t *content_init(char *name, char *type, uint8_t *content, uint16_t size)
+void content_setNext(uint8_t *self, uint8_t *next)
+{
+    uint8_t *nextDir = self + content_nextOffset(self);
+    uint64_t pointerTemp = (uint64_t)next;
+    for (uint32_t i = 0; i < sizeof(uint8_t *); i++)
+    {
+        // aboid \0
+        nextDir[i] = pointerTemp;
+        pointerTemp = pointerTemp >> 8;
+    }
+}
+
+uint8_t *content_init(char *name, char *type, uint8_t *content, uint16_t size, uint8_t *next)
 {
     uint16_t nameSize = strGetSize(name);
     uint16_t typeSize = strGetSize(type);
     uint8_t *self = (uint8_t *)pikaMalloc(nameSize + 1 +
                                           typeSize + 1 +
                                           2 +
-                                          size);
+                                          size +
+                                          sizeof(uint8_t *));
     uint8_t *nameDir = self;
     uint8_t *typeDir = nameDir + nameSize + 1;
     uint8_t *sizeDir = typeDir + typeSize + 1;
     uint8_t *contentDir = sizeDir + 2;
+    uint8_t *nextDir = contentDir + size;
 
     memcpy(nameDir, name, nameSize + 1);
     memcpy(typeDir, type, typeSize + 1);
@@ -58,12 +72,21 @@ uint8_t *content_init(char *name, char *type, uint8_t *content, uint16_t size)
     {
         memset(contentDir, 0, size);
     }
+
+    uint64_t pointerTemp = (uint64_t)next;
+    for (uint32_t i = 0; i < sizeof(uint8_t *); i++)
+    {
+        // aboid \0
+        nextDir[i] = pointerTemp;
+        pointerTemp = pointerTemp >> 8;
+    }
+
     return self;
 }
 
 uint16_t content_totleSize(uint8_t *self)
 {
-    return content_contentOffset(self) + content_getSize(self);
+    return content_contentOffset(self) + content_getSize(self) + sizeof(uint8_t *);
 }
 
 void arg_freeContent(Arg *self)
@@ -89,11 +112,12 @@ uint8_t *content_setContent(uint8_t *self, uint8_t *content, uint16_t size)
 {
     if (NULL == self)
     {
-        return content_init("", "", content, size);
+        return content_init("", "", content, size, NULL);
     }
     char *name = content_getName(self);
     char *type = content_getType(self);
-    uint8_t *newContent = content_init(name, type, content, size);
+    uint8_t *next = content_getNext(self);
+    uint8_t *newContent = content_init(name, type, content, size, next);
     content_deinit(self);
     return newContent;
 }
@@ -102,12 +126,13 @@ uint8_t *content_setName(uint8_t *self, char *name)
 {
     if (NULL == self)
     {
-        return content_init(name, "", NULL, 0);
+        return content_init(name, "", NULL, 0, NULL);
     }
     char *type = content_getType(self);
     uint8_t *content = content_getContent(self);
     uint16_t size = content_getSize(self);
-    uint8_t *newContent = content_init(name, type, content, size);
+    uint8_t *next = content_getNext(self);
+    uint8_t *newContent = content_init(name, type, content, size, next);
     content_deinit(self);
     return newContent;
 }
@@ -116,19 +141,20 @@ uint8_t *content_setType(uint8_t *self, char *type)
 {
     if (NULL == self)
     {
-        return content_init("", type, NULL, 0);
+        return content_init("", type, NULL, 0, NULL);
     }
     char *name = content_getName(self);
     uint8_t *content = content_getContent(self);
     uint16_t size = content_getSize(self);
-    uint8_t *newContent = content_init(name, type, content, size);
+    uint8_t *next = content_getNext(self);
+    uint8_t *newContent = content_init(name, type, content, size, next);
     content_deinit(self);
     return newContent;
 }
 
 Arg *arg_newContent(Arg *self, uint32_t size)
 {
-    uint8_t *newContent = content_init("", "", NULL, size);
+    uint8_t *newContent = content_init("", "", NULL, size, NULL);
     arg_freeContent(self);
     return newContent;
 }
@@ -158,6 +184,29 @@ uint16_t content_contentOffset(uint8_t *self)
     return content_sizeOffset(self) + 2;
 }
 
+uint16_t content_nextOffset(uint8_t *self)
+{
+    uint16_t size = content_getSize(self);
+    return content_contentOffset(self) + size;
+}
+
+uint8_t *content_getNext(uint8_t *self)
+{
+    uint8_t *nextDir = self + content_nextOffset(self);
+    uint8_t *next = NULL;
+    uint64_t pointerTemp = 0;
+
+    for (int32_t i = sizeof(uint8_t *); i > -1; i--)
+    {
+        // avoid \0
+        uint8_t val = nextDir[i];
+        pointerTemp = (pointerTemp << 8);
+        pointerTemp += val;
+    }
+    next = (uint8_t *)pointerTemp;
+    return next;
+}
+
 uint8_t *content_getContent(uint8_t *self)
 {
     return self + content_contentOffset(self);
@@ -178,7 +227,7 @@ Arg *arg_setInt(Arg *self, char *name, int64_t val)
         contentBuff[i] = int64Temp;
         int64Temp = int64Temp >> 8;
     }
-    return content_init(name, "int", contentBuff, 4);
+    return content_init(name, "int", contentBuff, 4, NULL);
 }
 
 Arg *arg_setFloat(Arg *self, char *name, float val)
@@ -190,7 +239,7 @@ Arg *arg_setFloat(Arg *self, char *name, float val)
         // add 0x30 to void \0
         contentBuff[i] = valPtr[i];
     }
-    return content_init(name, "float", contentBuff, 4);
+    return content_init(name, "float", contentBuff, 4, NULL);
 }
 
 float arg_getFloat(Arg *self)
@@ -220,12 +269,12 @@ Arg *arg_setPtr(Arg *self, char *name, char *type, void *pointer)
         contentBuff[i] = pointerTemp;
         pointerTemp = pointerTemp >> 8;
     }
-    return content_init(name, type, contentBuff, sizeof(uint8_t *));
+    return content_init(name, type, contentBuff, sizeof(uint8_t *), NULL);
 }
 
 Arg *arg_setStr(Arg *self, char *name, char *string)
 {
-    return content_init(name, "str", (uint8_t *)string, strGetSize(string) + 1);
+    return content_init(name, "str", (uint8_t *)string, strGetSize(string) + 1, NULL);
 }
 
 int64_t arg_getInt(Arg *self)
