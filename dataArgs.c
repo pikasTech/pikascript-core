@@ -157,17 +157,38 @@ int32_t args_isArgExist(Args *self, char *name)
 
 int32_t updateArg(Args *self, Arg *argNew)
 {
-    // arg New must be a new arg
-    LinkNode *node = args_getNode(self, arg_getName(argNew));
-    Arg *argOld = node;
-
-    // check type
-    if (!strEqu(arg_getType(argOld), arg_getType(argNew)))
+    LinkNode *nodeToUpdate = NULL;
+    LinkNode *nodeNow = self->firstNode;
+    LinkNode *priorNode = NULL;
+    char *name = arg_getName(argNew);
+    while (1)
     {
-        return 1;
-        // type do not match
+        if (strEqu(content_getName(nodeNow), name))
+        {
+            nodeToUpdate = nodeNow;
+            break;
+        }
+        if (content_getNext(nodeNow) == NULL)
+        {
+            // error, node no found
+            goto exit;
+        }
+        priorNode = nodeNow;
+        nodeNow = content_getNext(nodeNow);
     }
-    arg_setContent(argOld, arg_getContent(argNew), arg_getContentSize(argNew));
+
+    nodeToUpdate = arg_setContent(nodeToUpdate, arg_getContent(argNew), arg_getContentSize(argNew));
+
+    // update privior link, because arg_getContent would free origin pointer
+    if (NULL == priorNode)
+    {
+        self->firstNode = nodeToUpdate;
+        goto exit;
+    }
+
+    content_setNext(priorNode, nodeToUpdate);
+    goto exit;
+exit:
     arg_deinit(argNew);
     return 0;
 }

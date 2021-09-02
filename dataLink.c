@@ -19,7 +19,6 @@ void link_deinit(Link *self)
 
 void link_addNode(Link *self, void *content)
 {
-
     // old first node become new second node
     LinkNode *secondNode = self->firstNode;
 
@@ -80,12 +79,7 @@ int32_t link_getSize(Link *self)
 
 void link_init(Link *self, void *args)
 {
-    /* attribute */
     self->firstNode = NULL;
-
-    /* object */
-
-    /* override */
 }
 
 Link *New_link(void *args)
