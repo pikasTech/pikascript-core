@@ -33,6 +33,18 @@ uint16_t content_getSize(uint8_t *self)
     return size;
 }
 
+void content_setNext(uint8_t *self, uint8_t *next)
+{
+    uint8_t *nextDir = self + content_nextOffset(self);
+    uint64_t pointerTemp = (uint64_t)next;
+    for (uint32_t i = 0; i < sizeof(uint8_t *); i++)
+    {
+        // aboid \0
+        nextDir[i] = pointerTemp;
+        pointerTemp = pointerTemp >> 8;
+    }
+}
+
 uint8_t *content_init(char *name, char *type, uint8_t *content, uint16_t size, uint8_t *next)
 {
     uint16_t nameSize = strGetSize(name);
@@ -193,21 +205,6 @@ uint8_t *content_getNext(uint8_t *self)
     }
     next = (uint8_t *)pointerTemp;
     return next;
-}
-
-uint8_t *content_setNext(uint8_t *self, uint8_t *next)
-{
-    if (NULL == self)
-    {
-        return content_init("", "", NULL, 0, next);
-    }
-    char *name = content_getName(self);
-    char *type = content_getType(self);
-    uint8_t *content = content_getContent(self);
-    uint16_t size = content_getSize(self);
-    uint8_t *newContent = content_init(name, type, content, size, next);
-    content_deinit(self);
-    return newContent;
 }
 
 uint8_t *content_getContent(uint8_t *self)

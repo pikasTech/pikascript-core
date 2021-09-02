@@ -23,8 +23,9 @@ void link_addNode(Link *self, void *content)
     // old first node become new second node
     LinkNode *secondNode = self->firstNode;
 
+    self->firstNode = content;
     // change the first node to new node
-    self->firstNode = content_setNext(content, secondNode);
+    content_setNext(content, secondNode);
 }
 
 void link_removeNode(Link *self, void *content)
