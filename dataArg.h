@@ -9,6 +9,7 @@ uint16_t content_contentOffset(uint8_t *content);
 uint16_t content_sizeOffset(uint8_t *self);
 uint16_t content_contentOffset(uint8_t *self);
 uint16_t content_nextOffset(uint8_t *self);
+uint8_t content_nameOffset(uint8_t *self);
 
 char *content_getName(uint8_t *content);
 char *content_getType(uint8_t *content);
