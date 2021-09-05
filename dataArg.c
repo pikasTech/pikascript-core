@@ -91,7 +91,8 @@ uint16_t content_totleSize(uint8_t *self)
     char *type = content_getType(self);
     const uint8_t sizeLenth = 2;
     const uint8_t nextLength = sizeof(uint8_t *);
-    return content_getSize(self) + strGetSize(name) + 1 + strGetSize(type) + 1 + sizeLenth + nextLength;
+    uint16_t size = content_getSize(self);
+    return size + strGetSize(name) + 1 + strGetSize(type) + 1 + sizeLenth + nextLength;
 }
 
 void arg_freeContent(Arg *self)
@@ -116,7 +117,8 @@ char *content_getName(uint8_t *self)
 
 uint8_t *content_deinit(uint8_t *self)
 {
-    pikaFree(self, content_totleSize(self));
+    uint16_t totleSize = content_totleSize(self);
+    pikaFree(self, totleSize);
     return 0;
 }
 
@@ -335,7 +337,7 @@ uint16_t content_typeOffset(uint8_t *self)
 {
     const uint8_t nextLength = sizeof(uint8_t *);
     const uint8_t sizeLength = 2;
-    uint8_t size = content_getSize(self);
+    uint16_t size = content_getSize(self);
     char *name = content_getName(self);
     uint16_t nameSize = strGetSize(name);
     return nextLength + sizeLength + nameSize + 1 + size;
